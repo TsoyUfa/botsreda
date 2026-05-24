@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Централизация партнёрского канала — Коммерческое предложение</title>
+    <meta name="description" content="Единая точка входа для партнёров. Координация, SLA, отчётность и рост конверсии партнёрского канала за 3 месяца." />
+    <style>
+      :root {
+        --bg: #0b0c10;
+        --card: #111218;
+        --muted: #8b91a1;
+        --text: #eef2ff;
+        --accent: #6ee7ff;
+        --accent-2: #8b5cf6;
+        --ok: #22c55e;
+        --warn: #f59e0b;
+        --danger: #ef4444;
+        --border: #1f2330;
+        --shadow: 0 10px 30px rgba(0,0,0,.35);
+        --radius: 16px;
+        --radius-sm: 12px;
+        --radius-lg: 24px;
+      }
+      * { box-sizing: border-box; }
+      html, body { height: 100%; }
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+        color: var(--text);
+        background: radial-gradient(1200px 600px at 10% -10%, rgba(110,231,255,.15), rgba(139,92,246,.12) 30%, transparent 60%),
+                    radial-gradient(800px 500px at 100% 0%, rgba(139,92,246,.12), transparent 60%),
+                    var(--bg);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      .container { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+      .hero {
+        position: relative;
+        padding: 80px 0 40px;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 14px;
+        border: 1px solid color-mix(in oklab, var(--accent) 35%, transparent);
+        color: var(--accent);
+        background: linear-gradient(180deg, rgba(110,231,255,.12), rgba(110,231,255,.06));
+        border-radius: 999px;
+        font-weight: 600;
+        letter-spacing: .2px;
+        width: fit-content;
+      }
+      h1 {
+        margin: 20px 0 14px;
+        font-size: clamp(34px, 5vw, 56px);
+        line-height: 1.08;
+      }
+      .subtitle {
+        font-size: clamp(16px, 2.2vw, 20px);
+        color: var(--muted);
+        max-width: 840px;
+      }
+      .hero-cards {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 16px;
+        margin-top: 36px;
+      }
+      .card {
+        background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 18px;
+        box-shadow: var(--shadow);
+      }
+      .card h3 { margin: 0 0 8px; font-size: 16px; color: var(--muted); font-weight: 600; }
+      .kpi { font-size: clamp(24px, 3.6vw, 34px); font-weight: 800; }
+      .kpi small { font-size: .6em; font-weight: 600; color: var(--muted); margin-left: 6px; }
+
+      .section { margin: 56px 0; }
+      .section h2 {
+        font-size: clamp(22px, 3vw, 30px);
+        margin: 0 0 12px;
+      }
+      .section p.lead { color: var(--muted); margin: 0 0 18px; }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 16px;
+      }
+      .grid > .span-12 { grid-column: span 12; }
+      .grid > .span-8 { grid-column: span 8; }
+      .grid > .span-6 { grid-column: span 6; }
+      .grid > .span-4 { grid-column: span 4; }
+
+      @media (max-width: 960px) {
+        .grid > .span-8, .grid > .span-6 { grid-column: span 12; }
+        .hero { padding-top: 56px; }
+      }
+
+      ul.clean { margin: 0; padding-left: 18px; }
+      ul.clean li { margin: 6px 0; }
+
+      .pill-list { display: flex; flex-wrap: wrap; gap: 10px; }
+      .pill { border: 1px solid var(--border); background: #0f1117; padding: 10px 12px; border-radius: 999px; color: var(--muted); }
+
+      .timeline { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+      .timeline .step { position: relative; padding: 16px; border-radius: var(--radius); background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02)); border: 1px solid var(--border); }
+      .timeline .step h4 { margin: 0 0 8px; font-size: 16px; color: var(--muted); }
+      .timeline .step p { margin: 0; color: var(--text); }
+      @media (max-width: 960px) { .timeline { grid-template-columns: 1fr; } }
+
+      .cta {
+        margin: 64px 0 32px;
+        padding: 22px;
+        background: linear-gradient(135deg, rgba(110,231,255,.10), rgba(139,92,246,.08));
+        border: 1px solid color-mix(in oklab, var(--accent) 25%, var(--border));
+        border-radius: var(--radius-lg);
+        display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between;
+      }
+      .cta h3 { margin: 0; font-size: clamp(18px, 2.4vw, 22px); }
+      .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+      .btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 12px; text-decoration: none; font-weight: 700; }
+      .btn-primary { background: linear-gradient(180deg, var(--accent), #5bd5ee); color: #001218; }
+      .btn-ghost { color: var(--accent); border: 1px solid color-mix(in oklab, var(--accent) 35%, transparent); background: transparent; }
+
+      .footer { margin: 40px 0 80px; color: var(--muted); font-size: 14px; }
+      .meta { display: flex; gap: 12px; color: var(--muted); font-size: 14px; margin-top: 10px; flex-wrap: wrap; }
+      .meta .dot { width: 6px; height: 6px; background: var(--muted); border-radius: 999px; display: inline-block; margin: 0 6px; opacity: .5; }
+    </style>
+  </head>
+  <body>
+    <header class="hero">
+      <div class="container">
+        <div class="badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l2.39 4.84L20 8l-4 3.9.94 5.48L12 15.77 7.06 17.38 8 11.9 4 8l5.61-1.16L12 2z" fill="currentColor" opacity=".9"/></svg>
+          Централизация партнёрского канала
+        </div>
+        <h1>Единая точка входа для партнёров: быстрый рост конверсии без хаоса</h1>
+        <p class="subtitle">Менеджер‑координатор, строгие SLA, антидубли и прозрачная обратная связь партнёрам. Система устойчива к замене контрагентов и масштабируется.</p>
+
+        <div class="hero-cards">
+          <div class="card" style="grid-column: span 4;">
+            <h3>Конверсия лид → встреча</h3>
+            <div class="kpi">+20–40% <small>за 3 месяца</small></div>
+          </div>
+          <div class="card" style="grid-column: span 4;">
+            <h3>Встреча → бронь/сделка</h3>
+            <div class="kpi">+10–20% <small>за счёт дисциплины и скорости</small></div>
+          </div>
+          <div class="card" style="grid-column: span 4;">
+            <h3>Первичный ответ по лиду</h3>
+            <div class="kpi">≤ 15 минут <small>медиана и P90</small></div>
+          </div>
+        </div>
+
+        <div class="meta">
+          <span>Дата: 30.10.2025</span>
+          <span class="dot"></span>
+          <span>Исполнитель: Антон Цой</span>
+          <span class="dot"></span>
+          <span>Срок внедрения: 3 месяца</span>
+          <span class="dot"></span>
+          <span>Стоимость: 150 000 ₽/мес</span>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="section">
+        <div class="container grid">
+          <div class="span-8">
+            <h2>Цель</h2>
+            <p class="lead">Запустить единое окно для партнёров и централизовать весь поток заявок, повысив скорость реакции и конверсию. Система не зависит от конкретных контрагентов и не ломается при замене.</p>
+            <div class="card">
+              <ul class="clean">
+                <li>Единая точка входа и жёсткая дисциплина обработки</li>
+                <li>Антидубли и приоритизация лидов</li>
+                <li>Быстрый мост с отделом продаж (SLA 5–15 минут)</li>
+                <li>Прозрачная обратная связь партнёрам и понятные reason codes</li>
+              </ul>
+            </div>
+          </div>
+          <div class="span-4">
+            <h2>Ключевая идея</h2>
+            <div class="card">
+              <p>Один менеджер‑координатор как единое окно: квалификация, антидубли, приоритизация, передача в ОП и контроль статусов в CRM.</p>
+              <div class="pill-list" style="margin-top:10px;">
+                <span class="pill">Менеджер‑координатор</span>
+                <span class="pill">Единый вход</span>
+                <span class="pill">SLA 5–15 минут</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Архитектура процесса</h2>
+          <div class="timeline" style="margin-top:14px;">
+            <div class="step">
+              <h4>1) Источники</h4>
+              <p>Тарент Агент, ИП Ашуров, ИП Макромир и др.</p>
+            </div>
+            <div class="step">
+              <h4>2) Единая точка входа</h4>
+              <p>Все лиды попадают к менеджеру‑координатору.</p>
+            </div>
+            <div class="step">
+              <h4>3) Квалификация и контроль</h4>
+              <p>Антидубли, разметка источника, приоритизация.</p>
+            </div>
+            <div class="step">
+              <h4>4) Передача по SLA</h4>
+              <p>В отдел продаж за 5–15 минут с контролем статусов.</p>
+            </div>
+            <div class="step">
+              <h4>5) Обратная связь</h4>
+              <p>Партнёрам — статусы, материалы и причины отказов.</p>
+            </div>
+            <div class="step">
+              <h4>6) Отчётность</h4>
+              <p>Рейтинг контрагентов, матрица замещения, метрики.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container grid">
+          <div class="span-6">
+            <h2>Роли и ответственность</h2>
+            <div class="card">
+              <ul class="clean">
+                <li><strong>Исполнитель:</strong> дизайн процессов, регламенты, онбординг координатора, контроль KPI</li>
+                <li><strong>Заказчик:</strong> доступы, полномочия, CRM‑настройки, утверждение регламентов</li>
+                <li><strong>РОП/ОП:</strong> соблюдение SLA, обратная связь, дисциплина статусов</li>
+                <li><strong>Партнёры:</strong> правила передачи лидов, работа по материалам</li>
+              </ul>
+            </div>
+          </div>
+          <div class="span-6">
+            <h2>KPI и SLA</h2>
+            <div class="card">
+              <ul class="clean">
+                <li>Первичный ответ по лиду: ≤ 15 минут (медиана и P90)</li>
+                <li>Лид → встреча: рост на 20–40%</li>
+                <li>Встреча → бронь/сделка: рост на 10–20%</li>
+                <li>Доли дублей: снижение на 50–80%</li>
+                <li>Доля сделок через партнёров: целевой рост X% (аудит)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>План внедрения: 3 месяца</h2>
+          <div class="grid" style="margin-top:14px;">
+            <div class="span-4">
+              <div class="card">
+                <h3>Месяц 1</h3>
+                <ul class="clean">
+                  <li>Аудит каналов и CRM</li>
+                  <li>Дизайн To‑Be процессов</li>
+                  <li>Регламенты и онбординг менеджера</li>
+                  <li>Быстрые победы</li>
+                </ul>
+              </div>
+            </div>
+            <div class="span-4">
+              <div class="card">
+                <h3>Месяц 2</h3>
+                <ul class="clean">
+                  <li>Интеграции</li>
+                  <li>Обучение ОП и партнёров</li>
+                  <li>Запуск SLA и отчётности</li>
+                </ul>
+              </div>
+            </div>
+            <div class="span-4">
+              <div class="card">
+                <h3>Месяц 3</h3>
+                <ul class="clean">
+                  <li>Оптимизация</li>
+                  <li>Замещение слабых контрагентов</li>
+                  <li>Масштабирование и стабилизация</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container grid">
+          <div class="span-6">
+            <h2>Быстрый старт: День 0–10</h2>
+            <div class="card">
+              <ul class="clean">
+                <li>Единый вход для партнёрских лидов</li>
+                <li>Чек‑лист квалификации и «скрипт глупых вопросов»</li>
+                <li>Базовый дашборд KPI</li>
+              </ul>
+            </div>
+          </div>
+          <div class="span-6">
+            <h2>Материалы для запуска</h2>
+            <div class="card">
+              <ul class="clean">
+                <li>Регламенты: вход/квалификация, SLA, отчётность</li>
+                <li>Онбординг/оффбординг партнёров</li>
+                <li>Шаблоны: карточка контрагента, reason codes, пакет материалов</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container grid">
+          <div class="span-8">
+            <h2>Коммерческие условия</h2>
+            <div class="card">
+              <ul class="clean">
+                <li>150 000 ₽/мес, срок 3 месяца, оплата помесячно</li>
+                <li>Включено: менеджер‑координатор и сопровождение внедрения</li>
+                <li>Старт: после подписания договора и предоставления доступов</li>
+              </ul>
+            </div>
+          </div>
+          <div class="span-4">
+            <h2>Следующие шаги</h2>
+            <div class="card">
+              <ol class="clean">
+                <li>Подтвердить пилот и назначить стартовую сессию (2 часа)</li>
+                <li>Обменяться доступами к CRM/каналам и перечнем контрагентов</li>
+                <li>Утвердить KPI‑лист и регламенты v1.0 (приложение к договору)</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="container cta">
+        <h3>Готовы запустить централизованный партнёрский канал?</h3>
+        <div class="actions">
+          <a class="btn btn-primary" href="#contact">Запросить пилот</a>
+          <a class="btn btn-ghost" href="#materials">Посмотреть материалы</a>
+        </div>
+      </section>
+
+      <section id="contact" class="section">
+        <div class="container">
+          <h2>Контакты</h2>
+          <div class="card">
+            <p>Антон Цой</p>
+            <p>Телефон: +7 (___) ___‑__‑__ • Почта: your@email.example</p>
+            <p>Удобно: Телеграм/WhatsApp. Укажите в теме: «Партнёрский канал».</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="container footer">
+      <div>© 2025. Централизация партнёрского канала. Все права защищены.</div>
+    </footer>
+  </body>
+  </html>
+
+

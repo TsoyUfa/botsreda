@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Сертификат — Тихий дом</title>
+
+  <!--
+    Шаблон сертификата АН «Тихий дом» (Уфа).
+    Формат: A4, альбомная ориентация. Готов к печати и экспорту в PDF
+    (Chrome → Печать → «Сохранить как PDF», поля: «Нет», масштаб: 100%).
+
+    Где менять переменные:
+      {{ФИО участника}}    — крупно, по центру (блок .recipient .name)
+      {{ДД.ММ.ГГГГ}}        — дата выдачи (нижний левый угол, .meta-left)
+      {{№ сертификата}}    — номер (нижний левый угол, .meta-left)
+      {{ФИО руководителя}} — подпись (центр подвала, .signature .name)
+      {{Должность}}         — должность подписанта (.signature .role)
+
+    Все плейсхолдеры обёрнуты в <span class="field">{{...}}</span>,
+    поэтому их легко находить поиском по `{{`.
+  -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #F7F5F1;
+      --paper: #FBFAF6;
+      --ink: #1F2024;
+      --ink-soft: #6E6A62;
+      --hairline: #1F2024;
+      --accent: #C9A36A;
+
+      --serif: "Cormorant Garamond", "Georgia", "Times New Roman", serif;
+      --sans:  "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+      --tracking-xl: 0.42em;
+      --tracking-l:  0.28em;
+      --tracking-m:  0.18em;
+    }
+
+    @page {
+      size: A4 landscape;
+      margin: 0;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Лист сертификата: ровно A4 landscape (297×210 мм) */
+    .sheet {
+      width: 297mm;
+      height: 210mm;
+      margin: 16px auto;
+      background: var(--paper);
+      position: relative;
+      padding: 14mm 18mm;
+      display: grid;
+      grid-template-rows: auto 1fr auto auto;
+      row-gap: 6mm;
+      box-shadow: 0 8px 40px rgba(31, 32, 36, 0.12);
+    }
+
+    /* Тонкая внутренняя рамка-волосок */
+    .sheet::before {
+      content: "";
+      position: absolute;
+      inset: 8mm;
+      border: 0.4pt solid var(--ink);
+      pointer-events: none;
+    }
+
+    /* Микро-монограмма «ТД» в правом верхнем углу */
+    .monogram {
+      position: absolute;
+      top: 11mm;
+      right: 12mm;
+      width: 14mm;
+      height: 14mm;
+      border: 0.6pt solid var(--ink);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: 12pt;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+    }
+
+    /* ───────── Шапка ───────── */
+    .head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 4mm;
+    }
+    .brand {
+      font-family: var(--sans);
+      font-size: 9pt;
+      letter-spacing: var(--tracking-l);
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .brand .city {
+      color: var(--ink-soft);
+    }
+    .brand .dot {
+      display: inline-block;
+      margin: 0 0.6em;
+      color: var(--ink-soft);
+    }
+    .head .right-spacer {
+      width: 14mm;
+    }
+
+    /* ───────── Центральный блок ───────── */
+    .center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 4mm;
+    }
+
+    .classifier {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2mm;
+    }
+    .classifier .title {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: 22pt;
+      letter-spacing: var(--tracking-xl);
+      text-transform: uppercase;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .classifier .subtitle {
+      font-family: var(--sans);
+      font-size: 9pt;
+      letter-spacing: var(--tracking-m);
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .recipient {
+      margin-top: 2mm;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3mm;
+      width: 100%;
+    }
+    .recipient .preamble {
+      font-family: var(--sans);
+      font-size: 10pt;
+      letter-spacing: var(--tracking-m);
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .recipient .name {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: 44pt;
+      line-height: 1.05;
+      color: var(--ink);
+      max-width: 220mm;
+    }
+    .recipient .underline {
+      width: 110mm;
+      height: 0;
+      border-top: 0.6pt solid var(--accent);
+    }
+
+    .statement {
+      margin-top: 2mm;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2.5mm;
+      max-width: 215mm;
+    }
+    .statement .lead {
+      font-family: var(--sans);
+      font-size: 11pt;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+    .statement .program {
+      font-family: var(--serif);
+      font-size: 26pt;
+      font-weight: 500;
+      color: var(--ink);
+      line-height: 1;
+      margin-top: 1mm;
+    }
+    .statement .meta {
+      font-family: var(--sans);
+      font-size: 9pt;
+      letter-spacing: var(--tracking-m);
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-top: 1mm;
+    }
+
+    /* ───────── Содержание программы ───────── */
+    .program-content {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: 12mm;
+      row-gap: 4mm;
+      padding: 5mm 6mm 0;
+      border-top: 0.4pt solid var(--ink);
+    }
+    .program-content .heading {
+      grid-column: 1 / -1;
+      font-family: var(--sans);
+      font-size: 8.5pt;
+      letter-spacing: var(--tracking-l);
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      text-align: center;
+      margin-bottom: 1mm;
+    }
+    .module {
+      display: grid;
+      grid-template-columns: 9mm 1fr;
+      align-items: baseline;
+      gap: 3mm;
+    }
+    .module .num {
+      font-family: var(--serif);
+      font-size: 14pt;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .module .body .name {
+      font-family: var(--sans);
+      font-size: 10pt;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.25;
+      margin-bottom: 0.5mm;
+    }
+    .module .body .focus {
+      font-family: var(--sans);
+      font-size: 8.5pt;
+      color: var(--ink-soft);
+      line-height: 1.35;
+    }
+
+    /* ───────── Подвал ───────── */
+    .footer {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      align-items: end;
+      column-gap: 8mm;
+      padding-top: 4mm;
+      border-top: 0.4pt solid var(--ink);
+    }
+
+    .meta-left {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5mm;
+      font-family: var(--sans);
+      font-size: 9pt;
+      color: var(--ink);
+    }
+    .meta-left .row {
+      display: flex;
+      gap: 1.5mm;
+    }
+    .meta-left .label {
+      color: var(--ink-soft);
+      letter-spacing: var(--tracking-m);
+      text-transform: uppercase;
+      font-size: 7.5pt;
+      align-self: center;
+    }
+    .meta-left .value {
+      font-size: 10pt;
+      color: var(--ink);
+    }
+
+    .signature {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1mm;
+    }
+    .signature .line {
+      width: 70mm;
+      border-top: 0.6pt solid var(--ink);
+    }
+    .signature .name {
+      font-family: var(--sans);
+      font-size: 10pt;
+      font-weight: 600;
+      color: var(--ink);
+      margin-top: 1.5mm;
+    }
+    .signature .role {
+      font-family: var(--sans);
+      font-size: 8.5pt;
+      color: var(--ink-soft);
+      letter-spacing: var(--tracking-m);
+      text-transform: uppercase;
+    }
+
+    .seal {
+      justify-self: end;
+      width: 28mm;
+      height: 28mm;
+      border: 0.6pt dashed var(--ink-soft);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--ink-soft);
+      font-family: var(--sans);
+      font-size: 8pt;
+      letter-spacing: var(--tracking-m);
+      text-transform: uppercase;
+    }
+
+    .principle {
+      grid-column: 1 / -1;
+      text-align: center;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 10pt;
+      color: var(--ink-soft);
+      margin-top: 4mm;
+    }
+
+    /* ───────── Печать ───────── */
+    @media print {
+      html, body {
+        background: #fff;
+      }
+      .sheet {
+        margin: 0;
+        box-shadow: none;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="sheet" aria-label="Сертификат о прохождении программы обучения «Тихий дом»">
+
+    <div class="monogram" aria-hidden="true">ТД</div>
+
+    <header class="head">
+      <div class="brand">
+        АН «Тихий дом»
+        <span class="dot">·</span>
+        <span class="city">Уфа</span>
+      </div>
+      <div class="right-spacer" aria-hidden="true"></div>
+    </header>
+
+    <main class="center">
+      <div class="classifier">
+        <div class="title">Сертификат</div>
+        <div class="subtitle">о прохождении программы обучения</div>
+      </div>
+
+      <div class="recipient">
+        <div class="preamble">Настоящим подтверждается, что</div>
+        <div class="name"><span class="field">{{ФИО участника}}</span></div>
+        <div class="underline" aria-hidden="true"></div>
+      </div>
+
+      <div class="statement">
+        <div class="lead">успешно прошёл(-ла) программу обучения агентов по новостройкам</div>
+        <div class="program">«Тихий дом»</div>
+        <div class="meta">4 офлайн-блока · 8 часов · г. Уфа</div>
+      </div>
+    </main>
+
+    <section class="program-content" aria-label="Содержание программы">
+      <div class="heading">Содержание программы</div>
+
+      <div class="module">
+        <div class="num">01</div>
+        <div class="body">
+          <div class="name">Рынок, продукт, роль агента</div>
+          <div class="focus">Понимание рынка новостроек 2026, доверие, роль навигатора, агрегаторы и данные.</div>
+        </div>
+      </div>
+
+      <div class="module">
+        <div class="num">02</div>
+        <div class="body">
+          <div class="name">Работа с клиентом</div>
+          <div class="focus">Первая встреча, диагностика, фиксация уникальности, общение с застройщиками.</div>
+        </div>
+      </div>
+
+      <div class="module">
+        <div class="num">03</div>
+        <div class="body">
+          <div class="name">Каналы привлечения и соцсети</div>
+          <div class="focus">10 стратегий, Instagram и Telegram, готовые офферы и скрипты входа.</div>
+        </div>
+      </div>
+
+      <div class="module">
+        <div class="num">04</div>
+        <div class="body">
+          <div class="name">Система работы и план на 150к</div>
+          <div class="focus">База знаний, метрики, воронка, недельное расписание и минимальные действия.</div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="meta-left">
+        <div class="row">
+          <span class="label">Дата выдачи</span>
+          <span class="value"><span class="field">{{ДД.ММ.ГГГГ}}</span></span>
+        </div>
+        <div class="row">
+          <span class="label">№ сертификата</span>
+          <span class="value"><span class="field">{{№ сертификата}}</span></span>
+        </div>
+      </div>
+
+      <div class="signature">
+        <div class="line" aria-hidden="true"></div>
+        <div class="name"><span class="field">{{ФИО руководителя}}</span></div>
+        <div class="role"><span class="field">{{Должность}}</span>, АН «Тихий дом»</div>
+      </div>
+
+      <div class="seal" aria-label="Место для печати">М.П.</div>
+
+      <div class="principle">«Я не продаю — я объясняю»</div>
+    </footer>
+
+  </section>
+
+</body>
+</html>

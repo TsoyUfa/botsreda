@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Эксперт-Сити — маршрутная карта 2026</title>
+  <style>
+    :root {
+      --bg: #0b0f1a;
+      --bg-elevated: #0f1626;
+      --panel: #121a2b;
+      --panel-2: #0f1c33;
+      --text: #e6edf7;
+      --muted: #9aa7bd;
+      --accent: #6c7cff;
+      --accent-2: #22d3ee;
+      --border: rgba(255, 255, 255, 0.08);
+      --shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: radial-gradient(1200px 700px at 20% -10%, rgba(108, 124, 255, 0.2), transparent 60%),
+        radial-gradient(900px 500px at 90% 0%, rgba(34, 211, 238, 0.18), transparent 55%),
+        var(--bg);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1200px, 92vw);
+      margin: 0 auto;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(11, 15, 26, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .hero {
+      padding: 72px 0 56px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 32px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      line-height: 1.1;
+      margin-bottom: 18px;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin-bottom: 24px;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .chip {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .hero-cards {
+      display: grid;
+      gap: 16px;
+    }
+
+    .card {
+      background: linear-gradient(145deg, rgba(18, 26, 43, 0.9), rgba(11, 17, 31, 0.9));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h3 {
+      font-size: 1.05rem;
+      margin-bottom: 6px;
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .section {
+      padding: 64px 0;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    .section-lead {
+      color: var(--muted);
+      max-width: 740px;
+      margin-bottom: 32px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+
+    .panel h4 {
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+
+    .panel ul {
+      list-style: none;
+      display: grid;
+      gap: 8px;
+      color: var(--muted);
+    }
+
+    .panel ul li::before {
+      content: "•";
+      color: var(--accent);
+      margin-right: 8px;
+    }
+
+    .highlight {
+      background: linear-gradient(120deg, rgba(108, 124, 255, 0.18), rgba(34, 211, 238, 0.14));
+      border: 1px solid rgba(108, 124, 255, 0.25);
+    }
+
+    .timeline {
+      display: grid;
+      gap: 16px;
+    }
+
+    .month {
+      display: grid;
+      gap: 10px;
+      padding: 18px;
+      border-radius: 14px;
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+    }
+
+    .month strong {
+      font-size: 1.05rem;
+    }
+
+    .month ul {
+      list-style: none;
+      color: var(--muted);
+      display: grid;
+      gap: 6px;
+    }
+
+    .month ul li::before {
+      content: "—";
+      margin-right: 8px;
+      color: var(--accent-2);
+    }
+
+    .metrics {
+      display: grid;
+      gap: 16px;
+    }
+
+    .metric-row {
+      display: grid;
+      gap: 6px;
+    }
+
+    .metric-row span {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 24px 0;
+    }
+
+    .footer {
+      padding: 40px 0 56px;
+      color: var(--muted);
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 720px) {
+      .nav-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="logo" href="#top">Эксперт-Сити</a>
+      <div class="nav-links">
+        <a href="#goal">Цель</a>
+        <a href="#streams">Потоки</a>
+        <a href="#timeline">Календарь</a>
+        <a href="#metrics">Метрики</a>
+        <a href="#integration">Интеграции</a>
+        <a href="#artifacts">Артефакты</a>
+        <a href="#risks">Риски</a>
+      </div>
+    </div>
+  </nav>
+
+  <header id="top" class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="eyebrow">Маршрутная карта 2026</span>
+        <h1>Экосистема роста продаж новостроек</h1>
+        <p>
+          Шестимесячный план развития «Эксперт-Сити»: цифровой помощник, Telegram‑канал,
+          Академия новостроек и консалтинг для застройщиков — единая система с общей логикой и метриками.
+        </p>
+        <div class="hero-meta">
+          <span class="chip">Период: февраль–июль 2026</span>
+          <span class="chip">4 потока</span>
+          <span class="chip">Экосистема продуктов</span>
+        </div>
+      </div>
+      <div class="hero-cards">
+        <div class="card">
+          <h3>Скорость подбора</h3>
+          <p>Снижение времени поиска объекта на 50% благодаря цифровому помощнику.</p>
+        </div>
+        <div class="card">
+          <h3>Привлечение покупателей</h3>
+          <p>до 500 руб. стоимость привлечения клиента через Telegram‑канал.</p>
+        </div>
+        <div class="card">
+          <h3>Стандартизация агентской сети</h3>
+          <p>12‑недельная Академия и единая «Библия агента».</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="goal" class="section">
+      <div class="container">
+        <h2 class="section-title">Цель на 6 месяцев</h2>
+        <p class="section-lead">
+          Создать взаимосвязанную экосистему продуктов, которая сокращает время подбора новостроек,
+          системно привлекает покупателей, обучает и привлекает новых агентов и обеспечивает агентству
+          улучшенные условия у застройщиков.
+        </p>
+        <div class="grid-2">
+          <div class="panel highlight">
+            <h4>Q1 (февраль–апрель)</h4>
+            <ul>
+              <li>Запущен MVP цифрового помощника и база новостроек.</li>
+              <li>Старт потока Академии (недели 1–8).</li>
+              <li>Сформирована стратегия Telegram‑канала, запущены канал и бот.</li>
+            </ul>
+          </div>
+          <div class="panel highlight">
+            <h4>Q2 (май–июль)</h4>
+            <ul>
+              <li>Telegram‑канал масштабирован, настроена работа с базой и CRM.</li>
+              <li>Академия завершила 12‑недельный цикл и перешла в сопровождение.</li>
+              <li>Консалтинг упакован и запущен с 1–2 клиентами.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="streams" class="section">
+      <div class="container">
+        <h2 class="section-title">4 ключевых потока</h2>
+        <p class="section-lead">Каждый поток отвечает за свой блок ценности и усиливает остальные.</p>
+        <div class="grid-4">
+          <div class="panel">
+            <h4>Цифровой помощник</h4>
+            <ul>
+              <li>MVP и база 50+ новостроек.</li>
+              <li>Актуальность данных > 90%.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h4>Telegram‑канал</h4>
+            <ul>
+              <li>1000–3000 потенциальных клиентов.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h4>Академия новостроек</h4>
+            <ul>
+              <li>12‑недельный поток обучения.</li>
+              <li>«Библия агента» и стандарты.</li>
+              <li>привлечение новых агентов.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h4>Консалтинг для застройщиков</h4>
+            <ul>
+              <li>1–2 застройщика на консалтинге.</li>
+              <li>Улучшение ипотечных условий 10–20%.</li>
+              <li>Рост агентского канала 30–50%.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="timeline" class="section">
+      <div class="container">
+        <h2 class="section-title">6‑месячный календарь</h2>
+        <p class="section-lead">Помесячные фокусы с привязкой к направлениям.</p>
+        <div class="timeline grid-3">
+          <div class="month">
+            <strong>Февраль</strong>
+            <ul>
+              <li>Интервью, ТЗ, архитектура, прототип цифрового помощника.</li>
+              <li>Подготовка Академии: «Библия агента», ритм недели, кураторы.</li>
+            </ul>
+          </div>
+          <div class="month">
+            <strong>Март</strong>
+            <ul>
+              <li>MVP и запуск цифрового помощника.</li>
+              <li>Академия: недели 1–4 (старт, фокус объектов, коммуникации).</li>
+            </ul>
+          </div>
+          <div class="month">
+            <strong>Апрель</strong>
+            <ul>
+              <li>Telegram‑канал: стратегия, контент‑план, бот, вирусная механика.</li>
+              <li>Академия: недели 5–8 (личный бренд, ИИ, промо‑материалы).</li>
+              <li>Стабилизация цифрового помощника.</li>
+            </ul>
+          </div>
+          <div class="month">
+            <strong>Май</strong>
+            <ul>
+              <li>Telegram‑канал: тест, масштаб, CRM, аналитика.</li>
+              <li>Академия: недели 9–12 (воронка, сервис, партнерства).</li>
+            </ul>
+          </div>
+          <div class="month">
+            <strong>Июнь</strong>
+            <ul>
+              <li>Консалтинг: исследование потребностей, ипотечные продукты.</li>
+              <li>Сопровождение Академии, обновление «Библии агента».</li>
+              <li>Стабильный контент и работа с базой в Telegram.</li>
+            </ul>
+          </div>
+          <div class="month">
+            <strong>Июль</strong>
+            <ul>
+              <li>Консалтинг: первые клиенты, интеграция условий в экосистему.</li>
+              <li>Обновление условий в цифровом помощнике и Telegram.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="metrics" class="section">
+      <div class="container">
+        <h2 class="section-title">Ключевые метрики</h2>
+        <div class="grid-2">
+          <div class="panel metrics">
+            <h4>Цифровой помощник</h4>
+            <div class="metric-row">
+              <strong>50+ новостроек в базе</strong>
+              <span>Актуальность данных > 90%.</span>
+            </div>
+            <div class="metric-row">
+              <span>Сокращение времени поиска на 50%.</span>
+            </div>
+          </div>
+          <div class="panel metrics">
+            <h4>Telegram‑канал</h4>
+            <div class="metric-row">
+              <strong>1000–3000 клиентов</strong>
+              <span>Стоимость привлечения до 500 руб.</span>
+            </div>
+            <div class="metric-row">
+
+            </div>
+          </div>
+          <div class="panel metrics">
+            <h4>Академия новостроек</h4>
+            <div class="metric-row">
+              <strong>85% выполнения недельных планов</strong>
+              <span>Рост действий: контакты, звонки, встречи, контент.</span>
+            </div>
+            <div class="metric-row">
+              <strong>Итоговый отчет и новые OKR</strong>
+              <span>Переход в сопровождение после 12 недель.</span>
+            </div>
+          </div>
+          <div class="panel metrics">
+            <h4>Консалтинг</h4>
+            <div class="metric-row">
+              <strong>1–2 застройщика на консалтинге</strong>
+              <span>Улучшение ипотечных условий на 10–20%.</span>
+            </div>
+            <div class="metric-row">
+              <strong>Рост агентского канала 30–50%</strong>
+              <span>Удовлетворенность застройщиков 8+/10.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="integration" class="section">
+      <div class="container">
+        <h2 class="section-title">Интеграции экосистемы</h2>
+        <p class="section-lead">Потоки усиливают друг друга и ускоряют масштабирование.</p>
+        <div class="grid-3">
+          <div class="panel">
+            <h4>Консалтинг → продукты</h4>
+            <ul>
+              <li>Новые условия, комиссии, спец‑акции.</li>
+              <li>Усиление ценности для агентов и покупателей.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h4>Академия → Telegram</h4>
+            <ul>
+              <li>Обученные агенты создают контент.</li>
+              <li>Рост доверия и экспертизы канала.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h4>Цифровой помощник → все потоки</h4>
+            <ul>
+              <li>Актуальные карточки объектов и сравнения.</li>
+              <li>Быстрый подбор под запрос клиента.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="artifacts" class="section">
+      <div class="container">
+        <h2 class="section-title">Артефакты по итогам 6 месяцев</h2>
+        <div class="grid-2">
+          <div class="panel">
+            <ul>
+              <li>MVP цифрового помощника и актуальная база новостроек.</li>
+              <li>Telegram‑канал, бот, промокоды, CRM‑контур.</li>
+              <li>«Библия агента», стандарты обучения, отчет по 12 неделям.</li>
+              <li>Упакованный консалтинг, методологии, кейсы и договоры.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h4>Эффект для бизнеса</h4>
+            <ul>
+              <li>Ускорение подбора объектов.</li>
+              <li>Стабильный поток покупателей.</li>
+              <li>Укрепление агентской сети.</li>
+              <li>Лучшие условия от застройщиков.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  <footer class="footer">
+    <div class="container">
+      Эксперт-Сити · Маршрутная карта 2026 · темная версия лендинга
+    </div>
+  </footer>
+</body>
+</html>

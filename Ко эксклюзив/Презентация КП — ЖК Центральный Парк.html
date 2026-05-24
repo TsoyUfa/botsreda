@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ЖК «Центральный Парк» — Система эксклюзивных продаж</title>
+<style>
+    @page {
+        size: A4;
+        margin: 0;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --bg: #ffffff;
+        --bg-soft: #f7f7fb;
+        --bg-violet: #f5f3ff;
+        --ink-900: #0f172a;
+        --ink-700: #334155;
+        --ink-500: #64748b;
+        --ink-400: #94a3b8;
+        --line: #e2e8f0;
+        --line-strong: #cbd5e1;
+        --violet-50: #f5f3ff;
+        --violet-100: #ede9fe;
+        --violet-300: #c4b5fd;
+        --violet-500: #8b5cf6;
+        --violet-600: #7c3aed;
+        --violet-700: #6d28d9;
+        --violet-800: #5b21b6;
+        --emerald: #10b981;
+        --emerald-soft: #ecfdf5;
+        --amber: #f59e0b;
+        --amber-soft: #fffbeb;
+        --rose: #f43f5e;
+        --rose-soft: #fff1f2;
+    }
+
+    html, body {
+        background: var(--bg);
+        color: var(--ink-900);
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Helvetica Neue", "Segoe UI", Arial, sans-serif;
+        font-feature-settings: "ss01", "cv11", "tnum";
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* На экране — лёгкая «галерея» с тенями и рамкой;
+       при печати — чистые страницы без декора. */
+    @media screen {
+        body {
+            background: #eef0f4;
+            padding: 24px 0;
+        }
+        .slide {
+            margin: 0 auto 24px;
+            box-shadow: 0 12px 40px rgba(15, 23, 42, 0.10), 0 2px 6px rgba(15, 23, 42, 0.04);
+            border-radius: 4px;
+        }
+    }
+
+    .slide {
+        position: relative;
+        width: 210mm;
+        height: 297mm;
+        padding: 16mm 18mm 12mm;
+        background: var(--bg);
+        page-break-after: always;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+    .slide:last-child { page-break-after: auto; }
+
+    /* Верхняя фирменная полоса */
+    .slide::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--violet-700) 0%, var(--violet-500) 60%, var(--violet-300) 100%);
+    }
+
+    /* Нижний колонтитул */
+    .footer {
+        position: absolute;
+        left: 18mm; right: 18mm; bottom: 6mm;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 4pt 10pt;
+        font-size: 8pt;
+        color: var(--ink-400);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+    .footer .num { color: var(--violet-700); font-weight: 600; }
+    .footer .brand { font-weight: 600; color: var(--ink-500); }
+
+    /* Eyebrow / надзаголовок */
+    .eyebrow {
+        display: inline-block;
+        font-size: 9pt;
+        font-weight: 600;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--violet-700);
+        margin-bottom: 14pt;
+    }
+    .eyebrow::before {
+        content: '';
+        display: inline-block;
+        width: 18pt;
+        height: 2px;
+        background: var(--violet-700);
+        vertical-align: middle;
+        margin-right: 10pt;
+        transform: translateY(-2px);
+    }
+
+    /* Заголовки */
+    h1.slide-title {
+        font-size: 32pt;
+        line-height: 1.1;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        color: var(--ink-900);
+        margin-bottom: 8pt;
+    }
+    h2.slide-subtitle {
+        font-size: 14pt;
+        font-weight: 500;
+        line-height: 1.45;
+        color: var(--ink-500);
+        max-width: 100%;
+        margin-bottom: 18pt;
+    }
+
+    /* === Утилиты === */
+    .row { display: flex; }
+    .col { display: flex; flex-direction: column; }
+    .gap-12 { gap: 12pt; }
+    .gap-16 { gap: 16pt; }
+    .gap-20 { gap: 20pt; }
+    .gap-24 { gap: 24pt; }
+    .grow { flex: 1 1 auto; }
+    .center { align-items: center; justify-content: center; text-align: center; }
+
+    /* Титул: KPI в сетке 2×2 под книжный A4 */
+    .title-kpis {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12pt;
+    }
+
+    /* === Карточки и таблицы === */
+    .card {
+        background: var(--bg-soft);
+        border: 1px solid var(--line);
+        border-radius: 10pt;
+        padding: 16pt 18pt;
+    }
+    .card-violet {
+        background: var(--violet-50);
+        border: 1px solid var(--violet-100);
+        border-radius: 10pt;
+        padding: 16pt 18pt;
+    }
+    .card-outline {
+        background: var(--bg);
+        border: 1px solid var(--line);
+        border-radius: 10pt;
+        padding: 16pt 18pt;
+    }
+    .card-accent-left {
+        border-left: 3px solid var(--violet-700);
+    }
+
+    .card-eyebrow {
+        font-size: 8.5pt;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--violet-700);
+        margin-bottom: 8pt;
+    }
+    .card-title {
+        font-size: 11.5pt;
+        font-weight: 700;
+        color: var(--ink-900);
+        margin-bottom: 6pt;
+        line-height: 1.3;
+    }
+    .card-body {
+        font-size: 10pt;
+        color: var(--ink-700);
+        line-height: 1.5;
+    }
+
+    /* Большая числовая карточка */
+    .stat {
+        background: var(--bg);
+        border: 1px solid var(--line);
+        border-radius: 12pt;
+        padding: 18pt 20pt;
+        flex: 1;
+    }
+    .stat .stat-eyebrow {
+        font-size: 8.5pt;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-500);
+        margin-bottom: 10pt;
+    }
+    .stat .stat-number {
+        font-size: 34pt;
+        font-weight: 800;
+        line-height: 1;
+        letter-spacing: -0.03em;
+        color: var(--violet-700);
+        margin-bottom: 8pt;
+    }
+    .stat .stat-caption {
+        font-size: 10pt;
+        color: var(--ink-700);
+        line-height: 1.4;
+    }
+    .stat.stat-emerald .stat-number { color: var(--emerald); }
+    .stat.stat-strong { background: var(--violet-700); border-color: var(--violet-700); }
+    .stat.stat-strong .stat-eyebrow { color: var(--violet-300); }
+    .stat.stat-strong .stat-number { color: #ffffff; }
+    .stat.stat-strong .stat-caption { color: var(--violet-100); }
+
+    /* Чипы */
+    .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6pt;
+        background: var(--violet-50);
+        border: 1px solid var(--violet-100);
+        color: var(--violet-700);
+        padding: 6pt 11pt;
+        border-radius: 999pt;
+        font-size: 9.5pt;
+        font-weight: 600;
+    }
+    .chip-neutral {
+        background: var(--bg-soft);
+        border-color: var(--line);
+        color: var(--ink-700);
+    }
+
+    /* Таблица */
+    table.t {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 9.5pt;
+    }
+    table.t th, table.t td {
+        text-align: left;
+        padding: 10pt 12pt;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+    }
+    table.t thead th {
+        font-size: 8.5pt;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ink-500);
+        border-bottom: 1px solid var(--line-strong);
+        background: transparent;
+    }
+    table.t tbody td { color: var(--ink-700); }
+    table.t tbody td.first { color: var(--ink-900); font-weight: 600; }
+    table.t tbody tr:last-child td { border-bottom: 0; }
+    table.t tfoot td {
+        background: var(--bg-violet);
+        color: var(--violet-800);
+        font-weight: 700;
+        border-top: 1px solid var(--violet-100);
+        border-bottom: 0;
+    }
+    table.t tfoot td:first-child { letter-spacing: 0.06em; text-transform: uppercase; font-size: 9pt; }
+
+    /* Сравнительная таблица 2 колонки */
+    .compare {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+        border: 1px solid var(--line);
+        border-radius: 10pt;
+        overflow: hidden;
+    }
+    .compare > div { padding: 18pt 22pt; }
+    .compare > div.left { background: var(--bg-soft); border-right: 1px solid var(--line); }
+    .compare > div.right { background: var(--violet-50); }
+    .compare h4 {
+        font-size: 9pt;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        margin-bottom: 12pt;
+    }
+    .compare .left h4 { color: var(--ink-500); }
+    .compare .right h4 { color: var(--violet-700); }
+    .compare ul { list-style: none; }
+    .compare li {
+        font-size: 11pt;
+        line-height: 1.5;
+        color: var(--ink-700);
+        padding: 5pt 0;
+        display: flex;
+        align-items: baseline;
+        gap: 8pt;
+    }
+    .compare li.total { font-weight: 700; color: var(--ink-900); border-top: 1px solid var(--line); margin-top: 6pt; padding-top: 10pt; }
+    .compare .right li.total { color: var(--violet-800); border-top-color: var(--violet-100); }
+    .compare li::before {
+        content: '';
+        width: 5pt; height: 5pt;
+        border-radius: 50%;
+        flex-shrink: 0;
+        transform: translateY(-2px);
+    }
+    .compare .left li::before { background: var(--ink-400); }
+    .compare .right li::before { background: var(--violet-600); }
+    .compare li.total::before { display: none; }
+
+    /* Призовая плашка */
+    .banner-emerald {
+        background: var(--emerald-soft);
+        border: 1px solid #a7f3d0;
+        border-left: 4px solid var(--emerald);
+        border-radius: 10pt;
+        padding: 14pt 18pt;
+        display: flex;
+        align-items: center;
+        gap: 16pt;
+    }
+    .banner-emerald .label {
+        font-size: 9pt; font-weight: 600;
+        letter-spacing: 0.14em; text-transform: uppercase;
+        color: var(--emerald);
+    }
+    .banner-emerald .text {
+        font-size: 13pt; font-weight: 700; color: #065f46;
+    }
+
+    .banner-amber {
+        background: var(--amber-soft);
+        border: 1px solid #fde68a;
+        border-left: 4px solid var(--amber);
+        border-radius: 10pt;
+        padding: 12pt 16pt;
+        font-size: 10pt;
+        color: #78350f;
+    }
+    .banner-amber strong { color: #92400e; }
+
+    /* Сноска */
+    .note {
+        font-size: 8.5pt;
+        color: var(--ink-400);
+        line-height: 1.4;
+    }
+
+    /* Гант (2×2 под книжный A4) */
+    .gantt {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0;
+        border: 1px solid var(--line);
+        border-radius: 12pt;
+        overflow: hidden;
+        background: var(--bg-soft);
+    }
+    .gantt-bar {
+        height: 6pt;
+        background: linear-gradient(90deg, var(--violet-700), var(--violet-500), var(--violet-300));
+        grid-column: 1 / -1;
+    }
+    .gantt-cell {
+        padding: 14pt 16pt 16pt;
+        background: var(--bg);
+        position: relative;
+    }
+    .gantt-cell:nth-child(2),
+    .gantt-cell:nth-child(4) {
+        border-right: 1px solid var(--line);
+    }
+    .gantt-cell:nth-child(2),
+    .gantt-cell:nth-child(3) {
+        border-bottom: 1px solid var(--line);
+    }
+    .gantt-cell .dot {
+        width: 11pt; height: 11pt;
+        border-radius: 50%;
+        background: var(--violet-700);
+        border: 3px solid var(--bg);
+        margin-bottom: 12pt;
+        box-shadow: 0 0 0 1px var(--violet-300);
+    }
+    .gantt-cell .date {
+        font-size: 9pt; font-weight: 700;
+        letter-spacing: 0.12em; text-transform: uppercase;
+        color: var(--violet-700); margin-bottom: 6pt;
+    }
+    .gantt-cell .event {
+        font-size: 12pt; font-weight: 700; color: var(--ink-900);
+        margin-bottom: 6pt; line-height: 1.3;
+    }
+    .gantt-cell .who {
+        font-size: 9pt; color: var(--ink-500); line-height: 1.4;
+    }
+
+    /* Сценарии (go / no-go) */
+    .scenarios {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10pt;
+    }
+    .scenario {
+        border: 1px solid var(--line);
+        border-radius: 10pt;
+        padding: 14pt 16pt;
+        background: var(--bg);
+        position: relative;
+    }
+    .scenario .num {
+        font-size: 22pt; font-weight: 800;
+        letter-spacing: -0.02em;
+        line-height: 1;
+        margin-bottom: 8pt;
+    }
+    .scenario .label {
+        font-size: 8.5pt; font-weight: 700;
+        letter-spacing: 0.14em; text-transform: uppercase;
+        margin-bottom: 8pt;
+    }
+    .scenario .descr {
+        font-size: 10pt; color: var(--ink-700); line-height: 1.4;
+    }
+    .scenario.go { background: var(--emerald-soft); border-color: #a7f3d0; }
+    .scenario.go .num, .scenario.go .label { color: var(--emerald); }
+    .scenario.warn { background: var(--amber-soft); border-color: #fde68a; }
+    .scenario.warn .num, .scenario.warn .label { color: var(--amber); }
+    .scenario.stop { background: var(--rose-soft); border-color: #fecdd3; }
+    .scenario.stop .num, .scenario.stop .label { color: var(--rose); }
+
+    /* Печать */
+    @media print {
+        @page { size: A4; margin: 0; }
+        html, body { background: #ffffff; }
+        body { padding: 0; }
+        .slide {
+            margin: 0;
+            box-shadow: none;
+            border-radius: 0;
+            page-break-after: always;
+            break-after: page;
+        }
+        .slide:last-child { page-break-after: auto; }
+        * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+        }
+    }
+</style>
+</head>
+<body>
+
+<!-- =================== СЛАЙД 1. ТИТУЛ =================== -->
+<section class="slide">
+    <div style="flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center;">
+        <div style="max-width: 100%;">
+            <div class="eyebrow">Коммерческое предложение · Май 2026</div>
+            <h1 style="font-size: 48pt; font-weight: 800; line-height: 1.02; letter-spacing: -0.03em; color: var(--ink-900); margin-bottom: 14pt;">
+                ЖК «Центральный&nbsp;Парк»
+            </h1>
+            <div style="font-size: 20pt; font-weight: 500; line-height: 1.25; color: var(--violet-700); margin-bottom: 12pt;">
+                Система эксклюзивных продаж
+            </div>
+            <div style="font-size: 12.5pt; line-height: 1.5; color: var(--ink-500); max-width: 100%; margin-bottom: 20pt;">
+                Ускорение реализации остатка 196&nbsp;апартаментов через управляемый партнёрский канал. Финансовая модель — нейтральная для застройщика.
+            </div>
+
+            <div class="title-kpis">
+                <div class="card-outline" style="flex: 1; padding: 14pt 16pt;">
+                    <div class="card-eyebrow" style="color: var(--ink-500);">Остаток</div>
+                    <div style="font-size: 26pt; font-weight: 800; color: var(--ink-900); line-height: 1; letter-spacing: -0.02em;">196</div>
+                    <div style="font-size: 9pt; color: var(--ink-500); margin-top: 4pt;">апартаментов из 508</div>
+                </div>
+                <div class="card-outline" style="flex: 1; padding: 14pt 16pt;">
+                    <div class="card-eyebrow" style="color: var(--ink-500);">Темп Q1 2026</div>
+                    <div style="font-size: 26pt; font-weight: 800; color: var(--ink-900); line-height: 1; letter-spacing: -0.02em;">7</div>
+                    <div style="font-size: 9pt; color: var(--ink-500); margin-top: 4pt;">сделок за квартал · янв 2 / фев 4 / мар 1</div>
+                </div>
+                <div class="card-outline" style="flex: 1; padding: 14pt 16pt;">
+                    <div class="card-eyebrow" style="color: var(--emerald);">Финмодель</div>
+                    <div style="font-size: 26pt; font-weight: 800; color: var(--emerald); line-height: 1; letter-spacing: -0.02em;">0&nbsp;₽</div>
+                    <div style="font-size: 9pt; color: var(--ink-500); margin-top: 4pt;">дополнительных затрат застройщика</div>
+                </div>
+                <div class="card-outline" style="flex: 1; padding: 14pt 16pt;">
+                    <div class="card-eyebrow" style="color: var(--violet-700);">Апробация</div>
+                    <div style="font-size: 26pt; font-weight: 800; color: var(--violet-700); line-height: 1; letter-spacing: -0.02em;">1&nbsp;месяц</div>
+                    <div style="font-size: 9pt; color: var(--ink-500); margin-top: 4pt;">май 2026 · выход без обязательств</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <span><span class="num">01</span> · 10</span>
+        <span>Эксперт-Сити для СУ-10 · топ-3 АН Уфы по объёму сделок ЖК «Некрасовский»</span>
+        <span class="brand">ЭКСПЕРТ-СИТИ</span>
+    </div>
+</section>
+
+<!-- =================== СЛАЙД 2. KPI МАЯ =================== -->
+<section class="slide">
+    <div class="eyebrow">02 · KPI пилота мая</div>
+    <h1 class="slide-title">Что считаем результатом</h1>
+    <h2 class="slide-subtitle">Один месяц, измеримые цели, нулевая стоимость для застройщика.</h2>
+
+    <div class="row gap-16" style="margin-bottom: 18pt;">
+        <div class="stat stat-strong">
+            <div class="stat-eyebrow">Сделки</div>
+            <div class="stat-number">5</div>
+            <div class="stat-caption">2,5% остатка за месяц пилота</div>
+        </div>
+        <div class="stat">
+            <div class="stat-eyebrow">Выручка</div>
+            <div class="stat-number">~ X&nbsp;млн&nbsp;₽</div>
+            <div class="stat-caption">5 сделок × средний чек по шахматке СУ-10</div>
+        </div>
+        <div class="stat stat-emerald">
+            <div class="stat-eyebrow">Затраты застройщика</div>
+            <div class="stat-number">0&nbsp;₽</div>
+            <div class="stat-caption">Финансовая модель нейтральна</div>
+        </div>
+    </div>
+
+    <div class="card-outline" style="padding: 14pt 18pt;">
+        <div class="card-eyebrow">Лидирующие индикаторы воронки</div>
+        <div class="row gap-12" style="flex-wrap: wrap;">
+            <span class="chip">Топ-200 АН Уфы + 5 ключевых агрегаторов</span>
+            <span class="chip">30+ целевых показов</span>
+            <span class="chip">10 броней — задел на июнь</span>
+            <span class="chip-neutral chip">Авито · Тренд&nbsp;Агент · Репрофит · Домклик · НМаркет</span>
+        </div>
+    </div>
+
+    <div style="flex: 1;"></div>
+    <p class="note">Финальная цифра выручки фиксируется до запуска по актуальной шахматке СУ-10.</p>
+
+    <div class="footer">
+        <span><span class="num">02</span> · 10</span>
+        <span>KPI пилота мая</span>
+        <span class="brand">ЭКСПЕРТ-СИТИ</span>
+    </div>
+</section>
+
+<!-- =================== СЛАЙД 3. ПОДГОТОВКА ДО 6 МАЯ =================== -->
+<section class="slide">
+    <div class="eyebrow">03 · Этап 1 · Подготовка</div>
+    <h1 class="slide-title">Подготовка к запуску. До 6 мая</h1>
+    <h2 class="slide-subtitle">Юридический и операционный фундамент. Каждый пункт с дедлайном и ответственным.</h2>
+
+    <table class="t">
+        <thead>
+            <tr>
+                <th style="width: 56%;">Что готовим</th>
+                <th style="width: 28%;">Ответственный</th>
+                <th style="width: 16%;">Срок</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td class="first">Договор и финансовая модель (5% + 5%)</td><td>Эксперт-Сити + юристы СУ-10</td><td>до 5 мая</td></tr>
+            <tr><td class="first">Прайс и регламент скидок</td><td>СУ-10</td><td>до 5 мая</td></tr>
+            <tr><td class="first">ABC-сегментация партнёрской сети Уфы</td><td>Эксперт-Сити</td><td>до 6 мая</td></tr>
+            <tr><td class="first">Регламент работы с агрегаторами</td><td>Эксперт-Сити</td><td>до 6 мая</td></tr>
+            <tr><td class="first">Доступ к материалам и шахматке для партнёров</td><td>СУ-10</td><td>до 6 мая</td></tr>
+            <tr><td class="first">Назначение ответственного со стороны СУ-10</td><td>СУ-10</td><td>до 5 мая</td></tr>
+        </tbody>
+    </table>
+
+    <div style="flex: 1;"></div>
+
+    <div class="banner-amber">
+        <strong>Главный риск этапа:</strong> медленные согласования.&nbsp;&nbsp;
+        <strong>Митигация:</strong> один ответственный со стороны СУ-10 + еженедельный список решений на оперативке.
+    </div>
+
+    <div class="footer">
+        <span><span class="num">03</span> · 10</span>
+        <span>Этап 1 · подготовка к запуску</span>
+        <span class="brand">ЭКСПЕРТ-СИТИ</span>
+    </div>
+</section>
+
+<!-- =================== СЛАЙД 4. ОФЛАЙН РЕ-СТАРТ 13–15 МАЯ =================== -->
+<section class="slide">
+    <div class="eyebrow">04 · Офлайн ре-старт</div>
+    <h1 class="slide-title">Офлайн ре-старт Центральный парк: 13–15 мая</h1>
+    <h2 class="slide-subtitle">Точка входа в воронку мая. Каждое касание привязано к броням и сделкам.</h2>
+
+    <div style="font-size: 9pt; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-500); margin-bottom: 8pt;">Программа и измеримые цели</div>
+
+    <table class="t" style="margin-bottom: 18pt;">
+        <thead>
+            <tr>
+                <th style="width: 44%;">Формат</th>
+                <th style="width: 26%;">Аудитория</th>
+                <th style="width: 30%;">Цель события</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="first">Презентация продукта + спецусловия</td>
+                <td>Партнёры (15 АН)</td>
+                <td><strong style="color: var(--violet-700);">15 целевых показов в течение недели</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="banner-emerald" style="margin-bottom: 14pt;">
+        <span class="label">Что получаем после мероприятия</span>
+        <span class="text">8–10 квалифицированных броней до конца мая</span>
+    </div>
+
+    <div style="flex: 1;"></div>
+
+    <div class="card-outline" style="padding: 14pt 18pt;">
+        <div style="display: flex; gap: 14pt; align-items: stretch;">
+            <div style="flex: 1; padding-right: 14pt; border-right: 1px solid var(--line);">
+                <div style="font-size: 8.5pt; letter-spacing: 0.14em; text-transform: uppercase; color: var(--violet-700); font-weight: 700; margin-bottom: 6pt;">Ответственные</div>
+                <div style="font-size: 11pt; color: var(--ink-900); font-weight: 600; line-height: 1.4;">Куратор проекта (Эксперт-Сити) + ответственный СУ-10</div>
+            </div>
+            <div style="flex: 1;">
+                <div style="font-size: 8.5pt; letter-spacing: 0.14em; text-transform: uppercase; color: var(--violet-700); font-weight: 700; margin-bottom: 6pt;">Бюджет ивента</div>
+                <div style="font-size: 11pt; color: var(--ink-900); font-weight: 600; line-height: 1.4;">В рамках регулярных активностей объекта</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <span><span class="num">04</span> · 10</span>
+        <span>Офлайн ре-старт Центральный парк</span>
+        <span class="brand">ЭКСПЕРТ-СИТИ</span>
+    </div>
+</section>
+
+<!-- =================== СЛАЙД 5. КОМАНДА И НЕДЕЛЬНЫЙ РИТМ =================== -->
+<section class="slide">
+    <div class="eyebrow">05 · Этап 2 · Регулярный ритм</div>
+    <h1 class="slide-title">Команда в проекте и недельный цикл</h1>
+    <h2 class="slide-subtitle">Постоянный состав со стороны Эксперт-Сити. Каждая роль — с зоной ответственности и видимым выходом.</h2>
+
+    <div class="row gap-20" style="flex: 1;">
+        <!-- Левая колонка: роли -->
+        <div style="flex: 1.2; display: flex; flex-direction: column; gap: 12pt;">
+            <div class="card card-accent-left">
+                <div class="card-title">Куратор проекта</div>
+                <div class="card-body">Логика запуска, контакт с СУ-10, управленческие решения.&nbsp; <strong style="color: var(--violet-700);">Выход:</strong> недельный отчёт.</div>
+            </div>
+            <div class="card card-accent-left">
+                <div class="card-title">Партнёрский менеджер</div>
+                <div class="card-body">Регулярные обучения по объекту.</div>
+            </div>
+            <div class="card card-accent-left">
+                <div class="card-title">Отдел заботы</div>
+                <div class="card-body">Вопрос — ответ от риэлторов, контроль броней и уникальностей.</div>
+            </div>
+        </div>
+
+        <!-- Правая колонка: недельный цикл -->
+        <div style="flex: 1; display: flex; flex-direction: column;">
+            <div class="card-violet" style="padding: 16pt 18pt; flex: 1; display: flex; flex-direction: column;">
+                <div class="card-eyebrow">Недельный цикл · повторяется каждые 7 дней</div>
+
+                <div style="display: flex; flex-direction: column; gap: 10pt; margin-top: 6pt;">
+                    <div style="display: flex; gap: 14pt; align-items: flex-start;">
+                        <div style="width: 36pt; flex-shrink: 0; font-size: 11pt; font-weight: 800; color: var(--violet-700); padding-top: 1pt;">Пн</div>
+                        <div>
+                            <div style="font-size: 11pt; font-weight: 700; color: var(--ink-900);">Оперативка СУ-10 ↔ Эксперт-Сити</div>
+                            <div style="font-size: 9.5pt; color: var(--ink-500);">30 минут · ведёт куратор</div>
+                        </div>
+                    </div>
+                    <div style="height: 1px; background: var(--violet-100);"></div>
+
+                    <div style="display: flex; gap: 14pt; align-items: flex-start;">
+                        <div style="width: 36pt; flex-shrink: 0; font-size: 11pt; font-weight: 800; color: var(--violet-700); padding-top: 1pt;">Вт–Ср</div>
+                        <div>
+                            <div style="font-size: 11pt; font-weight: 700; color: var(--ink-900);">Обучения и встречи с А/B-партнёрами</div>
+                            <div style="font-size: 9.5pt; color: var(--ink-500);">Тренер + партнёрский менеджер</div>
+                        </div>
+                    </div>
+                    <div style="height: 1px; background: var(--violet-100);"></div>
+
+                    <div style="display: flex; gap: 14pt; align-items: flex-start;">
+                        <div style="width: 36pt; flex-shrink: 0; font-size: 11pt; font-weight: 800; color: var(--violet-700); padding-top: 1pt;">Чт</div>
+                        <div>
+                            <div style="font-size: 11pt; font-weight: 700; color: var(--ink-900);">Показы и follow-up по броням</div>
+                            <div style="font-size: 9.5pt; color: var(--ink-500);">Партнёрский менеджер</div>
+                        </div>
+                    </div>
+                    <div style="height: 1px; background: var(--violet-100);"></div>
+
+                    <div style="display: flex; gap: 14pt; align-items: flex-start;">
+                        <div style="width: 36pt; flex-shrink: 0; font-size: 11pt; font-weight: 800; color: var(--violet-700); padding-top: 1pt;">Пт</div>
+                        <div>
+                            <div style="font-size: 11pt; font-weight: 700; color: var(--ink-900);">1-страничный отчёт в адрес ГД</div>
+                            <div style="font-size: 9.5pt; color: var(--ink-500);">План / факт / отклонения / решения</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <span><span class="num">05</span> · 10</span>
+        <span>Команда и регулярный ритм</span>
+        <span class="brand">ЭКСПЕРТ-СИТИ</span>
+    </div>
+</section>
+
+<!-- =================== СЛАЙД 6. 4 КОНТРОЛЬНЫЕ ТОЧКИ =================== -->
+<section class="slide">
+    <div class="eyebrow">06 · Прозрачность канала</div>
+    <h1 class="slide-title">Четыре контрольные точки</h1>
+    <h2 class="slide-subtitle">Вы видите партнёрский канал в реальном времени — всегда.</h2>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12pt; flex: 1;">
+        <div class="card" style="padding: 16pt 18pt; display: flex; flex-direction: column;">
+            <div style="display: flex; align-items: center; gap: 10pt; margin-bottom: 10pt;">
+                <div style="width: 26pt; height: 26pt; border-radius: 8pt; background: var(--violet-700); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12pt;">1</div>
+                <div class="card-title" style="margin: 0; font-size: 13pt;">Уникальности клиентов</div>
+            </div>
+            <div class="card-body" style="margin-bottom: 10pt;">Регистрация заявок и броней с идентификаторами, конфликты, двойные брони.</div>
+            <div style="margin-top: auto; padding-top: 10pt; border-top: 1px solid var(--line);">
+                <div style="font-size: 8.5pt; letter-spacing: 0.14em; text-transform: uppercase; color: var(--violet-700); font-weight: 700; margin-bottom: 4pt;">Что вы получаете</div>
+                <div style="font-size: 10pt; color: var(--ink-900); font-weight: 600; line-height: 1.4;">Снижение споров с АН, прозрачность приоритетов сделок.</div>
+            </div>
+        </div>
+
+        <div class="card" style="padding: 16pt 18pt; display: flex; flex-direction: column;">
+            <div style="display: flex; align-items: center; gap: 10pt; margin-bottom: 10pt;">
+                <div style="width: 26pt; height: 26pt; border-radius: 8pt; background: var(--violet-700); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12pt;">2</div>
+                <div class="card-title" style="margin: 0; font-size: 13pt;">График обучений</div>
+            </div>
+            <div class="card-body" style="margin-bottom: 10pt;">Расписание, посещаемость по агентствам и менеджерам, активность тренеров.</div>
+            <div style="margin-top: auto; padding-top: 10pt; border-top: 1px solid var(--line);">
+                <div style="font-size: 8.5pt; letter-spacing: 0.14em; text-transform: uppercase; color: var(--violet-700); font-weight: 700; margin-bottom: 4pt;">Что вы получаете</div>
+                <div style="font-size: 10pt; color: var(--ink-900); font-weight: 600; line-height: 1.4;">Дисциплина АН и ранний сигнал «партнёр выпадает из канала».</div>
+            </div>
+        </div>
+
+        <div class="card" style="padding: 16pt 18pt; display: flex; flex-direction: column;">
+            <div style="display: flex; align-items: center; gap: 10pt; margin-bottom: 10pt;">
+                <div style="width: 26pt; height: 26pt; border-radius: 8pt; background: var(--violet-700); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12pt;">3</div>
+                <div class="card-title" style="margin: 0; font-size: 13pt;">Вопросы партнёров</div>
+            </div>
+            <div class="card-body" style="margin-bottom: 10pt;">Классификация (продукт / документы / цены / технические), время реакции и решения.</div>
+            <div style="margin-top: auto; padding-top: 10pt; border-top: 1px solid var(--line);">
+                <div style="font-size: 8.5pt; letter-spacing: 0.14em; text-transform: uppercase; color: var(--violet-700); font-weight: 700; margin-bottom: 4pt;">Что вы получаете</div>
+                <div style="font-size: 10pt; color: var(--ink-900); font-weight: 600; line-height: 1.4;">База типовых ответов, выявление системных проблем продукта.</div>
+            </div>
+        </div>
+
+        <div class="card" style="padding: 16pt 18pt; display: flex; flex-direction: column;">
+            <div style="display: flex; align-items: center; gap: 10pt; margin-bottom: 10pt;">
+                <div style="width: 26pt; height: 26pt; border-radius: 8pt; background: var(--violet-700); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12pt;">4</div>
+                <div class="card-title" style="margin: 0; font-size: 13pt;">Брони от агентств</div>
+            </div>
+            <div class="card-body" style="margin-bottom: 10pt;">Конверсия заявка → бронь → сделка по каждому агентству.</div>
+            <div style="margin-top: auto; padding-top: 10pt; border-top: 1px solid var(--line);">
+                <div style="font-size: 8.5pt; letter-spacing: 0.14em; text-transform: uppercase; color: var(--violet-700); font-weight: 700; margin-bottom: 4pt;">Что вы получаете</div>
+                <div style="font-size: 10pt; color: var(--ink-900); font-weight: 600; line-height: 1.4;">Видимая воронка, узкие места, обоснованные решения по партнёрам.</div>
+            </div>
+        </div>
+    </div>
+
+    <p class="note" style="margin-top: 10pt;">Формат вывода: дашборд + 1-страничный недельный срез для ГД (свод по 4 точкам, отклонения, решения недели).</p>
+
+    <div class="footer">
+        <span><span class="num">06</span> · 10</span>
+        <span>Прозрачность канала</span>
+        <span class="brand">ЭКСПЕРТ-СИТИ</span>
+    </div>
+</section>
+
+<!-- =================== СЛАЙД 7. РИТМ + GO/NO-GO =================== -->
+<section class="slide">
+    <div class="eyebrow">07 · Управленческий ритм</div>
+    <h1 class="slide-title">Что и когда получает СУ-10</h1>
+    <h2 class="slide-subtitle">Точки контроля выстроены так, чтобы решение о продлении принималось на основании фактов, а не ожиданий.</h2>
+
+    <table class="t" style="margin-bottom: 18pt;">
+        <thead>
+            <tr>
+                <th style="width: 24%;">Точка</th>
+                <th style="width: 22%;">Периодичность</th>
+                <th style="width: 18%;">Формат</th>
+                <th style="width: 36%;">Содержание</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="first">Оперативка</td>
+                <td>Каждый понедельник</td>
+                <td>30 минут</td>
+                <td>Воронка, отклонения, решения недели, ответственные</td>
+            </tr>
+            <tr>
+                <td class="first">Отчёт</td>
+                <td>Каждую пятницу</td>
+                <td>1 страница</td>
+                <td>План / факт / 4 контрольные точки / решения, нужные от СУ-10</td>
+            </tr>
+            <tr>
+                <td class="first" style="color: var(--violet-700);">Решение</td>
+                <td><strong style="color: var(--violet-700);">28–29 мая</strong></td>
+                <td>Стратегическая встреча</td>
+                <td>Итоги мая, прогноз июня, условия продления</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div style="font-size: 9pt; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-500); margin-bottom: 10pt;">Критерии продления на июнь</div>
+    <div class="scenarios">
+        <div class="scenario go">
+            <div class="label">5 сделок и более</div>
+            <div class="descr">Автоматическое продление на июнь по той же модели.</div>
+        </div>
+        <div class="scenario warn">
+            <div class="label">3–4 сделки</div>
+            <div class="descr">Продление с корректировкой плана и условий.</div>
+        </div>
+        <div class="scenario stop">
+            <div class="label">Менее 3 сделок</div>
+            <div class="descr">Выход без обязательств для обеих сторон.</div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <span><span class="num">07</span> · 10</span>
+        <span>Управленческий ритм</span>
+        <span class="brand">ЭКСПЕРТ-СИТИ</span>
+    </div>
+</section>
+
+<!-- =================== СЛАЙД 8. ПРОГНОЗ ВОРОНКИ =================== -->
+<section class="slide">
+    <div class="eyebrow">08 · Прогноз</div>
+    <h1 class="slide-title">Воронка и закрытие остатка</h1>
+    <h2 class="slide-subtitle">Лиды → брони → сделки. Прогноз июня и июля уточняется по фактическим конверсиям первого месяца пилота.</h2>
+
+    <table class="t">
+        <thead>
+            <tr>
+                <th style="width: 18%;">Месяц</th>
+                <th style="width: 13%;">Лиды</th>
+                <th style="width: 13%;">Брони</th>
+                <th style="width: 13%;">Сделки</th>
+                <th style="width: 25%;">Выручка</th>
+                <th style="width: 18%;">Доля от 196 шт.</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="first">Май <span style="color: var(--violet-700); font-weight: 700;">· пилот</span></td>
+                <td>30</td>
+                <td>10</td>
+                <td><strong style="color: var(--violet-700); font-size: 12pt;">5</strong></td>
+                <td>~ 5 × средний чек</td>
+                <td>2,5%</td>
+            </tr>
+            <tr>
+                <td class="first">Июнь</td>
+                <td>45</td>
+                <td>14</td>
+                <td><strong style="color: var(--violet-700); font-size: 12pt;">7</strong></td>
+                <td>~ 7 × средний чек</td>
+                <td>3,6%</td>
+            </tr>
+            <tr>
+                <td class="first">Июль</td>
+                <td>65</td>
+                <td>20</td>
+                <td><strong style="color: var(--violet-700); font-size: 12pt;">10</strong></td>
+                <td>~ 10 × средний чек</td>
+                <td>5,1%</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>Итого Q2–Q3</td>
+                <td>140</td>
+                <td>44</td>
+                <td><strong style="font-size: 13pt;">22</strong></td>
+                <td>~ 22 × средний чек</td>
+                <td><strong style="font-size: 13pt;">11,2%</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div style="flex: 1;"></div>
+
+    <div class="footer">
+        <span><span class="num">08</span> · 10</span>
+        <span>Прогноз воронки и выручки</span>
+        <span class="brand">ЭКСПЕРТ-СИТИ</span>
+    </div>
+</section>
+
+<!-- =================== СЛАЙД 9. ТАЙМЛАЙН МАЯ =================== -->
+<section class="slide">
+    <div class="eyebrow">09 · Таймлайн</div>
+    <h1 class="slide-title">Таймлайн мая 2026</h1>
+    <h2 class="slide-subtitle">Четыре контрольные точки за месяц. Каждая — с ответственным и видимым выходом.</h2>
+
+    <div class="gantt" style="margin-bottom: 18pt;">
+        <div class="gantt-bar"></div>
+        <div class="gantt-cell">
+            <div class="dot"></div>
+            <div class="date">До 6 мая</div>
+            <div class="event">Подготовка</div>
+            <div class="who">Договор, прайс, регламенты<br><span style="color: var(--violet-700); font-weight: 600;">СУ-10 + Эксперт-Сити</span></div>
+        </div>
+        <div class="gantt-cell">
+            <div class="dot"></div>
+            <div class="date">13–15 мая</div>
+            <div class="event">Запуск</div>
+            <div class="who">Офлайн-мероприятия на объекте<br><span style="color: var(--violet-700); font-weight: 600;">Куратор Эксперт-Сити</span></div>
+        </div>
+        <div class="gantt-cell">
+            <div class="dot"></div>
+            <div class="date">18 мая → еженедельно</div>
+            <div class="event">Регулярный ритм</div>
+            <div class="who">Оперативки + пятничный отчёт<br><span style="color: var(--violet-700); font-weight: 600;">Куратор + ответственный СУ-10</span></div>
+        </div>
+        <div class="gantt-cell" style="background: var(--violet-50);">
+            <div class="dot" style="background: var(--emerald); box-shadow: 0 0 0 1px #a7f3d0;"></div>
+            <div class="date" style="color: var(--emerald);">28–29 мая</div>
+            <div class="event">Решение</div>
+            <div class="who">Итоги мая, продление на июнь<br><span style="color: var(--emerald); font-weight: 600;">СУ-10</span></div>
+        </div>
+    </div>
+
+    <div style="flex: 1;"></div>
+
+    <div class="banner-emerald">
+        <span class="label">Главное событие мая</span>
+        <span class="text">Стратегическая встреча 28–29 мая с фактической базой для решения о продлении</span>
+    </div>
+
+    <div class="footer">
+        <span><span class="num">09</span> · 10</span>
+        <span>Таймлайн мая 2026</span>
+        <span class="brand">ЭКСПЕРТ-СИТИ</span>
+    </div>
+</section>
+
+<!-- =================== СЛАЙД 10. ФИНАНСОВАЯ МОДЕЛЬ И РЕШЕНИЕ =================== -->
+<section class="slide">
+    <div class="eyebrow">10 · Решение</div>
+    <h1 class="slide-title">Финансовая модель и условия запуска</h1>
+    <h2 class="slide-subtitle">Нулевые дополнительные затраты застройщика. Оплата только за факт сделки.</h2>
+
+    <div class="compare" style="margin-bottom: 14pt;">
+        <div class="left">
+            <h4>Текущая практика СУ-10</h4>
+            <ul>
+                <li>Скидка покупателю — <strong>10%</strong></li>
+                <li>&nbsp;</li>
+                <li>Без партнёрской системы продаж</li>
+                <li class="total">Итог для застройщика: −10% от цены</li>
+            </ul>
+        </div>
+        <div class="right">
+            <h4>Предложение Эксперт-Сити</h4>
+            <ul>
+                <li>Скидка покупателю — <strong>5%</strong></li>
+                <li>Комиссия Эксперт-Сити — <strong>5%</strong></li>
+                <li>+ полноценная партнёрская система продаж</li>
+                <li class="total">Итог для застройщика: −10% от цены</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card-violet" style="margin-bottom: 14pt; padding: 14pt 18pt; display: flex; align-items: center; gap: 16pt;">
+        <div style="flex: 1;">
+            <div class="card-eyebrow">Базовое агентское вознаграждение</div>
+            <div style="font-size: 12pt; font-weight: 600; color: var(--ink-900); line-height: 1.4;">Для АН, агрегаторов и частных агентов — с каждой проведённой сделки</div>
+        </div>
+        <div style="font-size: 32pt; font-weight: 800; color: var(--violet-700); line-height: 1; letter-spacing: -0.02em;">5%</div>
+    </div>
+
+    <div class="banner-emerald" style="margin-bottom: 14pt;">
+        <span class="label">Эффект для СУ-10</span>
+        <span class="text">0 ₽ дополнительных затрат · ноль изменений уровня цен · работающий партнёрский канал</span>
+    </div>
+
+    <div style="flex: 1;"></div>
+
+    <div class="row gap-12" style="flex-direction: column;">
+        <div class="card-violet" style="flex: 1; padding: 14pt 18pt;">
+            <div class="card-eyebrow">Решение, которое нужно от Вас сегодня</div>
+            <div style="display: flex; flex-direction: column; gap: 12pt;">
+                <div style="padding-bottom: 12pt; border-bottom: 1px solid var(--violet-100);">
+                    <div style="font-size: 18pt; font-weight: 800; color: var(--violet-700); line-height: 1; margin-bottom: 4pt;">1</div>
+                    <div style="font-size: 10pt; color: var(--ink-900); font-weight: 600; line-height: 1.4;">Подтверждение запуска пилота мая на условиях 5% + 5%</div>
+                </div>
+                <div style="padding-bottom: 12pt; border-bottom: 1px solid var(--violet-100);">
+                    <div style="font-size: 18pt; font-weight: 800; color: var(--violet-700); line-height: 1; margin-bottom: 4pt;">2</div>
+                    <div style="font-size: 10pt; color: var(--ink-900); font-weight: 600; line-height: 1.4;">Назначение ответственного со стороны СУ-10</div>
+                </div>
+                <div>
+                    <div style="font-size: 18pt; font-weight: 800; color: var(--violet-700); line-height: 1; margin-bottom: 4pt;">3</div>
+                    <div style="font-size: 10pt; color: var(--ink-900); font-weight: 600; line-height: 1.4;">Старт подготовки 5–6 мая, запуск офлайн-блока 13–15 мая</div>
+                </div>
+            </div>
+        </div>
+        <div style="flex: 1; background: var(--violet-700); color: #fff; padding: 14pt 18pt; border-radius: 10pt; display: flex; flex-direction: column; justify-content: center;">
+            <div style="font-size: 8.5pt; letter-spacing: 0.14em; text-transform: uppercase; color: var(--violet-300); margin-bottom: 6pt;">Следующий шаг</div>
+            <div style="font-size: 12pt; font-weight: 700; line-height: 1.35;">Подписание соглашения на этой неделе → запуск 6 мая</div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <span><span class="num">10</span> · 10</span>
+        <span>Финансовая модель и условия</span>
+        <span class="brand">ЭКСПЕРТ-СИТИ</span>
+    </div>
+</section>
+
+</body>
+</html>

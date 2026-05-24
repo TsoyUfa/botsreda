@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Программа обучения «Агент по новостройкам» — 8 недель</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0F172A;
+    --bg-deep: #060B18;
+    --surface: rgba(255,255,255,0.04);
+    --surface-border: rgba(255,255,255,0.08);
+    --glass: rgba(15,23,42,0.6);
+    --glass-border: rgba(255,255,255,0.12);
+    --cyan: #22D3EE;
+    --cyan-glow: rgba(34,211,238,0.25);
+    --cyan-soft: rgba(34,211,238,0.12);
+    --magenta: #F472B6;
+    --magenta-glow: rgba(244,114,182,0.25);
+    --magenta-soft: rgba(244,114,182,0.12);
+    --text: #F1F5F9;
+    --text-muted: #94A3B8;
+    --text-dim: #64748B;
+    --gold: #FBBF24;
+    --green: #34D399;
+    --red: #FB7185;
+    --purple: #A78BFA;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .deck { position: relative; width: 100%; height: 100%; }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 80px;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.prev {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  .slide::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  /* --- Glow backgrounds per slide type --- */
+  .glow-cyan::before {
+    background:
+      radial-gradient(ellipse at 25% 40%, var(--cyan-soft) 0%, transparent 55%),
+      radial-gradient(ellipse at 75% 70%, rgba(34,211,238,0.06) 0%, transparent 50%);
+  }
+  .glow-magenta::before {
+    background:
+      radial-gradient(ellipse at 60% 35%, var(--magenta-soft) 0%, transparent 55%),
+      radial-gradient(ellipse at 20% 80%, rgba(244,114,182,0.06) 0%, transparent 50%);
+  }
+  .glow-dual::before {
+    background:
+      radial-gradient(ellipse at 20% 30%, var(--cyan-soft) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 70%, var(--magenta-soft) 0%, transparent 50%);
+  }
+  .glow-gold::before {
+    background:
+      radial-gradient(ellipse at 50% 40%, rgba(251,191,36,0.1) 0%, transparent 50%);
+  }
+  .glow-green::before {
+    background:
+      radial-gradient(ellipse at 40% 50%, rgba(52,211,153,0.1) 0%, transparent 50%);
+  }
+  .glow-red::before {
+    background:
+      radial-gradient(ellipse at 50% 50%, rgba(251,113,133,0.08) 0%, transparent 50%);
+  }
+  .glow-purple::before {
+    background:
+      radial-gradient(ellipse at 35% 45%, rgba(167,139,250,0.1) 0%, transparent 50%);
+  }
+
+  /* --- Typography --- */
+  h1 {
+    font-size: clamp(2.4rem, 4.5vw, 4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    font-size: clamp(1.6rem, 3vw, 2.6rem);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    font-size: clamp(0.95rem, 1.6vw, 1.25rem);
+    color: var(--text-muted);
+    font-weight: 400;
+    max-width: 700px;
+    line-height: 1.6;
+  }
+
+  .cyan { color: var(--cyan); }
+  .magenta { color: var(--magenta); }
+  .gold { color: var(--gold); }
+  .green { color: var(--green); }
+  .red { color: var(--red); }
+  .purple { color: var(--purple); }
+  .muted { color: var(--text-muted); }
+
+  /* --- Tags --- */
+  .tag {
+    display: inline-block;
+    padding: 6px 18px;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .tag-cyan { background: var(--cyan-soft); color: var(--cyan); border: 1px solid rgba(34,211,238,0.3); }
+  .tag-magenta { background: var(--magenta-soft); color: var(--magenta); border: 1px solid rgba(244,114,182,0.3); }
+  .tag-gold { background: rgba(251,191,36,0.12); color: var(--gold); border: 1px solid rgba(251,191,36,0.3); }
+  .tag-green { background: rgba(52,211,153,0.12); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
+  .tag-red { background: rgba(251,113,133,0.12); color: var(--red); border: 1px solid rgba(251,113,133,0.3); }
+
+  /* --- Divider --- */
+  .divider {
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--cyan), var(--magenta));
+    border-radius: 2px;
+    margin: 20px auto;
+  }
+
+  /* --- Glass card --- */
+  .glass-card {
+    background: var(--glass);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 36px 40px;
+    max-width: 900px;
+    width: 100%;
+  }
+
+  /* --- Stats grid --- */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 900px;
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  .stat-card {
+    background: var(--glass);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 24px 18px;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(34,211,238,0.4);
+  }
+
+  .stat-value {
+    font-size: clamp(1.5rem, 2.2vw, 2rem);
+    font-weight: 800;
+    color: var(--cyan);
+    margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  .stat-card.highlight {
+    border-color: var(--gold);
+    background: rgba(251,191,36,0.05);
+  }
+
+  .stat-card.highlight .stat-value { color: var(--gold); }
+
+  .stat-card.magenta-hl {
+    border-color: var(--magenta);
+    background: rgba(244,114,182,0.05);
+  }
+
+  .stat-card.magenta-hl .stat-value { color: var(--magenta); }
+
+  /* --- VS layout --- */
+  .vs-container {
+    display: flex;
+    align-items: stretch;
+    gap: 32px;
+    max-width: 900px;
+    width: 100%;
+    margin-top: 12px;
+  }
+
+  .vs-card {
+    flex: 1;
+    border-radius: 20px;
+    padding: 32px 28px;
+    text-align: left;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .vs-card.bad {
+    background: rgba(251,113,133,0.06);
+    border: 1px solid rgba(251,113,133,0.2);
+  }
+
+  .vs-card.good {
+    background: rgba(34,211,238,0.06);
+    border: 1px solid rgba(34,211,238,0.2);
+  }
+
+  .vs-card ul { list-style: none; padding: 0; }
+
+  .vs-card ul li {
+    padding: 7px 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    padding-left: 24px;
+    position: relative;
+  }
+
+  .vs-card.bad ul li::before { content: '\2715'; position: absolute; left: 0; color: var(--red); font-weight: 700; }
+  .vs-card.good ul li::before { content: '\2713'; position: absolute; left: 0; color: var(--cyan); font-weight: 700; }
+
+  .vs-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text-dim);
+  }
+
+  /* --- Timeline --- */
+  .timeline {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    max-width: 960px;
+    width: 100%;
+    margin-top: 12px;
+  }
+
+  .timeline-item {
+    background: var(--glass);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 20px 16px;
+    text-align: left;
+    transition: border-color 0.3s;
+  }
+
+  .timeline-item:hover { border-color: rgba(34,211,238,0.3); }
+
+  .timeline-week {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 8px;
+  }
+
+  .timeline-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .timeline-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  /* --- Content list --- */
+  .content-list {
+    text-align: left;
+    max-width: 700px;
+    width: 100%;
+    list-style: none;
+    padding: 0;
+  }
+
+  .content-list li {
+    padding: 12px 0;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--text);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding-left: 28px;
+    position: relative;
+  }
+
+  .content-list li::before {
+    content: '\2192';
+    position: absolute;
+    left: 0;
+    color: var(--cyan);
+    font-weight: 700;
+  }
+
+  .content-list li:last-child { border-bottom: none; }
+
+  /* --- Artifact grid --- */
+  .artifact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 900px;
+    width: 100%;
+    margin-top: 12px;
+  }
+
+  .artifact-card {
+    background: var(--glass);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 22px 18px;
+    text-align: left;
+  }
+
+  .artifact-icon {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+  }
+
+  .artifact-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .artifact-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  /* --- Quote block --- */
+  .quote-block {
+    position: relative;
+    max-width: 800px;
+    padding: 0 40px;
+  }
+
+  .quote-block::before {
+    content: '\00AB';
+    position: absolute;
+    left: -20px;
+    top: -30px;
+    font-size: 7rem;
+    color: rgba(34,211,238,0.12);
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .quote-text {
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+  }
+
+  /* --- Funnel --- */
+  .funnel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    max-width: 600px;
+    width: 100%;
+    margin-top: 12px;
+  }
+
+  .funnel-step {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 24px;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass);
+    backdrop-filter: blur(16px);
+    transition: border-color 0.3s;
+  }
+
+  .funnel-step:nth-child(1) { width: 100%; }
+  .funnel-step:nth-child(2) { width: 88%; }
+  .funnel-step:nth-child(3) { width: 74%; }
+  .funnel-step:nth-child(4) { width: 60%; }
+  .funnel-step:nth-child(5) { width: 46%; border-color: var(--cyan); }
+
+  .funnel-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .funnel-value {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--cyan);
+  }
+
+  .funnel-step:last-child .funnel-value { color: var(--magenta); }
+
+  /* --- CTA block --- */
+  .cta-box {
+    background: linear-gradient(135deg, rgba(244,114,182,0.15), rgba(34,211,238,0.1));
+    border: 2px solid var(--magenta);
+    border-radius: 24px;
+    padding: 40px 48px;
+    max-width: 700px;
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  .cta-box h2 { color: var(--magenta); margin-bottom: 12px; }
+
+  .cta-steps {
+    text-align: left;
+    list-style: none;
+    padding: 0;
+  }
+
+  .cta-steps li {
+    padding: 10px 0;
+    font-size: 1.05rem;
+    color: var(--text);
+    padding-left: 36px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .cta-steps li .step-num {
+    position: absolute;
+    left: 0;
+    font-weight: 800;
+    color: var(--magenta);
+    font-size: 1.1rem;
+  }
+
+  /* --- Format grid --- */
+  .format-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    max-width: 700px;
+    width: 100%;
+    margin-top: 12px;
+  }
+
+  .format-card {
+    background: var(--glass);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 24px 20px;
+    text-align: left;
+  }
+
+  .format-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 6px;
+  }
+
+  .format-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  /* --- Pain list --- */
+  .pain-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 800px;
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  .pain-card {
+    background: rgba(251,113,133,0.05);
+    border: 1px solid rgba(251,113,133,0.15);
+    border-radius: 16px;
+    padding: 28px 22px;
+    text-align: center;
+    transition: border-color 0.3s;
+  }
+
+  .pain-card:hover { border-color: rgba(251,113,133,0.4); }
+
+  .pain-icon { font-size: 2rem; margin-bottom: 12px; }
+
+  .pain-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--red);
+    margin-bottom: 6px;
+  }
+
+  .pain-desc {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  /* --- Week detail card --- */
+  .week-detail {
+    display: flex;
+    gap: 28px;
+    max-width: 900px;
+    width: 100%;
+    margin-top: 12px;
+    text-align: left;
+  }
+
+  .week-main {
+    flex: 2;
+    background: var(--glass);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 28px 24px;
+  }
+
+  .week-side {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .week-side-card {
+    background: var(--glass);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 18px 16px;
+  }
+
+  .week-side-card .mini-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 6px;
+  }
+
+  .week-side-card .mini-value {
+    font-size: 0.85rem;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .bullet-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .bullet-list li {
+    padding: 5px 0;
+    padding-left: 18px;
+    position: relative;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .bullet-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--cyan);
+  }
+
+  /* --- Slide number --- */
+  .slide-num {
+    position: absolute;
+    top: 28px;
+    right: 36px;
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.15);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+  }
+
+  /* --- Navigation --- */
+  .nav {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    z-index: 100;
+    background: rgba(15,23,42,0.85);
+    backdrop-filter: blur(20px);
+    padding: 8px 18px;
+    border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .nav-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.04);
+    color: var(--text);
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .nav-btn:hover {
+    background: var(--cyan);
+    border-color: var(--cyan);
+    color: var(--bg);
+  }
+
+  .nav-counter {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    min-width: 50px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--cyan), var(--magenta));
+    transition: width 0.4s ease;
+    z-index: 100;
+  }
+
+  .dots { display: flex; gap: 5px; }
+
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+
+  .dot.active {
+    background: var(--cyan);
+    width: 22px;
+    border-radius: 4px;
+  }
+
+  /* --- Animations --- */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide.active .an { animation: fadeUp 0.5s ease forwards; }
+  .slide.active .d1 { animation-delay: 0.08s; opacity: 0; }
+  .slide.active .d2 { animation-delay: 0.16s; opacity: 0; }
+  .slide.active .d3 { animation-delay: 0.24s; opacity: 0; }
+  .slide.active .d4 { animation-delay: 0.32s; opacity: 0; }
+  .slide.active .d5 { animation-delay: 0.4s; opacity: 0; }
+
+  /* --- Responsive --- */
+  @media (max-width: 768px) {
+    .slide { padding: 36px 24px; }
+    .stats-grid, .artifact-grid, .pain-grid { grid-template-columns: repeat(2, 1fr); }
+    .timeline { grid-template-columns: repeat(2, 1fr); }
+    .vs-container, .week-detail { flex-direction: column; }
+    .format-grid { grid-template-columns: 1fr; }
+    .nav { bottom: 12px; padding: 6px 12px; }
+  }
+
+  /* --- Print / PDF --- */
+  @media print {
+    @page {
+      size: 297mm 167mm;
+      margin: 0;
+    }
+
+    body {
+      overflow: visible;
+      height: auto;
+      width: auto;
+      background: var(--bg);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .deck { position: static; }
+
+    .slide {
+      position: relative;
+      opacity: 1 !important;
+      transform: none !important;
+      pointer-events: auto;
+      page-break-after: always;
+      page-break-inside: avoid;
+      width: 297mm;
+      height: 167mm;
+      padding: 40px 56px;
+      background: var(--bg);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .slide::before {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .slide:last-child { page-break-after: auto; }
+
+    .slide .an {
+      opacity: 1 !important;
+      transform: none !important;
+      animation: none !important;
+    }
+
+    .nav, .progress-bar { display: none !important; }
+
+    .stat-card, .glass-card, .vs-card, .timeline-item,
+    .artifact-card, .format-card, .pain-card, .week-main,
+    .week-side-card, .cta-box, .funnel-step {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<div class="deck" id="deck">
+
+  <!-- ===================== SLIDE 1: Title ===================== -->
+  <div class="slide glow-dual active" data-index="0">
+    <span class="slide-num">01 / 18</span>
+    <div class="an d1 tag tag-cyan">Программа обучения</div>
+    <h1 class="an d2">Агент по<br><span class="cyan">новостройкам</span></h1>
+    <div class="divider an d3"></div>
+    <p class="subtitle an d4">8 недель. 9 онлайн-встреч. Конкретные навыки и план дохода от 150 000 руб./мес.</p>
+    <p class="an d5" style="margin-top:24px; font-size:0.85rem; color:var(--text-dim); background-color:var(--bg);">СРЕДА &middot; Недвижимость для людей</p>
+  </div>
+
+  <!-- ===================== SLIDE 2: FOMO ===================== -->
+  <div class="slide glow-cyan" data-index="1">
+    <span class="slide-num">02 / 18</span>
+    <div class="an d1 tag tag-red">Проблема</div>
+    <h1 class="an d2">Старые методы<br><span class="red">мертвы</span></h1>
+    <div class="stats-grid an d3">
+      <div class="stat-card">
+        <div class="stat-value">12 592</div>
+        <div class="stat-label">Сделок в Уфе за 2025</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">94,3 млрд</div>
+        <div class="stat-label">Объём реализации</div>
+      </div>
+      <div class="stat-card highlight">
+        <div class="stat-value">1,9 млрд ₽</div>
+        <div class="stat-label">Выплачено агентам</div>
+      </div>
+    </div>
+    <p class="an d4 subtitle" style="margin-top:20px;">А сколько из этого получил <span class="magenta" style="font-weight:700;">ты</span>?</p>
+  </div>
+
+  <!-- ===================== SLIDE 3: Market changed ===================== -->
+  <div class="slide glow-cyan" data-index="2">
+    <span class="slide-num">03 / 18</span>
+    <div class="an d1 tag tag-cyan">Данные рынка Уфы &middot; 2025</div>
+    <h2 class="an d2">Рынок <span class="cyan">изменился</span> навсегда</h2>
+    <div class="stats-grid an d3">
+      <div class="stat-card">
+        <div class="stat-value">81%</div>
+        <div class="stat-label">Сделок через ипотеку</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">6,8 млн ₽</div>
+        <div class="stat-label">Средний чек</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">44 м&sup2;</div>
+        <div class="stat-label">Средняя площадь</div>
+      </div>
+    </div>
+    <p class="an d4 subtitle" style="margin-top:18px;">Льготные программы ограничены. Клиент стал разборчивее. Конкуренция выросла.<br>Кто не понимает продукт и клиента &mdash; <span class="red">проигрывает</span>.</p>
+  </div>
+
+  <!-- ===================== SLIDE 4: Fisherman vs Strategist ===================== -->
+  <div class="slide glow-red" data-index="3">
+    <span class="slide-num">04 / 18</span>
+    <div class="an d1 tag tag-red">Два подхода</div>
+    <h2 class="an d2">Агент-рыбак <span class="red">vs</span> Агент-стратег</h2>
+    <div class="vs-container an d3">
+      <div class="vs-card bad">
+        <h3 class="red">Агент-рыбак</h3>
+        <ul>
+          <li>Закинул объявление &mdash; ждёт</li>
+          <li>Рассылки раз в месяц, хаотично</li>
+          <li>Когда входящих мало &mdash; ждёт ещё</li>
+          <li>Результат зависит от удачи</li>
+        </ul>
+      </div>
+      <div class="vs-divider">VS</div>
+      <div class="vs-card good">
+        <h3 class="cyan">Агент-стратег</h3>
+        <ul>
+          <li>Управляет базой и касаниями</li>
+          <li>Индивидуальные подборки под сегмент</li>
+          <li>Идёт в звонки, соцсети, расклейку</li>
+          <li>Результат зависит от действий</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SLIDE 5: Evolutionary dead end ===================== -->
+  <div class="slide glow-red" data-index="4">
+    <span class="slide-num">05 / 18</span>
+    <div class="an d1 tag tag-red">Эволюционный тупик</div>
+    <h2 class="an d2">Если ты застрял &mdash;<br>ты уже <span class="red">проигрываешь</span></h2>
+    <div class="pain-grid an d3">
+      <div class="pain-card">
+        <div class="pain-icon">&#128247;</div>
+        <div class="pain-title">Нет digital-присутствия</div>
+        <div class="pain-desc">Клиенты не знают, что ты существуешь. Нет блога = нет доверия</div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">&#128222;</div>
+        <div class="pain-title">Звонки без системы</div>
+        <div class="pain-desc">Хаотичные действия без базы, скриптов и учёта = потолок дохода</div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">&#128564;</div>
+        <div class="pain-title">«Тихие» продажи</div>
+        <div class="pain-desc">Надежда на сарафан и удачу. Нет воронки = нет предсказуемости</div>
+      </div>
+    </div>
+    <p class="an d4 subtitle" style="margin-top:16px;">Каждый месяц без системы &mdash; это <span class="magenta" style="font-weight:700;">упущенные 150 000+ ₽</span></p>
+  </div>
+
+  <!-- ===================== SLIDE 6: Core principle ===================== -->
+  <div class="slide glow-gold" data-index="5">
+    <span class="slide-num">06 / 18</span>
+    <div class="an d1 tag tag-gold">Главный принцип</div>
+    <div class="quote-block an d2">
+      <p class="quote-text">Я не продаю &mdash;<br>я <span class="gold">объясняю</span></p>
+    </div>
+    <div class="divider an d3"></div>
+    <p class="subtitle an d4" style="margin-top:8px;">Знание рынка + Эмпатия + Данные = <span class="cyan" style="font-weight:700;">Доверие клиента</span></p>
+    <p class="an d5 subtitle" style="margin-top:12px; font-size:0.88rem;">Без скриптов. Без давления. Через понимание клиента и факты.</p>
+  </div>
+
+  <!-- ===================== SLIDE 7: Program map ===================== -->
+  <div class="slide glow-cyan" data-index="6">
+    <span class="slide-num">07 / 18</span>
+    <div class="an d1 tag tag-cyan">Дорожная карта</div>
+    <h2 class="an d2">8 недель. 8 навыков. <span class="cyan">1 система.</span></h2>
+    <div class="timeline an d3">
+      <div class="timeline-item">
+        <div class="timeline-week">Неделя 0</div>
+        <div class="timeline-title">Знакомство</div>
+        <div class="timeline-desc">Формат, правила, цели</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-week">Неделя 1</div>
+        <div class="timeline-title">Рынок и продукт</div>
+        <div class="timeline-desc">Рынок, роль агента, агрегаторы</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-week">Неделя 2</div>
+        <div class="timeline-title">Застройщики</div>
+        <div class="timeline-desc">Москва, СПб, Краснодар, Уфа</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-week">Неделя 3</div>
+        <div class="timeline-title">Стратсессия</div>
+        <div class="timeline-desc">Закрепление и практика</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-week">Неделя 4</div>
+        <div class="timeline-title">Работа с клиентом</div>
+        <div class="timeline-desc">Диагностика, JTBD, уникальность</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-week">Неделя 5</div>
+        <div class="timeline-title">Ипотека</div>
+        <div class="timeline-desc">Программы, финмодель, брокеры</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-week">Неделя 6</div>
+        <div class="timeline-title">Холодные звонки</div>
+        <div class="timeline-desc">База, скрипты, отказы</div>
+      </div>
+      <div class="timeline-item" style="border-color: var(--magenta);">
+        <div class="timeline-week" style="color: var(--magenta);">Недели 7-8</div>
+        <div class="timeline-title">Digital + Система</div>
+        <div class="timeline-desc">Каналы, соцсети, план 150к</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SLIDE 8: Weeks 1-2 ===================== -->
+  <div class="slide glow-cyan" data-index="7">
+    <span class="slide-num">08 / 18</span>
+    <div class="an d1 tag tag-cyan">Недели 1&ndash;2</div>
+    <h2 class="an d2"><span class="cyan">Фундамент:</span> рынок и продукт</h2>
+    <div class="week-detail an d3">
+      <div class="week-main">
+        <h3>Что изучаем</h3>
+        <ul class="bullet-list">
+          <li>Структура рынка новостроек 2026: застройщики, районы, сегменты</li>
+          <li>Роль агента-навигатора vs агента-продавца</li>
+          <li>Застройщики 4 регионов: Москва, СПб, Краснодар, Уфа</li>
+          <li>Сегменты от эконома (6 млн) до бизнеса (12+ млн)</li>
+          <li>Агрегаторы: Авито, Тренд &mdash; как читать рынок через данные</li>
+        </ul>
+      </div>
+      <div class="week-side">
+        <div class="week-side-card">
+          <div class="mini-label">Артефакт</div>
+          <div class="mini-value">Карта рынка (5 ЖК) + 8 карточек ЖК по регионам</div>
+        </div>
+        <div class="week-side-card">
+          <div class="mini-label">Навык</div>
+          <div class="mini-value">Формулировка «Моя ценность» для клиента</div>
+        </div>
+        <div class="week-side-card">
+          <div class="mini-label">Практика</div>
+          <div class="mini-value">Регистрация в партнёрской программе застройщика</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SLIDE 9: Weeks 3-4 ===================== -->
+  <div class="slide glow-green" data-index="8">
+    <span class="slide-num">09 / 18</span>
+    <div class="an d1 tag tag-green">Недели 3&ndash;4</div>
+    <h2 class="an d2"><span class="green">Навыки:</span> клиент и диагностика</h2>
+    <div class="week-detail an d3">
+      <div class="week-main">
+        <h3>Что изучаем</h3>
+        <ul class="bullet-list">
+          <li>Стратсессия: блиц-опрос, проверка ДЗ, «Битва аргументов»</li>
+          <li>5 этапов первой встречи с клиентом</li>
+          <li>JTBD: функциональная, эмоциональная, социальная задача клиента</li>
+          <li>4 силы прогресса: Push + Pull vs Anxiety + Habit</li>
+          <li>Фиксация уникальности и коммуникация с застройщиками</li>
+        </ul>
+      </div>
+      <div class="week-side">
+        <div class="week-side-card">
+          <div class="mini-label">Артефакт</div>
+          <div class="mini-value">Чек-лист диагностики клиента (10+ вопросов)</div>
+        </div>
+        <div class="week-side-card">
+          <div class="mini-label">Практика</div>
+          <div class="mini-value">Ролевые игры: 3 сценария клиентов</div>
+        </div>
+        <div class="week-side-card">
+          <div class="mini-label">Принцип</div>
+          <div class="mini-value">На первой встрече мы НЕ продаём &mdash; мы ПОНИМАЕМ</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SLIDE 10: Week 5 ===================== -->
+  <div class="slide glow-gold" data-index="9">
+    <span class="slide-num">10 / 18</span>
+    <div class="an d1 tag tag-gold">Неделя 5</div>
+    <h2 class="an d2"><span class="gold">Ипотека:</span> ключ к 90% сделок</h2>
+    <div class="week-detail an d3">
+      <div class="week-main">
+        <h3>Что изучаем</h3>
+        <ul class="bullet-list">
+          <li>Ипотечные программы 2026: семейная 6%, стандартная 18&ndash;22%, IT, военная</li>
+          <li>Расчёт платежа: 4 млн кредита при 6% = 25 800 руб./мес.</li>
+          <li>Финмодель: 2-3 сценария для каждого клиента</li>
+          <li>Страхование: обязательное vs добровольное, экономика</li>
+          <li>Команда ипотечных брокеров как конкурентное преимущество</li>
+        </ul>
+      </div>
+      <div class="week-side">
+        <div class="week-side-card">
+          <div class="mini-label">Факт</div>
+          <div class="mini-value" style="color: var(--gold); font-weight:700;">80% сделок через ипотеку. Не знаешь ипотеку = теряешь 9 из 10 клиентов</div>
+        </div>
+        <div class="week-side-card">
+          <div class="mini-label">Артефакт</div>
+          <div class="mini-value">4 финкарточки + шпаргалка по ипотечным программам</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SLIDE 11: Week 6 ===================== -->
+  <div class="slide glow-purple" data-index="10">
+    <span class="slide-num">11 / 18</span>
+    <div class="an d1 tag tag-cyan">Неделя 6</div>
+    <h2 class="an d2"><span class="cyan">Звонки:</span> база на все времена</h2>
+    <div class="week-detail an d3">
+      <div class="week-main">
+        <h3>Что изучаем</h3>
+        <ul class="bullet-list">
+          <li>Источники базы: Авито, ЦИАН, истёкшие, вторичка, районные группы, Топ-100</li>
+          <li>5 этапов холодного звонка: приветствие &rarr; крючок &rarr; квалификация &rarr; оффер &rarr; шаг</li>
+          <li>Скрипты по 4 сегментам: собственник, вторичка, Топ-100, истёкшие</li>
+          <li>Работа с отказами: принцип ЛПСД</li>
+          <li>Психология: 5 нет = 1 да &mdash; это математика</li>
+        </ul>
+      </div>
+      <div class="week-side">
+        <div class="week-side-card">
+          <div class="mini-label">Математика</div>
+          <div class="mini-value" style="color: var(--cyan); font-weight:700;">20 звонков = 1&ndash;2 реальных диалога = 1 час работы</div>
+        </div>
+        <div class="week-side-card">
+          <div class="mini-label">Артефакт</div>
+          <div class="mini-value">3 персональных скрипта + журнал 10+ звонков</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SLIDE 12: Week 7 ===================== -->
+  <div class="slide glow-magenta" data-index="11">
+    <span class="slide-num">12 / 18</span>
+    <div class="an d1 tag tag-magenta">Неделя 7</div>
+    <h2 class="an d2"><span class="magenta">Digital:</span> цифровое доминирование</h2>
+    <div class="week-detail an d3">
+      <div class="week-main">
+        <h3>10 каналов привлечения клиентов</h3>
+        <ul class="bullet-list">
+          <li>Trade-in, переориентация вторички, рекомендации, Топ-100, рассылки</li>
+          <li>Сторителлинг в статусах, расклейка, холодные звонки</li>
+          <li>Instagram: визуальная витрина экспертности</li>
+          <li>Telegram: аналитика, расчёты, инсайды</li>
+          <li>6 готовых офферов + 6 скриптов входа по сегментам</li>
+        </ul>
+      </div>
+      <div class="week-side">
+        <div class="week-side-card">
+          <div class="mini-label">Правило</div>
+          <div class="mini-value" style="color: var(--magenta); font-weight:700;">Лучше 3 канала системно, чем 12 каналов по 3 дня</div>
+        </div>
+        <div class="week-side-card">
+          <div class="mini-label">Артефакт</div>
+          <div class="mini-value">Топ-100 + 3 рассылки + сценарий 3 сторис + план по 3 каналам</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SLIDE 13: Week 8 ===================== -->
+  <div class="slide glow-dual" data-index="12">
+    <span class="slide-num">13 / 18</span>
+    <div class="an d1 tag tag-cyan">Неделя 8</div>
+    <h2 class="an d2"><span class="cyan">Система:</span> план на <span class="magenta">150к</span></h2>
+    <div class="week-detail an d3">
+      <div class="week-main">
+        <h3>Что строим</h3>
+        <ul class="bullet-list">
+          <li>База знаний команды: карточки ЖК, ипотека, возражения, шаблоны</li>
+          <li>Обратный расчёт воронки: от дохода к ежедневным действиям</li>
+          <li>Недельное расписание с блоками фокуса</li>
+          <li>Дашборд метрик: INPUT (касания, звонки) &rarr; OUTPUT (сделки)</li>
+          <li>Публичные обязательства &mdash; точка невозврата</li>
+        </ul>
+      </div>
+      <div class="week-side">
+        <div class="week-side-card">
+          <div class="mini-label">Принцип</div>
+          <div class="mini-value" style="color: var(--cyan); font-weight:700;">Контролируй INPUT &mdash; OUTPUT придёт</div>
+        </div>
+        <div class="week-side-card">
+          <div class="mini-label">Артефакт</div>
+          <div class="mini-value">Персональный план на 150к + дашборд + расписание</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SLIDE 14: Math 150k ===================== -->
+  <div class="slide glow-cyan" data-index="13">
+    <span class="slide-num">14 / 18</span>
+    <div class="an d1 tag tag-cyan">Математика дохода</div>
+    <h2 class="an d2">Как выйти на <span class="cyan">150 000 ₽</span> / мес.</h2>
+    <div class="funnel an d3">
+      <div class="funnel-step">
+        <span class="funnel-label">Касания в месяц</span>
+        <span class="funnel-value">100&ndash;150</span>
+      </div>
+      <div class="funnel-step">
+        <span class="funnel-label">Диалоги</span>
+        <span class="funnel-value">30&ndash;50</span>
+      </div>
+      <div class="funnel-step">
+        <span class="funnel-label">Подборки</span>
+        <span class="funnel-value">10&ndash;15</span>
+      </div>
+      <div class="funnel-step">
+        <span class="funnel-label">Показы / встречи</span>
+        <span class="funnel-value">4&ndash;6</span>
+      </div>
+      <div class="funnel-step">
+        <span class="funnel-label">Сделки &rarr; 150к+</span>
+        <span class="funnel-value">2</span>
+      </div>
+    </div>
+    <p class="an d4 subtitle" style="margin-top:16px;">5&ndash;7 касаний в день. Это <span class="cyan" style="font-weight:700;">1 час</span> сфокусированной работы.</p>
+  </div>
+
+  <!-- ===================== SLIDE 15: Artifacts ===================== -->
+  <div class="slide glow-green" data-index="14">
+    <span class="slide-num">15 / 18</span>
+    <div class="an d1 tag tag-green">Результат программы</div>
+    <h2 class="an d2">Что ты <span class="green">заберёшь</span> с собой</h2>
+    <div class="artifact-grid an d3">
+      <div class="artifact-card">
+        <div class="artifact-icon">&#127968;</div>
+        <div class="artifact-title">13+ карточек ЖК</div>
+        <div class="artifact-desc">По 4 регионам, от эконом до бизнеса, с аргументацией</div>
+      </div>
+      <div class="artifact-card">
+        <div class="artifact-icon">&#128202;</div>
+        <div class="artifact-title">Финмодели клиентов</div>
+        <div class="artifact-desc">4 финкарточки + шаблон сравнения сценариев</div>
+      </div>
+      <div class="artifact-card">
+        <div class="artifact-icon">&#128172;</div>
+        <div class="artifact-title">Скрипты и офферы</div>
+        <div class="artifact-desc">3 скрипта звонков + 6 офферов + 6 скриптов входа</div>
+      </div>
+      <div class="artifact-card">
+        <div class="artifact-icon">&#128203;</div>
+        <div class="artifact-title">Чек-листы</div>
+        <div class="artifact-desc">Диагностика клиента, фиксация уникальности, ипотечные программы</div>
+      </div>
+      <div class="artifact-card">
+        <div class="artifact-icon">&#128200;</div>
+        <div class="artifact-title">Воронка и дашборд</div>
+        <div class="artifact-desc">Персональный расчёт 150к + дашборд INPUT/OUTPUT</div>
+      </div>
+      <div class="artifact-card">
+        <div class="artifact-icon">&#128197;</div>
+        <div class="artifact-title">Недельный план</div>
+        <div class="artifact-desc">Расписание с блоками фокуса + план по 3 каналам</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SLIDE 16: Format ===================== -->
+  <div class="slide glow-cyan" data-index="15">
+    <span class="slide-num">16 / 18</span>
+    <div class="an d1 tag tag-cyan">Формат и ритм</div>
+    <h2 class="an d2">Как устроено <span class="cyan">обучение</span></h2>
+    <div class="format-grid an d3">
+      <div class="format-card">
+        <div class="format-label">Формат</div>
+        <div class="format-value">9 онлайн-встреч по 2 часа</div>
+      </div>
+      <div class="format-card">
+        <div class="format-label">Ритм</div>
+        <div class="format-value">Каждый понедельник, 10:00 МСК</div>
+      </div>
+      <div class="format-card">
+        <div class="format-label">Структура</div>
+        <div class="format-value">60 мин теория + 60 мин практика</div>
+      </div>
+      <div class="format-card">
+        <div class="format-label">Материалы</div>
+        <div class="format-value">Конспект, шаблоны, ДЗ после каждой встречи</div>
+      </div>
+      <div class="format-card">
+        <div class="format-label">Чат группы</div>
+        <div class="format-value">Вопросы, ДЗ, обмен опытом</div>
+      </div>
+      <div class="format-card">
+        <div class="format-label">Бонусы</div>
+        <div class="format-value">2 эфира: приглашённые спикеры + психология</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SLIDE 17: CTA ===================== -->
+  <div class="slide glow-magenta" data-index="16">
+    <span class="slide-num">17 / 18</span>
+    <div class="an d1 tag tag-magenta">Первый шаг</div>
+    <h1 class="an d2">Действуй<br><span class="magenta">прямо сейчас</span></h1>
+    <div class="cta-box an d3">
+      <h2>Твоё задание после этой презентации:</h2>
+      <ul class="cta-steps">
+        <li><span class="step-num">1.</span> Выбери 1 застройщика из своего города</li>
+        <li><span class="step-num">2.</span> Сделай пост / сторис / рилс о нём <span class="magenta" style="font-weight:700;">сегодня</span></li>
+        <li><span class="step-num">3.</span> Напиши в чат группы: &laquo;Сделано!&raquo;</li>
+      </ul>
+    </div>
+    <p class="an d4 subtitle" style="margin-top:16px;">Первый шаг не должен быть идеальным. Он должен быть <span class="magenta" style="font-weight:700;">сделан</span>.</p>
+  </div>
+
+  <!-- ===================== SLIDE 18: Contacts ===================== -->
+  <div class="slide glow-dual" data-index="17">
+    <span class="slide-num">18 / 18</span>
+    <div class="an d1 tag tag-cyan">Следующий шаг</div>
+    <h1 class="an d2">Начни свой путь<br>к <span class="cyan">150 000 ₽</span> / мес.</h1>
+    <div class="divider an d3"></div>
+    <div class="glass-card an d4" style="text-align:center; max-width:600px; margin-top:8px;">
+      <p style="font-size:1.1rem; font-weight:600; margin-bottom:16px;">Запишись на программу</p>
+      <p style="font-size:0.95rem; color:var(--text-muted); margin-bottom:8px;">СРЕДА &middot; Недвижимость для людей</p>
+      <div class="divider" style="margin:16px auto;"></div>
+      <p style="font-size:0.9rem; color:var(--text-muted); line-height:1.6;">Напиши в личные сообщения или<br>свяжись через чат группы</p>
+    </div>
+    <p class="an d5" style="margin-top:24px; font-size:0.8rem; color:var(--text-dim);">8 недель &middot; 9 встреч &middot; Конкретный результат</p>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<nav class="nav">
+  <button class="nav-btn" id="prevBtn" aria-label="Prev">&#8249;</button>
+  <div class="dots" id="dots"></div>
+  <span class="nav-counter" id="counter">1 / 18</span>
+  <button class="nav-btn" id="nextBtn" aria-label="Next">&#8250;</button>
+</nav>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  const progress = document.getElementById('progress');
+  const counter = document.getElementById('counter');
+  const dotsEl = document.getElementById('dots');
+
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(dot);
+  }
+
+  function updateUI() {
+    progress.style.width = ((current + 1) / total * 100) + '%';
+    counter.textContent = (current + 1) + ' / ' + total;
+    document.querySelectorAll('.dot').forEach((d, i) => {
+      d.className = 'dot' + (i === current ? ' active' : '');
+    });
+  }
+
+  function goTo(index) {
+    if (index < 0 || index >= total || index === current) return;
+    const dir = index > current ? 1 : -1;
+    slides[current].classList.remove('active');
+    slides[current].classList.add(dir > 0 ? 'prev' : '');
+    slides[current].classList.remove(dir > 0 ? '' : 'prev');
+    current = index;
+    slides[current].classList.remove('prev');
+    slides[current].classList.add('active');
+    updateUI();
+    setTimeout(() => {
+      slides.forEach((s, i) => { if (i !== current) s.classList.remove('prev'); });
+    }, 600);
+  }
+
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+
+  document.getElementById('nextBtn').addEventListener('click', next);
+  document.getElementById('prevBtn').addEventListener('click', prev);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+  });
+
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', (e) => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) { diff > 0 ? next() : prev(); }
+  });
+
+  updateUI();
+</script>
+
+</body>
+</html>

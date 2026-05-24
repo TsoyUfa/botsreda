@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Рынок, продукт, роль агента</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --accent: #6c5ce7;
+    --accent-light: #a29bfe;
+    --accent-glow: rgba(108, 92, 231, 0.3);
+    --text: #f0f0f5;
+    --text-muted: #8888a0;
+    --gold: #f9ca24;
+    --green: #00d2d3;
+    --red: #ff6b6b;
+    --orange: #ffa502;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .deck {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 80px;
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    text-align: center;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .slide.prev {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  /* Slide backgrounds */
+  .slide::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .slide-title::before {
+    background: radial-gradient(ellipse at 30% 50%, rgba(108,92,231,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 80%, rgba(162,155,254,0.08) 0%, transparent 50%);
+  }
+
+  .slide-principle::before {
+    background: radial-gradient(ellipse at 50% 40%, rgba(249,202,36,0.1) 0%, transparent 50%);
+  }
+
+  .slide-exercise::before {
+    background: radial-gradient(ellipse at 60% 50%, rgba(0,210,211,0.1) 0%, transparent 55%);
+  }
+
+  .slide-data::before {
+    background: radial-gradient(ellipse at 40% 60%, rgba(108,92,231,0.12) 0%, transparent 50%);
+  }
+
+  .slide-concept::before {
+    background: radial-gradient(ellipse at 50% 50%, rgba(255,107,107,0.08) 0%, transparent 50%);
+  }
+
+  /* Typography */
+  h1 {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+  }
+
+  h2 {
+    font-size: clamp(1.8rem, 3.5vw, 3rem);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+
+  h3 {
+    font-size: clamp(1.2rem, 2vw, 1.6rem);
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 16px;
+  }
+
+  .subtitle {
+    font-size: clamp(1rem, 1.8vw, 1.4rem);
+    color: var(--text-muted);
+    font-weight: 400;
+    max-width: 700px;
+    line-height: 1.6;
+  }
+
+  .accent-text { color: var(--accent-light); }
+  .gold-text { color: var(--gold); }
+  .green-text { color: var(--green); }
+  .red-text { color: var(--red); }
+
+  .tag {
+    display: inline-block;
+    padding: 6px 18px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .tag-purple { background: rgba(108,92,231,0.2); color: var(--accent-light); border: 1px solid rgba(108,92,231,0.3); }
+  .tag-green { background: rgba(0,210,211,0.15); color: var(--green); border: 1px solid rgba(0,210,211,0.25); }
+  .tag-gold { background: rgba(249,202,36,0.15); color: var(--gold); border: 1px solid rgba(249,202,36,0.25); }
+  .tag-red { background: rgba(255,107,107,0.15); color: var(--red); border: 1px solid rgba(255,107,107,0.25); }
+
+  /* Decorative line */
+  .divider {
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    border-radius: 2px;
+    margin: 24px auto;
+  }
+
+  /* Stats grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 900px;
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .stat-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 28px 20px;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(108,92,231,0.4);
+  }
+
+  .stat-value {
+    font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+    font-weight: 800;
+    color: var(--accent-light);
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  .stat-card.highlight {
+    border-color: var(--gold);
+    background: rgba(249,202,36,0.05);
+  }
+
+  .stat-card.highlight .stat-value {
+    color: var(--gold);
+  }
+
+  /* Form card */
+  .form-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 48px 56px;
+    max-width: 700px;
+    width: 100%;
+    text-align: left;
+  }
+
+  .form-field {
+    margin-bottom: 28px;
+  }
+
+  .form-field:last-child {
+    margin-bottom: 0;
+  }
+
+  .form-field label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+
+  .form-field .line {
+    width: 100%;
+    height: 1px;
+    background: rgba(255,255,255,0.15);
+    margin-top: 4px;
+  }
+
+  .form-field span.num {
+    color: var(--accent-light);
+    font-weight: 700;
+    margin-right: 8px;
+  }
+
+  /* Quote block */
+  .quote-block {
+    position: relative;
+    max-width: 800px;
+    padding: 0 40px;
+  }
+
+  .quote-block::before {
+    content: '«';
+    position: absolute;
+    left: -20px;
+    top: -30px;
+    font-size: 8rem;
+    color: rgba(108,92,231,0.15);
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .quote-text {
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+  }
+
+  /* VS layout */
+  .vs-container {
+    display: flex;
+    align-items: stretch;
+    gap: 40px;
+    max-width: 900px;
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  .vs-card {
+    flex: 1;
+    border-radius: 20px;
+    padding: 36px 32px;
+    text-align: left;
+  }
+
+  .vs-card.bad {
+    background: rgba(255,107,107,0.06);
+    border: 1px solid rgba(255,107,107,0.2);
+  }
+
+  .vs-card.good {
+    background: rgba(0,210,211,0.06);
+    border: 1px solid rgba(0,210,211,0.2);
+  }
+
+  .vs-card h3 {
+    margin-bottom: 20px;
+  }
+
+  .vs-card ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .vs-card ul li {
+    padding: 8px 0;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    padding-left: 24px;
+    position: relative;
+  }
+
+  .vs-card.bad ul li::before {
+    content: '✕';
+    position: absolute;
+    left: 0;
+    color: var(--red);
+    font-weight: 700;
+  }
+
+  .vs-card.good ul li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--green);
+    font-weight: 700;
+  }
+
+  .vs-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--text-muted);
+  }
+
+  /* Content blocks */
+  .content-list {
+    text-align: left;
+    max-width: 700px;
+    width: 100%;
+  }
+
+  .content-list li {
+    padding: 14px 0;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    color: var(--text);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding-left: 28px;
+    position: relative;
+    list-style: none;
+  }
+
+  .content-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent-light);
+    font-weight: 700;
+  }
+
+  .content-list li:last-child {
+    border-bottom: none;
+  }
+
+  /* Big icon */
+  .big-icon {
+    font-size: 4rem;
+    margin-bottom: 24px;
+    filter: grayscale(0.2);
+  }
+
+  /* Navigation */
+  .nav {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 100;
+    background: rgba(19,19,26,0.85);
+    backdrop-filter: blur(20px);
+    padding: 10px 20px;
+    border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .nav-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.04);
+    color: var(--text);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .nav-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .nav-counter {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    min-width: 50px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    transition: width 0.4s ease;
+    z-index: 100;
+  }
+
+  /* Dots */
+  .dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+
+  .dot.active {
+    background: var(--accent-light);
+    width: 24px;
+    border-radius: 4px;
+  }
+
+  /* Slide number */
+  .slide-num {
+    position: absolute;
+    top: 32px;
+    right: 40px;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.2);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide.active .animate {
+    animation: fadeUp 0.6s ease forwards;
+  }
+
+  .slide.active .animate.d1 { animation-delay: 0.1s; opacity: 0; }
+  .slide.active .animate.d2 { animation-delay: 0.2s; opacity: 0; }
+  .slide.active .animate.d3 { animation-delay: 0.3s; opacity: 0; }
+  .slide.active .animate.d4 { animation-delay: 0.4s; opacity: 0; }
+  .slide.active .animate.d5 { animation-delay: 0.5s; opacity: 0; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .slide { padding: 40px 28px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .vs-container { flex-direction: column; gap: 20px; }
+    .form-card { padding: 32px 28px; }
+    .nav { bottom: 16px; padding: 8px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<div class="deck" id="deck">
+
+  <!-- SLIDE 1: Title -->
+  <div class="slide slide-title active" data-index="0">
+    <span class="slide-num">01 / 11</span>
+    <div class="animate d1 tag tag-purple">Неделя 1 · Модуль 1</div>
+    <h1 class="animate d2">Рынок, продукт,<br><span class="accent-text">роль агента</span></h1>
+    <div class="divider animate d3"></div>
+    <p class="subtitle animate d4">Программа обучения «Агент по новостройкам» — 8 недель</p>
+  </div>
+
+  <!-- SLIDE 2: Principle -->
+  <div class="slide slide-principle" data-index="1">
+    <span class="slide-num">02 / 11</span>
+    <div class="animate d1 tag tag-gold">Главный принцип</div>
+    <div class="quote-block animate d2">
+      <p class="quote-text">Я не продаю —<br>я <span class="gold-text">объясняю</span></p>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: Exercise 2 -->
+  <div class="slide slide-exercise" data-index="2">
+    <span class="slide-num">03 / 11</span>
+    <div class="animate d1 tag tag-green">Упражнение №2</div>
+    <h2 class="animate d2">Мои цели на обучение</h2>
+    <div class="form-card animate d3">
+      <div class="form-field" style="display:flex; gap: 40px; margin-bottom: 32px;">
+        <div style="flex:1">
+          <label>Имя:</label>
+          <div class="line"></div>
+        </div>
+        <div style="flex:1">
+          <label>Дата:</label>
+          <div class="line"></div>
+        </div>
+      </div>
+      <div class="form-field">
+        <label><span class="num">1.</span> Через 8 недель я хочу уметь:</label>
+        <div class="line"></div>
+      </div>
+      <div class="form-field">
+        <label><span class="num">2.</span> Мой главный страх / барьер сейчас:</label>
+        <div class="line"></div>
+      </div>
+      <div class="form-field">
+        <label><span class="num">3.</span> Сколько сделок по новостройкам я хочу делать в месяц:</label>
+        <div class="line"></div>
+      </div>
+      <div class="form-field">
+        <label><span class="num">4.</span> Что я готов делать каждый день, чтобы достичь этого:</label>
+        <div class="line"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: Market Understanding -->
+  <div class="slide slide-title" data-index="3">
+    <span class="slide-num">04 / 11</span>
+    <div class="animate d1 big-icon">🏗</div>
+    <h1 class="animate d2">Понимание рынка<br>новостроек <span class="accent-text">2026</span></h1>
+  </div>
+
+  <!-- SLIDE 5: Data -->
+  <div class="slide slide-data" data-index="4">
+    <span class="slide-num">05 / 11</span>
+    <div class="animate d1 tag tag-purple">Данные по рынку Уфы · 2025</div>
+    <div class="stats-grid">
+      <div class="stat-card animate d1">
+        <div class="stat-value">12 592</div>
+        <div class="stat-label">Сделок за 2025 год</div>
+      </div>
+      <div class="stat-card animate d2">
+        <div class="stat-value">81%</div>
+        <div class="stat-label">Доля квартир по ипотеке</div>
+      </div>
+      <div class="stat-card animate d3">
+        <div class="stat-value">94,3 млрд ₽</div>
+        <div class="stat-label">Общий объём реализации</div>
+      </div>
+      <div class="stat-card animate d4">
+        <div class="stat-value">6 830 000 ₽</div>
+        <div class="stat-label">Средний чек сделки</div>
+      </div>
+      <div class="stat-card animate d5">
+        <div class="stat-value">44 м²</div>
+        <div class="stat-label">Средняя площадь квартиры</div>
+      </div>
+      <div class="stat-card highlight animate d5">
+        <div class="stat-value">1,9 млрд ₽</div>
+        <div class="stat-label">Выплачено агентской сети</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: What to talk about -->
+  <div class="slide slide-title" data-index="5">
+    <span class="slide-num">06 / 11</span>
+    <div class="animate d1 big-icon">💬</div>
+    <h1 class="animate d2">О чём <span class="accent-text">говорить</span></h1>
+  </div>
+
+  <!-- SLIDE 7: Trust -->
+  <div class="slide slide-concept" data-index="6">
+    <span class="slide-num">07 / 11</span>
+    <div class="animate d1 tag tag-gold">Ключевая тема</div>
+    <h1 class="animate d2">Доверие рынка<br>и <span class="gold-text">роль агента</span></h1>
+  </div>
+
+  <!-- SLIDE 8: Fisherman vs Strategist -->
+  <div class="slide slide-concept" data-index="7">
+    <span class="slide-num">08 / 11</span>
+    <div class="animate d1 tag tag-red">Два подхода</div>
+    <h2 class="animate d2" style="margin-bottom: 32px;">Агент-рыбак <span class="red-text">vs</span> Агент-стратег</h2>
+    <div class="vs-container animate d3">
+      <div class="vs-card bad">
+        <h3 class="red-text">🎣 Агент-рыбак</h3>
+        <ul>
+          <li>Ждёт «горячего» клиента</li>
+          <li>Работает хаотично</li>
+          <li>Зависит от удачи</li>
+          <li>Реагирует на рынок</li>
+        </ul>
+      </div>
+      <div class="vs-divider">VS</div>
+      <div class="vs-card good">
+        <h3 class="green-text">♟ Агент-стратег</h3>
+        <ul>
+          <li>Выстраивает систему</li>
+          <li>Работает по процессу</li>
+          <li>Создаёт предсказуемый поток</li>
+          <li>Формирует рынок</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: Exercise 3 -->
+  <div class="slide slide-exercise" data-index="8">
+    <span class="slide-num">09 / 11</span>
+    <div class="animate d1 tag tag-green">Упражнение №3</div>
+    <h2 class="animate d2">«Кто я: рыбак или стратег?»</h2>
+    <div class="divider animate d3"></div>
+    <p class="subtitle animate d4" style="max-width: 600px;">
+      Задание: честная самооценка.<br>Каждый агент отвечает на вопросы и определяет свой текущий подход к работе.
+    </p>
+  </div>
+
+  <!-- SLIDE 10: No scripts -->
+  <div class="slide slide-principle" data-index="9">
+    <span class="slide-num">10 / 11</span>
+    <div class="animate d1 big-icon">🚫</div>
+    <div class="quote-block animate d2">
+      <p class="quote-text">Скриптов по продаже новостроек в <span class="gold-text">2026</span> не существует</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 11: Tools -->
+  <div class="slide slide-title" data-index="10">
+    <span class="slide-num">11 / 11</span>
+    <div class="animate d1 tag tag-purple">Инструменты</div>
+    <h1 class="animate d2">Агрегаторы<br>и <span class="accent-text">инструменты</span></h1>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<nav class="nav">
+  <button class="nav-btn" id="prevBtn" aria-label="Предыдущий">‹</button>
+  <div class="dots" id="dots"></div>
+  <span class="nav-counter" id="counter">1 / 11</span>
+  <button class="nav-btn" id="nextBtn" aria-label="Следующий">›</button>
+</nav>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  const progress = document.getElementById('progress');
+  const counter = document.getElementById('counter');
+  const dotsContainer = document.getElementById('dots');
+
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.addEventListener('click', () => goTo(i));
+    dotsContainer.appendChild(dot);
+  }
+
+  function updateUI() {
+    progress.style.width = ((current + 1) / total * 100) + '%';
+    counter.textContent = (current + 1) + ' / ' + total;
+    document.querySelectorAll('.dot').forEach((d, i) => {
+      d.className = 'dot' + (i === current ? ' active' : '');
+    });
+  }
+
+  function goTo(index) {
+    if (index < 0 || index >= total || index === current) return;
+    const dir = index > current ? 1 : -1;
+    slides[current].classList.remove('active');
+    slides[current].classList.add(dir > 0 ? 'prev' : '');
+    slides[current].classList.remove(dir > 0 ? '' : 'prev');
+    current = index;
+    slides[current].classList.remove('prev');
+    slides[current].classList.add('active');
+    updateUI();
+    setTimeout(() => {
+      slides.forEach((s, i) => {
+        if (i !== current) { s.classList.remove('prev'); }
+      });
+    }, 600);
+  }
+
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+
+  document.getElementById('nextBtn').addEventListener('click', next);
+  document.getElementById('prevBtn').addEventListener('click', prev);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+  });
+
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', (e) => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) { diff > 0 ? next() : prev(); }
+  });
+
+  updateUI();
+</script>
+
+</body>
+</html>

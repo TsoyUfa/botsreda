@@ -1,0 +1,73 @@
+{
+  "properties": {
+    "Name": { "title": {} },
+    "Type": {
+      "select": {
+        "options": [
+          { "name": "process" },
+          { "name": "task" },
+          { "name": "metric" },
+          { "name": "finance" },
+          { "name": "registry" }
+        ]
+      }
+    },
+    "Status": {
+      "select": {
+        "options": [
+          { "name": "active" },
+          { "name": "planned" },
+          { "name": "done" },
+          { "name": "archived" },
+          { "name": "reference" },
+          { "name": "paused" }
+        ]
+      }
+    },
+    "Area": {
+      "select": {
+        "options": [
+          { "name": "expert_city" },
+          { "name": "products" },
+          { "name": "finance" },
+          { "name": "personal_finance" },
+          { "name": "marketing" },
+          { "name": "sales" },
+          { "name": "ops" }
+        ]
+      }
+    },
+    "Owner": {
+      "select": {
+        "options": [
+          { "name": "Anton" }
+        ]
+      }
+    },
+    "Review": {
+      "select": {
+        "options": [
+          { "name": "daily" },
+          { "name": "weekly" },
+          { "name": "monthly" },
+          { "name": "quarterly" },
+          { "name": "none" }
+        ]
+      }
+    },
+    "Due": { "date": {} },
+    "KPI": { "rich_text": {} },
+    "Tags": {
+      "multi_select": {
+        "options": [
+          { "name": "product" },
+          { "name": "finance" },
+          { "name": "expert_city" }
+        ]
+      }
+    },
+    "Path": { "rich_text": {} },
+    "LastSyncedAt": { "date": {} },
+    "Content": { "rich_text": {} }
+  }
+}

@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Коммерческое предложение - Аудит потенциала продаж на земле</title>
+    <style>
+        @page {
+            size: A4 landscape;
+            margin: 0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .page {
+            width: 297mm;
+            height: 210mm;
+            padding: 40mm 30mm;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+            page-break-after: always;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4a9eff 0%, #7b68ee 100%);
+        }
+
+        .page:last-child {
+            page-break-after: auto;
+        }
+
+        /* Титульная страница */
+        .title-page {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .title-page h1 {
+            font-size: 4.5em;
+            font-weight: 700;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #4a9eff 0%, #7b68ee 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .title-page .subtitle {
+            font-size: 2em;
+            color: #b0b0b0;
+            margin-bottom: 50px;
+            font-weight: 300;
+        }
+
+        .title-page .meta {
+            font-size: 1.2em;
+            color: #888;
+            margin-top: 60px;
+        }
+
+        .title-page .meta-item {
+            margin: 10px 0;
+        }
+
+        .title-page .price {
+            font-size: 3em;
+            color: #4a9eff;
+            font-weight: 700;
+            margin-top: 40px;
+        }
+
+        /* Заголовки */
+        h1 {
+            font-size: 3em;
+            margin-bottom: 30px;
+            color: #ffffff;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2.2em;
+            margin: 30px 0 20px 0;
+            color: #4a9eff;
+            font-weight: 600;
+            border-bottom: 2px solid rgba(74, 158, 255, 0.3);
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 1.6em;
+            margin: 25px 0 15px 0;
+            color: #7b68ee;
+            font-weight: 600;
+        }
+
+        h4 {
+            font-size: 1.3em;
+            margin: 20px 0 12px 0;
+            color: #9d8aff;
+            font-weight: 500;
+        }
+
+        /* Текст */
+        p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            color: #d0d0d0;
+        }
+
+        ul, ol {
+            margin: 15px 0 15px 30px;
+            color: #d0d0d0;
+        }
+
+        li {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 12px;
+            padding-left: 10px;
+        }
+
+        /* Списки с чекбоксами */
+        .check-list li::marker {
+            content: "✓ ";
+            color: #4a9eff;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        /* Акцентные блоки */
+        .highlight {
+            background: rgba(74, 158, 255, 0.1);
+            border-left: 4px solid #4a9eff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .quote {
+            border-left: 4px solid #7b68ee;
+            padding: 20px;
+            margin: 20px 0;
+            background: rgba(123, 104, 238, 0.1);
+            border-radius: 8px;
+            font-style: italic;
+            font-size: 1.2em;
+        }
+
+        /* Таблицы */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th {
+            background: rgba(74, 158, 255, 0.2);
+            color: #4a9eff;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #d0d0d0;
+            font-size: 1em;
+        }
+
+        tr:hover {
+            background: rgba(74, 158, 255, 0.05);
+        }
+
+        /* Блоки с результатами */
+        .result-box {
+            background: rgba(74, 158, 255, 0.1);
+            border: 1px solid rgba(74, 158, 255, 0.3);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .result-box h3 {
+            margin-top: 0;
+        }
+
+        /* Двухколоночная верстка */
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        /* Иконки */
+        .icon {
+            display: inline-block;
+            margin-right: 8px;
+            font-size: 1.2em;
+        }
+
+        /* Номера страниц */
+        .page-number {
+            position: absolute;
+            bottom: 20mm;
+            right: 30mm;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        /* Секции */
+        .section {
+            margin-bottom: 40px;
+        }
+
+        /* Ключевые цифры */
+        .big-number {
+            font-size: 3em;
+            font-weight: 700;
+            color: #4a9eff;
+            line-height: 1;
+            margin: 10px 0;
+        }
+
+        .big-number-label {
+            font-size: 1.1em;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        /* Процесс работы */
+        .process-step {
+            background: rgba(123, 104, 238, 0.1);
+            border-left: 4px solid #7b68ee;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+
+        .process-step-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #4a9eff 0%, #7b68ee 100%);
+            border-radius: 50%;
+            color: white;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 1.2em;
+        }
+
+        /* Контакты */
+        .contacts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .contact-item {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .contact-label {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .contact-value {
+            color: #4a9eff;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        /* Печать */
+        @media print {
+            body {
+                background: #0a0a0a;
+            }
+            
+            .page {
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Титульная страница -->
+<div class="page title-page">
+    <h1>🏗️ КОММЕРЧЕСКОЕ<br>ПРЕДЛОЖЕНИЕ</h1>
+    <div class="subtitle">Аудит: Оценка потенциала продаж на земле</div>
+    <div class="meta">
+        <div class="meta-item">Расширенный формат аудита</div>
+        <div class="meta-item">Дата: 2025-01-27</div>
+        <div class="meta-item">Исполнитель: Антон Цой</div>
+        <div class="meta-item">Срок выполнения: 8–10 рабочих дней</div>
+    </div>
+    <div class="price">250 000 ₽</div>
+    <div class="page-number">1</div>
+</div>
+
+<!-- Цель услуги -->
+<div class="page">
+    <h1>🎯 ЦЕЛЬ УСЛУГИ</h1>
+    <p style="font-size: 1.3em; margin-bottom: 30px;">
+        Провести комплексный анализ земельного участка в Уфе для принятия обоснованного решения о покупке и разработке проекта.
+    </p>
+    
+    <h2>Вы получите:</h2>
+    <ul class="check-list">
+        <li>Полную картину рынка в районе участка</li>
+        <li>Финансовую модель продаж с тремя сценариями</li>
+        <li>Прогноз объема продаж по типам квартир</li>
+        <li>Рекомендации по ценообразованию и составу квартир</li>
+        <li>Оценку рисков и возможностей проекта</li>
+        <li><strong>Полный отчет по продажам рынка Уфы</strong> (01.01.2025 – 10.11.2025) с детализацией по застройщикам, районам, типам недвижимости, ипотеке и наличным покупкам</li>
+    </ul>
+    
+    <div class="highlight" style="margin-top: 40px;">
+        <strong>Результат:</strong> Обоснованное решение о покупке земли с пониманием экономики проекта.
+    </div>
+    <div class="page-number">2</div>
+</div>
+
+<!-- Что входит в аудит - Часть 1 -->
+<div class="page">
+    <h1>📦 ЧТО ВХОДИТ В АУДИТ</h1>
+    
+    <h2>1. АНАЛИЗ РЫНКА И КОНКУРЕНТОВ В РАЙОНЕ</h2>
+    
+    <h3>1.1. Анализ локации</h3>
+    <ul class="check-list">
+        <li>Оценка района (транспортная доступность, инфраструктура, экология)</li>
+        <li>Анализ ближайших объектов инфраструктуры (школы, детсады, ТЦ, транспорт)</li>
+        <li>Оценка перспектив развития района</li>
+        <li>Анализ транспортной доступности и логистики</li>
+    </ul>
+    
+    <h3>1.2. Конкурентный анализ</h3>
+    <ul class="check-list">
+        <li>Выявление всех проектов-конкурентов в радиусе 2–3 км</li>
+        <li>Сравнительный анализ конкурентов (типы квартир, цены, темпы продаж, позиционирование)</li>
+        <li>Рейтинг конкурентов по ключевым параметрам</li>
+        <li>Выявление свободных ниш на рынке</li>
+    </ul>
+    
+    <div class="result-box">
+        <strong>Результат:</strong> Презентация (15–20 слайдов) с анализом рынка, конкурентов и локации.
+    </div>
+    <div class="page-number">3</div>
+</div>
+
+<!-- Что входит в аудит - Часть 2 -->
+<div class="page">
+    <h2>1.3. Рыночная динамика</h2>
+    <ul class="check-list">
+        <li>Анализ продаж в районе за последние 6–12 месяцев</li>
+        <li>Динамика цен и спроса</li>
+        <li>Сезонность продаж</li>
+        <li>Прогноз развития рынка в районе на 2–3 года</li>
+    </ul>
+    
+    <h2>1.4. Спрос и предложение</h2>
+    <ul class="check-list">
+        <li>Оценка текущего предложения в районе</li>
+        <li>Анализ спроса по типам квартир (студии, 1к, 2к, 3к, 4к+)</li>
+        <li>Выявление дефицитных сегментов</li>
+        <li>Оценка потенциала поглощения рынка</li>
+    </ul>
+    
+    <h2>2. ФИНАНСОВАЯ МОДЕЛЬ ПРОДАЖ</h2>
+    
+    <h3>2.1. Моделирование проекта</h3>
+    <ul class="check-list">
+        <li>Расчет оптимального состава квартир (типы и площади)</li>
+        <li>Расчет общей площади проекта</li>
+        <li>Оценка плотности застройки</li>
+        <li>Расчет количества квартир по типам</li>
+    </ul>
+    
+    <h3>2.2. Ценообразование</h3>
+    <ul class="check-list">
+        <li>Анализ цен конкурентов в районе</li>
+        <li>Расчет рекомендуемой цены за м² по типам квартир</li>
+        <li>Обоснование ценовой стратегии</li>
+        <li>Анализ эластичности спроса от цены</li>
+    </ul>
+    <div class="page-number">4</div>
+</div>
+
+<!-- Финансовая модель - сценарии -->
+<div class="page">
+    <h2>2.3. Финансовая модель (3 сценария)</h2>
+    
+    <div class="two-columns">
+        <div class="result-box">
+            <h3>✅ Оптимистичный сценарий</h3>
+            <ul>
+                <li>Высокий спрос, быстрые продажи</li>
+                <li>Цены на верхней границе рынка</li>
+                <li>Прогноз выручки и прибыли</li>
+            </ul>
+        </div>
+        
+        <div class="result-box">
+            <h3>✅ Реалистичный сценарий</h3>
+            <ul>
+                <li>Средний спрос, стандартные темпы продаж</li>
+                <li>Цены на уровне рынка</li>
+                <li>Прогноз выручки и прибыли</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="result-box" style="margin-top: 20px;">
+        <h3>✅ Пессимистичный сценарий</h3>
+        <ul>
+            <li>Низкий спрос, медленные продажи</li>
+            <li>Цены ниже рынка</li>
+            <li>Прогноз выручки и прибыли</li>
+        </ul>
+    </div>
+    
+    <h2>2.4. Ключевые финансовые показатели</h2>
+    <ul class="check-list">
+        <li>Прогноз выручки (общая и по этапам)</li>
+        <li>Прогноз себестоимости продаж</li>
+        <li>Маржинальность проекта</li>
+        <li>Сроки продаж (месяцы/кварталы)</li>
+        <li>Денежные потоки (cash flow)</li>
+        <li>Точка безубыточности</li>
+        <li>ROI и окупаемость</li>
+    </ul>
+    
+    <div class="result-box">
+        <strong>Результат:</strong> Excel-модель с тремя сценариями и детальными расчетами.
+    </div>
+    <div class="page-number">5</div>
+</div>
+
+<!-- Прогноз продаж -->
+<div class="page">
+    <h1>3. ПРОГНОЗ ОБЪЕМА ПРОДАЖ ПО ТИПАМ КВАРТИР</h1>
+    
+    <h2>3.1. Анализ спроса по типам</h2>
+    <ul class="check-list">
+        <li>Доля каждого типа квартир в продажах района</li>
+        <li>Динамика спроса по типам (рост/падение)</li>
+        <li>Сезонность по типам квартир</li>
+        <li>Ценовые диапазоны по типам</li>
+    </ul>
+    
+    <h2>3.2. Прогноз продаж</h2>
+    <ul class="check-list">
+        <li>Прогноз количества продаж по типам квартир (студии, 1к, 2к, 3к, 4к+)</li>
+        <li>Прогноз выручки по типам</li>
+        <li>Прогноз темпов продаж (квартир/месяц)</li>
+        <li>Прогноз сроков реализации проекта</li>
+    </ul>
+    
+    <h2>3.3. Рекомендации по составу квартир</h2>
+    <ul class="check-list">
+        <li>Оптимальное соотношение типов квартир</li>
+        <li>Рекомендуемые площади</li>
+        <li>Приоритетные типы для запуска</li>
+        <li>Типы, от которых стоит отказаться</li>
+    </ul>
+    
+    <div class="result-box">
+        <strong>Результат:</strong> Детальный прогноз с обоснованием и рекомендациями.
+    </div>
+    <div class="page-number">6</div>
+</div>
+
+<!-- Рекомендации по ценообразованию -->
+<div class="page">
+    <h1>4. РЕКОМЕНДАЦИИ ПО ЦЕНООБРАЗОВАНИЮ</h1>
+    
+    <h2>4.1. Ценовая стратегия</h2>
+    <ul class="check-list">
+        <li>Рекомендуемая цена за м² по типам квартир</li>
+        <li>Обоснование цен (сравнение с конкурентами)</li>
+        <li>Стратегия стартовых цен</li>
+        <li>Стратегия повышения цен в процессе продаж</li>
+    </ul>
+    
+    <h2>4.2. Ценовые ниши</h2>
+    <ul class="check-list">
+        <li>Анализ ценовых ниш в районе</li>
+        <li>Выявление свободных ниш</li>
+        <li>Рекомендации по позиционированию</li>
+        <li>Оценка потенциала премиального сегмента</li>
+    </ul>
+    
+    <h2>4.3. Скидки и акции</h2>
+    <ul class="check-list">
+        <li>Рекомендации по системе скидок</li>
+        <li>Оптимальные размеры скидок</li>
+        <li>Стратегия акций и спецпредложений</li>
+        <li>Оценка влияния на маржинальность</li>
+    </ul>
+    
+    <div class="result-box">
+        <strong>Результат:</strong> Детальные рекомендации по ценообразованию с обоснованием.
+    </div>
+    <div class="page-number">7</div>
+</div>
+
+<!-- Дополнительные разделы -->
+<div class="page">
+    <h1>5. ДОПОЛНИТЕЛЬНЫЕ РАЗДЕЛЫ</h1>
+    
+    <h2>5.1. Оценка рисков</h2>
+    <ul class="check-list">
+        <li>Рыночные риски (спрос, конкуренция, цены)</li>
+        <li>Операционные риски (сроки, качество)</li>
+        <li>Финансовые риски (ликвидность, финансирование)</li>
+        <li>Рекомендации по минимизации рисков</li>
+    </ul>
+    
+    <h2>5.2. Возможности роста</h2>
+    <ul class="check-list">
+        <li>Потенциал увеличения продаж</li>
+        <li>Возможности оптимизации цен</li>
+        <li>Дополнительные источники дохода</li>
+        <li>Стратегии масштабирования</li>
+    </ul>
+    
+    <h2>5.3. Дорожная карта запуска продаж</h2>
+    <ul class="check-list">
+        <li>Этапы запуска проекта</li>
+        <li>Рекомендации по маркетингу</li>
+        <li>План работы с партнерами</li>
+        <li>Ключевые метрики для контроля</li>
+    </ul>
+    <div class="page-number">8</div>
+</div>
+
+<!-- Результаты и форматы -->
+<div class="page">
+    <h1>📊 РЕЗУЛЬТАТЫ И ФОРМАТЫ</h1>
+    
+    <h2>1. ПРЕЗЕНТАЦИЯ (40–50 слайдов)</h2>
+    <p><strong>Структура:</strong></p>
+    <ul>
+        <li>Executive Summary (1 страница)</li>
+        <li>Анализ рынка и конкурентов (15–20 слайдов)</li>
+        <li>Финансовая модель (10–12 слайдов)</li>
+        <li>Прогноз продаж (8–10 слайдов)</li>
+        <li>Рекомендации по ценообразованию (5–7 слайдов)</li>
+        <li>Риски и возможности (3–5 слайдов)</li>
+        <li>Выводы и рекомендации (2–3 слайда)</li>
+    </ul>
+    <p><strong>Формат:</strong> PDF + PowerPoint</p>
+    
+    <h2>2. ДЕТАЛЬНЫЙ ОТЧЕТ (60–80 страниц PDF)</h2>
+    <ul>
+        <li>Полное описание методологии</li>
+        <li>Детальный анализ всех разделов</li>
+        <li>Таблицы и графики</li>
+        <li>Примеры расчетов</li>
+        <li>Справочные материалы</li>
+    </ul>
+    
+    <h2>3. ФИНАНСОВАЯ МОДЕЛЬ (Excel)</h2>
+    <ul>
+        <li>Интерактивная модель с тремя сценариями</li>
+        <li>Возможность изменения параметров</li>
+        <li>Автоматические расчеты</li>
+        <li>Графики и визуализации</li>
+        <li>Инструкция по использованию</li>
+    </ul>
+    <div class="page-number">9</div>
+</div>
+
+<!-- Полный отчет по продажам рынка Уфы -->
+<div class="page">
+    <h1>5. ПОЛНЫЙ ОТЧЕТ ПО ПРОДАЖАМ РЫНКА УФЫ</h1>
+    <p style="font-size: 1.2em; margin-bottom: 30px;">
+        <strong>Период:</strong> 01.01.2025 – 10.11.2025
+    </p>
+    
+    <h2>Содержание отчета:</h2>
+    
+    <h3>5.1. Данные по застройщикам</h3>
+    <ul class="check-list">
+        <li>ТОП застройщиков по продажам</li>
+        <li>Количество проданных квартир по каждому застройщику</li>
+        <li>Выручка и средний чек</li>
+        <li>Цена за м² по застройщикам</li>
+        <li>Количество ЖК в портфеле</li>
+    </ul>
+    
+    <h3>5.2. Паркинги, кладовые и офисы</h3>
+    <ul class="check-list">
+        <li>Объем продаж паркингов</li>
+        <li>Объем продаж кладовых</li>
+        <li>Объем продаж офисных помещений</li>
+        <li>Средние цены по категориям</li>
+        <li>Динамика продаж</li>
+    </ul>
+    
+    <h3>5.3. Свод по районам</h3>
+    <ul class="check-list">
+        <li>Продажи по каждому району Уфы</li>
+        <li>Средние цены по районам</li>
+        <li>Количество проданных квартир по районам</li>
+        <li>Рейтинг районов по продажам</li>
+        <li>Динамика по районам</li>
+    </ul>
+    <div class="page-number">10</div>
+</div>
+
+<!-- Отчет по продажам - продолжение -->
+<div class="page">
+    <h3>5.4. Общие данные рынка</h3>
+    <ul class="check-list">
+        <li>Общий объем продаж (квартиры, м², руб.)</li>
+        <li>Средний чек по рынку</li>
+        <li>Средняя цена за м²</li>
+        <li>Динамика продаж (месяц к месяцу)</li>
+        <li>Сезонность продаж</li>
+    </ul>
+    
+    <h3>5.5. Ипотека: доля по банкам</h3>
+    <ul class="check-list">
+        <li>Общая доля ипотечных сделок</li>
+        <li>Распределение по банкам</li>
+        <li>ТОП банков-кредиторов</li>
+        <li>Средние суммы кредитов</li>
+        <li>Динамика ипотечного канала</li>
+    </ul>
+    
+    <h3>5.6. Наличные покупки</h3>
+    <ul class="check-list">
+        <li>Доля наличных покупок</li>
+        <li>Средний чек наличных сделок</li>
+        <li>Динамика наличных покупок</li>
+        <li>Сравнение с ипотечными сделками</li>
+    </ul>
+    
+    <h3>5.7. Сегментация по ЖК</h3>
+    <ul class="check-list">
+        <li>Данные по каждому жилому комплексу</li>
+        <li>Количество проданных квартир</li>
+        <li>Типы квартир (студии, 1к, 2к, 3к, 4к+)</li>
+        <li>Цены и средний чек</li>
+        <li>Темпы продаж</li>
+        <li>Стадия реализации</li>
+    </ul>
+    
+    <div class="result-box">
+        <strong>Формат:</strong> Excel-файл с детализацией + PDF-сводка
+    </div>
+    <div class="page-number">11</div>
+</div>
+
+<!-- Сроки выполнения -->
+<div class="page">
+    <h1>⏱️ СРОКИ ВЫПОЛНЕНИЯ</h1>
+    
+    <div style="text-align: center; margin: 40px 0;">
+        <div class="big-number">8–10</div>
+        <div class="big-number-label">рабочих дней</div>
+    </div>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Этап</th>
+                <th>Срок</th>
+                <th>Результат</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>1. Сбор данных и анализ рынка</strong></td>
+                <td>3–4 дня</td>
+                <td>Анализ рынка и конкурентов</td>
+            </tr>
+            <tr>
+                <td><strong>2. Финансовое моделирование</strong></td>
+                <td>2–3 дня</td>
+                <td>Финансовая модель</td>
+            </tr>
+            <tr>
+                <td><strong>3. Прогноз продаж и рекомендации</strong></td>
+                <td>2–3 дня</td>
+                <td>Прогноз и рекомендации</td>
+            </tr>
+            <tr>
+                <td><strong>4. Подготовка материалов</strong></td>
+                <td>1 день</td>
+                <td>Презентация, отчет, модель</td>
+            </tr>
+            <tr>
+                <td><strong>5. Презентация результатов</strong></td>
+                <td>1 день</td>
+                <td>Защита перед руководством</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div class="highlight" style="margin-top: 30px;">
+        <strong>Старт работ:</strong> В течение 1–2 дней после подписания договора и оплаты
+    </div>
+    <div class="page-number">12</div>
+</div>
+
+<!-- Стоимость -->
+<div class="page">
+    <h1>💰 СТОИМОСТЬ И УСЛОВИЯ</h1>
+    
+    <div style="text-align: center; margin: 40px 0;">
+        <div class="big-number">250 000 ₽</div>
+    </div>
+    
+    <h2>Что входит:</h2>
+    <ul class="check-list">
+        <li>Полный анализ рынка и конкурентов</li>
+        <li>Финансовая модель с тремя сценариями</li>
+        <li>Прогноз продаж по типам квартир</li>
+        <li>Рекомендации по ценообразованию</li>
+        <li>Презентация (40–50 слайдов)</li>
+        <li>Детальный отчет (60–80 страниц)</li>
+        <li>Excel-модель</li>
+        <li><strong>Полный отчет по продажам рынка Уфы (01.01.2025 – 10.11.2025)</strong></li>
+        <li>Презентация результатов (2 часа)</li>
+        <li>2 консультации по Zoom (по 1 часу)</li>
+    </ul>
+    
+    <h2>Условия оплаты:</h2>
+    <div class="two-columns">
+        <div class="result-box">
+            <h3>50% предоплата</h3>
+            <p>При подписании договора</p>
+            <div class="big-number" style="font-size: 2em;">125 000 ₽</div>
+        </div>
+        <div class="result-box">
+            <h3>50% по завершении</h3>
+            <p>После презентации результатов</p>
+            <div class="big-number" style="font-size: 2em;">125 000 ₽</div>
+        </div>
+    </div>
+    <div class="page-number">13</div>
+</div>
+
+<!-- Процесс работы -->
+<div class="page">
+    <h1>🔁 ПРОЦЕСС РАБОТЫ</h1>
+    
+    <div class="process-step">
+        <span class="process-step-number">1</span>
+        <div style="display: inline-block; vertical-align: top; width: calc(100% - 60px);">
+            <h3>Согласование и подписание (1 день)</h3>
+            <ul>
+                <li>Обсуждение деталей проекта</li>
+                <li>Согласование формата работы и конфиденциальности</li>
+                <li>Подписание договора и NDA</li>
+                <li>Оплата предоплаты (50%)</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="process-step">
+        <span class="process-step-number">2</span>
+        <div style="display: inline-block; vertical-align: top; width: calc(100% - 60px);">
+            <h3>Сбор данных (1–2 дня)</h3>
+            <ul>
+                <li>Предоставление данных о земельном участке</li>
+                <li>Заполнение формы (если не заполнена)</li>
+                <li>Согласование доступов к данным</li>
+                <li>Уточнение требований</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="process-step">
+        <span class="process-step-number">3</span>
+        <div style="display: inline-block; vertical-align: top; width: calc(100% - 60px);">
+            <h3>Проведение аудита (8–10 рабочих дней)</h3>
+            <ul>
+                <li>Анализ рынка и конкурентов</li>
+                <li>Финансовое моделирование</li>
+                <li>Прогноз продаж</li>
+                <li>Подготовка рекомендаций</li>
+                <li>Создание презентации и отчета</li>
+            </ul>
+        </div>
+    </div>
+    <div class="page-number">14</div>
+</div>
+
+<!-- Процесс работы - продолжение -->
+<div class="page">
+    <div class="process-step">
+        <span class="process-step-number">4</span>
+        <div style="display: inline-block; vertical-align: top; width: calc(100% - 60px);">
+            <h3>Презентация результатов (1 день)</h3>
+            <ul>
+                <li>Презентация результатов руководству (2 часа)</li>
+                <li>Обсуждение рекомендаций</li>
+                <li>Ответы на вопросы</li>
+                <li>Согласование следующих шагов</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="process-step">
+        <span class="process-step-number">5</span>
+        <div style="display: inline-block; vertical-align: top; width: calc(100% - 60px);">
+            <h3>Завершение (1 день)</h3>
+            <ul>
+                <li>Передача всех материалов</li>
+                <li>Оплата оставшейся суммы (50%)</li>
+                <li>Подписание акта выполненных работ</li>
+            </ul>
+        </div>
+    </div>
+    
+    <h1>✅ ГАРАНТИИ</h1>
+    
+    <div class="two-columns" style="margin-top: 30px;">
+        <div>
+            <h3>Качество анализа</h3>
+            <ul>
+                <li>Все данные проверяются из нескольких источников</li>
+                <li>Используются актуальные данные рынка</li>
+                <li>Методология основана на опыте работы с застройщиками</li>
+                <li>Учитывается специфика рынка Уфы</li>
+            </ul>
+        </div>
+        <div>
+            <h3>Конкретность рекомендаций</h3>
+            <ul>
+                <li>Не общие советы, а конкретные цифры и действия</li>
+                <li>Все рекомендации обоснованы данными</li>
+                <li>Учитываются ваши ограничения и возможности</li>
+                <li>Практические инструменты для применения</li>
+            </ul>
+        </div>
+    </div>
+    <div class="page-number">15</div>
+</div>
+
+<!-- Для кого эта услуга -->
+<div class="page">
+    <h1>🎯 ДЛЯ КОГО ЭТА УСЛУГА</h1>
+    
+    <div class="two-columns">
+        <div class="result-box" style="background: rgba(74, 158, 255, 0.15);">
+            <h2 style="color: #4a9eff; border: none; margin-top: 0;">✅ Подходит, если:</h2>
+            <ul>
+                <li>Вы рассматриваете покупку земли в Уфе</li>
+                <li>Нужна объективная оценка потенциала участка</li>
+                <li>Важно принять обоснованное решение о покупке</li>
+                <li>Нужна финансовая модель для инвесторов/банка</li>
+                <li>Хотите минимизировать риски проекта</li>
+                <li>Нужны рекомендации по ценообразованию и составу квартир</li>
+            </ul>
+        </div>
+        
+        <div class="result-box" style="background: rgba(255, 100, 100, 0.1); border-color: rgba(255, 100, 100, 0.3);">
+            <h2 style="color: #ff6464; border: none; margin-top: 0;">❌ Не подходит, если:</h2>
+            <ul>
+                <li>Земля уже куплена и проект запущен</li>
+                <li>Нужен только быстрый экспресс-анализ</li>
+                <li>Нет готовности предоставить базовую информацию</li>
+                <li>Бюджет ограничен (менее 200 000 ₽)</li>
+            </ul>
+        </div>
+    </div>
+    
+    <h1>💡 УНИКАЛЬНОСТЬ ПРЕДЛОЖЕНИЯ</h1>
+    
+    <div class="two-columns" style="margin-top: 20px;">
+        <div>
+            <h3>✅ Комплексный подход</h3>
+            <ul>
+                <li>Не только анализ рынка, но и финансовая модель</li>
+                <li>Не только прогноз, но и конкретные рекомендации</li>
+                <li>Учитываются все аспекты проекта</li>
+            </ul>
+        </div>
+        <div>
+            <h3>✅ Опыт и экспертиза</h3>
+            <ul>
+                <li>Понимание рынка недвижимости Уфы</li>
+                <li>Опыт работы с застройщиками</li>
+                <li>Методология, проверенная на реальных проектах</li>
+            </ul>
+        </div>
+    </div>
+    <div class="page-number">16</div>
+</div>
+
+<!-- Конфиденциальность -->
+<div class="page">
+    <h1>🔒 КОНФИДЕНЦИАЛЬНОСТЬ</h1>
+    
+    <h2>Мы гарантируем:</h2>
+    <ul class="check-list">
+        <li>Строгое соблюдение конфиденциальности всех данных</li>
+        <li>Работа с анонимизированными данными (при необходимости)</li>
+        <li>Подписание NDA (соглашение о неразглашении)</li>
+        <li>Использование данных только для целей аудита</li>
+        <li>Не передаем информацию третьим лицам</li>
+        <li>Уничтожение данных после завершения проекта (по запросу)</li>
+    </ul>
+    
+    <h2>Формат работы:</h2>
+    <ul>
+        <li>Все данные обрабатываются конфиденциально</li>
+        <li>Результаты предоставляются только заказчику</li>
+        <li>Возможна работа без указания точного адреса участка</li>
+    </ul>
+    
+    <h1>📋 ЧТО НУЖНО ОТ ВАС</h1>
+    
+    <div class="two-columns" style="margin-top: 20px;">
+        <div>
+            <h3>Минимально необходимо:</h3>
+            <ul class="check-list">
+                <li>Район и площадь участка</li>
+                <li>Тип жилья и ценовой сегмент</li>
+                <li>Ориентировочное количество квартир или площадь</li>
+                <li>Предварительная цена за м² (или диапазон)</li>
+            </ul>
+        </div>
+        <div>
+            <h3>Желательно:</h3>
+            <ul>
+                <li>Стоимость земли</li>
+                <li>Бюджет на строительство</li>
+                <li>Опыт застройщика</li>
+                <li>Сроки реализации</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="highlight">
+        <strong>Все данные строго конфиденциальны!</strong>
+    </div>
+    <div class="page-number">17</div>
+</div>
+
+<!-- Примеры результатов -->
+<div class="page">
+    <h1>📊 ПРИМЕРЫ РЕЗУЛЬТАТОВ</h1>
+    
+    <div class="two-columns">
+        <div class="result-box">
+            <h3>1. Анализ рынка</h3>
+            <ul>
+                <li>12 конкурентов в радиусе 2 км</li>
+                <li>Средняя цена: 85 000 ₽/м²</li>
+                <li>Ваша позиция: премиум-сегмент</li>
+                <li>Свободная ниша: 2-комнатные 60-70 м²</li>
+            </ul>
+        </div>
+        
+        <div class="result-box">
+            <h3>2. Финансовая модель</h3>
+            <ul>
+                <li>Общая площадь: 15 000 м²</li>
+                <li>Количество квартир: 200</li>
+                <li>Средняя цена: 90 000 ₽/м²</li>
+                <li>Выручка: 1 350 млн ₽</li>
+                <li>Срок продаж: 24 месяца</li>
+                <li>Маржинальность: 25%</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="two-columns" style="margin-top: 20px;">
+        <div class="result-box">
+            <h3>3. Прогноз продаж</h3>
+            <ul>
+                <li>Студии (20%): 40 квартир</li>
+                <li>1-комнатные (30%): 60 квартир</li>
+                <li>2-комнатные (35%): 70 квартир</li>
+                <li>3-комнатные (15%): 30 квартир</li>
+            </ul>
+        </div>
+        
+        <div class="result-box">
+            <h3>4. Рекомендации</h3>
+            <ul>
+                <li>Стартовая цена: 88 000 ₽/м²</li>
+                <li>Фокус на 2-комнатные квартиры</li>
+                <li>Запуск в Q2 2025</li>
+                <li>Партнерский канал: 40% продаж</li>
+            </ul>
+        </div>
+    </div>
+    <div class="page-number">18</div>
+</div>
+
+<!-- Бонусы -->
+<div class="page">
+    <h1>🎁 БОНУСЫ</h1>
+    
+    <div class="quote">
+        <strong>При подписании договора в течение 7 дней:</strong>
+    </div>
+    
+    <div class="two-columns" style="margin-top: 30px;">
+        <div class="result-box">
+            <h3>✅ Бесплатная консультация</h3>
+            <p>По результатам аудита (дополнительно 1 час)</p>
+        </div>
+        
+        <div class="result-box">
+            <h3>✅ Приоритетная поддержка</h3>
+            <p>При внедрении рекомендаций</p>
+        </div>
+    </div>
+    
+    <div class="result-box" style="margin-top: 20px;">
+        <h3>✅ Скидка 10%</h3>
+        <p>На дополнительные услуги (если понадобятся)</p>
+    </div>
+    
+    <h1>💬 КЛЮЧЕВОЕ СООБЩЕНИЕ</h1>
+    
+    <div class="quote" style="margin-top: 30px; font-size: 1.3em;">
+        <strong>"Принимайте решение о покупке земли на основе данных, а не интуиции"</strong>
+    </div>
+    
+    <p style="margin-top: 30px; font-size: 1.2em;">
+        Вы получите не просто анализ, а:
+    </p>
+    <ul style="font-size: 1.1em; margin-top: 20px;">
+        <li>📊 Полную картину рынка в районе</li>
+        <li>💰 Финансовую модель с тремя сценариями</li>
+        <li>📈 Прогноз продаж по типам квартир</li>
+        <li>🎯 Конкретные рекомендации по ценообразованию</li>
+        <li>✅ Обоснованное решение о покупке земли</li>
+    </ul>
+    <div class="page-number">19</div>
+</div>
+
+<!-- Контакты -->
+<div class="page title-page">
+    <h1>📞 КОНТАКТЫ</h1>
+    
+    <div style="margin-top: 60px;">
+        <h2 style="font-size: 2.5em; border: none; margin-bottom: 40px;">Антон Цой</h2>
+        <p style="font-size: 1.4em; color: #888; margin-bottom: 50px;">
+            Эксперт по анализу рынка недвижимости<br>и финансовому моделированию
+        </p>
+    </div>
+    
+    <div class="contacts" style="justify-content: center; margin-top: 60px;">
+        <div class="contact-item" style="text-align: center;">
+            <div class="contact-label">Telegram</div>
+            <div class="contact-value">@antontsoy</div>
+        </div>
+        <div class="contact-item" style="text-align: center;">
+            <div class="contact-label">Сайт</div>
+            <div class="contact-value">antontsoy.ru</div>
+        </div>
+    </div>
+    
+    <div class="highlight" style="margin-top: 80px; text-align: center; max-width: 600px; margin-left: auto; margin-right: auto;">
+        <div class="big-number" style="font-size: 2em; margin-bottom: 10px;">8–10 рабочих дней</div>
+        <div style="font-size: 1.2em; margin-bottom: 15px;">Срок выполнения</div>
+        <div class="big-number" style="font-size: 2.5em; margin-bottom: 10px;">250 000 ₽</div>
+        <div style="font-size: 1.2em;">Стоимость</div>
+    </div>
+    
+    <div class="page-number">20</div>
+</div>
+
+</body>
+</html>
+
+

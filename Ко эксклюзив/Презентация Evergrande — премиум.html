@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>China Evergrande Group · Крах империи · Май 2026</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@page { size: A4 landscape; margin: 0; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+    --ink-void: #060418; --violet-core: #7c3aed; --violet-bright: #a855f7; --violet-soft: #c4b5fd;
+    --magenta: #ec4899; --acid: #d4ff00; --cream: #f4ecd8; --white: #ffffff; --mute: #64708b; --mute-2: #9ca3af;
+    --line-soft: rgba(255, 255, 255, 0.08); --line-strong: rgba(255, 255, 255, 0.18);
+    --glass-bg-2: rgba(255, 255, 255, 0.05);
+    --font-display: 'Cormorant Garamond', Georgia, serif;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+html, body { background: var(--ink-void); color: var(--white); font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums; }
+@media screen {
+    body { background: #03020a; padding: 32px 0; }
+    .slide { margin: 0 auto 32px; box-shadow: 0 40px 80px -20px rgba(0,0,0,0.8), 0 8px 32px rgba(124,58,237,0.12), 0 0 0 1px rgba(255,255,255,0.04); }
+}
+.slide { position: relative; width: 297mm; height: 210mm; padding: 14mm 18mm 12mm; background: var(--ink-void);
+    color: var(--white); overflow: hidden; page-break-after: always; display: flex; flex-direction: column; }
+.slide:last-child { page-break-after: auto; }
+.aurora { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.aurora.v1 { background: radial-gradient(at 18% 88%, rgba(124,58,237,.55) 0px, transparent 42%), radial-gradient(at 88% 12%, rgba(236,72,153,.32) 0px, transparent 45%), radial-gradient(at 75% 80%, rgba(168,85,247,.22) 0px, transparent 38%), radial-gradient(at 50% 30%, rgba(212,255,0,.04) 0px, transparent 35%); }
+.aurora.v2 { background: radial-gradient(at 90% 95%, rgba(236,72,153,.40) 0px, transparent 45%), radial-gradient(at 5% 20%, rgba(124,58,237,.45) 0px, transparent 50%), radial-gradient(at 60% 60%, rgba(212,255,0,.04) 0px, transparent 28%); }
+.aurora.v3 { background: radial-gradient(at 50% 100%, rgba(124,58,237,.45) 0px, transparent 50%), radial-gradient(at 20% 0%, rgba(236,72,153,.28) 0px, transparent 45%), radial-gradient(at 80% 0%, rgba(168,85,247,.18) 0px, transparent 40%); }
+.aurora.v4 { background: radial-gradient(at 100% 50%, rgba(212,255,0,.10) 0px, transparent 45%), radial-gradient(at 0% 50%, rgba(124,58,237,.50) 0px, transparent 55%), radial-gradient(at 50% 100%, rgba(236,72,153,.18) 0px, transparent 40%); }
+.aurora.v5 { background: radial-gradient(at 30% 50%, rgba(124,58,237,.40) 0px, transparent 50%), radial-gradient(at 75% 25%, rgba(236,72,153,.28) 0px, transparent 40%), radial-gradient(at 75% 80%, rgba(168,85,247,.18) 0px, transparent 40%); }
+.noise { position: absolute; inset: 0; pointer-events: none; z-index: 1; opacity: .06; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.8 0'/></filter><rect width='240' height='240' filter='url(%23n)'/></svg>");
+    background-size: 240px; }
+.slide-inner { position: relative; z-index: 2; flex: 1; display: flex; flex-direction: column; }
+.corner { position: absolute; z-index: 3; width: 12mm; height: 12mm; border-color: rgba(255,255,255,.18); border-style: solid; border-width: 0; }
+.corner.tl { top: 6mm; left: 6mm; border-top-width: 1px; border-left-width: 1px; }
+.corner.tr { top: 6mm; right: 6mm; border-top-width: 1px; border-right-width: 1px; }
+.corner.bl { bottom: 6mm; left: 6mm; border-bottom-width: 1px; border-left-width: 1px; }
+.corner.br { bottom: 6mm; right: 6mm; border-bottom-width: 1px; border-right-width: 1px; }
+.topbar { position: relative; z-index: 3; display: flex; align-items: center; justify-content: space-between; padding-bottom: 5mm; margin-bottom: 6mm; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-size: 8.5pt; font-weight: 600; letter-spacing: .32em; text-transform: uppercase; color: var(--mute-2); display: flex; align-items: center; gap: 14pt; }
+.eyebrow .num { color: var(--acid); font-weight: 700; }
+.eyebrow .dot { color: var(--violet-bright); }
+.eyebrow .label { color: var(--cream); }
+.brand-tag { font-size: 8.5pt; font-weight: 700; letter-spacing: .36em; text-transform: uppercase; color: var(--white); display: flex; align-items: center; gap: 10pt; }
+.brand-tag .mono { display: inline-flex; align-items: center; justify-content: center; width: 22pt; height: 22pt; border: 1px solid var(--acid); color: var(--acid); font-family: var(--font-display); font-style: italic; font-weight: 600; font-size: 13pt; letter-spacing: 0; line-height: 1; }
+.bottombar { position: relative; z-index: 3; display: flex; align-items: center; justify-content: space-between; padding-top: 5mm; margin-top: auto; border-top: 1px solid var(--line-soft); font-size: 8pt; letter-spacing: .24em; text-transform: uppercase; color: var(--mute); }
+.bottombar .l, .bottombar .c, .bottombar .r { display: flex; align-items: center; gap: 10pt; }
+.bottombar .pageno { font-family: var(--font-display); font-style: italic; font-weight: 600; font-size: 14pt; color: var(--cream); letter-spacing: 0; }
+.bottombar .total { color: var(--mute); }
+.bottombar .seal { display: inline-flex; align-items: center; justify-content: center; width: 18pt; height: 18pt; border: 1px solid var(--line-strong); border-radius: 50%; color: var(--cream); font-family: var(--font-display); font-style: italic; font-size: 10pt; line-height: 1; }
+.glass { position: relative; background: var(--glass-bg-2); border: 1px solid var(--line-soft); border-radius: 6pt; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 8px 24px rgba(0,0,0,.3); }
+.cream { color: var(--cream); }
+.ev-stage { flex: 1; display: flex; flex-direction: column; justify-content: center; padding-top: 2mm; }
+.ev-s01 .hook-eye { font-family: var(--font-display); font-style: italic; font-size: 20pt; color: var(--cream); margin-bottom: 8pt; }
+.ev-s01 h1 { font-family: var(--font-sans); font-weight: 800; font-size: 38pt; line-height: 1.08; letter-spacing: -.03em; max-width: 230mm; }
+.ev-s01 h1 .q { color: var(--acid); }
+.ev-s01 .sub { margin-top: 10mm; font-size: 11.5pt; line-height: 1.55; color: var(--mute-2); max-width: 155mm; border-left: 2px solid var(--violet-core); padding-left: 12pt; }
+.ev-s01 .mega-debt { position: absolute; right: 12mm; bottom: 28mm; text-align: right; z-index: 2; }
+.ev-s01 .mega-debt .n { font-family: var(--font-sans); font-weight: 900; font-size: 72pt; line-height: .9; letter-spacing: -.04em; color: rgba(255,255,255,.12); }
+.ev-s01 .mega-debt .cap { font-size: 8pt; letter-spacing: .28em; text-transform: uppercase; color: var(--violet-soft); margin-top: 6pt; }
+.ev-s02 .timeline { display: grid; grid-template-columns: repeat(5,1fr); gap: 10pt; margin-bottom: 8mm; }
+.ev-s02 .tl-card { padding: 12pt 11pt; background: var(--glass-bg-2); border: 1px solid var(--line-soft); border-radius: 5pt; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+.ev-s02 .tl-card .y { font-size: 20pt; font-weight: 800; color: var(--acid); letter-spacing: -.03em; }
+.ev-s02 .tl-card .t { font-size: 9pt; font-weight: 600; color: var(--white); margin-top: 6pt; line-height: 1.35; }
+.ev-s02 .tl-card .m { font-size: 8pt; color: var(--mute-2); margin-top: 5pt; line-height: 1.4; }
+.ev-s02 .banner { padding: 12pt 16pt; background: linear-gradient(90deg, rgba(124,58,237,.25), rgba(236,72,153,.12)); border: 1px solid var(--line-strong); border-radius: 6pt; font-family: var(--font-display); font-style: italic; font-size: 22pt; line-height: 1.2; color: var(--cream); }
+.ev-head h2 { font-family: var(--font-display); font-weight: 600; font-size: 32pt; line-height: 1.06; color: var(--white); max-width: 220mm; margin-bottom: 6mm; }
+.ev-head h2 em { color: var(--acid); font-style: italic; }
+.ev-s03 .pill-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10pt; flex: 1; align-content: start; }
+.ev-s03 .pill { padding: 14pt 16pt; background: var(--glass-bg-2); border: 1px solid var(--line-soft); border-radius: 6pt; border-left: 3px solid var(--violet-bright); }
+.ev-s03 .pill .k { font-size: 8pt; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--violet-soft); margin-bottom: 6pt; }
+.ev-s03 .pill .v { font-size: 15pt; font-weight: 700; color: var(--white); }
+.ev-s03 .pill .d { font-size: 9.5pt; color: var(--mute-2); margin-top: 6pt; line-height: 1.45; }
+.ev-s03 .note { margin-top: 5mm; font-size: 10pt; line-height: 1.5; color: var(--mute-2); padding: 10pt 14pt; border-radius: 4pt; background: rgba(212,255,0,.06); border: 1px solid rgba(212,255,0,.2); }
+.ev-cols3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 12pt; flex: 1; align-content: stretch; }
+.ev-col-card { padding: 14pt 15pt; background: var(--glass-bg-2); border: 1px solid var(--line-soft); border-radius: 6pt; display: flex; flex-direction: column; }
+.ev-col-card .idx { font-family: var(--font-display); font-style: italic; font-size: 28pt; color: var(--acid); line-height: 1; margin-bottom: 8pt; }
+.ev-col-card h3 { font-size: 12pt; font-weight: 700; margin-bottom: 8pt; }
+.ev-col-card p { font-size: 9.5pt; color: var(--mute-2); line-height: 1.5; flex: 1; }
+.ev-s05 .split { display: grid; grid-template-columns: 1fr 1fr; gap: 14mm; flex: 1; }
+.ev-spot { padding: 16pt 18pt; background: var(--glass-bg-2); border: 1px solid var(--line-soft); border-radius: 6pt; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+.ev-spot .tag { font-size: 7.5pt; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: var(--magenta); margin-bottom: 10pt; }
+.ev-spot h3 { font-family: var(--font-display); font-style: italic; font-size: 26pt; line-height: 1.1; margin-bottom: 10pt; }
+.ev-spot p { font-size: 10pt; line-height: 1.55; color: var(--mute-2); }
+.ev-spot .big { font-size: 28pt; font-weight: 800; color: var(--white); letter-spacing: -.03em; margin: 8pt 0; }
+.ev-spot .big span { font-size: 45%; color: var(--acid); margin-left: 6pt; vertical-align: super; }
+.ev-table-wrap { overflow: hidden; border-radius: 6pt; border: 1px solid var(--line-soft); margin-top: 5mm; }
+.ev-table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+.ev-table th, .ev-table td { padding: 10pt 12pt; text-align: left; border-bottom: 1px solid var(--line-soft); }
+.ev-table th { background: rgba(124,58,237,.2); color: var(--cream); font-weight: 700; letter-spacing: .12em; text-transform: uppercase; font-size: 7.5pt; }
+.ev-table tr:last-child td { border-bottom: 0; }
+.ev-table td { color: var(--mute-2); }
+.ev-table td strong { color: var(--white); }
+.ev-s07 .row-big { display: flex; align-items: flex-end; gap: 14mm; margin-bottom: 6mm; }
+.ev-s07 .pct { font-family: var(--font-sans); font-weight: 900; font-size: 120pt; line-height: .85; letter-spacing: -.05em; color: var(--acid); text-shadow: 0 0 48px rgba(212,255,0,.15); }
+.ev-s07 .pct-cap { font-size: 10pt; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--cream); max-width: 70mm; line-height: 1.4; }
+.ev-bullets { display: grid; grid-template-columns: 1fr 1fr; gap: 10pt; }
+.ev-bullets .b { padding: 11pt 13pt; background: var(--glass-bg-2); border: 1px solid var(--line-soft); border-radius: 5pt; font-size: 9.5pt; line-height: 1.45; color: var(--mute-2); }
+.ev-bullets .b strong { color: var(--white); display: block; margin-bottom: 4pt; font-size: 8pt; letter-spacing: .14em; text-transform: uppercase; color: var(--violet-soft); }
+.ev-s08 .ghost-hero { display: grid; grid-template-columns: 1.2fr 1fr; gap: 14mm; flex: 1; align-items: center; }
+.ev-s08 .place { font-family: var(--font-display); font-style: italic; font-size: 36pt; line-height: 1.05; color: var(--white); margin-bottom: 8pt; }
+.ev-s08 .rent { font-size: 56pt; font-weight: 900; letter-spacing: -.04em; color: var(--acid); line-height: 1; }
+.ev-s08 .rent small { font-size: 40%; color: var(--mute-2); font-weight: 500; margin-left: 8pt; }
+.ev-s08 .ctx { margin-top: 8mm; font-size: 10.5pt; line-height: 1.55; color: var(--mute-2); max-width: 95mm; }
+.ev-s09 .human { display: grid; grid-template-columns: 160pt 1fr; gap: 14mm; align-items: start; flex: 1; }
+.ev-s09 .stat-block { text-align: center; padding: 18pt; background: linear-gradient(135deg, rgba(236,72,153,.15), rgba(124,58,237,.12)); border: 1px solid var(--line-strong); border-radius: 8pt; }
+.ev-s09 .stat-block .num { font-size: 64pt; font-weight: 900; line-height: 1; color: var(--white); letter-spacing: -.03em; }
+.ev-s09 .stat-block .lab { font-size: 8pt; letter-spacing: .2em; text-transform: uppercase; color: var(--cream); margin-top: 8pt; }
+.ev-s09 .body-text { font-size: 11pt; line-height: 1.6; color: var(--mute-2); }
+.ev-s09 .body-text strong { color: var(--cream); }
+.ev-s09 .aside { margin-top: 6mm; font-size: 9pt; color: var(--mute); font-style: italic; border-left: 2px solid var(--magenta); padding-left: 12pt; }
+.ev-s10 .fin { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 12pt; flex: 1; min-height: 0; }
+.ev-s10 .sins { padding: 12pt 14pt; background: var(--glass-bg-2); border: 1px solid var(--line-soft); border-radius: 6pt; display: grid; grid-template-columns: 1fr 1fr; gap: 6pt 14pt; align-content: start; }
+.ev-s10 .sin { font-size: 8.5pt; line-height: 1.35; color: var(--mute-2); padding-left: 22pt; position: relative; }
+.ev-s10 .sin::before { content: attr(data-i); position: absolute; left: 0; font-family: var(--font-display); font-style: italic; font-weight: 600; color: var(--acid); font-size: 14pt; line-height: 1; }
+.ev-s10 .lessons { display: flex; flex-direction: column; gap: 10pt; }
+.ev-s10 .lesson { flex: 1; padding: 12pt 14pt; background: linear-gradient(135deg, var(--violet-core), var(--magenta)); border-radius: 6pt; box-shadow: 0 12px 32px rgba(124,58,237,.35); }
+.ev-s10 .lesson .eye { font-size: 7pt; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; color: rgba(255,255,255,.65); margin-bottom: 6pt; }
+.ev-s10 .lesson p { font-size: 10pt; line-height: 1.45; color: var(--white); }
+@media print {
+    @page { size: A4 landscape; margin: 0; }
+    html, body { background: var(--ink-void); }
+    body { padding: 0; }
+    .slide { margin: 0; box-shadow: none; page-break-after: always; break-after: page; }
+    .slide:last-child { page-break-after: auto; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+}
+</style>
+</head>
+<body>
+
+
+<section class="slide ev-s01">
+    <div class="aurora v1"></div>
+    <div class="noise"></div>
+    <div class="corner tl"></div>
+    <div class="corner tr"></div>
+    <div class="corner bl"></div>
+    <div class="corner br"></div>
+    <div class="slide-inner">
+        <div class="topbar">
+            <div class="eyebrow">
+                <span class="num">01</span><span class="dot">/</span><span>10</span>
+                <span style="opacity:0.4">·</span>
+                <span class="label">КЕЙС</span>
+                <span style="opacity:0.4">·</span>
+                <span>EVERGRANDE</span>
+            </div>
+            <div class="brand-tag">
+                <span>China Evergrande Group</span>
+                <span class="mono">EG</span>
+            </div>
+        </div>
+        <div class="ev-stage" style="position:relative">
+            <div class="hook-eye">Заголовок-крючок</div>
+            <h1>Как просрать <span class="q">$300&nbsp;млрд</span> и обрушить рынок?</h1>
+            <p class="sub">Дефолт 2021 года, ликвидация в Гонконге в 2024-м и делистинг в 2025-м: крах крупнейшего застройщика планеты — урок о кредитном плече, пресейлах и том, что происходит, когда исчезает вера в бесконечный рост.</p>
+            <div class="mega-debt">
+                <div class="n">$300B+</div>
+                <div class="cap">совокупные обязательства к моменту ликвидации</div>
+            </div>
+        </div>
+        <div class="bottombar">
+            <div class="l"><span class="seal">EG</span><span>по материалам Evergrande Group.md</span></div>
+            <div class="c"><span>аналитика · май 2026</span></div>
+            <div class="r"><span class="pageno">01</span><span class="total">— 10</span></div>
+        </div>
+    </div>
+</section>
+
+<section class="slide ev-s02">
+    <div class="aurora v2"></div>
+    <div class="noise"></div>
+    <div class="corner tl"></div>
+    <div class="corner br"></div>
+    <div class="slide-inner">
+        <div class="topbar">
+            <div class="eyebrow">
+                <span class="num">02</span><span class="dot">/</span><span>10</span>
+                <span style="opacity:0.4">·</span>
+                <span class="label">ДУГА ИМПЕРИИ</span>
+            </div>
+            <div class="brand-tag"><span>От пика к нулю</span></div>
+        </div>
+        <div class="ev-head"><h2>Масштаб катастрофы: от <em>богатейшего</em> человека Китая до полной ликвидации.</h2></div>
+        <div class="timeline">
+            <div class="tl-card">
+                <div class="y">1996</div>
+                <div class="t">Старт в Гуанчжоу</div>
+                <div class="m">Hengda: массовое жильё и пресейлы в дельте Жемчужной реки.</div>
+            </div>
+            <div class="tl-card">
+                <div class="y">2009</div>
+                <div class="t">IPO в Гонконге</div>
+                <div class="m">~$722 млн привлечено; выход на глобальные рынки капитала.</div>
+            </div>
+            <div class="tl-card">
+                <div class="y">2017</div>
+                <div class="t">Хуэй Ка Янь — №1 в КНР</div>
+                <div class="m">Пик влияния: политический вес и медиаприсутствие на максимуме.</div>
+            </div>
+            <div class="tl-card">
+                <div class="y">2024</div>
+                <div class="t">Ликвидация</div>
+                <div class="m">29 янв.: суд Гонконга; Alvarez &amp; Marsal; активы на ~3000 юрлиц.</div>
+            </div>
+            <div class="tl-card">
+                <div class="y">2025</div>
+                <div class="t">Делистинг</div>
+                <div class="m">25 авг.: снятие с биржи; капитализация &gt;$50 млрд → ноль.</div>
+            </div>
+        </div>
+        <div class="banner">«Контролируемый взрыв»: приоритет — достройка для граждан, а не спасение офшорных кредиторов.</div>
+        <div class="bottombar">
+            <div class="l"><span class="seal">EG</span><span>хронология</span></div>
+            <div class="c"><span>источник конспекта: Evergrande Group.md</span></div>
+            <div class="r"><span class="pageno">02</span><span class="total">— 10</span></div>
+        </div>
+    </div>
+</section>
+
+<section class="slide ev-s03">
+    <div class="aurora v3"></div>
+    <div class="noise"></div>
+    <div class="corner tl"></div>
+    <div class="corner br"></div>
+    <div class="slide-inner">
+        <div class="topbar">
+            <div class="eyebrow">
+                <span class="num">03</span><span class="dot">/</span><span>10</span>
+                <span style="opacity:0.4">·</span>
+                <span class="label">МОДЕЛЬ</span>
+            </div>
+            <div class="brand-tag"><span>Философия роста</span></div>
+        </div>
+        <div class="ev-head"><h2>Секрет «успеха»: <em>три высоких</em> и одно низкое.</h2></div>
+        <div class="pill-grid">
+            <div class="pill">
+                <div class="k">Высокий долг</div>
+                <div class="v">Максимум земли и стартов</div>
+                <div class="d">Ставка на то, что банки и рынок бесконечно рефинансируют сектор.</div>
+            </div>
+            <div class="pill">
+                <div class="k">Высокое плечо</div>
+                <div class="v">Минимум собственного капитала</div>
+                <div class="d">Масштаб через заём: доминирование на аукционах земли «нерыночными» ценами.</div>
+            </div>
+            <div class="pill">
+                <div class="k">Высокая оборачиваемость</div>
+                <div class="v">Пресейлы и параллельные проекты</div>
+                <div class="d">Цикл наличных: стартовать много площадок одновременно на деньгах покупателей.</div>
+            </div>
+            <div class="pill">
+                <div class="k">Низкие затраты</div>
+                <div class="v">Жёсткая экономика на себестоимости</div>
+                <div class="d">Маржа за счёт дисциплины и давления на цепочку поставок.</div>
+            </div>
+        </div>
+        <p class="note">Работает, пока цены на жильё растут и ликвидность льётся рекой. В стагнации модель превращается в ловушку.</p>
+        <div class="bottombar">
+            <div class="l"><span class="seal">EG</span><span>3&nbsp;high + 1 low</span></div>
+            <div class="c"><span></span></div>
+            <div class="r"><span class="pageno">03</span><span class="total">— 10</span></div>
+        </div>
+    </div>
+</section>
+
+<section class="slide ev-s04">
+    <div class="aurora v4"></div>
+    <div class="noise"></div>
+    <div class="corner tl"></div>
+    <div class="corner br"></div>
+    <div class="slide-inner">
+        <div class="topbar">
+            <div class="eyebrow">
+                <span class="num">04</span><span class="dot">/</span><span>10</span>
+                <span style="opacity:0.4">·</span>
+                <span class="label">РИСКИ</span>
+            </div>
+            <div class="brand-tag"><span>Кто финансировал машину</span></div>
+        </div>
+        <div class="ev-head"><h2>Финансовая пирамида? Три группы держателей <em>чужих</em> рисков.</h2></div>
+        <div class="ev-cols3">
+            <div class="ev-col-card">
+                <div class="idx">1</div>
+                <h3>Покупатели жилья</h3>
+                <p>Полная оплата по пресейлу за годы до сдачи: по сути беспроцентный кредит застройщику. Обещания — взамен текущей ликвидности компании.</p>
+            </div>
+            <div class="ev-col-card">
+                <div class="idx">2</div>
+                <h3>Поставщики и подрядчики</h3>
+                <p>Векселя и отсрочки перекладывают финансирование стройки на малый и средний бизнес в цепочке.</p>
+            </div>
+            <div class="ev-col-card">
+                <div class="idx">3</div>
+                <h3>Инвесторы и WMP</h3>
+                <p>Облигации и продукты доверительного управления с завышенной доходностью, поддерживаемые новыми займами.</p>
+            </div>
+        </div>
+        <p style="margin-top:5mm;font-size:10pt;line-height:1.5;color:var(--mute-2);max-width:200mm">Схема устойчива только при непрерывном притоке новых продаж и рефинансировании — классическая зависимость «потока», а не капитала.</p>
+        <div class="bottombar">
+            <div class="l"><span class="seal">EG</span><span>пресейл · коммерческий кредит · рынок капитала</span></div>
+            <div class="c"><span></span></div>
+            <div class="r"><span class="pageno">04</span><span class="total">— 10</span></div>
+        </div>
+    </div>
+</section>
+
+<section class="slide ev-s05">
+    <div class="aurora v5"></div>
+    <div class="noise"></div>
+    <div class="corner tl"></div>
+    <div class="corner tr"></div>
+    <div class="slide-inner">
+        <div class="topbar">
+            <div class="eyebrow">
+                <span class="num">05</span><span class="dot">/</span><span>10</span>
+                <span style="opacity:0.4">·</span>
+                <span class="label">ДИВЕРСИФИКАЦИЯ</span>
+            </div>
+            <div class="brand-tag"><span>Не только бетон</span></div>
+        </div>
+        <div class="ev-head"><h2>Игры в имидж: зачем девелоперу <em>футбол</em> и <em>электрокары</em>?</h2></div>
+        <div class="split">
+            <div class="ev-spot">
+                <div class="tag">Спорт и элиты</div>
+                <h3>Guangzhou Evergrande FC</h3>
+                <p>Клуб с 2010 года: узнаваемость бренда, медийный капитал, восемь чемпионств Китая за девять сезонов и два трофея ЛЧ АФК — плюс колоссальные операционные расходы.</p>
+            </div>
+            <div class="ev-spot">
+                <div class="tag">NEV-империя</div>
+                <h3>Hengchi</h3>
+                <div class="big">45&nbsp;млрд<span>юаней</span></div>
+                <p>Объявленные инвестиции в 2019 году; заводы в Наньше и Шанхае при почти нулевых поставках. К 2021 году NEV — один из главных источников убытков группы: капитал утекает из ядра девелопмента.</p>
+            </div>
+        </div>
+        <div class="bottombar">
+            <div class="l"><span class="seal">EG</span><span>маркетинг vs ликвидность</span></div>
+            <div class="c"><span>активы &gt;2 трлн юаней к 2020 при критическом долге</span></div>
+            <div class="r"><span class="pageno">05</span><span class="total">— 10</span></div>
+        </div>
+    </div>
+</section>
+
+
+<section class="slide ev-s06">
+    <div class="aurora v1"></div>
+    <div class="noise"></div>
+    <div class="corner bl"></div>
+    <div class="corner tr"></div>
+    <div class="slide-inner">
+        <div class="topbar">
+            <div class="eyebrow">
+                <span class="num">06</span><span class="dot">/</span><span>10</span>
+                <span style="opacity:0.4">·</span>
+                <span class="label">РЕГУЛИРОВАНИЕ</span>
+            </div>
+            <div class="brand-tag"><span>Август 2020</span></div>
+        </div>
+        <div class="ev-head"><h2>Удар в спину от государства: политика <em>«трёх красных линий»</em>.</h2></div>
+        <div class="ev-cols3" style="margin-bottom:4mm">
+            <div class="ev-col-card">
+                <div class="idx" style="font-size:20pt">A</div>
+                <h3>Обязательства / активы</h3>
+                <p>&lt; 70% (без учёта авансов от покупателей). Цель — урезать скрытое плечо на балансе.</p>
+            </div>
+            <div class="ev-col-card">
+                <div class="idx" style="font-size:20pt">B</div>
+                <h3>Чистый долг / капитал</h3>
+                <p>&lt; 100%. Ограничение долговой нагрузки относительно собственных средств.</p>
+            </div>
+            <div class="ev-col-card">
+                <div class="idx" style="font-size:20pt">C</div>
+                <h3>Cash / краткий долг</h3>
+                <p>≥ 1. Требование ликвидности на ближайшие выплаты.</p>
+            </div>
+        </div>
+        <p style="font-size:10pt;color:var(--mute-2);margin-bottom:3mm">Сектор к 2020 году — почти 29% ВВП КНР; регуляторы боялись системного каскада.</p>
+        <div class="ev-table-wrap">
+            <table class="ev-table">
+                <thead><tr><th>Показатель (конец 2021)</th><th>Evergrande</th><th>Статус</th></tr></thead>
+                <tbody>
+                    <tr><td>Обязательства к активам</td><td><strong>&gt; 80%</strong></td><td>линия нарушена</td></tr>
+                    <tr><td>Чистый долг к капиталу</td><td><strong>&gt; 100%</strong></td><td>линия нарушена</td></tr>
+                    <tr><td>Деньги / краткосрочный долг</td><td><strong>0,53</strong></td><td>критическое нарушение</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="bottombar">
+            <div class="l"><span class="seal">EG</span><span>всё красное → запрет на новый долг</span></div>
+            <div class="c"><span></span></div>
+            <div class="r"><span class="pageno">06</span><span class="total">— 10</span></div>
+        </div>
+    </div>
+</section>
+
+
+<section class="slide ev-s07">
+    <div class="aurora v2"></div>
+    <div class="noise"></div>
+    <div class="corner tl"></div>
+    <div class="corner br"></div>
+    <div class="slide-inner">
+        <div class="topbar">
+            <div class="eyebrow">
+                <span class="num">07</span><span class="dot">/</span><span>10</span>
+                <span style="opacity:0.4">·</span>
+                <span class="label">2021</span>
+            </div>
+            <div class="brand-tag"><span>Дефолт и доверие</span></div>
+        </div>
+        <div class="ev-head"><h2>Эффект домино: <em>−97%</em> продаж и паника инвесторов.</h2></div>
+        <div class="row-big">
+            <div class="pct">97<span style="font-size:45%;color:var(--white);margin-left:4pt">%</span></div>
+            <div class="pct-cap">Падение продаж в пиковый сезон, когда испарилось доверие покупателей — и последний приток наличности.</div>
+        </div>
+        <div class="ev-bullets">
+            <div class="b"><strong>Оффшор</strong>Дефолт по долларовым облигациям: сигнал, что эпоха автоматических спасений для гигантов сектора закончилась.</div>
+            <div class="b"><strong>Китай</strong>Власти выбирают достройку объектов для граждан в приоритете над выплатами иностранным держателям бумаг.</div>
+            <div class="b"><strong>Соц. взрыв</strong>До порядка 800 000 проданных, но не сданных квартир — замедленная социальная бомба.</div>
+            <div class="b"><strong>Сектор</strong>Крах Evergrande обвалил настроения по всему рынку недвижимости КНР: контагиозный риск для глобальных фондов.</div>
+        </div>
+        <div class="bottombar">
+            <div class="l"><span class="seal">EG</span><span>ликвидность исчезла первой</span></div>
+            <div class="c"><span></span></div>
+            <div class="r"><span class="pageno">07</span><span class="total">— 10</span></div>
+        </div>
+    </div>
+</section>
+
+
+<section class="slide ev-s08">
+    <div class="aurora v3"></div>
+    <div class="noise"></div>
+    <div class="corner tl"></div>
+    <div class="corner br"></div>
+    <div class="slide-inner">
+        <div class="topbar">
+            <div class="eyebrow">
+                <span class="num">08</span><span class="dot">/</span><span>10</span>
+                <span style="opacity:0.4">·</span>
+                <span class="label">QIDONG</span>
+            </div>
+            <div class="brand-tag"><span>Jiangsu</span></div>
+        </div>
+        <div class="ev-head"><h2>Города-призраки: <em>«Жизнь в Венеции»</em> по-китайски.</h2></div>
+        <div class="ghost-hero">
+            <div>
+                <div class="place">Evergrande «Венеция»</div>
+                <div class="rent">800&nbsp;¥<small>/мес</small></div>
+                <p class="ctx">Трёхкомнатная квартира: аренда ~<strong class="cream">$116</strong> в месяц. К 2026 году проект у моря превратился в полупустой комплекс с каналами и европейской застройкой — символ перепроизводства и разворота цикла.</p>
+            </div>
+            <div class="glass" style="padding:18pt">
+                <p style="font-size:9.5pt;line-height:1.55;color:var(--mute-2);margin-bottom:10pt">Параллель: стадион «Лотос» в Гуанчжоу — до <strong class="cream">100 000</strong> мест и <strong class="cream">12 млрд</strong> юаней CAPEX; в 2022-м конфискация, к 2026-му радикальный даунскейл (до ~73 000 мест) и отказ от «цветка лотоса» ради экономии.</p>
+                <p style="font-size:8.5pt;color:var(--mute);text-transform:uppercase;letter-spacing:0.14em">Монументы амбиций, которые пережили деньги</p>
+            </div>
+        </div>
+        <div class="bottombar">
+            <div class="l"><span class="seal">EG</span><span>цены и аренда — обзоры 2026</span></div>
+            <div class="c"><span></span></div>
+            <div class="r"><span class="pageno">08</span><span class="total">— 10</span></div>
+        </div>
+    </div>
+</section>
+
+
+<section class="slide ev-s09">
+    <div class="aurora v4"></div>
+    <div class="noise"></div>
+    <div class="corner tl"></div>
+    <div class="corner br"></div>
+    <div class="slide-inner">
+        <div class="topbar">
+            <div class="eyebrow">
+                <span class="num">09</span><span class="dot">/</span><span>10</span>
+                <span style="opacity:0.4">·</span>
+                <span class="label">ЛЮДИ</span>
+            </div>
+            <div class="brand-tag"><span>За балансом</span></div>
+        </div>
+        <div class="ev-head"><h2>Человеческая трагедия: <em>600 000</em> квартир и разрушенные судьбы.</h2></div>
+        <div class="human">
+            <div class="stat-block">
+                <div class="num">600K</div>
+                <div class="lab">авансы Evergrande за недостроенные квартиры</div>
+            </div>
+            <div>
+                <p class="body-text">В КНР <strong>более 70%</strong> домашнего богатства — в недвижимости. Семьи вкладывали сбережения и брали ипотеки на 20–30 лет под объекты, которые так и остались бетонными каркасами.</p>
+                <p class="aside">Пример из провинции Хунань: стройка остановлена — сорваны свадьбы и планы, потому что квартира в Китае часто условие «взрослой жизни».</p>
+            </div>
+        </div>
+        <div class="bottombar">
+            <div class="l"><span class="seal">EG</span><span>социальное измерение кризиса</span></div>
+            <div class="c"><span></span></div>
+            <div class="r"><span class="pageno">09</span><span class="total">— 10</span></div>
+        </div>
+    </div>
+</section>
+
+
+<section class="slide ev-s10">
+    <div class="aurora v5"></div>
+    <div class="noise"></div>
+    <div class="corner tl"></div>
+    <div class="corner tr"></div>
+    <div class="corner bl"></div>
+    <div class="corner br"></div>
+    <div class="slide-inner">
+        <div class="topbar">
+            <div class="eyebrow">
+                <span class="num">10</span><span class="dot">/</span><span>10</span>
+                <span style="opacity:0.4">·</span>
+                <span class="label">ФИНАЛ</span>
+            </div>
+            <div class="brand-tag"><span>Сюй Цзяинь · рынок</span></div>
+        </div>
+        <div class="ev-head"><h2><em>«Восемь грехов»</em> и уроки: агрессивный рост без фундамента ведёт в никуда.</h2></div>
+        <div class="fin">
+            <div class="sins">
+                <div class="sin" data-i="1">Незаконный приём вкладов через пирамиды WMP.</div>
+                <div class="sin" data-i="2">Мошенничество при сборе средств.</div>
+                <div class="sin" data-i="3">Незаконная выдача кредитов.</div>
+                <div class="sin" data-i="4">Нецелевое использование средств (вывод с эскроу).</div>
+                <div class="sin" data-i="5">Мошеннический выпуск ЦБ (завышение выручки ~$78 млрд).</div>
+                <div class="sin" data-i="6">Незаконное раскрытие существенной информации.</div>
+                <div class="sin" data-i="7">Присвоение имущества (хищение).</div>
+                <div class="sin" data-i="8">Корпоративное взяточничество.</div>
+            </div>
+            <div class="lessons">
+                <div class="lesson">
+                    <div class="eye">Урок I</div>
+                    <p>Высокая оборачиваемость на пресейлах работает только в росте цен; при замедлении модель становится ловушкой ликвидности.</p>
+                </div>
+                <div class="lesson">
+                    <div class="eye">Урок II</div>
+                    <p>Диверсификация в непрофиль (NEV, спорт) отнимает капитал у обязательств перед дольщиками и быстро обесценивается.</p>
+                </div>
+                <div class="lesson">
+                    <div class="eye">Урок III</div>
+                    <p>Регуляторный риск реален: государство может пожертвовать корпорацией ради системной стабильности и справедливости.</p>
+                </div>
+            </div>
+        </div>
+        <div class="bottombar">
+            <div class="l"><span class="seal">EG</span><span>апрель 2026 · отчёты госканалов КНР</span></div>
+            <div class="c"><span>финал: «8 грехов» + выводы для рынка</span></div>
+            <div class="r"><span class="pageno">10</span><span class="total">— 10</span></div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

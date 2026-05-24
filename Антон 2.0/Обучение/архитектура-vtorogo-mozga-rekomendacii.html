@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<!-- 2026-05-06 | Мини-курс: архитектура «второго мозга» (Бизнес / Я / Мастерство) для хранилища Антон 2.0 -->
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Архитектура второго мозга — рекомендации для хранилища</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-page: #f7f5fc;
+      --bg-card: #ffffff;
+      --text: #1e1b2e;
+      --muted: #5c5669;
+      --accent: #6d28d9;
+      --accent-soft: #ede9fe;
+      --accent-mid: #8b5cf6;
+      --border: rgba(109, 40, 217, 0.18);
+      --shadow: 0 18px 48px rgba(76, 29, 149, 0.09);
+      --font: "Manrope", system-ui, -apple-system, sans-serif;
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg-page);
+      color: var(--text);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 32px 20px 64px;
+    }
+
+    header.hero {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+
+    .hero-accent {
+      height: 8px;
+      width: 100%;
+      background: linear-gradient(90deg, var(--accent) 0%, var(--accent-mid) 55%, #c4b5fd 100%);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .hero-inner {
+      padding: 28px 26px 32px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    h1.title {
+      font-size: clamp(1.55rem, 4vw, 2rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+
+    .lead {
+      font-size: 1.05rem;
+      color: var(--muted);
+      font-weight: 500;
+      max-width: 52ch;
+    }
+
+    .meta {
+      margin-top: 18px;
+      font-size: 0.875rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    nav.toc {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      margin-bottom: 28px;
+      box-shadow: 0 8px 24px rgba(76, 29, 149, 0.06);
+    }
+
+    nav.toc h2 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 12px;
+      font-weight: 800;
+    }
+
+    nav.toc ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    nav.toc a {
+      color: var(--text);
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 1px solid var(--accent-soft);
+      padding-bottom: 1px;
+    }
+
+    nav.toc a:hover {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    section.lesson {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 26px 24px 28px;
+      margin-bottom: 22px;
+      box-shadow: 0 8px 24px rgba(76, 29, 149, 0.06);
+    }
+
+    section.lesson h2 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--accent-soft);
+    }
+
+    section.lesson h3 {
+      font-size: 1rem;
+      font-weight: 800;
+      margin: 22px 0 10px;
+      color: var(--text);
+    }
+
+    section.lesson p,
+    section.lesson li {
+      font-size: 0.98rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    section.lesson p {
+      margin-bottom: 12px;
+      max-width: 62ch;
+    }
+
+    section.lesson p:last-child {
+      margin-bottom: 0;
+    }
+
+    ul.points {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    ul.points li {
+      padding-left: 22px;
+      position: relative;
+    }
+
+    ul.points li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .callout {
+      background: var(--accent-soft);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin: 16px 0;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #4c1d95;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    table.map {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin: 16px 0;
+    }
+
+    table.map th,
+    table.map td {
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    table.map th {
+      background: #faf8ff;
+      font-weight: 800;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    table.map td {
+      font-weight: 500;
+    }
+
+    code.vault-path {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 0.82em;
+      background: #f4f0ff;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .flow-box {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin: 18px 0;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .flow-item {
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #faf8ff;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .flow-arrow {
+      color: var(--accent);
+      font-weight: 800;
+    }
+
+    pre.template {
+      background: #1e1b2e;
+      color: #e9e4f5;
+      border-radius: 10px;
+      padding: 18px 16px;
+      overflow-x: auto;
+      font-size: 0.78rem;
+      line-height: 1.45;
+      margin: 14px 0;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .checklist {
+      list-style: none;
+      margin: 12px 0;
+    }
+
+    .checklist li {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 10px 0;
+      border-bottom: 1px dashed var(--border);
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .checklist li:last-child {
+      border-bottom: none;
+    }
+
+    .check-icon {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--accent);
+      border-radius: 6px;
+      margin-top: 2px;
+    }
+
+    footer.end {
+      margin-top: 32px;
+      font-size: 0.875rem;
+      color: var(--muted);
+      font-weight: 500;
+      text-align: center;
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 14mm;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .page {
+        max-width: none;
+        padding: 0;
+      }
+
+      nav.toc {
+        page-break-after: avoid;
+      }
+
+      section.lesson {
+        box-shadow: none;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      pre.template {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero" id="top">
+      <div class="hero-accent" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <p class="eyebrow">Мини-курс · Obsidian · Антон 2.0</p>
+        <h1 class="title">Архитектура второго мозга: Бизнес, Я и Мастерство</h1>
+        <p class="lead">Как не превратить хранилище в красивую свалку цитат и подстроить уже существующую структуру под три столпа — с опорой на ваши реальные папки и без обязательного массового переноса файлов.</p>
+        <p class="meta">Материал для самообучения · можно распечатать (Ctrl/Cmd+P)</p>
+      </div>
+    </header>
+
+    <nav class="toc" aria-label="Содержание курса">
+      <h2>Содержание</h2>
+      <ul>
+        <li><a href="#intro">Введение: контент-инженерия vs свалка</a></li>
+        <li><a href="#lesson1">Урок 1. Диагностика хранилища «Антон 2.0»</a></li>
+        <li><a href="#lesson2">Урок 2. Три столпа и операционка</a></li>
+        <li><a href="#lesson3">Урок 3. Мастеркарточки и связь с Библиотекой</a></li>
+        <li><a href="#lesson4">Урок 4. Куда положить ваши папки (две схемы)</a></li>
+        <li><a href="#checklist">Чек-лист: первые 7 дней</a></li>
+        <li><a href="#pin">Как закрепить этот файл в Obsidian</a></li>
+      </ul>
+    </nav>
+
+    <section class="lesson" id="intro">
+      <h2>Введение: зачем три папки в голове проекта</h2>
+      <p>Типичная ловушка выглядит так: в Obsidian сваливают подкасты, статьи, книги и «пусть ИИ разберётся». В итоге растёт красивая база цитат, в которой мало <strong>вашей</strong> линии — мало того, <em>как вы решаете</em> и <em>что продаёте</em>. Модель «второго мозга» из вашего описания опирается на три оси:</p>
+      <ul class="points">
+        <li><strong>Бизнес</strong> — что вы делаете на рынке: аудитория, продукты, цены, экономика, цели именно работы.</li>
+        <li><strong>Я</strong> — как вы думаете: принципы, отторжения, стиль, этика, темп, язык.</li>
+        <li><strong>Мастерство</strong> — выжимки чужих методов под задачи: не книга целиком, а «советник» с декомпозицией и триггерами применения.</li>
+      </ul>
+      <p>Искусственный интеллект тут не замена архитектуры, а <strong>слой над ней</strong>: ему не нужно «знать всё подряд» — ему нужно уметь нырнуть в нужный столп. Отсюда и идея контент-инженерии: вы проектируете, <em>куда</em> ложится смысл, а не только <em>что</em> сохранили.</p>
+    </section>
+
+    <section class="lesson" id="lesson1">
+      <h2>Урок 1. Диагностика хранилища «Антон 2.0»</h2>
+
+      <h3>Уже сильные элементы</h3>
+      <ul class="points">
+        <li><span class="vault-path">Рекомендации обсидиан/Командный центр.md</span> — точка входа: дашборды проектов, контента, встреч, шаблоны, ссылки на индексы и ИИ.</li>
+        <li><span class="vault-path">ИИ/ИИ-пульт.md</span> — дисциплина ответа модели: бриф, золотые промпты, выбор инструментов; это снижает «воду» и хаос.</li>
+        <li>Разделение «внешнее / своё» в индексах: <span class="vault-path">Библиотека/Библиотека - Индекс.md</span> (источники) и <span class="vault-path">База знаний/База знаний - Индекс.md</span> (выводы из опыта) — правильная идея архитектуры.</li>
+        <li>Операционный контур: <span class="vault-path">Реестры/</span>, <span class="vault-path">Ежедневник и Контакты/</span>, синхронизация с Notion — это не «мозг», а конвейер исполнения; смешивать его с тремя столпами не нужно, но связать через ссылки полезно.</li>
+      </ul>
+
+      <h3>Зазоры относительно модели Бизнес / Я / Мастерство</h3>
+      <table class="map">
+        <thead>
+          <tr>
+            <th>Столп</th>
+            <th>Что должно жить здесь</th>
+            <th>Где у вас сейчас</th>
+            <th>Риск</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Бизнес</strong></td>
+            <td>Аудитория, офферы, цены, юнит-экономика, цели деятельности</td>
+            <td>Размазано: <span class="vault-path">База знаний/</span> (концепции агентства), <span class="vault-path">маркетинг/</span>, <span class="vault-path">Личный бренд/</span>, клиентские зоны <span class="vault-path">Третий Трест/</span>, <span class="vault-path">Застройщики/</span>, финансы в <span class="vault-path">🧑‍💻 Личный кабинет/</span></td>
+            <td>Нет одного «корня бизнеса»: сложно за секунду ответить, где «истина» по продукту</td>
+          </tr>
+          <tr>
+            <td><strong>Я</strong></td>
+            <td>Как думаю, что отвергаю, принципы, критерии качества</td>
+            <td><span class="vault-path">Духовный рост/</span>, <span class="vault-path">Трансерфинг/</span>, частично база знаний и персональные настройки ИИ</td>
+            <td>Много материала, но мало одного короткого <strong>индекса «Я»</strong> (манифест на 1–2 экрана со ссылками вглубь)</td>
+          </tr>
+          <tr>
+            <td><strong>Мастерство</strong></td>
+            <td>Карточки методов под задачи: автор, контекст, шаги, антипаттерны</td>
+            <td><span class="vault-path">Библиотека/</span> (книги, курсы, YouTube) как склад сырья; задел в <span class="vault-path">База знаний/Заметки с учений/</span></td>
+            <td>Без шаблона «одна карточка = один рычаг» библиотека становится цитатницей</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout">Дублирование <span class="vault-path">Рекомендации обсидиан/</span> с частью того, что уже в корне (<span class="vault-path">ИИ/</span>, <span class="vault-path">Реестры/</span>, шаблоны), усложняет навигацию. Выберите один «источник правды» для рабочих ссылок или явно подпишите в Командном центре: корень = рабочие файлы, вложенная копия = методичка/бэкап.</div>
+    </section>
+
+    <section class="lesson" id="lesson2">
+      <h2>Урок 2. Три столпа и операционка</h2>
+      <p><strong>Бизнес.</strong> Всё, что отвечает на вопрос «на чём я зарабатываю и кому продаю». Индекс должен открываться за один клик из Командного центра.</p>
+      <p><strong>Я.</strong> Всё, что отвечает на «как я принимаю решения и чего не делаю никогда». Это не дневник эмоций ради объёма, а этика и стиль, сжатые до применимых правил.</p>
+      <p><strong>Мастерство.</strong> «Совет учредителей» из чужих методов: не хранилище книг, а набор карточек с декомпозицией. Книга остаётся в <span class="vault-path">Библиотека/</span>; в Мастерстве — только то, что вы <em>перевели в действие</em>.</p>
+      <p><strong>Операционка</strong> (реестры, календарь, контакты, рутинные чек-листы) живёт рядом, но не смешивается по смыслу с тремя столпами — это руки, а не идентичность.</p>
+
+      <div class="flow-box" aria-hidden="true">
+        <span class="flow-item">Бизнес</span>
+        <span class="flow-arrow">+</span>
+        <span class="flow-item">Я</span>
+        <span class="flow-arrow">+</span>
+        <span class="flow-item">Мастерство</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-item">ИИ-пульт / запрос</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-item">Реестры и исполнение</span>
+      </div>
+    </section>
+
+    <section class="lesson" id="lesson3">
+      <h2>Урок 3. Мастерство без свалки</h2>
+      <p><strong>Правило связи с Библиотекой:</strong> в карточке Мастерства всегда есть поле «Источник сырья» — ссылка на заметку в <span class="vault-path">Библиотека/</span> (книга, курс, видео). Обратное неверно: не ведите основной смысл из папки с книгой; ведите из карточки рычага.</p>
+
+      <h3>Шаблон карточки «Мастерство» (скопируйте в Obsidian)</h3>
+      <pre class="template">---
+type: mastery
+author: &lt;Фамилия / канал&gt;
+domain: &lt;маркетинг | переговоры | продукт | лидерство | …&gt;
+triggers: &lt;когда открывать эту карточку — 1 строка&gt;
+metric: &lt;как понять, что сработало&gt;
+source_raw: &quot;[[Библиотека/…]]&quot;
+---
+
+# &lt;Название метода одной строкой&gt;
+
+## В 5–7 шагах
+1.
+2.
+3.
+4.
+5.
+
+## Антипаттерны (что ломает метод)
+-
+
+## Мои ограничения (как адаптировать под себя)
+-
+
+## Одна фраза-напоминание
+&gt;
+
+## Связь с Бизнесом
+- Проект/оффер:
+
+## Связь с «Я»
+- Принцип, которое это усиливает или бьёт:
+</pre>
+
+      <p>На первых порах достаточно <strong>5 таких карточек</strong> по вашим самым частым типам задач (например: контент, сделка, обучение клиента, стратегия квартала, переговоры). Остальное Библиотека пусть лежит сырьём, пока не созрела очередная карточка.</p>
+    </section>
+
+    <section class="lesson" id="lesson4">
+      <h2>Урок 4. Куда положить ваши папки</h2>
+
+      <h3>Схема A (рекомендуется): логические индексы без массового переноса</h3>
+      <p>Оставляете физические папки как есть (ссылки и iCloud не страдают). В корне или в <span class="vault-path">Рекомендации обсидиан/</span> добавляете три индекс-файла:</p>
+      <ul class="points">
+        <li><strong>00 Бизнес — Индекс.md</strong> — ссылки на: концепции агентства, маркетинг, личный бренд, клиентские папки, ключевые продукты и цены, финансовые реестры.</li>
+        <li><strong>00 Я — Индекс.md</strong> — ссылки на: духовный рост, трансерфинг, личные принципы, настройки ИИ «как со мной говорить», этические границы.</li>
+        <li><strong>00 Мастерство — Индекс.md</strong> — только карточки mastery + сгруппированные по доменам (маркетинг, переговоры, …); внизу ссылка на <span class="vault-path">Библиотека - Индекс.md</span> как на склад.</li>
+      </ul>
+      <p>Клиентские зоны <span class="vault-path">Третий Трест/</span> и <span class="vault-path">Застройщики/</span> в этой схеме остаются подветками <strong>Бизнеса</strong> в индексе: так вы не путаете «мой метод» и «контекст клиента».</p>
+
+      <h3>Схема B: физические папки верхнего уровня</h3>
+      <p>Создаёте <span class="vault-path">Бизнес/</span>, <span class="vault-path">Я/</span>, <span class="vault-path">Мастерство/</span> и постепенно переносите содержимое. Плюс: наглядность в файловом дереве. Минус: миграция ссылок в Obsidian. Делайте только если готовы пройтись по сломанным <code>[[wiki]]</code>-ссылкам или использовать плагины массового переезда.</p>
+
+      <div class="callout">Папка <span class="vault-path">ИИ/</span> логически — мост между столпами и операционкой: шаблоны запросов, программы обучения, промпты. В индексе «Я» достаточно ссылки на неё в разделе «как я работаю с инструментами».</div>
+    </section>
+
+    <section class="lesson" id="checklist">
+      <h2>Чек-лист: первые 7 дней</h2>
+      <ul class="checklist">
+        <li><span class="check-icon" aria-hidden="true"></span><span>День 1: создать <strong>00 Я — Индекс.md</strong> — 10 строк: что люблю / не делаю / критерии качества + ссылки вглубь.</span></li>
+        <li><span class="check-icon" aria-hidden="true"></span><span>День 2: создать <strong>00 Бизнес — Индекс.md</strong> — перечислить продукты, цены (или ссылки на файлы с ценами), аудитории, KPI квартала.</span></li>
+        <li><span class="check-icon" aria-hidden="true"></span><span>День 3: создать <strong>00 Мастерство — Индекс.md</strong> и завести <strong>первую мастер-карточку</strong> по самой частой задаче недели.</span></li>
+        <li><span class="check-icon" aria-hidden="true"></span><span>День 4: в Командном центре добавить три ссылки на новые индексы (если их ещё нет).</span></li>
+        <li><span class="check-icon" aria-hidden="true"></span><span>День 5: решить вопрос с дублем <span class="vault-path">Рекомендации обсидиан/</span> — один канонический путь к шаблонам.</span></li>
+        <li><span class="check-icon" aria-hidden="true"></span><span>День 6–7: ещё <strong>четыре мастер-карточки</strong> или досушить одну большую до состояния «готово применять».</span></li>
+      </ul>
+    </section>
+
+    <section class="lesson" id="pin">
+      <h2>Как закрепить этот файл в Obsidian</h2>
+      <p>Откройте <span class="vault-path">Командный центр</span> и добавьте строку со ссылкой на этот HTML через обычный Markdown-формат URI или просто держите файл в избранном файлового менеджера. Путь к файлу:</p>
+      <p><code class="vault-path">Антон 2.0/Обучение/архитектура-vtorogo-mozga-rekomendacii.html</code></p>
+      <p>Так вы не создаёте лишних заметок — сам документ уже выступает учебным модулем.</p>
+    </section>
+
+    <footer class="end">
+      <p>Мини-курс согласован с архитектурой вашего хранилища на дату подготовки материала. Перенос папок — только осознанно, после бэкапа.</p>
+      <p><a href="#top" style="color: var(--accent); font-weight: 700; text-decoration: none;">Наверх ↑</a></p>
+    </footer>
+  </div>
+</body>
+</html>

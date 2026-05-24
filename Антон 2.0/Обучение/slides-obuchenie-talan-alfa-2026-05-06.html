@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<!-- 2026-05-06 | Слайды A4: уникальность/Аделина, список чатов, обучение Талан 11:00, Альфа Банк × Прайм Девелопмент -->
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Обучение: Талан, Альфа Банк — слайды A4</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-page: #f7f5fc;
+      --bg-card: #ffffff;
+      --text: #1e1b2e;
+      --muted: #5c5669;
+      --accent: #6d28d9;
+      --accent-soft: #ede9fe;
+      --accent-mid: #8b5cf6;
+      --border: rgba(109, 40, 217, 0.18);
+      --shadow: 0 18px 48px rgba(76, 29, 149, 0.09);
+      --font: "Manrope", system-ui, -apple-system, sans-serif;
+      --slide-w: 210mm;
+      --slide-h: 297mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg-page);
+      color: var(--text);
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .deck {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+      padding: 40px 24px 56px;
+    }
+
+    .slide {
+      width: var(--slide-w);
+      min-height: var(--slide-h);
+      background: var(--bg-card);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .slide-accent {
+      height: 8px;
+      width: 100%;
+      background: linear-gradient(90deg, var(--accent) 0%, var(--accent-mid) 55%, #c4b5fd 100%);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .slide-inner {
+      flex: 1;
+      padding: 36mm 22mm 28mm;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-height: 0;
+    }
+
+    .eyebrow {
+      font-size: 11pt;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    h1.slide-title {
+      font-size: 26pt;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.18;
+      max-width: 28ch;
+    }
+
+    .lead {
+      font-size: 13.5pt;
+      color: var(--muted);
+      font-weight: 500;
+      max-width: 52ch;
+    }
+
+    .body-text {
+      font-size: 12.5pt;
+      font-weight: 500;
+      color: var(--text);
+      max-width: 54ch;
+    }
+
+    ul.points {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    ul.points li {
+      font-size: 12.5pt;
+      font-weight: 500;
+      padding-left: 22px;
+      position: relative;
+    }
+
+    ul.points li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    a.file-link {
+      color: var(--accent);
+      font-weight: 700;
+      text-decoration: none;
+      border-bottom: 2px solid var(--accent-soft);
+    }
+
+    a.file-link:hover {
+      border-bottom-color: var(--accent);
+    }
+
+    .qr-wrap {
+      margin-top: auto;
+      padding-top: 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .qr-placeholder {
+      width: 120px;
+      height: 120px;
+      border: 2px dashed rgba(109, 40, 217, 0.4);
+      border-radius: 12px;
+      background: var(--accent-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 12px;
+      font-size: 9.5pt;
+      font-weight: 600;
+      color: var(--accent);
+      line-height: 1.35;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .qr-note {
+      flex: 1;
+      min-width: 200px;
+      font-size: 11pt;
+      color: var(--muted);
+      font-weight: 500;
+      align-self: center;
+    }
+
+    .time-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 14pt;
+      letter-spacing: 0.02em;
+      width: fit-content;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .projects {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .project-pill {
+      display: inline-block;
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-size: 12pt;
+      font-weight: 600;
+      background: #faf8ff;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .footer-hint {
+      margin-top: auto;
+      font-size: 10.5pt;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .deck {
+        padding: 0;
+        gap: 0;
+      }
+
+      .slide {
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+        page-break-after: always;
+        break-after: page;
+      }
+
+      .slide:last-child {
+        page-break-after: auto;
+        break-after: auto;
+      }
+
+      a.file-link {
+        color: var(--accent);
+        border-bottom-color: var(--accent);
+      }
+
+      .slide-accent,
+      .time-badge,
+      .qr-placeholder,
+      .project-pill,
+      ul.points li::before {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck">
+
+    <article class="slide" aria-label="Слайд 1">
+      <div class="slide-accent" aria-hidden="true"></div>
+      <div class="slide-inner">
+        <p class="eyebrow">Уникальность клиента</p>
+        <h1 class="slide-title">Нужно зауникалить клиента — пишем Аделине</h1>
+        <p class="lead">Вопросы по проверке уникальности и QR-кодам для входа в чат с Аделиной решаем через личное обращение к Аделине.</p>
+        <p class="body-text">Чат с Аделиной открывается по QR-коду. Отсканируйте код ниже (или вставьте актуальное изображение от Аделины) и напишите в чат.</p>
+        <div class="qr-wrap">
+          <div class="qr-placeholder" role="img" aria-label="Плейсхолдер под QR-код">Вставьте изображение QR-кода</div>
+          <p class="qr-note">Когда будет готов файл с кодом, замените этот блок на изображение QR.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="slide" aria-label="Слайд 2">
+      <div class="slide-accent" aria-hidden="true"></div>
+      <div class="slide-inner">
+        <p class="eyebrow">Чаты и ссылки</p>
+        <h1 class="slide-title">Где чаты со ссылками по QR-кодам</h1>
+        <p class="lead">Все invite-ссылки на чаты собраны в одном HTML-файле в корне хранилища.</p>
+        <p class="body-text">Откройте <a class="file-link" href="../../Список чатов.html">Список чатов.html</a> — там разделы:</p>
+        <ul class="points">
+          <li><strong>Внутренние чаты</strong> — новостройки, предложения, экскурсии и обучения.</li>
+          <li><strong>Чаты с застройщиками</strong> — рабочие группы по девелоперам и партнёрам.</li>
+        </ul>
+        <p class="footer-hint">QR-коды, которые вы показываете команде, обычно ведут на те же ссылки, что перечислены в этом файле.</p>
+      </div>
+    </article>
+
+    <article class="slide" aria-label="Слайд 3">
+      <div class="slide-accent" aria-hidden="true"></div>
+      <div class="slide-inner">
+        <p class="eyebrow">Расписание</p>
+        <div class="time-badge">11:00 — обучение</div>
+        <h1 class="slide-title">Застройщик Талан</h1>
+        <p class="lead">В программе — проекты девелопера и актуальные акценты по линейке.</p>
+        <div class="projects">
+          <span class="project-pill">Конди Нова</span>
+          <span class="project-pill">Конди Лофт</span>
+          <span class="project-pill">Бионика Парк</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="slide" aria-label="Слайд 4">
+      <div class="slide-accent" aria-hidden="true"></div>
+      <div class="slide-inner">
+        <p class="eyebrow">Пятница</p>
+        <h1 class="slide-title">Альфа-Банк × «Прайм Девелопмент»</h1>
+        <p class="lead">В пятницу пройдёт совместное обучение от Альфа-Банка вместе с «Прайм Девелопмент».</p>
+        <p class="body-text">Точное время и ссылка на подключение уточняйте у куратора обучения или в корпоративных чатах.</p>
+      </div>
+    </article>
+
+  </div>
+</body>
+</html>

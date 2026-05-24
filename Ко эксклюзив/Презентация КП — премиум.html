@@ -1,0 +1,2418 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ЦЕНТРАЛЬНЫЙ ПАРК · Эксклюзивные продажи · Май 2026</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@page { size: A4 landscape; margin: 0; }
+
+*, *::before, *::after {
+    margin: 0; padding: 0; box-sizing: border-box;
+}
+
+:root {
+    --ink-void: #060418;
+    --ink-deep: #0d0a26;
+    --ink-twilight: #1a1240;
+    --ink-card: #100a2e;
+    --violet-core: #7c3aed;
+    --violet-bright: #a855f7;
+    --violet-soft: #c4b5fd;
+    --magenta: #ec4899;
+    --pink-soft: #f9a8d4;
+    --acid: #d4ff00;
+    --acid-soft: #c1f73d;
+    --cream: #f4ecd8;
+    --white: #ffffff;
+    --mute: #64708b;
+    --mute-2: #9ca3af;
+    --line-soft: rgba(255, 255, 255, 0.08);
+    --line-strong: rgba(255, 255, 255, 0.18);
+    --glass-bg: rgba(255, 255, 255, 0.025);
+    --glass-bg-2: rgba(255, 255, 255, 0.05);
+
+    --font-display: 'Cormorant Garamond', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+html, body {
+    background: var(--ink-void);
+    color: var(--white);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "ss01", "cv11", "tnum", "calt";
+    font-variant-numeric: tabular-nums;
+}
+
+@media screen {
+    body {
+        background: #03020a;
+        padding: 32px 0;
+    }
+    .slide {
+        margin: 0 auto 32px;
+        box-shadow:
+            0 40px 80px -20px rgba(0, 0, 0, 0.8),
+            0 8px 32px rgba(124, 58, 237, 0.12),
+            0 0 0 1px rgba(255, 255, 255, 0.04);
+    }
+}
+
+/* ============================================================
+   SLIDE BASE
+   ============================================================ */
+.slide {
+    position: relative;
+    width: 297mm;
+    height: 210mm;
+    padding: 14mm 18mm 12mm;
+    background: var(--ink-void);
+    color: var(--white);
+    overflow: hidden;
+    page-break-after: always;
+    display: flex;
+    flex-direction: column;
+}
+.slide:last-child { page-break-after: auto; }
+
+/* Aurora gradient mesh background */
+.aurora {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+.aurora.v1 {
+    background:
+        radial-gradient(at 18% 88%, rgba(124, 58, 237, 0.55) 0px, transparent 42%),
+        radial-gradient(at 88% 12%, rgba(236, 72, 153, 0.32) 0px, transparent 45%),
+        radial-gradient(at 75% 80%, rgba(168, 85, 247, 0.22) 0px, transparent 38%),
+        radial-gradient(at 50% 30%, rgba(212, 255, 0, 0.04) 0px, transparent 35%);
+}
+.aurora.v2 {
+    background:
+        radial-gradient(at 90% 95%, rgba(236, 72, 153, 0.40) 0px, transparent 45%),
+        radial-gradient(at 5% 20%, rgba(124, 58, 237, 0.45) 0px, transparent 50%),
+        radial-gradient(at 60% 60%, rgba(212, 255, 0, 0.04) 0px, transparent 28%);
+}
+.aurora.v3 {
+    background:
+        radial-gradient(at 50% 100%, rgba(124, 58, 237, 0.45) 0px, transparent 50%),
+        radial-gradient(at 20% 0%, rgba(236, 72, 153, 0.28) 0px, transparent 45%),
+        radial-gradient(at 80% 0%, rgba(168, 85, 247, 0.18) 0px, transparent 40%);
+}
+.aurora.v4 {
+    background:
+        radial-gradient(at 100% 50%, rgba(212, 255, 0, 0.10) 0px, transparent 45%),
+        radial-gradient(at 0% 50%, rgba(124, 58, 237, 0.50) 0px, transparent 55%),
+        radial-gradient(at 50% 100%, rgba(236, 72, 153, 0.18) 0px, transparent 40%);
+}
+.aurora.v5 {
+    background:
+        radial-gradient(at 30% 50%, rgba(124, 58, 237, 0.40) 0px, transparent 50%),
+        radial-gradient(at 75% 25%, rgba(236, 72, 153, 0.28) 0px, transparent 40%),
+        radial-gradient(at 75% 80%, rgba(168, 85, 247, 0.18) 0px, transparent 40%);
+}
+
+/* SVG noise overlay for premium grain */
+.noise {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.06;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.8 0'/></filter><rect width='240' height='240' filter='url(%23n)'/></svg>");
+    background-size: 240px;
+}
+
+/* Slide content layer */
+.slide-inner {
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Editorial corners */
+.corner {
+    position: absolute;
+    z-index: 3;
+    width: 12mm;
+    height: 12mm;
+    border-color: rgba(255, 255, 255, 0.18);
+    border-style: solid;
+    border-width: 0;
+}
+.corner.tl { top: 6mm; left: 6mm; border-top-width: 1px; border-left-width: 1px; }
+.corner.tr { top: 6mm; right: 6mm; border-top-width: 1px; border-right-width: 1px; }
+.corner.bl { bottom: 6mm; left: 6mm; border-bottom-width: 1px; border-left-width: 1px; }
+.corner.br { bottom: 6mm; right: 6mm; border-bottom-width: 1px; border-right-width: 1px; }
+
+/* Editorial top-bar with eyebrow + brand */
+.topbar {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 5mm;
+    margin-bottom: 6mm;
+    border-bottom: 1px solid var(--line-soft);
+}
+
+.eyebrow {
+    font-size: 8.5pt;
+    font-weight: 600;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--mute-2);
+    display: flex;
+    align-items: center;
+    gap: 14pt;
+}
+.eyebrow .num { color: var(--acid); font-weight: 700; }
+.eyebrow .dot { color: var(--violet-bright); }
+.eyebrow .label { color: var(--cream); }
+
+.brand-tag {
+    font-size: 8.5pt;
+    font-weight: 700;
+    letter-spacing: 0.36em;
+    text-transform: uppercase;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    gap: 10pt;
+}
+.brand-tag .mono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22pt; height: 22pt;
+    border: 1px solid var(--acid);
+    color: var(--acid);
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 13pt;
+    letter-spacing: 0;
+    line-height: 1;
+}
+
+/* Footer mark */
+.bottombar {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 5mm;
+    margin-top: auto;
+    border-top: 1px solid var(--line-soft);
+    font-size: 8pt;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--mute);
+}
+.bottombar .l, .bottombar .c, .bottombar .r { display: flex; align-items: center; gap: 10pt; }
+.bottombar .pageno {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 14pt;
+    color: var(--cream);
+    letter-spacing: 0;
+}
+.bottombar .total { color: var(--mute); }
+.bottombar .seal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18pt; height: 18pt;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    color: var(--cream);
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 10pt;
+    line-height: 1;
+}
+
+/* Glass card */
+.glass {
+    position: relative;
+    background: var(--glass-bg-2);
+    border: 1px solid var(--line-soft);
+    border-radius: 6pt;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.06),
+        0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Helpers */
+.serif { font-family: var(--font-display); }
+.italic { font-style: italic; }
+.uppercase { text-transform: uppercase; }
+.tight { letter-spacing: -0.04em; }
+.wide { letter-spacing: 0.18em; }
+.cream { color: var(--cream); }
+.acid { color: var(--acid); }
+.violet { color: var(--violet-bright); }
+.magenta { color: var(--magenta); }
+.mute { color: var(--mute-2); }
+
+/* ============================================================
+   SLIDE 01 — COVER
+   ============================================================ */
+.s01 .hero {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 16mm;
+    align-items: center;
+    padding-top: 4mm;
+}
+.s01 .hero-left .lead {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 22pt;
+    font-weight: 500;
+    color: var(--cream);
+    letter-spacing: 0;
+    margin-bottom: 6pt;
+    opacity: 0.9;
+}
+.s01 .hero-left h1 {
+    font-family: var(--font-sans);
+    font-weight: 800;
+    font-size: 78pt;
+    line-height: 0.92;
+    letter-spacing: -0.045em;
+    color: var(--white);
+    text-transform: uppercase;
+    margin-bottom: 0;
+}
+.s01 .hero-left h1 .park {
+    display: block;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 700;
+    text-transform: none;
+    color: var(--cream);
+    font-size: 96pt;
+    letter-spacing: -0.02em;
+    margin-left: 6pt;
+    margin-top: -8pt;
+}
+.s01 .hero-left h1 .park .dot {
+    color: var(--acid);
+}
+.s01 .hero-left .descr {
+    margin-top: 14pt;
+    max-width: 130mm;
+    font-size: 11pt;
+    line-height: 1.55;
+    color: var(--mute-2);
+    border-left: 1px solid var(--violet-core);
+    padding-left: 10pt;
+}
+.s01 .hero-right {
+    display: flex;
+    flex-direction: column;
+    gap: 10pt;
+    align-items: stretch;
+    padding-top: 6mm;
+}
+.s01 .stat-card {
+    position: relative;
+    padding: 12pt 16pt;
+    background: var(--glass-bg-2);
+    border: 1px solid var(--line-soft);
+    border-radius: 6pt;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+.s01 .stat-card.c1 { transform: rotate(-1.6deg); }
+.s01 .stat-card.c2 { transform: rotate(0.8deg); margin-left: 8mm; }
+.s01 .stat-card.c3 { transform: rotate(-0.6deg); margin-left: 2mm; }
+.s01 .stat-card .label {
+    font-size: 7.5pt;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--mute-2);
+    margin-bottom: 4pt;
+}
+.s01 .stat-card .val {
+    font-family: var(--font-sans);
+    font-size: 38pt;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--white);
+}
+.s01 .stat-card .val .acc { color: var(--acid); }
+.s01 .stat-card .desc {
+    margin-top: 4pt;
+    font-size: 8.5pt;
+    line-height: 1.4;
+    color: var(--mute-2);
+}
+
+/* ============================================================
+   SLIDE 02 — KPI HERO
+   ============================================================ */
+.s02 .stage {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 16mm;
+    align-items: stretch;
+    padding-top: 4mm;
+}
+.s02 .mega {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.s02 .mega .mega-eye {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 18pt;
+    color: var(--cream);
+    margin-bottom: 6pt;
+}
+.s02 .mega .mega-num {
+    font-family: var(--font-sans);
+    font-weight: 900;
+    font-size: 380pt;
+    line-height: 0.78;
+    letter-spacing: -0.06em;
+    color: var(--acid);
+    text-shadow: 0 0 60px rgba(212, 255, 0, 0.20);
+    margin-left: -8pt;
+    margin-top: -22pt;
+}
+.s02 .mega .mega-cap {
+    margin-top: -10pt;
+    padding-left: 6pt;
+    font-family: var(--font-sans);
+    font-size: 11pt;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--white);
+    border-top: 1px solid var(--line-strong);
+    padding-top: 8pt;
+    max-width: 130mm;
+}
+.s02 .mega .mega-cap em {
+    font-style: normal;
+    color: var(--acid);
+    font-weight: 700;
+}
+.s02 .right-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10pt;
+    padding-top: 4mm;
+}
+.s02 .right-col .heading {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 28pt;
+    line-height: 1.05;
+    color: var(--white);
+    margin-bottom: 6pt;
+}
+.s02 .bento {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8pt;
+    flex: 1;
+}
+.s02 .bento-card {
+    background: var(--glass-bg-2);
+    border: 1px solid var(--line-soft);
+    border-radius: 5pt;
+    padding: 11pt 13pt;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+.s02 .bento-card .lab {
+    font-size: 7.5pt;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--mute-2);
+}
+.s02 .bento-card .num {
+    font-size: 28pt;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--white);
+    margin-top: 6pt;
+}
+.s02 .bento-card .num .pct { color: var(--violet-soft); font-size: 70%; }
+.s02 .bento-card .desc {
+    font-size: 8.5pt;
+    color: var(--mute-2);
+    margin-top: 4pt;
+    line-height: 1.35;
+}
+.s02 .bento-card.accent { background: var(--violet-core); border-color: var(--violet-bright); }
+.s02 .bento-card.accent .lab { color: rgba(255,255,255,0.7); }
+.s02 .bento-card.accent .num { color: var(--white); }
+.s02 .bento-card.accent .desc { color: rgba(255,255,255,0.85); }
+.s02 .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5pt;
+    margin-top: 4pt;
+}
+.s02 .chip {
+    font-size: 7.5pt;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 4pt 8pt;
+    border: 1px solid var(--line-strong);
+    color: var(--cream);
+    border-radius: 999pt;
+}
+.s02 .chip.acid { border-color: var(--acid); color: var(--acid); }
+
+/* ============================================================
+   SLIDE 03 — PREPARATION
+   ============================================================ */
+.s03 .head {
+    margin-bottom: 6mm;
+}
+.s03 .head h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 34pt;
+    line-height: 1.05;
+    color: var(--white);
+    letter-spacing: -0.01em;
+    max-width: 200mm;
+}
+.s03 .head h2 em {
+    color: var(--acid);
+    font-style: italic;
+    font-weight: 600;
+}
+.s03 .checklist {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 14mm;
+    row-gap: 4mm;
+    align-content: start;
+    padding-top: 2mm;
+}
+.s03 .item {
+    display: grid;
+    grid-template-columns: 28pt 1fr;
+    column-gap: 12pt;
+    align-items: start;
+    padding-bottom: 6pt;
+    border-bottom: 1px solid var(--line-soft);
+}
+.s03 .item .n {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 28pt;
+    line-height: 1;
+    color: var(--acid);
+    letter-spacing: -0.02em;
+}
+.s03 .item .body { padding-top: 3pt; }
+.s03 .item .title {
+    font-family: var(--font-sans);
+    font-size: 11pt;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.35;
+    margin-bottom: 4pt;
+}
+.s03 .item .meta {
+    display: flex;
+    align-items: center;
+    gap: 8pt;
+    font-size: 8.5pt;
+    color: var(--mute-2);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+}
+.s03 .item .meta .role { color: var(--violet-soft); }
+.s03 .item .meta .due {
+    margin-left: auto;
+    color: var(--cream);
+    font-weight: 600;
+}
+.s03 .risk {
+    margin-top: 6mm;
+    padding: 10pt 14pt;
+    background: linear-gradient(90deg, rgba(245, 158, 11, 0.08), rgba(245, 158, 11, 0.02));
+    border: 1px solid rgba(245, 158, 11, 0.45);
+    border-left: 3px solid #f59e0b;
+    border-radius: 4pt;
+    font-size: 9.5pt;
+    line-height: 1.5;
+    color: #fcd34d;
+}
+.s03 .risk strong { color: #fde68a; font-weight: 700; }
+
+/* ============================================================
+   SLIDE 04 — EVENT / DRAMATIC DATE
+   ============================================================ */
+.s04 .stage {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.s04 .vlabel {
+    position: absolute;
+    font-family: var(--font-sans);
+    font-size: 9pt;
+    font-weight: 600;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--mute-2);
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    padding: 0;
+}
+.s04 .vlabel.l { left: 4mm; top: 50%; transform: translateY(-50%) rotate(180deg); }
+.s04 .vlabel.r { right: 4mm; top: 50%; transform: translateY(-50%) rotate(180deg); color: var(--cream); }
+.s04 .vlabel.l .accent { color: var(--violet-bright); }
+.s04 .vlabel.r .accent { color: var(--acid); }
+.s04 .date-hero {
+    text-align: center;
+    position: relative;
+}
+.s04 .date-hero .top-eye {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 24pt;
+    font-weight: 500;
+    color: var(--cream);
+    margin-bottom: 0pt;
+}
+.s04 .date-hero .num {
+    font-family: var(--font-sans);
+    font-weight: 900;
+    font-size: 240pt;
+    line-height: 0.86;
+    letter-spacing: -0.06em;
+    color: var(--white);
+    text-shadow: 0 0 80px rgba(124, 58, 237, 0.40);
+    position: relative;
+}
+.s04 .date-hero .num .dash {
+    color: var(--acid);
+    margin: 0 -10pt;
+    display: inline-block;
+    transform: translateY(-22pt);
+}
+.s04 .date-hero .sub {
+    font-family: var(--font-sans);
+    font-size: 12pt;
+    font-weight: 500;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--violet-soft);
+    margin-top: -8pt;
+}
+.s04 .claim {
+    position: absolute;
+    left: 50%;
+    bottom: 22mm;
+    transform: translateX(-50%);
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 18pt;
+    font-weight: 500;
+    color: var(--cream);
+    text-align: center;
+    max-width: 200mm;
+    line-height: 1.3;
+}
+.s04 .claim em {
+    font-style: italic;
+    color: var(--acid);
+    font-weight: 600;
+}
+.s04 .row-strip {
+    position: relative;
+    z-index: 3;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10pt;
+    margin-top: 4mm;
+}
+.s04 .strip-cell {
+    padding: 10pt 12pt;
+    background: var(--glass-bg-2);
+    border: 1px solid var(--line-soft);
+    border-radius: 4pt;
+}
+.s04 .strip-cell .lab {
+    font-size: 7.5pt;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--violet-soft);
+    margin-bottom: 4pt;
+}
+.s04 .strip-cell .val {
+    font-size: 10pt;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.35;
+}
+
+/* ============================================================
+   SLIDE 05 — TEAM & RHYTHM
+   ============================================================ */
+.s05 .head h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 32pt;
+    line-height: 1.05;
+    color: var(--white);
+    margin-bottom: 6mm;
+}
+.s05 .head h2 em { color: var(--acid); font-style: italic; }
+.s05 .stage {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 14mm;
+    align-items: stretch;
+}
+.s05 .roles {
+    display: flex;
+    flex-direction: column;
+    gap: 8pt;
+}
+.s05 .role {
+    position: relative;
+    padding: 12pt 16pt;
+    background: var(--glass-bg-2);
+    border: 1px solid var(--line-soft);
+    border-radius: 5pt;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+.s05 .role::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 16pt; bottom: 16pt;
+    width: 2px;
+    background: var(--violet-bright);
+}
+.s05 .role .top {
+    display: flex;
+    align-items: baseline;
+    gap: 10pt;
+    margin-bottom: 4pt;
+}
+.s05 .role .role-num {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 18pt;
+    color: var(--acid);
+    letter-spacing: -0.02em;
+}
+.s05 .role .role-name {
+    font-family: var(--font-sans);
+    font-size: 13pt;
+    font-weight: 700;
+    color: var(--white);
+}
+.s05 .role .role-body {
+    font-size: 10pt;
+    color: var(--mute-2);
+    line-height: 1.5;
+}
+.s05 .role .role-body em {
+    font-style: normal;
+    color: var(--cream);
+    font-weight: 600;
+}
+.s05 .ring-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.s05 .ring-wrap svg {
+    width: 100%;
+    max-width: 110mm;
+    height: auto;
+    overflow: visible;
+}
+.s05 .ring-center {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+.s05 .ring-center .word {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 36pt;
+    color: var(--cream);
+    letter-spacing: -0.01em;
+    line-height: 1;
+}
+.s05 .ring-center .sub {
+    font-size: 7pt;
+    font-weight: 700;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--mute);
+    margin-top: 6pt;
+}
+
+/* ============================================================
+   SLIDE 06 — 4 CONTROL POINTS
+   ============================================================ */
+.s06 .head h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 32pt;
+    line-height: 1.05;
+    color: var(--white);
+    margin-bottom: 6mm;
+    max-width: 220mm;
+}
+.s06 .head h2 em { color: var(--acid); font-style: italic; }
+.s06 .grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 8pt;
+}
+.s06 .ctrl {
+    position: relative;
+    padding: 14pt 16pt;
+    background: var(--glass-bg-2);
+    border: 1px solid var(--line-soft);
+    border-radius: 5pt;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    display: grid;
+    grid-template-columns: 1fr 60pt;
+    column-gap: 10pt;
+}
+.s06 .ctrl .stripe {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--violet-core);
+}
+.s06 .ctrl.c1 .stripe { background: var(--violet-bright); }
+.s06 .ctrl.c2 .stripe { background: var(--magenta); }
+.s06 .ctrl.c3 .stripe { background: var(--acid); }
+.s06 .ctrl.c4 .stripe { background: var(--cream); }
+.s06 .ctrl .nbadge {
+    position: absolute;
+    top: 14pt; right: 16pt;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 18pt;
+    color: var(--mute);
+    letter-spacing: 0;
+}
+.s06 .ctrl .name {
+    grid-column: 1 / span 2;
+    font-size: 13pt;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.01em;
+    margin-top: 6pt;
+    margin-bottom: 4pt;
+    padding-right: 28pt;
+}
+.s06 .ctrl .what {
+    font-size: 9pt;
+    color: var(--mute-2);
+    line-height: 1.45;
+}
+.s06 .ctrl .you {
+    margin-top: 6pt;
+    padding-top: 6pt;
+    border-top: 1px solid var(--line-soft);
+    font-size: 9pt;
+    color: var(--cream);
+    line-height: 1.45;
+    font-weight: 500;
+}
+.s06 .ctrl .you span {
+    display: block;
+    font-size: 7.5pt;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--acid);
+    margin-bottom: 3pt;
+}
+.s06 .ctrl .micro {
+    grid-column: 2;
+    grid-row: 2 / span 2;
+    align-self: end;
+    width: 60pt;
+    height: 50pt;
+    opacity: 0.85;
+}
+
+/* ============================================================
+   SLIDE 07 — CADENCE & SCENARIOS
+   ============================================================ */
+.s07 .head h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 30pt;
+    line-height: 1.05;
+    color: var(--white);
+    margin-bottom: 5mm;
+}
+.s07 .head h2 em { color: var(--acid); font-style: italic; }
+.s07 .timeline {
+    position: relative;
+    margin-bottom: 8mm;
+    padding: 14pt 0 10pt;
+}
+.s07 .timeline .axis {
+    position: absolute;
+    left: 0; right: 0; top: 32pt;
+    height: 1px;
+    background: linear-gradient(90deg, var(--violet-core) 0%, var(--magenta) 50%, var(--acid) 100%);
+}
+.s07 .timeline .points {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10pt;
+}
+.s07 .point {
+    position: relative;
+    padding-top: 28pt;
+    text-align: center;
+}
+.s07 .point .dot {
+    position: absolute;
+    left: 50%; top: 26pt;
+    transform: translate(-50%, -50%);
+    width: 14pt; height: 14pt;
+    border-radius: 50%;
+    background: var(--white);
+    box-shadow: 0 0 0 4px var(--ink-void), 0 0 0 5px var(--violet-bright);
+}
+.s07 .point.p3 .dot { background: var(--acid); box-shadow: 0 0 0 4px var(--ink-void), 0 0 0 5px var(--acid); }
+.s07 .point .when {
+    font-size: 8.5pt;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--mute-2);
+    margin-bottom: 4pt;
+    margin-top: 4pt;
+}
+.s07 .point.p3 .when { color: var(--acid); }
+.s07 .point .what {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 18pt;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 4pt;
+}
+.s07 .point .desc {
+    font-size: 9pt;
+    color: var(--mute-2);
+    line-height: 1.4;
+    max-width: 70mm;
+    margin: 0 auto;
+}
+.s07 .scenarios-eye {
+    font-size: 8pt;
+    font-weight: 700;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--acid);
+    margin-bottom: 4pt;
+}
+.s07 .scenarios {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10pt;
+    flex: 1;
+}
+.s07 .sc {
+    position: relative;
+    padding: 14pt 16pt;
+    border: 1px solid var(--line-soft);
+    border-radius: 5pt;
+    background: var(--glass-bg-2);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.s07 .sc.go {
+    background: linear-gradient(135deg, rgba(212, 255, 0, 0.18), rgba(212, 255, 0, 0.04));
+    border-color: rgba(212, 255, 0, 0.45);
+    transform: rotate(-1.6deg) translateY(-2pt);
+}
+.s07 .sc.warn {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(245, 158, 11, 0.04));
+    border-color: rgba(245, 158, 11, 0.45);
+    transform: rotate(0deg);
+}
+.s07 .sc.stop {
+    background: linear-gradient(135deg, rgba(244, 63, 94, 0.18), rgba(244, 63, 94, 0.04));
+    border-color: rgba(244, 63, 94, 0.45);
+    transform: rotate(1.6deg) translateY(-2pt);
+}
+.s07 .sc .lab {
+    font-size: 8pt;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 6pt;
+}
+.s07 .sc.go .lab { color: var(--acid); }
+.s07 .sc.warn .lab { color: #fcd34d; }
+.s07 .sc.stop .lab { color: #fda4af; }
+.s07 .sc .num {
+    font-family: var(--font-sans);
+    font-weight: 800;
+    font-size: 36pt;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--white);
+    margin-bottom: 4pt;
+}
+.s07 .sc .desc {
+    font-size: 9.5pt;
+    color: var(--cream);
+    line-height: 1.4;
+    margin-bottom: 8pt;
+}
+.s07 .sc .bars {
+    margin-top: auto;
+    display: flex;
+    align-items: flex-end;
+    gap: 3pt;
+    height: 18pt;
+}
+.s07 .sc .bars .b {
+    flex: 1;
+    background: rgba(255,255,255,0.18);
+    border-radius: 1pt;
+}
+.s07 .sc.go .bars .b { background: var(--acid); }
+.s07 .sc.warn .bars .b { background: #fcd34d; }
+.s07 .sc.stop .bars .b { background: #fda4af; }
+
+/* ============================================================
+   SLIDE 08 — FUNNEL & FORECAST
+   ============================================================ */
+.s08 .head h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 30pt;
+    line-height: 1.05;
+    color: var(--white);
+    margin-bottom: 4mm;
+}
+.s08 .head h2 em { color: var(--acid); font-style: italic; }
+.s08 .stage {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 12mm;
+    align-items: stretch;
+}
+.s08 .left {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 4mm;
+}
+.s08 .funnel-eye {
+    font-size: 8pt;
+    font-weight: 700;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--violet-soft);
+}
+.s08 .funnel-svg {
+    width: 100%;
+    max-height: 130mm;
+}
+.s08 .right {
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    gap: 4mm;
+}
+.s08 .forecast-eye {
+    font-size: 8pt;
+    font-weight: 700;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--acid);
+    margin-top: 2mm;
+}
+.s08 .table-mini {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.5pt;
+}
+.s08 .table-mini th, .s08 .table-mini td {
+    text-align: left;
+    padding: 6pt 4pt;
+    border-bottom: 1px solid var(--line-soft);
+    color: var(--mute-2);
+}
+.s08 .table-mini th {
+    font-size: 7.5pt;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--mute);
+    border-bottom-color: var(--line-strong);
+}
+.s08 .table-mini td.f { color: var(--white); font-weight: 600; }
+.s08 .table-mini td.deal { color: var(--acid); font-weight: 800; font-family: var(--font-sans); }
+.s08 .table-mini tfoot td {
+    color: var(--white);
+    font-weight: 800;
+    border-top: 1px solid var(--line-strong);
+    border-bottom: 0;
+    padding-top: 8pt;
+}
+.s08 .ring-block {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 14pt;
+    align-items: center;
+}
+.s08 .ring-block svg {
+    width: 60pt;
+    height: 60pt;
+}
+.s08 .ring-block .ring-text .big {
+    font-family: var(--font-sans);
+    font-weight: 800;
+    font-size: 30pt;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--acid);
+}
+.s08 .ring-block .ring-text .lab {
+    font-size: 8pt;
+    color: var(--mute-2);
+    margin-top: 3pt;
+    line-height: 1.4;
+    max-width: 70mm;
+}
+
+/* ============================================================
+   SLIDE 09 — CALENDAR GANTT
+   ============================================================ */
+.s09 .head h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 30pt;
+    line-height: 1.05;
+    color: var(--white);
+    margin-bottom: 5mm;
+}
+.s09 .head h2 em { color: var(--acid); font-style: italic; }
+.s09 .calendar {
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.s09 .cal-grid {
+    position: relative;
+    margin-top: 22mm;
+    padding-bottom: 10mm;
+}
+.s09 .cal-axis {
+    position: relative;
+    height: 32pt;
+    border-bottom: 1px solid var(--line-soft);
+}
+.s09 .cal-day {
+    position: absolute;
+    bottom: 0;
+    width: 1px;
+    background: var(--line-soft);
+    height: 6pt;
+}
+.s09 .cal-day.weekend { background: var(--violet-core); opacity: 0.45; }
+.s09 .cal-day .lbl {
+    position: absolute;
+    bottom: -16pt;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 6.5pt;
+    color: var(--mute);
+    font-weight: 600;
+    letter-spacing: 0;
+}
+.s09 .cal-day.weekend .lbl { color: var(--violet-soft); }
+.s09 .cal-day.major { background: var(--mute-2); height: 10pt; }
+.s09 .cal-day.major .lbl { color: var(--cream); font-weight: 700; }
+
+.s09 .milestone {
+    position: absolute;
+    bottom: 100%;
+    transform: translateX(-50%);
+    background: var(--glass-bg-2);
+    border: 1px solid var(--line-strong);
+    border-radius: 4pt;
+    padding: 8pt 12pt;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    min-width: 38mm;
+    margin-bottom: 4pt;
+}
+.s09 .milestone::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 16pt;
+    background: linear-gradient(to bottom, var(--violet-bright), transparent);
+}
+.s09 .milestone .when {
+    font-size: 7.5pt;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--violet-soft);
+    margin-bottom: 3pt;
+}
+.s09 .milestone .what {
+    font-family: var(--font-sans);
+    font-size: 12pt;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 3pt;
+}
+.s09 .milestone .who {
+    font-size: 8pt;
+    color: var(--mute-2);
+    line-height: 1.35;
+}
+.s09 .milestone.final {
+    background: rgba(212, 255, 0, 0.10);
+    border-color: var(--acid);
+    box-shadow: 0 0 30px rgba(212, 255, 0, 0.20);
+}
+.s09 .milestone.final::before { background: linear-gradient(to bottom, var(--acid), transparent); }
+.s09 .milestone.final .when { color: var(--acid); }
+.s09 .milestone.final .what { color: var(--white); }
+.s09 .ms-row-1 { bottom: calc(100% + 2pt); }
+.s09 .ms-row-2 { bottom: calc(100% + 30pt); }
+.s09 .ms-row-2::before { height: 44pt; }
+
+/* ============================================================
+   SLIDE 10 — DECISION
+   ============================================================ */
+.s10 .head h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 30pt;
+    line-height: 1.05;
+    color: var(--white);
+    margin-bottom: 5mm;
+    max-width: 220mm;
+}
+.s10 .head h2 em { color: var(--acid); font-style: italic; }
+.s10 .trio {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8pt;
+    margin-bottom: 5mm;
+}
+.s10 .tcell {
+    padding: 14pt 18pt 16pt;
+    background: var(--glass-bg-2);
+    border: 1px solid var(--line-soft);
+    border-radius: 6pt;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    text-align: center;
+    position: relative;
+}
+.s10 .tcell.last {
+    background: linear-gradient(135deg, rgba(212, 255, 0, 0.18), rgba(212, 255, 0, 0.02));
+    border-color: rgba(212, 255, 0, 0.45);
+}
+.s10 .tcell .lab {
+    font-size: 8pt;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--mute-2);
+    margin-bottom: 4pt;
+}
+.s10 .tcell.last .lab { color: var(--acid); }
+.s10 .tcell .num {
+    font-family: var(--font-sans);
+    font-weight: 900;
+    font-size: 96pt;
+    line-height: 0.92;
+    letter-spacing: -0.06em;
+    color: var(--white);
+}
+.s10 .tcell.last .num { color: var(--acid); text-shadow: 0 0 40px rgba(212, 255, 0, 0.30); }
+.s10 .tcell .sub {
+    font-size: 8.5pt;
+    color: var(--cream);
+    margin-top: 4pt;
+    line-height: 1.4;
+}
+.s10 .compare-line {
+    margin-bottom: 5mm;
+    padding: 9pt 14pt;
+    background: var(--glass-bg);
+    border: 1px solid var(--line-soft);
+    border-radius: 4pt;
+    font-size: 9pt;
+    color: var(--mute-2);
+    text-align: center;
+    line-height: 1.4;
+}
+.s10 .compare-line strong { color: var(--cream); font-weight: 600; }
+.s10 .compare-line .arr { color: var(--acid); margin: 0 6pt; }
+.s10 .closing {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 10pt;
+    flex: 1;
+}
+.s10 .decision {
+    background: var(--glass-bg-2);
+    border: 1px solid var(--line-soft);
+    border-radius: 6pt;
+    padding: 12pt 16pt;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+.s10 .decision .eye {
+    font-size: 8pt;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--violet-soft);
+    margin-bottom: 8pt;
+}
+.s10 .decision .actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12pt;
+}
+.s10 .decision .act {
+    border-left: 1px solid var(--line-soft);
+    padding-left: 10pt;
+}
+.s10 .decision .act:first-child { border-left: 0; padding-left: 0; }
+.s10 .decision .act .n {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 22pt;
+    color: var(--acid);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 4pt;
+}
+.s10 .decision .act .t {
+    font-size: 9.5pt;
+    color: var(--white);
+    font-weight: 600;
+    line-height: 1.4;
+}
+.s10 .cta {
+    background: linear-gradient(135deg, var(--violet-core), var(--magenta));
+    border-radius: 6pt;
+    padding: 12pt 16pt;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 12px 40px rgba(124, 58, 237, 0.45);
+    position: relative;
+    overflow: hidden;
+}
+.s10 .cta::before {
+    content: '';
+    position: absolute;
+    inset: 1px;
+    background: radial-gradient(at 80% 0%, rgba(255,255,255,0.18), transparent 60%);
+    border-radius: 5pt;
+    pointer-events: none;
+}
+.s10 .cta .eye {
+    font-size: 7.5pt;
+    font-weight: 700;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 6pt;
+    position: relative;
+}
+.s10 .cta .text {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 18pt;
+    line-height: 1.2;
+    color: var(--white);
+    position: relative;
+}
+.s10 .cta .text strong {
+    font-style: normal;
+    font-family: var(--font-sans);
+    font-weight: 800;
+    color: var(--acid);
+    text-shadow: 0 0 16px rgba(212, 255, 0, 0.30);
+}
+
+/* ============================================================
+   PRINT
+   ============================================================ */
+@media print {
+    @page { size: A4 landscape; margin: 0; }
+    html, body { background: var(--ink-void); }
+    body { padding: 0; }
+    .slide {
+        margin: 0;
+        box-shadow: none;
+        page-break-after: always;
+        break-after: page;
+    }
+    .slide:last-child { page-break-after: auto; }
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- ================================================================ -->
+<!-- 01 · COVER                                                        -->
+<!-- ================================================================ -->
+<section class="slide s01">
+    <div class="aurora v1"></div>
+    <div class="noise"></div>
+    <div class="corner tl"></div>
+    <div class="corner tr"></div>
+    <div class="corner bl"></div>
+    <div class="corner br"></div>
+
+    <div class="slide-inner">
+        <div class="topbar">
+            <div class="eyebrow">
+                <span class="num">01</span><span class="dot">/</span><span>10</span>
+                <span style="opacity:0.4">·</span>
+                <span class="label">ЭКСКЛЮЗИВНЫЕ ПРОДАЖИ</span>
+                <span style="opacity:0.4">·</span>
+                <span>МАЙ 2026</span>
+            </div>
+            <div class="brand-tag">
+                <span>Эксперт-Сити × СУ-10</span>
+                <span class="mono">EC</span>
+            </div>
+        </div>
+
+        <div class="hero">
+            <div class="hero-left">
+                <div class="lead">Коммерческое предложение —</div>
+                <h1>
+                    Центральный
+                    <span class="park">Парк<span class="dot">.</span></span>
+                </h1>
+                <div class="descr">
+                    Система эксклюзивных продаж. Ускорение реализации остатка <strong style="color:var(--cream)">196&nbsp;апартаментов</strong> через управляемый партнёрский канал. Финансовая модель — нейтральная для застройщика.
+                </div>
+            </div>
+
+            <div class="hero-right">
+                <div class="stat-card c1">
+                    <div class="label">Остаток</div>
+                    <div class="val">196<span class="acc" style="font-size: 14pt; vertical-align: top; margin-left: 4pt;">/508</span></div>
+                    <div class="desc">апартаментов · уровень распроданности 61%</div>
+                </div>
+                <div class="stat-card c2">
+                    <div class="label">Темп Q1·2026</div>
+                    <div class="val">7</div>
+                    <div class="desc">сделок за квартал — янв 2 / фев 4 / мар 1</div>
+                </div>
+                <div class="stat-card c3">
+                    <div class="label">Финмодель</div>
+                    <div class="val"><span class="acc">0&nbsp;₽</span></div>
+                    <div class="desc">дополнительных затрат застройщика. Ноль изменений уровня цен.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottombar">
+            <div class="l"><span class="seal">EC</span><span>топ-3 АН Уфы · ЖК Некрасовский</span></div>
+            <div class="c"><span>конфиденциально · для внутреннего рассмотрения</span></div>
+            <div class="r"><span class="pageno">01</span><span class="total">— 10</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- 02 · KPI HERO                                                     -->
+<!-- ================================================================ -->
+<section class="slide s02">
+    <div class="aurora v2"></div>
+    <div class="noise"></div>
+    <div class="corner tl"></div>
+    <div class="corner br"></div>
+
+    <div class="slide-inner">
+        <div class="topbar">
+            <div class="eyebrow">
+                <span class="num">02</span><span class="dot">/</span><span>10</span>
+                <span style="opacity:0.4">·</span>
+                <span class="label">ЦЕЛЬ</span>
+                <span style="opacity:0.4">·</span>
+                <span>KPI ПИЛОТА МАЯ</span>
+            </div>
+            <div class="brand-tag">
+                <span>Что считаем результатом</span>
+            </div>
+        </div>
+
+        <div class="stage">
+            <div class="mega">
+                <div class="mega-eye">сделок</div>
+                <div class="mega-num">5</div>
+                <div class="mega-cap">Цель пилота · <em>2,5%</em> остатка за месяц</div>
+            </div>
+
+            <div class="right-col">
+                <div class="heading">Один <em style="color:var(--acid); font-style:italic;">месяц.</em><br>Измеримые цели.</div>
+                <div class="bento">
+                    <div class="bento-card accent">
+                        <div class="lab">Выручка пилота</div>
+                        <div class="num">~ X<span class="pct" style="font-size:38%; margin-left:4pt; color:rgba(255,255,255,0.7)">млн ₽</span></div>
+                        <div class="desc">5 сделок × средний чек по шахматке СУ-10</div>
+                    </div>
+                    <div class="bento-card">
+                        <div class="lab">Затраты застройщика</div>
+                        <div class="num" style="color:var(--acid)">0 ₽</div>
+                        <div class="desc">Финансовая модель нейтральна</div>
+                    </div>
+                    <div class="bento-card">
+                        <div class="lab">Охват</div>
+                        <div class="num">200<span style="font-size:50%; margin-left:6pt; color:var(--mute-2)">АН</span></div>
+                        <div class="desc">Топ-агентств Уфы + 5 ключевых агрегаторов</div>
+                    </div>
+                    <div class="bento-card">
+                        <div class="lab">Показы</div>
+                        <div class="num">30+</div>
+                        <div class="desc">Целевых показов на объекте</div>
+                    </div>
+                </div>
+                <div class="chips">
+                    <span class="chip acid">10 броней — задел на июнь</span>
+                    <span class="chip">Авито</span>
+                    <span class="chip">Тренд&nbsp;Агент</span>
+                    <span class="chip">Репрофит</span>
+                    <span class="chip">Домклик</span>
+                    <span class="chip">НМаркет</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottombar">
+            <div class="l"><span class="seal">EC</span><span>цели · май 2026</span></div>
+            <div class="c"><span>финальная цифра выручки фиксируется до запуска</span></div>
+            <div class="r"><span class="pageno">02</span><span class="total">— 10</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- 03 · PREPARATION                                                  -->
+<!-- ================================================================ -->
+<section class="slide s03">
+    <div class="aurora v3"></div>
+    <div class="noise"></div>
+    <div class="corner tl"></div>
+    <div class="corner br"></div>
+
+    <div class="slide-inner">
+        <div class="topbar">
+            <div class="eyebrow">
+                <span class="num">03</span><span class="dot">/</span><span>10</span>
+                <span style="opacity:0.4">·</span>
+                <span class="label">PRE-FLIGHT</span>
+                <span style="opacity:0.4">·</span>
+                <span>ДО 6 МАЯ</span>
+            </div>
+            <div class="brand-tag">
+                <span>Этап 1 · Подготовка к запуску</span>
+            </div>
+        </div>
+
+        <div class="head">
+            <h2>Юридический и операционный <em>фундамент.</em></h2>
+        </div>
+
+        <div class="checklist">
+            <div class="item">
+                <div class="n">01</div>
+                <div class="body">
+                    <div class="title">Договор и финансовая модель (5% + 5%)</div>
+                    <div class="meta"><span class="role">Эксперт-Сити + юристы СУ-10</span><span class="due">до 5 мая</span></div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="n">02</div>
+                <div class="body">
+                    <div class="title">Прайс и регламент скидок</div>
+                    <div class="meta"><span class="role">СУ-10</span><span class="due">до 5 мая</span></div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="n">03</div>
+                <div class="body">
+                    <div class="title">ABC-сегментация партнёрской сети Уфы</div>
+                    <div class="meta"><span class="role">Эксперт-Сити</span><span class="due">до 6 мая</span></div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="n">04</div>
+                <div class="body">
+                    <div class="title">Регламент работы с агрегаторами</div>
+                    <div class="meta"><span class="role">Эксперт-Сити</span><span class="due">до 6 мая</span></div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="n">05</div>
+                <div class="body">
+                    <div class="title">Доступ к материалам и шахматке для партнёров</div>
+                    <div class="meta"><span class="role">СУ-10</span><span class="due">до 6 мая</span></div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="n">06</div>
+                <div class="body">
+                    <div class="title">Назначение ответственного со стороны СУ-10</div>
+                    <div class="meta"><span class="role">СУ-10</span><span class="due">до 5 мая</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="risk">
+            <strong>Главный риск этапа:</strong> медленные согласования.&nbsp;&nbsp;
+            <strong>Митигация:</strong> один ответственный со стороны СУ-10 + еженедельный список решений на оперативке.
+        </div>
+
+        <div class="bottombar">
+            <div class="l"><span class="seal">EC</span><span>подготовка к запуску</span></div>
+            <div class="c"><span>контрольная точка готовности — 6 мая 2026</span></div>
+            <div class="r"><span class="pageno">03</span><span class="total">— 10</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- 04 · EVENT / DRAMATIC DATE                                        -->
+<!-- ================================================================ -->
+<section class="slide s04">
+    <div class="aurora v4"></div>
+    <div class="noise"></div>
+    <div class="corner tl"></div>
+    <div class="corner tr"></div>
+    <div class="corner bl"></div>
+    <div class="corner br"></div>
+
+    <div class="slide-inner">
+        <div class="topbar">
+            <div class="eyebrow">
+                <span class="num">04</span><span class="dot">/</span><span>10</span>
+                <span style="opacity:0.4">·</span>
+                <span class="label">СОБЫТИЕ</span>
+                <span style="opacity:0.4">·</span>
+                <span>ОФЛАЙН РЕ-СТАРТ</span>
+            </div>
+            <div class="brand-tag">
+                <span>Точка входа в воронку мая</span>
+            </div>
+        </div>
+
+        <div class="stage">
+            <div class="vlabel l">офлайн <span class="accent">ре-старт</span></div>
+            <div class="vlabel r">центральный <span class="accent">парк</span></div>
+
+            <div class="date-hero">
+                <div class="top-eye">тринадцатого—пятнадцатого</div>
+                <div class="num">13<span class="dash">—</span>15</div>
+                <div class="sub">мая · 2026</div>
+            </div>
+
+            <div class="claim">
+                <em>8–10</em> квалифицированных броней до конца мая
+            </div>
+        </div>
+
+        <div class="row-strip">
+            <div class="strip-cell">
+                <div class="lab">Формат</div>
+                <div class="val">Презентация продукта + спецусловия</div>
+            </div>
+            <div class="strip-cell">
+                <div class="lab">Аудитория</div>
+                <div class="val">Партнёры (15 АН)</div>
+            </div>
+            <div class="strip-cell">
+                <div class="lab">Цель события</div>
+                <div class="val" style="color:var(--acid)">15 целевых показов в неделю</div>
+            </div>
+            <div class="strip-cell">
+                <div class="lab">Бюджет</div>
+                <div class="val">В рамках регулярных активностей</div>
+            </div>
+        </div>
+
+        <div class="bottombar">
+            <div class="l"><span class="seal">EC</span><span>событие · центральный парк</span></div>
+            <div class="c"><span>ответственные: куратор Эксперт-Сити + ответственный СУ-10</span></div>
+            <div class="r"><span class="pageno">04</span><span class="total">— 10</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- 05 · TEAM & RHYTHM                                                -->
+<!-- ================================================================ -->
+<section class="slide s05">
+    <div class="aurora v5"></div>
+    <div class="noise"></div>
+    <div class="corner tl"></div>
+    <div class="corner br"></div>
+
+    <div class="slide-inner">
+        <div class="topbar">
+            <div class="eyebrow">
+                <span class="num">05</span><span class="dot">/</span><span>10</span>
+                <span style="opacity:0.4">·</span>
+                <span class="label">ТЕАМ × РИТМ</span>
+                <span style="opacity:0.4">·</span>
+                <span>ЭТАП 2</span>
+            </div>
+            <div class="brand-tag">
+                <span>Регулярный цикл</span>
+            </div>
+        </div>
+
+        <div class="head">
+            <h2>Команда в проекте и <em>недельный</em> цикл.</h2>
+        </div>
+
+        <div class="stage">
+            <div class="roles">
+                <div class="role">
+                    <div class="top">
+                        <span class="role-num">i.</span>
+                        <span class="role-name">Куратор проекта</span>
+                    </div>
+                    <div class="role-body">Логика запуска, контакт с СУ-10, управленческие решения. <em>Выход:</em> недельный отчёт.</div>
+                </div>
+                <div class="role">
+                    <div class="top">
+                        <span class="role-num">ii.</span>
+                        <span class="role-name">Партнёрский менеджер</span>
+                    </div>
+                    <div class="role-body">Регулярные обучения по объекту. Активация А/B-партнёров.</div>
+                </div>
+                <div class="role">
+                    <div class="top">
+                        <span class="role-num">iii.</span>
+                        <span class="role-name">Отдел заботы</span>
+                    </div>
+                    <div class="role-body">Вопрос — ответ от риэлторов, контроль броней и уникальностей.</div>
+                </div>
+            </div>
+
+            <div class="ring-wrap">
+                <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="ringGrad1" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#a855f7"/>
+                            <stop offset="100%" stop-color="#7c3aed"/>
+                        </linearGradient>
+                        <linearGradient id="ringGrad2" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#ec4899"/>
+                            <stop offset="100%" stop-color="#a855f7"/>
+                        </linearGradient>
+                        <linearGradient id="ringGrad3" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#d4ff00"/>
+                            <stop offset="100%" stop-color="#a3e635"/>
+                        </linearGradient>
+                        <linearGradient id="ringGrad4" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#f4ecd8"/>
+                            <stop offset="100%" stop-color="#c4b5fd"/>
+                        </linearGradient>
+                    </defs>
+                    <!-- Базовое кольцо -->
+                    <circle cx="120" cy="120" r="92" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="14"/>
+
+                    <!-- 4 сегмента: каждый по 90°, между ними небольшой gap -->
+                    <!-- Окружность 2*pi*92 ≈ 578. Сегмент 90° ≈ 144.5 -->
+                    <!-- Делаем 4 сегмента по ~140 с гэпами -->
+
+                    <!-- Сегмент Пн (top, поворот -45° → -135°) -->
+                    <circle cx="120" cy="120" r="92" fill="none"
+                            stroke="url(#ringGrad1)" stroke-width="14"
+                            stroke-dasharray="135 443" stroke-dashoffset="79"
+                            transform="rotate(-90 120 120)" stroke-linecap="round"/>
+                    <!-- Сегмент Вт-Ср -->
+                    <circle cx="120" cy="120" r="92" fill="none"
+                            stroke="url(#ringGrad2)" stroke-width="14"
+                            stroke-dasharray="135 443" stroke-dashoffset="-65"
+                            transform="rotate(-90 120 120)" stroke-linecap="round"/>
+                    <!-- Сегмент Чт -->
+                    <circle cx="120" cy="120" r="92" fill="none"
+                            stroke="url(#ringGrad3)" stroke-width="14"
+                            stroke-dasharray="135 443" stroke-dashoffset="-209"
+                            transform="rotate(-90 120 120)" stroke-linecap="round"/>
+                    <!-- Сегмент Пт -->
+                    <circle cx="120" cy="120" r="92" fill="none"
+                            stroke="url(#ringGrad4)" stroke-width="14"
+                            stroke-dasharray="135 443" stroke-dashoffset="-353"
+                            transform="rotate(-90 120 120)" stroke-linecap="round"/>
+
+                    <!-- Подписи дней -->
+                    <g font-family="Inter, sans-serif" font-weight="700" font-size="9" letter-spacing="2" fill="#ffffff">
+                        <text x="120" y="25" text-anchor="middle">ПН</text>
+                        <text x="225" y="124" text-anchor="middle">ВТ–СР</text>
+                        <text x="120" y="225" text-anchor="middle">ЧТ</text>
+                        <text x="15" y="124" text-anchor="middle">ПТ</text>
+                    </g>
+                    <!-- Подписи действий -->
+                    <g font-family="Inter, sans-serif" font-weight="500" font-size="6.5" fill="#9ca3af" letter-spacing="0.4">
+                        <text x="120" y="38" text-anchor="middle">оперативка 30 мин</text>
+                        <text x="225" y="136" text-anchor="middle">обучения / встречи</text>
+                        <text x="120" y="212" text-anchor="middle">показы / follow-up</text>
+                        <text x="15" y="136" text-anchor="middle">отчёт по неделе</text>
+                    </g>
+                </svg>
+                <div class="ring-center">
+                    <div class="word"><em>ритм</em></div>
+                    <div class="sub">7 дней</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottombar">
+            <div class="l"><span class="seal">EC</span><span>команда + цикл</span></div>
+            <div class="c"><span>пятничный отчёт · оперативки в понедельник</span></div>
+            <div class="r"><span class="pageno">05</span><span class="total">— 10</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- 06 · 4 CONTROL POINTS                                             -->
+<!-- ================================================================ -->
+<section class="slide s06">
+    <div class="aurora v1"></div>
+    <div class="noise"></div>
+    <div class="corner tr"></div>
+    <div class="corner bl"></div>
+
+    <div class="slide-inner">
+        <div class="topbar">
+            <div class="eyebrow">
+                <span class="num">06</span><span class="dot">/</span><span>10</span>
+                <span style="opacity:0.4">·</span>
+                <span class="label">MONITOR</span>
+                <span style="opacity:0.4">·</span>
+                <span>04 SIGNALS</span>
+            </div>
+            <div class="brand-tag">
+                <span>Прозрачность канала</span>
+            </div>
+        </div>
+
+        <div class="head">
+            <h2>Четыре <em>контрольные</em> точки. Вы видите канал в реальном времени.</h2>
+        </div>
+
+        <div class="grid">
+            <div class="ctrl c1">
+                <div class="stripe"></div>
+                <div class="nbadge">i.</div>
+                <div class="name">Уникальности клиентов</div>
+                <div class="what">Регистрация заявок и броней с идентификаторами. Конфликты, двойные брони — на контроле.</div>
+                <svg class="micro" viewBox="0 0 60 50">
+                    <g fill="#a855f7" opacity="0.85">
+                        <circle cx="6" cy="38" r="3"/>
+                        <circle cx="14" cy="32" r="3"/>
+                        <circle cx="22" cy="36" r="3"/>
+                        <circle cx="30" cy="22" r="3.5"/>
+                        <circle cx="38" cy="26" r="3"/>
+                        <circle cx="46" cy="14" r="3.5"/>
+                        <circle cx="54" cy="10" r="4"/>
+                    </g>
+                    <line x1="0" y1="48" x2="60" y2="48" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                </svg>
+                <div class="you" style="grid-column:1; grid-row:3;">
+                    <span>Вы получаете</span>
+                    Снижение споров с АН, прозрачность приоритетов сделок.
+                </div>
+            </div>
+
+            <div class="ctrl c2">
+                <div class="stripe"></div>
+                <div class="nbadge">ii.</div>
+                <div class="name">График обучений</div>
+                <div class="what">Расписание, посещаемость по агентствам и менеджерам, активность тренеров.</div>
+                <svg class="micro" viewBox="0 0 60 50">
+                    <g fill="#ec4899" opacity="0.85">
+                        <rect x="2" y="35" width="6" height="13"/>
+                        <rect x="11" y="28" width="6" height="20"/>
+                        <rect x="20" y="22" width="6" height="26"/>
+                        <rect x="29" y="18" width="6" height="30"/>
+                        <rect x="38" y="14" width="6" height="34"/>
+                        <rect x="47" y="6" width="6" height="42"/>
+                    </g>
+                    <line x1="0" y1="48" x2="60" y2="48" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                </svg>
+                <div class="you" style="grid-column:1; grid-row:3;">
+                    <span>Вы получаете</span>
+                    Дисциплину АН и ранний сигнал «партнёр выпадает из канала».
+                </div>
+            </div>
+
+            <div class="ctrl c3">
+                <div class="stripe"></div>
+                <div class="nbadge">iii.</div>
+                <div class="name">Вопросы партнёров</div>
+                <div class="what">Классификация (продукт / документы / цены / тех), время реакции и решения.</div>
+                <svg class="micro" viewBox="0 0 60 50">
+                    <circle cx="30" cy="25" r="20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="6"/>
+                    <circle cx="30" cy="25" r="20" fill="none" stroke="#d4ff00" stroke-width="6"
+                            stroke-dasharray="80 126" stroke-dashoffset="0" transform="rotate(-90 30 25)" stroke-linecap="round"/>
+                </svg>
+                <div class="you" style="grid-column:1; grid-row:3;">
+                    <span>Вы получаете</span>
+                    Базу типовых ответов, выявление системных проблем продукта.
+                </div>
+            </div>
+
+            <div class="ctrl c4">
+                <div class="stripe"></div>
+                <div class="nbadge">iv.</div>
+                <div class="name">Брони от агентств</div>
+                <div class="what">Конверсия заявка → бронь → сделка по каждому агентству.</div>
+                <svg class="micro" viewBox="0 0 60 50">
+                    <polyline points="2,40 12,32 22,28 32,18 42,20 52,8" fill="none" stroke="#f4ecd8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="2" cy="40" r="2.5" fill="#f4ecd8"/>
+                    <circle cx="52" cy="8" r="3" fill="#f4ecd8"/>
+                    <line x1="0" y1="48" x2="60" y2="48" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+                </svg>
+                <div class="you" style="grid-column:1; grid-row:3;">
+                    <span>Вы получаете</span>
+                    Видимая воронка, узкие места, обоснованные решения по партнёрам.
+                </div>
+            </div>
+        </div>
+
+        <div class="bottombar">
+            <div class="l"><span class="seal">EC</span><span>контроль · 4 сигнала</span></div>
+            <div class="c"><span>дашборд + 1-страничный недельный срез</span></div>
+            <div class="r"><span class="pageno">06</span><span class="total">— 10</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- 07 · CADENCE & SCENARIOS                                          -->
+<!-- ================================================================ -->
+<section class="slide s07">
+    <div class="aurora v2"></div>
+    <div class="noise"></div>
+    <div class="corner tl"></div>
+    <div class="corner br"></div>
+
+    <div class="slide-inner">
+        <div class="topbar">
+            <div class="eyebrow">
+                <span class="num">07</span><span class="dot">/</span><span>10</span>
+                <span style="opacity:0.4">·</span>
+                <span class="label">CADENCE</span>
+                <span style="opacity:0.4">·</span>
+                <span>УПРАВЛЕНЧЕСКИЙ РИТМ</span>
+            </div>
+            <div class="brand-tag">
+                <span>Что и когда получает СУ-10</span>
+            </div>
+        </div>
+
+        <div class="head">
+            <h2>Решение принимается на основании <em>фактов</em>, не ожиданий.</h2>
+        </div>
+
+        <div class="timeline">
+            <div class="axis"></div>
+            <div class="points">
+                <div class="point p1">
+                    <div class="dot"></div>
+                    <div class="when">каждый понедельник</div>
+                    <div class="what">Оперативка</div>
+                    <div class="desc">30 минут · воронка / отклонения / решения недели / ответственные</div>
+                </div>
+                <div class="point p2">
+                    <div class="dot"></div>
+                    <div class="when">каждую пятницу</div>
+                    <div class="what">Отчёт</div>
+                    <div class="desc">1 страница · план / факт / 4 контрольные точки / решения от СУ-10</div>
+                </div>
+                <div class="point p3">
+                    <div class="dot"></div>
+                    <div class="when">28–29 мая</div>
+                    <div class="what">Решение</div>
+                    <div class="desc">стратегическая встреча · итоги мая · прогноз июня · условия продления</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="scenarios-eye">критерии продления на июнь</div>
+
+        <div class="scenarios">
+            <div class="sc go">
+                <div class="lab">5 сделок и более</div>
+                <div class="num">→ продлеваем</div>
+                <div class="desc">Автоматическое продление на июнь по той же модели.</div>
+                <div class="bars">
+                    <div class="b" style="height:30%"></div>
+                    <div class="b" style="height:55%"></div>
+                    <div class="b" style="height:70%"></div>
+                    <div class="b" style="height:85%"></div>
+                    <div class="b" style="height:100%"></div>
+                </div>
+            </div>
+            <div class="sc warn">
+                <div class="lab">3–4 сделки</div>
+                <div class="num">→ корректируем</div>
+                <div class="desc">Продление с корректировкой плана и условий.</div>
+                <div class="bars">
+                    <div class="b" style="height:30%"></div>
+                    <div class="b" style="height:50%"></div>
+                    <div class="b" style="height:55%"></div>
+                    <div class="b" style="height:65%"></div>
+                    <div class="b" style="height:60%"></div>
+                </div>
+            </div>
+            <div class="sc stop">
+                <div class="lab">менее 3 сделок</div>
+                <div class="num">→ выходим</div>
+                <div class="desc">Выход без обязательств для обеих сторон.</div>
+                <div class="bars">
+                    <div class="b" style="height:30%"></div>
+                    <div class="b" style="height:35%"></div>
+                    <div class="b" style="height:30%"></div>
+                    <div class="b" style="height:25%"></div>
+                    <div class="b" style="height:20%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottombar">
+            <div class="l"><span class="seal">EC</span><span>ритм · сценарии</span></div>
+            <div class="c"><span>один ответственный со стороны СУ-10 — главный антириск</span></div>
+            <div class="r"><span class="pageno">07</span><span class="total">— 10</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- 08 · FUNNEL & FORECAST                                            -->
+<!-- ================================================================ -->
+<section class="slide s08">
+    <div class="aurora v3"></div>
+    <div class="noise"></div>
+    <div class="corner tl"></div>
+    <div class="corner br"></div>
+
+    <div class="slide-inner">
+        <div class="topbar">
+            <div class="eyebrow">
+                <span class="num">08</span><span class="dot">/</span><span>10</span>
+                <span style="opacity:0.4">·</span>
+                <span class="label">FORECAST</span>
+                <span style="opacity:0.4">·</span>
+                <span>ВОРОНКА И ВЫРУЧКА</span>
+            </div>
+            <div class="brand-tag">
+                <span>Закрытие остатка 196 шт.</span>
+            </div>
+        </div>
+
+        <div class="head">
+            <h2>Прогноз воронки — <em>22 сделки</em> за май–июль.</h2>
+        </div>
+
+        <div class="stage">
+            <div class="left">
+                <div class="funnel-eye">воронка q2–q3 · совокупно</div>
+                <svg class="funnel-svg" viewBox="0 0 460 280" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="fStage1" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.85"/>
+                            <stop offset="100%" stop-color="#7c3aed" stop-opacity="0.25"/>
+                        </linearGradient>
+                        <linearGradient id="fStage2" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#ec4899" stop-opacity="0.85"/>
+                            <stop offset="100%" stop-color="#ec4899" stop-opacity="0.25"/>
+                        </linearGradient>
+                        <linearGradient id="fStage3" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#d4ff00" stop-opacity="1"/>
+                            <stop offset="100%" stop-color="#a3e635" stop-opacity="0.6"/>
+                        </linearGradient>
+                    </defs>
+
+                    <!-- Stage 1: Лиды (140) — широкая трапеция -->
+                    <polygon points="0,10 460,10 380,80 80,80" fill="url(#fStage1)" stroke="rgba(255,255,255,0.08)"/>
+                    <text x="230" y="56" text-anchor="middle" font-family="Inter, sans-serif" font-weight="800" font-size="36" fill="#ffffff">140</text>
+                    <text x="20" y="48" font-family="Inter, sans-serif" font-weight="600" font-size="9" letter-spacing="2" fill="#c4b5fd">ЛИДЫ</text>
+                    <text x="440" y="48" text-anchor="end" font-family="Inter, sans-serif" font-weight="500" font-size="9" fill="#9ca3af">100%</text>
+
+                    <!-- Connector with conversion text -->
+                    <line x1="230" y1="80" x2="230" y2="100" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-dasharray="2,3"/>
+                    <text x="240" y="95" font-family="Inter, sans-serif" font-weight="600" font-size="8" fill="#9ca3af">~30% · конверсия лид → бронь</text>
+
+                    <!-- Stage 2: Брони (44) -->
+                    <polygon points="80,100 380,100 320,170 140,170" fill="url(#fStage2)" stroke="rgba(255,255,255,0.08)"/>
+                    <text x="230" y="146" text-anchor="middle" font-family="Inter, sans-serif" font-weight="800" font-size="36" fill="#ffffff">44</text>
+                    <text x="100" y="138" font-family="Inter, sans-serif" font-weight="600" font-size="9" letter-spacing="2" fill="#f9a8d4">БРОНИ</text>
+                    <text x="360" y="138" text-anchor="end" font-family="Inter, sans-serif" font-weight="500" font-size="9" fill="#9ca3af">31%</text>
+
+                    <!-- Connector -->
+                    <line x1="230" y1="170" x2="230" y2="190" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-dasharray="2,3"/>
+                    <text x="240" y="185" font-family="Inter, sans-serif" font-weight="600" font-size="8" fill="#9ca3af">~50% · конверсия бронь → сделка</text>
+
+                    <!-- Stage 3: Сделки (22) -->
+                    <polygon points="140,190 320,190 270,260 190,260" fill="url(#fStage3)" stroke="rgba(212,255,0,0.4)"/>
+                    <text x="230" y="234" text-anchor="middle" font-family="Inter, sans-serif" font-weight="800" font-size="36" fill="#0d0a26">22</text>
+                    <text x="160" y="226" font-family="Inter, sans-serif" font-weight="700" font-size="9" letter-spacing="2" fill="#0d0a26">СДЕЛКИ</text>
+                    <text x="300" y="226" text-anchor="end" font-family="Inter, sans-serif" font-weight="600" font-size="9" fill="#0d0a26">15.7%</text>
+                </svg>
+            </div>
+
+            <div class="right">
+                <div class="forecast-eye">помесячно · сделки</div>
+
+                <!-- Bar chart -->
+                <svg viewBox="0 0 280 120" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto;">
+                    <defs>
+                        <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#d4ff00"/>
+                            <stop offset="100%" stop-color="#7c3aed"/>
+                        </linearGradient>
+                    </defs>
+                    <!-- Bars: 5/7/10 -->
+                    <rect x="20" y="50" width="50" height="50" fill="url(#barGrad)" rx="2"/>
+                    <rect x="100" y="30" width="50" height="70" fill="url(#barGrad)" rx="2"/>
+                    <rect x="180" y="2" width="50" height="98" fill="url(#barGrad)" rx="2"/>
+
+                    <!-- Cumulative line -->
+                    <polyline points="45,80 125,55 205,15" fill="none" stroke="#f4ecd8" stroke-width="1.5" stroke-dasharray="3,3"/>
+                    <circle cx="45" cy="80" r="3" fill="#f4ecd8"/>
+                    <circle cx="125" cy="55" r="3" fill="#f4ecd8"/>
+                    <circle cx="205" cy="15" r="3" fill="#f4ecd8"/>
+
+                    <!-- Labels -->
+                    <g font-family="Inter, sans-serif" font-weight="800" font-size="14" fill="#ffffff">
+                        <text x="45" y="46" text-anchor="middle">5</text>
+                        <text x="125" y="26" text-anchor="middle">7</text>
+                        <text x="205" y="-2" text-anchor="middle" dy="14">10</text>
+                    </g>
+                    <g font-family="Inter, sans-serif" font-weight="600" font-size="7" letter-spacing="1.5" fill="#9ca3af">
+                        <text x="45" y="115" text-anchor="middle">МАЙ</text>
+                        <text x="125" y="115" text-anchor="middle">ИЮНЬ</text>
+                        <text x="205" y="115" text-anchor="middle">ИЮЛЬ</text>
+                    </g>
+                </svg>
+
+                <table class="table-mini">
+                    <thead>
+                        <tr><th>период</th><th>лиды</th><th>брони</th><th>сделки</th><th>выручка</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="f">май · пилот</td><td>30</td><td>10</td><td class="deal">5</td><td>~ 5×ср.чек</td></tr>
+                        <tr><td class="f">июнь</td><td>45</td><td>14</td><td class="deal">7</td><td>~ 7×ср.чек</td></tr>
+                        <tr><td class="f">июль</td><td>65</td><td>20</td><td class="deal">10</td><td>~ 10×ср.чек</td></tr>
+                    </tbody>
+                    <tfoot>
+                        <tr><td class="f">итого</td><td>140</td><td>44</td><td style="color:var(--acid)">22</td><td>~ 22×ср.чек</td></tr>
+                    </tfoot>
+                </table>
+
+                <div class="ring-block">
+                    <svg viewBox="0 0 80 80">
+                        <circle cx="40" cy="40" r="32" fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="9"/>
+                        <circle cx="40" cy="40" r="32" fill="none" stroke="#d4ff00" stroke-width="9"
+                                stroke-dasharray="22.5 201" stroke-dashoffset="0"
+                                transform="rotate(-90 40 40)" stroke-linecap="round"/>
+                    </svg>
+                    <div class="ring-text">
+                        <div class="big">11,2%</div>
+                        <div class="lab">от остатка 196 апартаментов закрываем за май–июль 2026</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottombar">
+            <div class="l"><span class="seal">EC</span><span>прогноз q2–q3 · 2026</span></div>
+            <div class="c"><span>после мая воронка уточняется по фактическим конверсиям</span></div>
+            <div class="r"><span class="pageno">08</span><span class="total">— 10</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- 09 · CALENDAR GANTT                                               -->
+<!-- ================================================================ -->
+<section class="slide s09">
+    <div class="aurora v5"></div>
+    <div class="noise"></div>
+    <div class="corner tl"></div>
+    <div class="corner br"></div>
+
+    <div class="slide-inner">
+        <div class="topbar">
+            <div class="eyebrow">
+                <span class="num">09</span><span class="dot">/</span><span>10</span>
+                <span style="opacity:0.4">·</span>
+                <span class="label">TIMELINE</span>
+                <span style="opacity:0.4">·</span>
+                <span>МАЙ · 2026</span>
+            </div>
+            <div class="brand-tag">
+                <span>Контрольные точки месяца</span>
+            </div>
+        </div>
+
+        <div class="head">
+            <h2>Четыре <em>контрольные</em> точки за один месяц.</h2>
+        </div>
+
+        <div class="calendar">
+            <div class="cal-grid">
+                <div class="cal-axis">
+                    <!-- 31 day mark, дни недели начинаем с пятницы 1 мая 2026 (это была пятница) -->
+                    <!-- Положение каждого дня в %% -->
+                    <!-- Дни 1-31 -->
+                    <!-- Простая раскладка: каждый день — 100/30 = ~3.33% -->
+                    <!-- 6 мая = day 6 = 5/30 * 100 = 16.7% -->
+                    <!-- 13 мая = 12/30 = 40% -->
+                    <!-- 18 мая = 17/30 = 56.67% -->
+                    <!-- 28 мая = 27/30 = 90% -->
+
+                    <!-- Дни месяца -->
+                    <div class="cal-day" style="left:0%"><span class="lbl">1</span></div>
+                    <div class="cal-day weekend" style="left:3.33%"><span class="lbl">2</span></div>
+                    <div class="cal-day weekend" style="left:6.67%"><span class="lbl">3</span></div>
+                    <div class="cal-day" style="left:10%"></div>
+                    <div class="cal-day" style="left:13.33%"><span class="lbl">5</span></div>
+                    <div class="cal-day major" style="left:16.67%"><span class="lbl">6</span></div>
+                    <div class="cal-day" style="left:20%"></div>
+                    <div class="cal-day" style="left:23.33%"></div>
+                    <div class="cal-day weekend" style="left:26.67%"><span class="lbl">9</span></div>
+                    <div class="cal-day weekend" style="left:30%"><span class="lbl">10</span></div>
+                    <div class="cal-day" style="left:33.33%"><span class="lbl">11</span></div>
+                    <div class="cal-day" style="left:36.67%"></div>
+                    <div class="cal-day major" style="left:40%"><span class="lbl">13</span></div>
+                    <div class="cal-day major" style="left:43.33%"><span class="lbl">14</span></div>
+                    <div class="cal-day major" style="left:46.67%"><span class="lbl">15</span></div>
+                    <div class="cal-day weekend" style="left:50%"><span class="lbl">16</span></div>
+                    <div class="cal-day weekend" style="left:53.33%"><span class="lbl">17</span></div>
+                    <div class="cal-day major" style="left:56.67%"><span class="lbl">18</span></div>
+                    <div class="cal-day" style="left:60%"></div>
+                    <div class="cal-day" style="left:63.33%"></div>
+                    <div class="cal-day" style="left:66.67%"></div>
+                    <div class="cal-day" style="left:70%"><span class="lbl">22</span></div>
+                    <div class="cal-day weekend" style="left:73.33%"><span class="lbl">23</span></div>
+                    <div class="cal-day weekend" style="left:76.67%"><span class="lbl">24</span></div>
+                    <div class="cal-day" style="left:80%"><span class="lbl">25</span></div>
+                    <div class="cal-day" style="left:83.33%"></div>
+                    <div class="cal-day" style="left:86.67%"></div>
+                    <div class="cal-day major" style="left:90%"><span class="lbl">28</span></div>
+                    <div class="cal-day major" style="left:93.33%"><span class="lbl">29</span></div>
+                    <div class="cal-day weekend" style="left:96.67%"><span class="lbl">30</span></div>
+
+                    <!-- 4 Milestones positioned -->
+                    <div class="milestone ms-row-1" style="left:16.67%">
+                        <div class="when">6 мая</div>
+                        <div class="what">Подготовка</div>
+                        <div class="who">Договор, прайс, регламенты — СУ-10 + Эксперт-Сити</div>
+                    </div>
+
+                    <div class="milestone ms-row-2" style="left:43.33%">
+                        <div class="when">13–15 мая</div>
+                        <div class="what">Запуск</div>
+                        <div class="who">Офлайн-мероприятия — Куратор Эксперт-Сити</div>
+                    </div>
+
+                    <div class="milestone ms-row-1" style="left:62%">
+                        <div class="when">18 → еженедельно</div>
+                        <div class="what">Регулярный ритм</div>
+                        <div class="who">Оперативки + пятничный отчёт</div>
+                    </div>
+
+                    <div class="milestone final ms-row-2" style="left:91%">
+                        <div class="when">28–29 мая</div>
+                        <div class="what">Решение</div>
+                        <div class="who">Итоги мая, продление на июнь — СУ-10</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottombar">
+            <div class="l"><span class="seal">EC</span><span>таймлайн · май 2026</span></div>
+            <div class="c"><span>главное событие месяца — стратегическая встреча 28–29 мая</span></div>
+            <div class="r"><span class="pageno">09</span><span class="total">— 10</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- 10 · DECISION                                                     -->
+<!-- ================================================================ -->
+<section class="slide s10">
+    <div class="aurora v4"></div>
+    <div class="noise"></div>
+    <div class="corner tl"></div>
+    <div class="corner tr"></div>
+    <div class="corner bl"></div>
+    <div class="corner br"></div>
+
+    <div class="slide-inner">
+        <div class="topbar">
+            <div class="eyebrow">
+                <span class="num">10</span><span class="dot">/</span><span>10</span>
+                <span style="opacity:0.4">·</span>
+                <span class="label">DECISION</span>
+                <span style="opacity:0.4">·</span>
+                <span>ФИНАНСОВАЯ МОДЕЛЬ</span>
+            </div>
+            <div class="brand-tag">
+                <span>Условия запуска</span>
+            </div>
+        </div>
+
+        <div class="head">
+            <h2>Нулевые дополнительные затраты. Оплата только за <em>факт сделки.</em></h2>
+        </div>
+
+        <div class="trio">
+            <div class="tcell">
+                <div class="lab">Покупателю — скидка</div>
+                <div class="num">5%</div>
+                <div class="sub">вместо текущей практики 10%</div>
+            </div>
+            <div class="tcell">
+                <div class="lab">Партнёрской сети — комиссия</div>
+                <div class="num">5%</div>
+                <div class="sub">базовое агентское вознаграждение для АН, агрегаторов и частных агентов</div>
+            </div>
+            <div class="tcell last">
+                <div class="lab">Эффект для застройщика</div>
+                <div class="num">0 ₽</div>
+                <div class="sub">дополнительных затрат · ноль изменений уровня цен</div>
+            </div>
+        </div>
+
+        <div class="compare-line">
+            <strong>Текущая практика:</strong> скидка покупателю 10% <span class="arr">→</span>
+            <strong>Предложение:</strong> 5% покупателю + 5% партнёрской сети <span class="arr">=</span>
+            <strong>−10% от цены</strong> · идентичная нагрузка, но + полноценная партнёрская система продаж
+        </div>
+
+        <div class="closing">
+            <div class="decision">
+                <div class="eye">Решение, которое нужно от Вас сегодня</div>
+                <div class="actions">
+                    <div class="act">
+                        <div class="n">i.</div>
+                        <div class="t">Подтверждение запуска пилота мая на условиях 5% + 5%</div>
+                    </div>
+                    <div class="act">
+                        <div class="n">ii.</div>
+                        <div class="t">Назначение ответственного со стороны СУ-10</div>
+                    </div>
+                    <div class="act">
+                        <div class="n">iii.</div>
+                        <div class="t">Старт подготовки 5–6 мая, запуск офлайн-блока 13–15 мая</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta">
+                <div class="eye">Следующий шаг</div>
+                <div class="text">
+                    Подписание соглашения <em>на этой неделе</em><br>
+                    <strong>→ запуск 6 мая</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottombar">
+            <div class="l"><span class="seal">EC</span><span>финал · решение</span></div>
+            <div class="c"><span>предлагаем встретиться на этой неделе и согласовать условия</span></div>
+            <div class="r"><span class="pageno">10</span><span class="total">— 10</span></div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

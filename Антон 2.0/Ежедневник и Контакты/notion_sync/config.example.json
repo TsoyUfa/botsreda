@@ -1,0 +1,28 @@
+{
+  "vault_root": "/Users/antontsoy/Library/Mobile Documents/com~apple~CloudDocs/абсидиан",
+  "scan_paths": ["Антон 2.0"],
+  "notion_token_env": "NOTION_TOKEN",
+  "parent_page_id": "PASTE_NOTION_PARENT_PAGE_ID_HERE",
+  "database_ids": {
+    "process": "",
+    "task": "",
+    "metric": "",
+    "finance": ""
+  },
+  "property_map": {
+    "title": "Name",
+    "type": "Type",
+    "status": "Status",
+    "area": "Area",
+    "owner": "Owner",
+    "review": "Review",
+    "due": "Due",
+    "kpi": "KPI",
+    "tags": "Tags",
+    "path": "Path",
+    "last_synced_at": "LastSyncedAt",
+    "content": "Content"
+  },
+  "allow_create_from_notion": false,
+  "log_path": "Антон 2.0/Ежедневник и Контакты/notion_sync/logs/sync.log"
+}

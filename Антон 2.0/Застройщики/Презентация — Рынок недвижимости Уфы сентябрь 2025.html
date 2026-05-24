@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Рынок недвижимости Уфы — Сентябрь 2025</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0a;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .presentation {
+            width: 100%;
+            max-width: 1920px;
+            margin: 0 auto;
+        }
+
+        .slide {
+            min-height: 100vh;
+            padding: 80px 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            page-break-after: always;
+            overflow: hidden;
+        }
+
+        /* Анимированный фон с частицами */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(100px) scale(1.5); opacity: 0; }
+        }
+
+        /* Анимации появления */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(255, 255, 255, 0.5), 0 0 80px rgba(255, 255, 255, 0.3);
+            }
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Слайд 1 - Обложка */
+        .slide-1 {
+            background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #4facfe);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: white;
+            text-align: center;
+        }
+
+        .slide-1 h1 {
+            font-size: 80px;
+            font-weight: 900;
+            margin-bottom: 30px;
+            line-height: 1.2;
+            animation: fadeInUp 1s ease-out;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .slide-1 .subtitle {
+            font-size: 40px;
+            margin-bottom: 60px;
+            font-weight: 300;
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        .slide-1 .stats {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            margin-top: 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .slide-1 .stat-item {
+            text-align: center;
+            animation: scaleIn 0.8s ease-out;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px 50px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+
+        .slide-1 .stat-item:hover {
+            transform: translateY(-10px) scale(1.05);
+            animation: glow 2s infinite;
+        }
+
+        .slide-1 .stat-item:nth-child(1) { animation-delay: 0.2s; }
+        .slide-1 .stat-item:nth-child(2) { animation-delay: 0.4s; }
+        .slide-1 .stat-item:nth-child(3) { animation-delay: 0.6s; }
+
+        .slide-1 .stat-number {
+            font-size: 72px;
+            font-weight: 900;
+            display: block;
+            animation: pulse 2s infinite;
+        }
+
+        .slide-1 .stat-label {
+            font-size: 24px;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+
+        /* Слайд 2 - Ипотека */
+        .slide-2 {
+            background: linear-gradient(-45deg, #11998e, #38ef7d, #7de77d, #11998e);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: white;
+        }
+
+        .big-number {
+            font-size: 220px;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 6px 6px 12px rgba(0,0,0,0.3);
+            animation: scaleIn 1s ease-out;
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(45deg, #fff, #38ef7d, #fff);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: scaleIn 1s ease-out, gradientShift 3s ease infinite;
+        }
+
+        .slide-title {
+            font-size: 60px;
+            font-weight: 800;
+            margin-bottom: 50px;
+            text-align: center;
+            animation: fadeInUp 1.2s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        .bullet-list {
+            font-size: 36px;
+            list-style: none;
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .bullet-list li {
+            margin-bottom: 30px;
+            padding-left: 60px;
+            position: relative;
+            animation: fadeInLeft 0.8s ease-out;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px 25px 25px 80px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .bullet-list li:hover {
+            transform: translateX(20px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .bullet-list li:nth-child(1) { animation-delay: 0.2s; }
+        .bullet-list li:nth-child(2) { animation-delay: 0.3s; }
+        .bullet-list li:nth-child(3) { animation-delay: 0.4s; }
+        .bullet-list li:nth-child(4) { animation-delay: 0.5s; }
+        .bullet-list li:nth-child(5) { animation-delay: 0.6s; }
+
+        .bullet-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 25px;
+            font-weight: 900;
+            font-size: 42px;
+            color: #38ef7d;
+            animation: pulse 2s infinite;
+        }
+
+        /* Слайд 3 - Большая тройка */
+        .slide-3 {
+            background: linear-gradient(-45deg, #4facfe, #00f2fe, #43e97b, #38ef7d);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: white;
+        }
+
+        .podium {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 40px;
+            margin-top: 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .podium-item {
+            background: rgba(255,255,255,0.98);
+            color: #333;
+            padding: 40px 30px;
+            border-radius: 25px;
+            text-align: center;
+            min-width: 340px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            transition: all 0.4s ease;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .podium-item:hover {
+            transform: translateY(-20px) scale(1.05);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+        }
+
+        .podium-item-1 {
+            height: 540px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            animation-delay: 0.4s;
+        }
+
+        .podium-item-2 {
+            height: 470px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            animation-delay: 0.2s;
+        }
+
+        .podium-item-3 {
+            height: 420px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            animation-delay: 0.6s;
+        }
+
+        .medal {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        .company-logo {
+            height: 80px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            border-radius: 15px;
+            padding: 15px;
+            font-weight: 700;
+            font-size: 22px;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .company-logo:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .company-stats {
+            font-size: 20px;
+            line-height: 1.8;
+            margin-top: 15px;
+        }
+
+        .company-stats strong {
+            display: block;
+            font-size: 32px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-top: 10px;
+        }
+
+        /* Слайд 4 - Цены */
+        .slide-4 {
+            background: linear-gradient(-45deg, #fa709a, #fee140, #ffeaa7, #ff6348);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: #1a1a1a;
+        }
+
+        .price-scale {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 60px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .price-scale:before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            height: 12px;
+            background: linear-gradient(to right, #11998e, #fa709a, #fee140);
+            transform: translateY(-50%);
+            z-index: 0;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .price-point {
+            background: white;
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            z-index: 1;
+            position: relative;
+            min-width: 400px;
+            text-align: center;
+            animation: scaleIn 1s ease-out;
+            transition: all 0.4s ease;
+        }
+
+        .price-point:hover {
+            transform: translateY(-20px) scale(1.1);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+        }
+
+        .price-point:nth-child(1) { animation-delay: 0.2s; }
+        .price-point:nth-child(2) { animation-delay: 0.4s; }
+
+        .price-point .company-logo {
+            height: 70px;
+            font-size: 20px;
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+        }
+
+        .price-value {
+            font-size: 48px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fa709a, #fee140);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 20px 0;
+            animation: pulse 2s infinite;
+        }
+
+        .average-price {
+            text-align: center;
+            font-size: 52px;
+            font-weight: 800;
+            margin-top: 60px;
+            padding: 50px;
+            background: white;
+            border-radius: 25px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            animation: fadeInUp 1.2s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Слайд 5 - Что покупают */
+        .slide-5 {
+            background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #667eea);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: white;
+        }
+
+        .apartment-types {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-top: 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .apartment-card {
+            background: rgba(255,255,255,0.98);
+            color: #333;
+            padding: 50px 30px;
+            border-radius: 25px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: scaleIn 0.8s ease-out;
+            transition: all 0.4s ease;
+        }
+
+        .apartment-card:hover {
+            transform: translateY(-20px) rotate(2deg);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+        }
+
+        .apartment-card:nth-child(1) { animation-delay: 0.2s; }
+        .apartment-card:nth-child(2) { animation-delay: 0.4s; }
+        .apartment-card:nth-child(3) { animation-delay: 0.6s; }
+
+        .apartment-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: pulse 3s infinite;
+        }
+
+        .apartment-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .apartment-percent {
+            font-size: 64px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: pulse 2s infinite;
+        }
+
+        .apartment-label {
+            font-size: 20px;
+            margin-top: 10px;
+            color: #666;
+        }
+
+        /* Слайд 6 - Банки */
+        .slide-6 {
+            background: linear-gradient(-45deg, #0f9b0f, #38ef7d, #7de77d, #0f9b0f);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: white;
+        }
+
+        .bank-dominant {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .bank-logo-main {
+            height: 140px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 450px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: glow 3s infinite, scaleIn 1.2s ease-out;
+        }
+
+        .bank-logo-text {
+            font-size: 56px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #0f9b0f, #38ef7d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .banks-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .bank-card {
+            background: rgba(255,255,255,0.98);
+            color: #333;
+            padding: 35px;
+            border-radius: 20px;
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out;
+            transition: all 0.3s ease;
+        }
+
+        .bank-card:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 25px 70px rgba(0,0,0,0.3);
+        }
+
+        .bank-card:nth-child(1) { animation-delay: 0.2s; }
+        .bank-card:nth-child(2) { animation-delay: 0.4s; }
+        .bank-card:nth-child(3) { animation-delay: 0.6s; }
+
+        .bank-card .company-logo {
+            height: 70px;
+            margin-bottom: 15px;
+            font-size: 20px;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+
+        .bank-card-stats {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #0f9b0f, #38ef7d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Слайд 7 - Дополнительный доход */
+        .slide-7 {
+            background: linear-gradient(-45deg, #fc4a1a, #f7b733, #ffd200, #fc4a1a);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: white;
+        }
+
+        .income-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-top: 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .income-card {
+            background: rgba(255,255,255,0.98);
+            color: #333;
+            padding: 50px 40px;
+            border-radius: 25px;
+            text-align: center;
+            animation: scaleIn 0.8s ease-out;
+            transition: all 0.4s ease;
+        }
+
+        .income-card:hover {
+            transform: translateY(-20px) scale(1.1);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+        }
+
+        .income-card:nth-child(1) { animation-delay: 0.2s; }
+        .income-card:nth-child(2) { animation-delay: 0.4s; }
+        .income-card:nth-child(3) { animation-delay: 0.6s; }
+
+        .income-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: pulse 3s infinite;
+        }
+
+        .income-amount {
+            font-size: 48px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fc4a1a, #f7b733);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 20px 0;
+            animation: pulse 2s infinite;
+        }
+
+        .commercial-leaders {
+            margin-top: 60px;
+            background: rgba(255,255,255,0.98);
+            color: #333;
+            padding: 50px;
+            border-radius: 25px;
+            animation: fadeInUp 1.2s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        .commercial-leaders h3 {
+            font-size: 40px;
+            margin-bottom: 35px;
+            text-align: center;
+        }
+
+        .commercial-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff, #fef9e7);
+            border-radius: 15px;
+            animation: fadeInRight 0.8s ease-out;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .commercial-item:hover {
+            transform: translateX(15px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .commercial-item:nth-child(2) { animation-delay: 0.2s; }
+        .commercial-item:nth-child(3) { animation-delay: 0.4s; }
+        .commercial-item:nth-child(4) { animation-delay: 0.6s; }
+
+        .commercial-item .company-logo {
+            flex: 1;
+            height: 60px;
+            font-size: 18px;
+            margin: 0;
+            background: linear-gradient(135deg, #fc4a1a, #f7b733);
+        }
+
+        .commercial-item .amount {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fc4a1a, #f7b733);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0 20px;
+        }
+
+        .commercial-item .percent {
+            font-size: 22px;
+            color: #666;
+        }
+
+        /* Слайд 8 - Риски */
+        .slide-8 {
+            background: linear-gradient(-45deg, #eb3349, #f45c43, #ff6b6b, #ee5a6f);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: white;
+        }
+
+        .risks-container {
+            display: flex;
+            flex-direction: column;
+            gap: 35px;
+            margin-top: 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .risk-card {
+            background: rgba(255,255,255,0.98);
+            color: #333;
+            padding: 45px;
+            border-radius: 25px;
+            display: flex;
+            align-items: flex-start;
+            gap: 35px;
+            animation: fadeInLeft 0.8s ease-out;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .risk-card:hover {
+            transform: translateX(20px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .risk-card:nth-child(1) { animation-delay: 0.2s; }
+        .risk-card:nth-child(2) { animation-delay: 0.4s; }
+        .risk-card:nth-child(3) { animation-delay: 0.6s; }
+
+        .risk-number {
+            font-size: 80px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #eb3349, #f45c43);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            min-width: 100px;
+            animation: pulse 3s infinite;
+        }
+
+        .risk-content h3 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #eb3349, #f45c43);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .risk-content p {
+            font-size: 24px;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .conclusion {
+            margin-top: 60px;
+            text-align: center;
+            font-size: 40px;
+            font-weight: 600;
+            padding: 50px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 25px;
+            animation: fadeInUp 1.5s ease-out;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Слайд 9 - Итоги */
+        .slide-9 {
+            background: linear-gradient(-45deg, #4facfe, #00f2fe, #43e97b, #38ef7d);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: white;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .summary-card {
+            background: rgba(255,255,255,0.98);
+            color: #333;
+            padding: 45px;
+            border-radius: 25px;
+            text-align: center;
+            animation: scaleIn 0.8s ease-out;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .summary-card:hover {
+            transform: translateY(-20px) scale(1.1);
+            box-shadow: 0 25px 70px rgba(0,0,0,0.3);
+        }
+
+        .summary-card:nth-child(1) { animation-delay: 0.1s; }
+        .summary-card:nth-child(2) { animation-delay: 0.2s; }
+        .summary-card:nth-child(3) { animation-delay: 0.3s; }
+        .summary-card:nth-child(4) { animation-delay: 0.4s; }
+        .summary-card:nth-child(5) { animation-delay: 0.5s; }
+        .summary-card:nth-child(6) { animation-delay: 0.6s; }
+
+        .summary-card .big-stat {
+            font-size: 64px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 20px 0;
+            animation: pulse 2s infinite;
+        }
+
+        .summary-card .label {
+            font-size: 22px;
+            color: #666;
+        }
+
+        /* Слайд 10 - Контакты */
+        .slide-10 {
+            background: linear-gradient(-45deg, #2d3436, #636e72, #2c3e50, #34495e);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: white;
+            text-align: center;
+        }
+
+        .contact-title {
+            font-size: 72px;
+            font-weight: 900;
+            margin-bottom: 60px;
+            animation: fadeInUp 1s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-info {
+            font-size: 40px;
+            line-height: 2;
+            margin-bottom: 60px;
+            animation: fadeInUp 1.2s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-info strong {
+            display: block;
+            font-size: 56px;
+            margin-top: 40px;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: pulse 3s infinite;
+        }
+
+        .hashtags {
+            font-size: 22px;
+            opacity: 0.8;
+            margin-top: 60px;
+            animation: fadeInUp 1.4s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            font-size: 28px;
+            opacity: 0.7;
+            z-index: 10;
+            font-weight: 700;
+        }
+
+        /* Генератор частиц */
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            animation: float 20s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        @media print {
+            .slide {
+                page-break-after: always;
+            }
+        }
+
+        @media screen and (max-width: 1400px) {
+            .slide {
+                padding: 60px 60px;
+            }
+            .slide-title {
+                font-size: 48px;
+            }
+            .big-number {
+                font-size: 140px;
+            }
+        }
+
+        /* Дополнительные эффекты для текста */
+        .glow-text {
+            text-shadow: 0 0 20px rgba(255,255,255,0.5),
+                         0 0 40px rgba(255,255,255,0.3),
+                         0 0 60px rgba(255,255,255,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        
+        <!-- СЛАЙД 1: Обложка -->
+        <div class="slide slide-1">
+            <div class="particles" id="particles1"></div>
+            <h1 class="glow-text">СЕНТЯБРЬ РАЗОРВАЛ! 🚀</h1>
+            <div class="subtitle">Рынок недвижимости Уфы взял новую высоту</div>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number">1237</span>
+                    <span class="stat-label">квартир продано</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">8,4 млрд ₽</span>
+                    <span class="stat-label">объём продаж</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">+4,8%</span>
+                    <span class="stat-label">рост к августу</span>
+                </div>
+            </div>
+            <div class="slide-number">1 / 10</div>
+        </div>
+
+        <!-- СЛАЙД 2: Ипотека -->
+        <div class="slide slide-2">
+            <div class="particles" id="particles2"></div>
+            <div class="big-number">81%</div>
+            <h2 class="slide-title">ИПОТЕКА ПРАВИТ БАЛОМ 📈</h2>
+            <ul class="bullet-list">
+                <li>Абсолютный максимум 2025 года</li>
+                <li>+1,5 п.п. к августу</li>
+                <li>+13 п.п. к январю (было 68%)</li>
+                <li>С апреля стабильно выше 76%</li>
+                <li>В среднем за 9 месяцев — 76,37%</li>
+            </ul>
+            <div class="slide-number">2 / 10</div>
+        </div>
+
+        <!-- СЛАЙД 3: Большая тройка -->
+        <div class="slide slide-3">
+            <div class="particles" id="particles3"></div>
+            <h2 class="slide-title glow-text">БОЛЬШАЯ ТРОЙКА ЗАХВАТИЛА 41,3% РЫНКА 👑</h2>
+            <div class="podium">
+                <div class="podium-item podium-item-2">
+                    <div class="medal">🥈</div>
+                    <div class="company-logo">Prime Development</div>
+                    <div class="company-stats">
+                        <strong>171 квартира</strong>
+                        13,8% рынка<br>
+                        1,08 млрд ₽<br>
+                        <strong>182 639 ₽/м²</strong>
+                        (самый дорогой!)
+                    </div>
+                </div>
+                
+                <div class="podium-item podium-item-1">
+                    <div class="medal">🥇</div>
+                    <div class="company-logo">Первый Трест</div>
+                    <div class="company-stats">
+                        <strong>210 квартир</strong>
+                        17% рынка<br>
+                        1,53 млрд ₽<br>
+                        <strong>165 903 ₽/м²</strong>
+                        Тяжеловес рынка
+                    </div>
+                </div>
+                
+                <div class="podium-item podium-item-3">
+                    <div class="medal">🥉</div>
+                    <div class="company-logo">Третий Трест</div>
+                    <div class="company-stats">
+                        <strong>130 квартир</strong>
+                        10,5% рынка<br>
+                        862 млн ₽
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">3 / 10</div>
+        </div>
+
+        <!-- СЛАЙД 4: Цены -->
+        <div class="slide slide-4">
+            <div class="particles" id="particles4"></div>
+            <h2 class="slide-title">ЦЕНЫ: ОТ «ДОСТУПНО» ДО «ОГО-ГО» 💸</h2>
+            <div class="price-scale">
+                <div class="price-point">
+                    <div class="company-logo">КПД</div>
+                    <div style="font-size: 22px; margin: 15px 0; font-weight: 600;">💚 Самая доступная</div>
+                    <div class="price-value">108 383 ₽/м²</div>
+                </div>
+                
+                <div class="price-point">
+                    <div class="company-logo">КирпичХолдинг</div>
+                    <div style="font-size: 22px; margin: 15px 0; font-weight: 600;">💎 Самая премиальная</div>
+                    <div class="price-value">206 520 ₽/м²</div>
+                </div>
+            </div>
+            <div class="average-price">
+                Средняя цена: <span style="background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">158 100 ₽/м²</span><br>
+                <span style="font-size: 36px; opacity: 0.8; margin-top: 25px; display: block; font-weight: 700;">Разброс почти в 2 раза!</span>
+            </div>
+            <div class="slide-number">4 / 10</div>
+        </div>
+
+        <!-- СЛАЙД 5: Что покупают -->
+        <div class="slide slide-5">
+            <div class="particles" id="particles5"></div>
+            <h2 class="slide-title glow-text">ЧТО ПОКУПАЮТ УФИМЦЫ? 🏠</h2>
+            <div class="apartment-types">
+                <div class="apartment-card">
+                    <div class="apartment-icon">🏠</div>
+                    <div class="apartment-title">Однушки</div>
+                    <div class="apartment-percent">86,5%</div>
+                    <div class="apartment-label">сделок в ипотеку</div>
+                    <div style="margin-top: 20px; font-size: 22px; color: #666; font-weight: 600;">Любимчики банков!</div>
+                </div>
+                
+                <div class="apartment-card">
+                    <div class="apartment-icon">🏘️</div>
+                    <div class="apartment-title">Двушки</div>
+                    <div class="apartment-percent">82,4%</div>
+                    <div class="apartment-label">сделок в ипотеку</div>
+                    <div style="margin-top: 20px; font-size: 22px; color: #666; font-weight: 600;">Для семей</div>
+                </div>
+                
+                <div class="apartment-card">
+                    <div class="apartment-icon">🏢</div>
+                    <div class="apartment-title">Апартаменты</div>
+                    <div class="apartment-percent">58,8%</div>
+                    <div class="apartment-label">сделок в ипотеку</div>
+                    <div style="margin-top: 20px; font-size: 22px; color: #666; font-weight: 600;">5,5% рынка</div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 60px; font-size: 46px; font-weight: 700; animation: fadeInUp 1.5s ease-out; position: relative; z-index: 1;">
+                61% всех продаж — это 1К и 2К квартиры (761 из 1237)
+            </div>
+            <div class="slide-number">5 / 10</div>
+        </div>
+
+        <!-- СЛАЙД 6: Банки -->
+        <div class="slide slide-6">
+            <div class="particles" id="particles6"></div>
+            <h2 class="slide-title glow-text">СБЕРБАНК = 68% ИПОТЕКИ 🏦</h2>
+            <div class="bank-dominant">
+                <div class="bank-logo-main">
+                    <div class="bank-logo-text">СБЕРБАНК</div>
+                </div>
+                <div style="font-size: 72px; font-weight: 900; animation: pulse 2s infinite;">682 сделки из 1003</div>
+                <div style="font-size: 40px; margin-top: 20px;">Это 2/3 ВСЕГО рынка!</div>
+            </div>
+            
+            <h3 style="text-align: center; font-size: 46px; margin-bottom: 35px; position: relative; z-index: 1;">ТОП-4 банков (91,2% рынка):</h3>
+            <div class="banks-grid">
+                <div class="bank-card">
+                    <div class="company-logo">Дом.РФ</div>
+                    <div class="bank-card-stats">90 сделок<br>(9%)</div>
+                </div>
+                
+                <div class="bank-card">
+                    <div class="company-logo">Альфа-Банк</div>
+                    <div class="bank-card-stats">88 сделок<br>(8,8%)</div>
+                </div>
+                
+                <div class="bank-card">
+                    <div class="company-logo">ВТБ</div>
+                    <div class="bank-card-stats">55 сделок<br>(5,5%)</div>
+                </div>
+            </div>
+            <div class="slide-number">6 / 10</div>
+        </div>
+
+        <!-- СЛАЙД 7: Дополнительный доход -->
+        <div class="slide slide-7">
+            <div class="particles" id="particles7"></div>
+            <h2 class="slide-title glow-text">НЕ ТОЛЬКО КВАРТИРЫ 💰</h2>
+            <div class="income-grid">
+                <div class="income-card">
+                    <div class="income-icon">🚗</div>
+                    <h3 style="font-size: 32px; font-weight: 700;">Паркинги</h3>
+                    <div class="income-amount">140,5 млн ₽</div>
+                    <p style="font-size: 20px; color: #666;">Машиноместо — недешёвое удовольствие</p>
+                </div>
+                
+                <div class="income-card">
+                    <div class="income-icon">📦</div>
+                    <h3 style="font-size: 32px; font-weight: 700;">Кладовки</h3>
+                    <div class="income-amount">22 млн ₽</div>
+                    <p style="font-size: 20px; color: #666;">Вещей всегда много, нужно где-то хранить</p>
+                </div>
+                
+                <div class="income-card">
+                    <div class="income-icon">🏢</div>
+                    <h3 style="font-size: 32px; font-weight: 700;">Коммерция</h3>
+                    <div class="income-amount">320,6 млн ₽</div>
+                    <p style="font-size: 20px; color: #666;">Серьёзные деньги!</p>
+                </div>
+            </div>
+            
+            <div class="commercial-leaders">
+                <h3>🏆 Чемпионы по коммерческой недвижимости</h3>
+                <div class="commercial-item">
+                    <div class="company-logo">Талан</div>
+                    <span class="amount">77,5 млн ₽</span>
+                    <span class="percent">(25% оборота)</span>
+                </div>
+                
+                <div class="commercial-item">
+                    <div class="company-logo">Служба заказчика</div>
+                    <span class="amount">72,6 млн ₽</span>
+                    <span class="percent">(38% оборота!)</span>
+                </div>
+                
+                <div class="commercial-item">
+                    <div class="company-logo">Третий Трест</div>
+                    <span class="amount">56,6 млн ₽</span>
+                    <span class="percent"></span>
+                </div>
+            </div>
+            <div class="slide-number">7 / 10</div>
+        </div>
+
+        <!-- СЛАЙД 8: Риски -->
+        <div class="slide slide-8">
+            <div class="particles" id="particles8"></div>
+            <h2 class="slide-title glow-text">3 РИСКА РЫНКА ⚠️</h2>
+            <div class="risks-container">
+                <div class="risk-card">
+                    <div class="risk-number">1</div>
+                    <div class="risk-content">
+                        <h3>Большая тройка слишком большая</h3>
+                        <p>41,3% рынка контролируют три компании (Первый Трест, Prime Development, Третий Трест). Это не монополия, но конкуренция начинает хромать.</p>
+                    </div>
+                </div>
+                
+                <div class="risk-card">
+                    <div class="risk-number">2</div>
+                    <div class="risk-content">
+                        <h3>Ипотека — единственный герой</h3>
+                        <p>81% сделок через кредит — это круто, пока ставки не вырастут. Если ЦБ поднимет ключевую ставку ещё выше, рынок может просесть быстрее, чем успеет сказать «льготная ипотека».</p>
+                    </div>
+                </div>
+                
+                <div class="risk-card">
+                    <div class="risk-number">3</div>
+                    <div class="risk-content">
+                        <h3>Сбербанк-Сбербанк-Сбербанк</h3>
+                        <p>68% ипотечных сделок через один банк — это системная уязвимость. Если Сбер ужесточит условия, весь рынок почувствует это на своей шкуре.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="conclusion">
+                Но давайте честно: несмотря на риски, рынок чувствует себя бодро! 💪
+            </div>
+            <div class="slide-number">8 / 10</div>
+        </div>
+
+        <!-- СЛАЙД 9: Итоги -->
+        <div class="slide slide-9">
+            <div class="particles" id="particles9"></div>
+            <h2 class="slide-title glow-text">ИТОГИ СЕНТЯБРЯ 2025 ✨</h2>
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="label">Продано квартир</div>
+                    <div class="big-stat">1237</div>
+                    <div class="label">на 8,4 млрд ₽</div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="label">Рост к августу</div>
+                    <div class="big-stat">+4,8%</div>
+                    <div class="label">Рекорд года!</div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="label">Доля ипотеки</div>
+                    <div class="big-stat">81%</div>
+                    <div class="label">Максимум 2025</div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="label">Средняя цена</div>
+                    <div class="big-stat">158 100 ₽</div>
+                    <div class="label">за квадратный метр</div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="label">С начала года</div>
+                    <div class="big-stat">7684</div>
+                    <div class="label">квартиры на 52 млрд ₽</div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="label">Средний чек</div>
+                    <div class="big-stat">6,82 млн ₽</div>
+                    <div class="label">за квартиру 43 м²</div>
+                </div>
+            </div>
+            <div class="conclusion">
+                Рынок растёт. Уфа строится. Тренд продолжается. 🚀
+            </div>
+            <div class="slide-number">9 / 10</div>
+        </div>
+
+        <!-- СЛАЙД 10: Контакты -->
+        <div class="slide slide-10">
+            <div class="particles" id="particles10"></div>
+            <h2 class="contact-title">АНАЛИТИКА НЕДВИЖИМОСТИ</h2>
+            <div class="contact-info">
+                Данные • Инсайты • Стратегии
+                <strong>Антон Цой</strong>
+                Аналитик рынка недвижимости Уфы
+            </div>
+            <div style="font-size: 36px; margin: 40px 0; animation: fadeInUp 1.3s ease-out; position: relative; z-index: 1;">
+                📊 Хотите аналитику для вашего проекта?<br>
+                📧 Свяжитесь со мной
+            </div>
+            <div class="hashtags">
+                #недвижимостьуфы #рынокнедвижимости #аналитика #ипотека #уфа<br>
+                #инвестиции #первичка #новостройки #застройщики
+            </div>
+            <div style="margin-top: 60px; font-size: 20px; opacity: 0.6; position: relative; z-index: 1;">
+                По данным аналитического отчета рынка первичной недвижимости Уфы — Сентябрь 2025
+            </div>
+            <div class="slide-number">10 / 10</div>
+        </div>
+
+    </div>
+
+    <script>
+        // Генератор частиц для каждого слайда
+        function createParticles(containerId, count = 20) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.width = (Math.random() * 4 + 2) + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Создаем частицы для всех слайдов
+        for (let i = 1; i <= 10; i++) {
+            createParticles('particles' + i, 15);
+        }
+
+        // Навигация стрелками
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                e.preventDefault();
+                window.scrollBy({ top: -window.innerHeight, behavior: 'smooth' });
+            }
+        });
+
+        // Добавляем эффект параллакса при скролле
+        let ticking = false;
+        window.addEventListener('scroll', function() {
+            if (!ticking) {
+                window.requestAnimationFrame(function() {
+                    const scrolled = window.pageYOffset;
+                    const parallaxElements = document.querySelectorAll('.particles');
+                    parallaxElements.forEach(function(element) {
+                        const speed = 0.5;
+                        element.style.transform = 'translateY(' + (scrolled * speed) + 'px)';
+                    });
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        // Анимация при входе слайдов в viewport
+        const observerOptions = {
+            threshold: 0.5
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.slide').forEach(slide => {
+            observer.observe(slide);
+        });
+    </script>
+</body>
+</html>
