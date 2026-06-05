@@ -7,3 +7,16 @@
 
 # Временные файлы настройки Cursor/GitHub CLI
 .cursor-gh-tmp/
+
+# Тяжелые медиафайлы (видео и аудио)
+*.mov
+*.MOV
+*.mp4
+*.MP4
+*.avi
+*.mkv
+*.mp3
+*.MP3
+*.wav
+*.m4a
+

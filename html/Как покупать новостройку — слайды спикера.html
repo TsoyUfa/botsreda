@@ -1,0 +1,917 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Как покупать новостройку - слайды для спикера</title>
+  <meta name="description" content="Слайды для обучения агентов Эксперт Сити: как покупать новостройку и вести клиента от диагностики до сделки." />
+  <style>
+    :root {
+      --bg: #07120f;
+      --bg-deep: #030706;
+      --card: rgba(255, 255, 255, 0.08);
+      --card-strong: rgba(255, 255, 255, 0.14);
+      --text: #f8faf7;
+      --muted: #b8c4bb;
+      --soft: #e5ece6;
+      --green: #57d68d;
+      --green-deep: #0f7a4a;
+      --gold: #f5c86a;
+      --red: #ff8f8f;
+      --line: rgba(255, 255, 255, 0.16);
+      --shadow: 0 32px 100px rgba(0, 0, 0, 0.42);
+      --radius: 28px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--bg-deep);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      line-height: 1.45;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      background:
+        radial-gradient(circle at 16% 12%, rgba(87, 214, 141, 0.26), transparent 34%),
+        radial-gradient(circle at 86% 10%, rgba(245, 200, 106, 0.20), transparent 32%),
+        radial-gradient(circle at 78% 86%, rgba(15, 122, 74, 0.34), transparent 42%),
+        linear-gradient(135deg, #030706 0%, #07120f 46%, #10170d 100%);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      opacity: 0.16;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(circle at center, #000, transparent 82%);
+    }
+
+    .progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 20;
+      width: 100%;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .progress__bar {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--gold));
+      transition: width 0.15s linear;
+    }
+
+    .deck-nav {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 15;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(3, 7, 6, 0.76);
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+    }
+
+    .deck-nav button,
+    .deck-nav a {
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 14px;
+      color: var(--text);
+      background: var(--card-strong);
+      font: inherit;
+      font-weight: 800;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .deck-nav button:hover,
+    .deck-nav a:hover {
+      background: rgba(87, 214, 141, 0.22);
+    }
+
+    .slide {
+      position: relative;
+      min-height: 100vh;
+      display: grid;
+      align-items: center;
+      padding: 86px clamp(20px, 5vw, 72px);
+      scroll-snap-align: start;
+    }
+
+    .wrap {
+      width: min(var(--max), 100%);
+      margin: 0 auto;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 22px;
+      padding: 10px 14px;
+      border: 1px solid rgba(87, 214, 141, 0.34);
+      border-radius: 999px;
+      background: rgba(87, 214, 141, 0.10);
+      color: #dfffea;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .kicker::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      max-width: 980px;
+      margin-bottom: 24px;
+      font-size: clamp(44px, 7vw, 88px);
+      line-height: 0.94;
+      letter-spacing: -0.065em;
+      text-wrap: balance;
+    }
+
+    h2 {
+      max-width: 960px;
+      margin-bottom: 24px;
+      font-size: clamp(34px, 5vw, 66px);
+      line-height: 1.02;
+      letter-spacing: -0.045em;
+      text-wrap: balance;
+    }
+
+    h3 {
+      margin-bottom: 14px;
+      font-size: clamp(20px, 2.2vw, 30px);
+      letter-spacing: -0.02em;
+    }
+
+    .lead {
+      max-width: 820px;
+      color: var(--soft);
+      font-size: clamp(21px, 2.2vw, 32px);
+      line-height: 1.3;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .accent {
+      color: var(--green);
+    }
+
+    .gold {
+      color: var(--gold);
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .card {
+      padding: clamp(20px, 2.4vw, 30px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--card);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .card.strong {
+      background: var(--card-strong);
+    }
+
+    .card.gold-border {
+      border-color: rgba(245, 200, 106, 0.45);
+    }
+
+    .number {
+      display: inline-grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      margin-bottom: 14px;
+      border-radius: 14px;
+      background: rgba(87, 214, 141, 0.18);
+      color: var(--green);
+      font-weight: 950;
+    }
+
+    ul, ol {
+      margin: 0;
+      padding-left: 1.2em;
+      color: var(--soft);
+      font-size: clamp(18px, 1.6vw, 24px);
+    }
+
+    li + li { margin-top: 10px; }
+
+    .big-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 26px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .big-list li {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 16px;
+      align-items: start;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+      font-size: clamp(19px, 1.75vw, 26px);
+      font-weight: 750;
+    }
+
+    .big-list span {
+      display: inline-grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: rgba(245, 200, 106, 0.16);
+      color: var(--gold);
+      font-weight: 950;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.06);
+      font-size: clamp(16px, 1.25vw, 20px);
+    }
+
+    th, td {
+      padding: 15px 16px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: #dfffea;
+      background: rgba(87, 214, 141, 0.12);
+      font-weight: 900;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .quote {
+      margin: 24px 0 0;
+      padding: 26px;
+      border-left: 5px solid var(--gold);
+      border-radius: 0 24px 24px 0;
+      background: rgba(245, 200, 106, 0.10);
+      color: var(--soft);
+      font-size: clamp(22px, 2vw, 31px);
+      font-weight: 750;
+      line-height: 1.28;
+    }
+
+    .formula {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin: 28px 0;
+      font-size: clamp(24px, 3vw, 42px);
+      font-weight: 950;
+      letter-spacing: -0.04em;
+    }
+
+    .formula span {
+      padding: 14px 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--line);
+    }
+
+    .formula b {
+      color: var(--gold);
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .timeline .card {
+      min-height: 220px;
+    }
+
+    .speaker {
+      margin-top: 26px;
+      padding: 18px 20px;
+      border: 1px dashed rgba(245, 200, 106, 0.48);
+      border-radius: 22px;
+      background: rgba(3, 7, 6, 0.42);
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .speaker strong {
+      color: var(--gold);
+    }
+
+    .small {
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    .footer {
+      position: absolute;
+      left: clamp(20px, 5vw, 72px);
+      right: clamp(20px, 5vw, 72px);
+      bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      color: rgba(255, 255, 255, 0.46);
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: clamp(24px, 5vw, 72px);
+      align-items: center;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .pill {
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--soft);
+      font-weight: 800;
+    }
+
+    .red {
+      color: var(--red);
+    }
+
+    @media (max-width: 860px) {
+      .grid.two,
+      .grid.three,
+      .grid.four,
+      .timeline,
+      .split {
+        grid-template-columns: 1fr;
+      }
+
+      .deck-nav {
+        left: 14px;
+        right: 14px;
+        justify-content: center;
+      }
+
+      .slide {
+        min-height: auto;
+        padding-bottom: 120px;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        color: #111;
+      }
+
+      body::before,
+      body::after,
+      .progress,
+      .deck-nav {
+        display: none;
+      }
+
+      .slide {
+        min-height: 100vh;
+        page-break-after: always;
+        color: #111;
+        background: #fff;
+      }
+
+      .card,
+      table,
+      .quote,
+      .speaker {
+        box-shadow: none;
+        background: #fff;
+        color: #111;
+        border-color: #ddd;
+      }
+
+      .muted,
+      .small,
+      .speaker {
+        color: #444;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress" aria-hidden="true"><div class="progress__bar" id="progressBar"></div></div>
+  <nav class="deck-nav" aria-label="Навигация по слайдам">
+    <button type="button" id="prevBtn">Назад</button>
+    <a href="#slide-1">Старт</a>
+    <button type="button" id="nextBtn">Далее</button>
+  </nav>
+
+  <main>
+    <section class="slide" id="slide-1">
+      <div class="wrap split">
+        <div>
+          <p class="kicker">Эксперт Сити | обучение агентов</p>
+          <h1>Как покупать новостройку</h1>
+          <p class="lead">Сценарий для спикера: как научить агента вести клиента от первого вопроса до безопасной сделки.</p>
+          <div class="pill-row">
+            <span class="pill">60-90 минут</span>
+            <span class="pill">агенты</span>
+            <span class="pill">новостройки</span>
+            <span class="pill">практика</span>
+          </div>
+        </div>
+        <div class="card strong gold-border">
+          <h3>Главная мысль</h3>
+          <p class="lead">Агент не продает «варианты». Агент дает клиенту ясность, снижает риск и ведет к следующему шагу.</p>
+        </div>
+      </div>
+      <div class="footer"><span>Как покупать новостройку</span><span>1 / 24</span></div>
+    </section>
+
+    <section class="slide" id="slide-2">
+      <div class="wrap">
+        <p class="kicker">Цель занятия</p>
+        <h2>После обучения агент должен уметь вести клиента по понятному пути</h2>
+        <div class="grid three">
+          <div class="card"><span class="number">1</span><h3>Диагностика</h3><p class="muted">Понять цель, деньги, ипотеку, районы и критерии до показа ЖК.</p></div>
+          <div class="card"><span class="number">2</span><h3>Отбор</h3><p class="muted">Собрать shortlist, проверить застройщика и сравнить полную стоимость.</p></div>
+          <div class="card"><span class="number">3</span><h3>Сделка</h3><p class="muted">Довести до финального лота, ипотеки, брони, ДДУ и сопровождения.</p></div>
+        </div>
+        <div class="speaker"><strong>Заметка спикеру:</strong> открой рамку: это не лекция «про рынок», а рабочая система, которую агент завтра применит на первой консультации.</div>
+      </div>
+      <div class="footer"><span>Цель обучения</span><span>2 / 24</span></div>
+    </section>
+
+    <section class="slide" id="slide-3">
+      <div class="wrap">
+        <p class="kicker">Контекст 2026</p>
+        <h2>Клиент пришел не за показом. Он пришел за ясностью</h2>
+        <table>
+          <thead><tr><th>Было</th><th>Стало</th></tr></thead>
+          <tbody>
+            <tr><td>Показал объект - сделка</td><td>Нужно провести через сложное решение</td></tr>
+            <tr><td>Достаточно скидки и планировки</td><td>Нужны цифры, безопасность, логика выбора</td></tr>
+            <tr><td>Агент = проводник по ЖК</td><td>Агент = навигатор по покупке</td></tr>
+          </tbody>
+        </table>
+        <p class="quote">Выигрывает не тот, кто больше показал, а тот, кто структурировал выбор и довел до следующего шага.</p>
+      </div>
+      <div class="footer"><span>Роль агента</span><span>3 / 24</span></div>
+    </section>
+
+    <section class="slide" id="slide-4">
+      <div class="wrap">
+        <p class="kicker">Золотое правило</p>
+        <h2>Правильная последовательность снижает риск</h2>
+        <div class="formula">
+          <span>Финансы</span>
+          <b>+</b>
+          <span>безопасность</span>
+          <b>→</b>
+          <span>география</span>
+          <b>→</b>
+          <span>ЖК</span>
+          <b>→</b>
+          <span>планировка</span>
+        </div>
+        <p class="lead">Эмоции допустимы только между 2-3 безопасными и финансово понятными вариантами.</p>
+        <div class="speaker"><strong>Заметка спикеру:</strong> несколько раз повтори: «не начинаем с Авито, не начинаем с офиса продаж, не начинаем с красивой планировки».</div>
+      </div>
+      <div class="footer"><span>Золотое правило</span><span>4 / 24</span></div>
+    </section>
+
+    <section class="slide" id="slide-5">
+      <div class="wrap">
+        <p class="kicker">Воронка решения</p>
+        <h2>4 фазы покупки новостройки</h2>
+        <div class="timeline">
+          <div class="card"><span class="number">1</span><h3>Стратегия</h3><p class="muted">Цель, бюджет, ипотека, район, критерии.</p></div>
+          <div class="card"><span class="number">2</span><h3>Отбор</h3><p class="muted">Shortlist ЖК, проверка застройщика, TCO.</p></div>
+          <div class="card"><span class="number">3</span><h3>Сделка</h3><p class="muted">Осмотр, ипотека финал, бронь, ДДУ.</p></div>
+          <div class="card"><span class="number">4</span><h3>После</h3><p class="muted">Контроль стройки, приемка, собственность.</p></div>
+        </div>
+      </div>
+      <div class="footer"><span>Фазы</span><span>5 / 24</span></div>
+    </section>
+
+    <section class="slide" id="slide-6">
+      <div class="wrap">
+        <p class="kicker">План занятия</p>
+        <h2>Карта обучения на 60-90 минут</h2>
+        <table>
+          <thead><tr><th>Блок</th><th>Время</th><th>Тема</th><th>Результат</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>10 мин</td><td>Роль агента и золотое правило</td><td>Понимает позиционирование</td></tr>
+            <tr><td>2</td><td>15 мин</td><td>7 шагов 80/20</td><td>Сценарий первой консультации</td></tr>
+            <tr><td>3</td><td>20 мин</td><td>18-шаговая воронка</td><td>Видит весь путь сделки</td></tr>
+            <tr><td>4</td><td>15 мин</td><td>3 встречи с клиентом</td><td>Понимает ритм сопровождения</td></tr>
+            <tr><td>5</td><td>15 мин</td><td>Практика</td><td>Паспорт покупки и сравнение ЖК</td></tr>
+            <tr><td>6</td><td>5 мин</td><td>Чек-листы и домашка</td><td>Забирает инструменты</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="footer"><span>Тайминг</span><span>6 / 24</span></div>
+    </section>
+
+    <section class="slide" id="slide-7">
+      <div class="wrap">
+        <p class="kicker">Блок 1</p>
+        <h2>Ошибки, которые ломают сделку</h2>
+        <div class="grid two">
+          <div class="card"><h3 class="red">Сразу везти на ЖК</h3><p class="muted">Клиент влюбился, но бюджет или ипотека не сходятся.</p></div>
+          <div class="card"><h3 class="red">Не проверить застройщика</h3><p class="muted">Срыв сделки, претензии клиента, репутационный риск.</p></div>
+          <div class="card"><h3 class="red">Дать 10+ финалов</h3><p class="muted">Усталость, хаос и решение «наугад».</p></div>
+          <div class="card"><h3 class="red">Давить «последняя квартира»</h3><p class="muted">Краткосрочная манипуляция вместо доверия и рекомендаций.</p></div>
+        </div>
+      </div>
+      <div class="footer"><span>Ошибки</span><span>7 / 24</span></div>
+    </section>
+
+    <section class="slide" id="slide-8">
+      <div class="wrap">
+        <p class="kicker">Блок 2</p>
+        <h2>7 шагов 80/20 для первой консультации</h2>
+        <ul class="big-list">
+          <li><span>1</span>Цель покупки и срок ключей</li>
+          <li><span>2</span>Бюджет, первый взнос и комфортный платеж</li>
+          <li><span>3</span>Предварительная ипотека до выбора ЖК</li>
+          <li><span>4</span>2-4 района и сценарий жизни</li>
+          <li><span>5</span>Критерии квартиры: обязательные / желательные / компромисс</li>
+          <li><span>6</span>Shortlist 5-10 ЖК</li>
+          <li><span>7</span>Сравнение 2-3 лотов по полной стоимости</li>
+        </ul>
+      </div>
+      <div class="footer"><span>7 шагов</span><span>8 / 24</span></div>
+    </section>
+
+    <section class="slide" id="slide-9">
+      <div class="wrap">
+        <p class="kicker">Правило первой встречи</p>
+        <h2>Если не закрыты шаги 1-3, ЖК не показываем</h2>
+        <div class="grid three">
+          <div class="card strong"><span class="number">1</span><h3>Цель</h3><p class="muted">Зачем покупаем, на какой срок, когда нужны ключи.</p></div>
+          <div class="card strong"><span class="number">2</span><h3>Деньги</h3><p class="muted">Максимальная цена, первый взнос, комфортный платеж.</p></div>
+          <div class="card strong"><span class="number">3</span><h3>Ипотека</h3><p class="muted">Реальный лимит, программа, банк, ограничения.</p></div>
+        </div>
+        <p class="quote">Показ без этих трех пунктов - это не сервис, а хаос с красивыми картинками.</p>
+      </div>
+      <div class="footer"><span>Шаги 1-3</span><span>9 / 24</span></div>
+    </section>
+
+    <section class="slide" id="slide-10">
+      <div class="wrap">
+        <p class="kicker">Инструмент</p>
+        <h2>Паспорт покупки клиента</h2>
+        <div class="grid two">
+          <div class="card">
+            <h3>Что фиксируем</h3>
+            <ul>
+              <li>Цель: жить, аренда, детям, инвестиция.</li>
+              <li>Срок ключей и горизонт владения.</li>
+              <li>Максимальная цена и первый взнос.</li>
+              <li>Комфортный платеж в месяц.</li>
+              <li>Ипотека: лимит и программа.</li>
+              <li>Районы, обязательные и желательные критерии.</li>
+            </ul>
+          </div>
+          <div class="card strong gold-border">
+            <h3>Зачем это агенту</h3>
+            <p class="lead">Паспорт покупки защищает агента от хаотичных подборов и делает клиента соавтором решения.</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>Паспорт покупки</span><span>10 / 24</span></div>
+    </section>
+
+    <section class="slide" id="slide-11">
+      <div class="wrap">
+        <p class="kicker">Блок 3</p>
+        <h2>18 шагов - полный стандарт сделки</h2>
+        <div class="grid three">
+          <div class="card"><h3>1-5. Диагностика</h3><p class="muted">Цель, деньги, ипотека, районы, критерии.</p></div>
+          <div class="card"><h3>6-10. Отбор</h3><p class="muted">Shortlist, застройщик, проект, цена, финал.</p></div>
+          <div class="card"><h3>11-15. Сделка</h3><p class="muted">Осмотр, ипотека финал, бронь, ДДУ, регистрация.</p></div>
+          <div class="card"><h3>16-18. После</h3><p class="muted">Контроль стройки, приемка, собственность.</p></div>
+          <div class="card strong"><h3>Роль агента</h3><p class="muted">Не терять клиента после брони, создавать рекомендации.</p></div>
+          <div class="card strong"><h3>Роль системы</h3><p class="muted">Одинаковый путь для всех агентов и клиентов.</p></div>
+        </div>
+      </div>
+      <div class="footer"><span>18 шагов</span><span>11 / 24</span></div>
+    </section>
+
+    <section class="slide" id="slide-12">
+      <div class="wrap">
+        <p class="kicker">Этап 1</p>
+        <h2>Шаги 1-5: диагностика клиента</h2>
+        <table>
+          <thead><tr><th>Шаг</th><th>Суть</th><th>Результат</th></tr></thead>
+          <tbody>
+            <tr><td>1. Цель</td><td>Зачем покупает</td><td>Понятен сценарий объекта</td></tr>
+            <tr><td>2. Деньги</td><td>Цена, взнос, платеж</td><td>Есть рамка</td></tr>
+            <tr><td>3. Ипотека</td><td>Лимит до выбора ЖК</td><td>Нет иллюзий по бюджету</td></tr>
+            <tr><td>4. Районы</td><td>2-4 зоны</td><td>Сужена карта</td></tr>
+            <tr><td>5. Критерии</td><td>Обязательные / желательные</td><td>Есть фильтр выбора</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="footer"><span>Диагностика</span><span>12 / 24</span></div>
+    </section>
+
+    <section class="slide" id="slide-13">
+      <div class="wrap">
+        <p class="kicker">Этап 2</p>
+        <h2>Шаги 6-10: от shortlist до 2-3 финалов</h2>
+        <div class="grid two">
+          <div class="card"><h3>Что делает агент</h3><ul><li>Собирает 5-10 ЖК под рамку клиента.</li><li>Проверяет застройщика, сроки, эскроу.</li><li>Сравнивает цену и TCO на 5 лет.</li><li>Оставляет 2-3 конкретных лота.</li></ul></div>
+          <div class="card strong"><h3>Что видит клиент</h3><ul><li>Не поток ссылок, а понятный выбор.</li><li>Факты вместо рекламы.</li><li>Причину, почему один вариант лучше другого.</li></ul></div>
+        </div>
+        <div class="speaker"><strong>Заметка спикеру:</strong> объясни, что shortlist - это работа агента между встречами, а не «скинуть клиенту 20 ссылок в WhatsApp».</div>
+      </div>
+      <div class="footer"><span>Shortlist</span><span>13 / 24</span></div>
+    </section>
+
+    <section class="slide" id="slide-14">
+      <div class="wrap">
+        <p class="kicker">TCO</p>
+        <h2>Сравниваем не скидку, а полную стоимость владения</h2>
+        <table>
+          <thead><tr><th>Параметр</th><th>ЖК A</th><th>ЖК B</th><th>ЖК C</th></tr></thead>
+          <tbody>
+            <tr><td>Цена лота</td><td></td><td></td><td></td></tr>
+            <tr><td>Цена за м2</td><td></td><td></td><td></td></tr>
+            <tr><td>Срок сдачи</td><td></td><td></td><td></td></tr>
+            <tr><td>Ипотека / субсидия</td><td></td><td></td><td></td></tr>
+            <tr><td>Отделка</td><td></td><td></td><td></td></tr>
+            <tr><td><strong>TCO 5 лет</strong></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        <p class="quote">Скидка 15% не выгода, если ипотека и сроки делают объект дороже.</p>
+      </div>
+      <div class="footer"><span>Полная стоимость</span><span>14 / 24</span></div>
+    </section>
+
+    <section class="slide" id="slide-15">
+      <div class="wrap">
+        <p class="kicker">Этап 3</p>
+        <h2>Шаги 11-15: осмотр, ипотека, бронь, ДДУ</h2>
+        <ul class="big-list">
+          <li><span>11</span>Осмотр только 2-3 финалистов: офис, шоурум, локация.</li>
+          <li><span>12</span>Финальная ипотека под конкретный лот до брони.</li>
+          <li><span>13</span>Бронь: номер квартиры, срок, возврат, фиксация цены.</li>
+          <li><span>14</span>ДДУ: сроки, неустойка, отделка, площадь, эскроу.</li>
+          <li><span>15</span>Регистрация: Росреестр и деньги только на эскроу.</li>
+        </ul>
+      </div>
+      <div class="footer"><span>Сделка</span><span>15 / 24</span></div>
+    </section>
+
+    <section class="slide" id="slide-16">
+      <div class="wrap">
+        <p class="kicker">Этап 4</p>
+        <h2>После сделки агент не исчезает</h2>
+        <div class="grid three">
+          <div class="card"><span class="number">16</span><h3>Контроль стройки</h3><p class="muted">наш.дом.рф, отчеты, переносы сроков, документы.</p></div>
+          <div class="card"><span class="number">17</span><h3>Приемка</h3><p class="muted">Дефектовка, приемщик, акт с замечаниями.</p></div>
+          <div class="card"><span class="number">18</span><h3>Собственность</h3><p class="muted">Регистрация права, ремонт, аренда, рекомендации.</p></div>
+        </div>
+        <p class="quote">Пост-сопровождение - это репутация, повторные сделки и рекомендации.</p>
+      </div>
+      <div class="footer"><span>После сделки</span><span>16 / 24</span></div>
+    </section>
+
+    <section class="slide" id="slide-17">
+      <div class="wrap">
+        <p class="kicker">Блок 4</p>
+        <h2>Встреча 1: диагностика, а не показ</h2>
+        <table>
+          <thead><tr><th>Этап</th><th>Действие</th><th>Время</th></tr></thead>
+          <tbody>
+            <tr><td>Рамка</td><td>«Сегодня разберем вашу задачу и цифры»</td><td>2 мин</td></tr>
+            <tr><td>Цель</td><td>Паспорт покупки</td><td>8 мин</td></tr>
+            <tr><td>Деньги</td><td>Бюджет, платеж, ипотека</td><td>12 мин</td></tr>
+            <tr><td>География</td><td>Районы, обязательные / желательные критерии, приоритеты</td><td>15 мин</td></tr>
+            <tr><td>Итог</td><td>Домашнее задание и дата встречи 2</td><td>3 мин</td></tr>
+          </tbody>
+        </table>
+        <p class="quote">Запрещено: показы, бронь, давление «успейте».</p>
+      </div>
+      <div class="footer"><span>Встреча 1</span><span>17 / 24</span></div>
+    </section>
+
+    <section class="slide" id="slide-18">
+      <div class="wrap">
+        <p class="kicker">Блок 4</p>
+        <h2>Встреча 2: разбор вариантов</h2>
+        <div class="grid four">
+          <div class="card"><span class="number">1</span><h3>Shortlist</h3><p class="muted">5-10 ЖК под рамку клиента.</p></div>
+          <div class="card"><span class="number">2</span><h3>Факты</h3><p class="muted">Эскроу, декларация, история сдачи.</p></div>
+          <div class="card"><span class="number">3</span><h3>TCO</h3><p class="muted">Цена, ипотека, срок, полная стоимость.</p></div>
+          <div class="card"><span class="number">4</span><h3>Финал</h3><p class="muted">2-3 лота и назначенный осмотр.</p></div>
+        </div>
+      </div>
+      <div class="footer"><span>Встреча 2</span><span>18 / 24</span></div>
+    </section>
+
+    <section class="slide" id="slide-19">
+      <div class="wrap">
+        <p class="kicker">Блок 4</p>
+        <h2>Встреча 3: осмотр и решение</h2>
+        <div class="grid three">
+          <div class="card"><span class="number">1</span><h3>Осмотр</h3><p class="muted">Офис, шоурум, локация по чек-листу.</p></div>
+          <div class="card"><span class="number">2</span><h3>Ипотека финал</h3><p class="muted">Одобрение под конкретный лот.</p></div>
+          <div class="card"><span class="number">3</span><h3>Бронь</h3><p class="muted">Только после финансовой ясности и чтения договора брони.</p></div>
+        </div>
+        <p class="quote">Решение принимается не в эмоции, а после фильтра безопасности и цифр.</p>
+      </div>
+      <div class="footer"><span>Встреча 3</span><span>19 / 24</span></div>
+    </section>
+
+    <section class="slide" id="slide-20">
+      <div class="wrap">
+        <p class="kicker">Блок 5 | Практика 1</p>
+        <h2>Кейс: семья, 2 детей, «хотим трешку до 12 млн»</h2>
+        <div class="grid two">
+          <div class="card strong"><h3>Задание агентам</h3><ul><li>Заполнить паспорт покупки.</li><li>Назвать 3 вопроса до предложения ЖК.</li><li>Отделить обязательные критерии от желательных.</li></ul></div>
+          <div class="card"><h3>Эталонные вопросы</h3><ul><li>Зачем именно 3-комнатная?</li><li>Когда нужны ключи?</li><li>Какой платеж комфортен?</li><li>Есть ли предодобрение?</li><li>Какие районы реальные?</li></ul></div>
+        </div>
+      </div>
+      <div class="footer"><span>Практика 1</span><span>20 / 24</span></div>
+    </section>
+
+    <section class="slide" id="slide-21">
+      <div class="wrap">
+        <p class="kicker">Блок 5 | Практика 2</p>
+        <h2>Сравнить 2-3 ЖК по таблице</h2>
+        <table>
+          <thead><tr><th>Параметр</th><th>Что заполнить</th></tr></thead>
+          <tbody>
+            <tr><td>Цена лота и м2</td><td>Не «от», а конкретный лот</td></tr>
+            <tr><td>Срок сдачи</td><td>Срок ключей, корпус, очередь</td></tr>
+            <tr><td>Застройщик</td><td>Эскроу, декларация, история сдачи</td></tr>
+            <tr><td>Ипотека</td><td>Ставка, срок, платеж после льготного периода</td></tr>
+            <tr><td>TCO 5 лет</td><td>Цена + проценты + ремонт + аренда ожидания</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="footer"><span>Практика 2</span><span>21 / 24</span></div>
+    </section>
+
+    <section class="slide" id="slide-22">
+      <div class="wrap">
+        <p class="kicker">Блок 5 | Практика 3</p>
+        <h2>Презентация ЖК за 60 секунд</h2>
+        <div class="card strong">
+          <p class="lead">«Этот ЖК подходит <span class="gold">[тип клиента]</span>, потому что <span class="gold">[сильная сторона]</span>. Компромисс - <span class="gold">[слабое место]</span>. Сравнивать логично с <span class="gold">[конкурент]</span>. По цифрам: <span class="gold">[цена / платеж / срок]</span>. Следующий шаг - <span class="gold">[осмотр / ипотека / бронь]</span>.»</p>
+        </div>
+        <div class="speaker"><strong>Заметка спикеру:</strong> проси агентов говорить не «красивый ЖК», а «кому подходит, почему подходит, какой компромисс и следующий шаг».</div>
+      </div>
+      <div class="footer"><span>60 секунд</span><span>22 / 24</span></div>
+    </section>
+
+    <section class="slide" id="slide-23">
+      <div class="wrap">
+        <p class="kicker">Блок 6</p>
+        <h2>Чек-листы агента</h2>
+        <div class="grid three">
+          <div class="card"><h3>Вопросы клиенту</h3><ul><li>Зачем покупаете?</li><li>Когда ключи?</li><li>Какой платеж комфортен?</li><li>Какие районы и почему?</li></ul></div>
+          <div class="card"><h3>Красные флаги</h3><ul><li>Нет эскроу.</li><li>Задержки по домам.</li><li>Нет декларации.</li><li>Давят бронью без документов.</li></ul></div>
+          <div class="card"><h3>Сделка</h3><ul><li>Паспорт заполнен.</li><li>Ипотека есть.</li><li>TCO посчитан.</li><li>ДДУ проверен.</li></ul></div>
+        </div>
+      </div>
+      <div class="footer"><span>Чек-листы</span><span>23 / 24</span></div>
+    </section>
+
+    <section class="slide" id="slide-24">
+      <div class="wrap split">
+        <div>
+          <p class="kicker">Финал</p>
+          <h2>Одна фраза, которую агент должен забрать</h2>
+          <p class="lead">Покупка новостройки - не поиск красивой картинки, а последовательное снижение рисков.</p>
+        </div>
+        <div class="card strong gold-border">
+          <h3>Домашнее задание</h3>
+          <ul>
+            <li>За 24 часа: паспорт покупки на реальном или учебном клиенте.</li>
+            <li>За 3 дня: shortlist из 5 ЖК.</li>
+            <li>За 3 дня: сравнить 2 лота по TCO.</li>
+            <li>До планерки: 60-сек презентация одного ЖК.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer"><span>Домашнее задание</span><span>24 / 24</span></div>
+    </section>
+  </main>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    const progressBar = document.getElementById("progressBar");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    function currentSlideIndex() {
+      const middle = window.scrollY + window.innerHeight / 2;
+      let index = 0;
+      slides.forEach((slide, i) => {
+        if (slide.offsetTop <= middle) index = i;
+      });
+      return index;
+    }
+
+    function goToSlide(index) {
+      const safeIndex = Math.max(0, Math.min(slides.length - 1, index));
+      slides[safeIndex].scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function updateProgress() {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      progressBar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+    }
+
+    prevBtn.addEventListener("click", () => goToSlide(currentSlideIndex() - 1));
+    nextBtn.addEventListener("click", () => goToSlide(currentSlideIndex() + 1));
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight" || event.key === "PageDown" || event.key === " ") {
+        event.preventDefault();
+        goToSlide(currentSlideIndex() + 1);
+      }
+      if (event.key === "ArrowLeft" || event.key === "PageUp") {
+        event.preventDefault();
+        goToSlide(currentSlideIndex() - 1);
+      }
+      if (event.key === "Home") goToSlide(0);
+      if (event.key === "End") goToSlide(slides.length - 1);
+    });
+    updateProgress();
+  </script>
+</body>
+</html>

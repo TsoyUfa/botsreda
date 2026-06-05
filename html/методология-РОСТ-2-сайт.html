@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="ru" class="theme-gold">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Методология РОСТ №2 - Голосовое управление бизнесом</title>
+    <meta name="description" content="Интерактивный симулятор оцифровки личного времени и бизнес-процессов обычным голосом через Телеграм-бота.">
+    <!-- Подключение премиальных шрифтов -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Определение CSS-переменных для обеих тем */
+        :root.theme-gold {
+            --color-bg: #0b1220;
+            --color-card-bg: #0f172a;
+            --color-accent: #d8b46a;
+            --color-accent-glow: rgba(216, 180, 106, 0.18);
+            --color-accent-dim: rgba(216, 180, 106, 0.1);
+            --color-border: #1e293b;
+            --color-white: #ffffff;
+            --color-soft-white: #e2e8f0;
+            --color-muted: #94a3b8;
+            --color-card-highlight: #1a150e;
+            --color-chat-user: #1e293b;
+            --color-chat-bot: #0d1527;
+            --color-success: #39ff14;
+            --color-error: #ff3366;
+            --theme-name: "Золотая классика";
+        }
+
+        :root.theme-neon {
+            --color-bg: #030611;
+            --color-card-bg: #0b111e;
+            --color-accent: #00f2fe;
+            --color-accent-glow: rgba(0, 242, 254, 0.18);
+            --color-accent-dim: rgba(0, 242, 254, 0.08);
+            --color-border: #132238;
+            --color-white: #ffffff;
+            --color-soft-white: #d1d5db;
+            --color-muted: #64748b;
+            --color-card-highlight: #0b222f;
+            --color-chat-user: #132035;
+            --color-chat-bot: #050a14;
+            --color-success: #39ff14;
+            --color-error: #ff3366;
+            --theme-name: "Кибер-неон";
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.4s ease, border-color 0.4s ease;
+        }
+
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-soft-white);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* CRT-эффект старого экрана для премиального стиля */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 9999;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        /* Премиальная рамка А4-постера */
+        .page-frame {
+            border: 1px solid var(--color-border);
+            max-width: 1200px;
+            margin: 10px auto;
+            padding: 40px;
+            background-color: rgba(11, 18, 32, 0.6);
+            border-radius: 4px;
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8);
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Переключатель стилей */
+        .theme-toggle-container {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        @media (max-width: 768px) {
+            .theme-toggle-container {
+                position: static;
+                justify-content: center;
+                margin-bottom: 20px;
+            }
+        }
+
+        .theme-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 1px;
+            color: var(--color-muted);
+            text-transform: uppercase;
+        }
+
+        .theme-switch {
+            width: 50px;
+            height: 26px;
+            background-color: var(--color-card-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 13px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-switch::after {
+            content: "";
+            width: 18px;
+            height: 18px;
+            background-color: var(--color-accent);
+            border-radius: 50%;
+            position: absolute;
+            top: 3px;
+            left: 4px;
+            box-shadow: 0 0 8px var(--color-accent-glow);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .theme-neon .theme-switch::after {
+            left: 26px;
+        }
+
+        .theme-switch:hover {
+            border-color: var(--color-accent);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+        .logo-area {
+            font-family: 'Outfit', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--color-accent);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            text-shadow: 0 0 10px var(--color-accent-glow);
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 40px;
+            font-weight: 800;
+            color: var(--color-white);
+            line-height: 1.2;
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+        }
+
+        h1 span {
+            color: var(--color-accent);
+            text-shadow: 0 0 20px var(--color-accent-glow);
+        }
+
+        .subtitle {
+            font-size: 15px;
+            color: var(--color-muted);
+            max-width: 750px;
+            margin: 0 auto;
+            font-weight: 300;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+            margin: 25px 0;
+        }
+
+        /* РОСТ-Стиль: Выделенные карточки */
+        .rost-highlight-card {
+            background-color: var(--color-card-highlight);
+            border: 1px solid var(--color-accent);
+            border-left: 4px solid var(--color-accent);
+            padding: 24px 30px;
+            border-radius: 4px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-inner-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card-inner-text {
+            font-size: 13.5px;
+            color: var(--color-soft-white);
+            line-height: 1.6;
+        }
+
+        /* Сетка симулятора: Двухколоночный макет */
+        .simulator-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 900px) {
+            .simulator-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Левая панель: Телеграм-клиент */
+        .panel-chat {
+            background-color: rgba(5, 10, 20, 0.95);
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            height: 580px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
+        }
+
+        .chat-header {
+            background-color: var(--color-chat-bot);
+            border-bottom: 1px solid var(--color-border);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .bot-avatar {
+            width: 42px;
+            height: 42px;
+            background-color: var(--color-accent);
+            color: var(--color-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 20px;
+            box-shadow: 0 0 12px var(--color-accent-glow);
+        }
+
+        .bot-meta h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            color: var(--color-white);
+            font-weight: 600;
+        }
+
+        .bot-meta p {
+            font-size: 11px;
+            color: var(--color-accent);
+            font-weight: 500;
+        }
+
+        .chat-content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            scroll-behavior: smooth;
+        }
+
+        .msg-bubble {
+            max-width: 85%;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            line-height: 1.5;
+            position: relative;
+            animation: bubblePop 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .msg-user {
+            background-color: var(--color-chat-user);
+            color: var(--color-soft-white);
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+            border: 1px solid var(--color-border);
+        }
+
+        .msg-bot {
+            background-color: var(--color-chat-bot);
+            color: var(--color-soft-white);
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+            border: 1px solid var(--color-border);
+        }
+
+        .msg-bot b {
+            color: var(--color-accent);
+        }
+
+        .msg-time {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 9px;
+            color: var(--color-muted);
+            text-align: right;
+            margin-top: 5px;
+        }
+
+        /* Интерактивный аудио-плеер */
+        .audio-player-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 250px;
+        }
+
+        .audio-main-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-play-audio {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background-color: var(--color-accent);
+            color: var(--color-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            font-size: 14px;
+            box-shadow: 0 0 10px var(--color-accent-glow);
+            transition: all 0.2s ease;
+        }
+
+        .btn-play-audio:hover {
+            transform: scale(1.05);
+        }
+
+        .audio-waves-wrapper {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 24px;
+            flex-grow: 1;
+            padding-bottom: 2px;
+        }
+
+        .wave-bar {
+            width: 3px;
+            background-color: var(--color-muted);
+            border-radius: 1px;
+            height: 4px;
+            transition: height 0.15s ease, background-color 0.3s ease;
+        }
+
+        /* Анимированные пульсирующие волны при проигрывании */
+        .playing .wave-bar {
+            background-color: var(--color-accent);
+            animation: wavePulse 1.2s ease-in-out infinite alternate;
+        }
+
+        .playing .wave-bar:nth-child(2n) { animation-delay: 0.15s; }
+        .playing .wave-bar:nth-child(3n) { animation-delay: 0.3s; }
+        .playing .wave-bar:nth-child(4n) { animation-delay: 0.45s; }
+
+        .audio-timer {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 10px;
+            color: var(--color-accent);
+            min-width: 30px;
+        }
+
+        /* Эффект посимвольной печати Whisper */
+        .whisper-text-box {
+            font-size: 11px;
+            font-style: italic;
+            color: var(--color-muted);
+            border-top: 1px solid var(--color-border);
+            padding-top: 8px;
+            margin-top: 6px;
+            line-height: 1.4;
+        }
+
+        .whisper-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-weight: 600;
+            color: var(--color-accent);
+            text-transform: uppercase;
+            font-size: 9px;
+            letter-spacing: 0.5px;
+            margin-bottom: 3px;
+        }
+
+        /* Пошаговый пайплайн размышлений ИИ */
+        .ai-pipeline-card {
+            background-color: rgba(11, 18, 32, 0.9);
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 10px;
+            align-self: flex-start;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            animation: bubblePop 0.3s ease forwards;
+        }
+
+        .pipeline-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--color-accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .pipeline-step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 11.5px;
+            color: var(--color-muted);
+            transition: all 0.3s ease;
+        }
+
+        .pipeline-step.active {
+            color: var(--color-soft-white);
+        }
+
+        .pipeline-step.completed {
+            color: var(--color-success);
+        }
+
+        .pipeline-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: var(--color-muted);
+            position: relative;
+        }
+
+        .pipeline-step.active .pipeline-dot {
+            background-color: var(--color-accent);
+            box-shadow: 0 0 8px var(--color-accent);
+        }
+
+        .pipeline-step.completed .pipeline-dot {
+            background-color: var(--color-success);
+        }
+
+        .pipeline-step-text {
+            flex-grow: 1;
+        }
+
+        .pipeline-status-indicator {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 9px;
+        }
+
+        /* Контроллеры симулятора */
+        .chat-input-controls {
+            background-color: var(--color-chat-bot);
+            border-top: 1px solid var(--color-border);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .controls-title {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
+        }
+
+        .btn-case {
+            background-color: var(--color-bg);
+            border: 1px solid var(--color-border);
+            color: var(--color-soft-white);
+            padding: 10px 14px;
+            font-size: 11.5px;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-case:hover:not(:disabled) {
+            border-color: var(--color-accent);
+            background-color: rgba(15, 23, 42, 0.5);
+            color: var(--color-accent);
+            transform: translateY(-1px);
+        }
+
+        .btn-case.active-running {
+            background-color: var(--color-accent-dim);
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+            cursor: not-allowed;
+        }
+
+        .btn-case:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Правая панель: Проводник Obsidian + Граф связей */
+        .panel-explorer {
+            background-color: var(--color-card-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            height: 580px;
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
+        }
+
+        .panel-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--color-accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: 8px;
+            margin-bottom: 5px;
+        }
+
+        .explorer-tree {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .folder-branch {
+            padding: 8px 12px;
+            border-radius: 4px;
+            border-left: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .folder-branch.active-highlight {
+            border-left-color: var(--color-accent);
+            background-color: var(--color-card-highlight);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.05);
+            animation: folderGlowPulse 1.5s ease;
+        }
+
+        .folder-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--color-white);
+        }
+
+        .folder-badge-new {
+            margin-left: auto;
+            background-color: var(--color-accent);
+            color: var(--color-bg);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 9px;
+            font-weight: 800;
+            padding: 1px 5px;
+            border-radius: 10px;
+            display: none;
+            animation: badgePop 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+        }
+
+        .file-sublist {
+            list-style: none;
+            padding-left: 22px;
+            margin-top: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .file-node {
+            font-size: 11px;
+            color: var(--color-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .file-node-new {
+            color: var(--color-accent);
+            font-weight: 600;
+            animation: textFadeIn 0.5s ease forwards;
+        }
+
+        /* Интерактивный граф связей (Obsidian Graph) на SVG */
+        .graph-container {
+            border: 1px solid var(--color-border);
+            background-color: rgba(5, 10, 20, 0.6);
+            border-radius: 4px;
+            height: 180px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .graph-label {
+            position: absolute;
+            top: 8px;
+            left: 10px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 9px;
+            color: var(--color-muted);
+            letter-spacing: 0.5px;
+            z-index: 10;
+        }
+
+        .graph-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Стили узлов и связей в графе */
+        .graph-node {
+            fill: var(--color-border);
+            stroke: var(--color-muted);
+            stroke-width: 1;
+            transition: all 0.4s ease;
+        }
+
+        .graph-node.core {
+            fill: var(--color-accent-dim);
+            stroke: var(--color-accent);
+            stroke-width: 1.5;
+        }
+
+        .graph-node.active {
+            fill: var(--color-accent);
+            stroke: var(--color-accent);
+            stroke-width: 2;
+            filter: drop-shadow(0 0 6px var(--color-accent));
+        }
+
+        .graph-node.active-success {
+            fill: var(--color-success);
+            stroke: var(--color-success);
+            stroke-width: 2;
+            filter: drop-shadow(0 0 6px var(--color-success));
+        }
+
+        .graph-link {
+            stroke: var(--color-border);
+            stroke-width: 1;
+            stroke-dasharray: 2;
+            transition: all 0.4s ease;
+        }
+
+        .graph-link.active-pulse {
+            stroke: var(--color-accent);
+            stroke-width: 1.5;
+            stroke-dasharray: 4;
+            animation: lineDashPulse 1s linear infinite;
+        }
+
+        .graph-node-text {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 7.5px;
+            fill: var(--color-muted);
+            text-anchor: middle;
+            pointer-events: none;
+            transition: fill 0.3s ease;
+        }
+
+        .graph-node-text.active {
+            fill: var(--color-white);
+            font-weight: bold;
+        }
+
+        /* Панель предпросмотра сгенерированного Markdown */
+        .panel-markdown-preview {
+            background-color: var(--color-card-bg);
+            border: 1px solid var(--color-accent);
+            border-radius: 4px;
+            padding: 24px;
+            margin-bottom: 40px;
+            box-shadow: 0 15px 30px -10px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .preview-badge {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 9px;
+            color: var(--color-accent);
+            background-color: var(--color-accent-dim);
+            padding: 2px 8px;
+            border: 1px solid var(--color-accent);
+            border-radius: 2px;
+            text-transform: uppercase;
+        }
+
+        .preview-content-box {
+            background-color: rgba(5, 10, 20, 0.95);
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            padding: 20px;
+            height: 250px;
+            overflow-y: auto;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11.5px;
+            color: var(--color-soft-white);
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        /* Виджет интерактивного чек-листа стандартов качества */
+        .panel-checklist {
+            background-color: var(--color-card-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 40px;
+        }
+
+        .checklist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            color: var(--color-muted);
+            transition: all 0.3s ease;
+        }
+
+        .check-item.verified {
+            color: var(--color-soft-white);
+        }
+
+        .check-box {
+            width: 16px;
+            height: 16px;
+            border: 1px solid var(--color-border);
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .check-item.verified .check-box {
+            border-color: var(--color-success);
+            background-color: rgba(57, 255, 20, 0.05);
+            color: var(--color-success);
+        }
+
+        /* Кнопки призыва к действию (CTA) */
+        .cta-box {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            display: inline-block;
+            padding: 14px 28px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            text-decoration: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+        }
+
+        .btn-accent {
+            background-color: var(--color-accent);
+            color: var(--color-bg);
+            border: 1px solid var(--color-accent);
+            box-shadow: 0 0 15px var(--color-accent-glow);
+        }
+
+        .btn-accent:hover {
+            box-shadow: 0 0 25px var(--color-accent);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--color-accent);
+            border: 1px solid var(--color-accent);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--color-accent-glow);
+            transform: translateY(-2px);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 10px;
+            color: var(--color-muted);
+            letter-spacing: 1px;
+        }
+
+        /* Ключевые анимации */
+        @keyframes bubblePop {
+            from { opacity: 0; transform: scale(0.96) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        @keyframes badgePop {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        @keyframes textFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes wavePulse {
+            from { height: 4px; }
+            to { height: 22px; }
+        }
+
+        @keyframes folderGlowPulse {
+            0% { box-shadow: 0 0 0px transparent; }
+            50% { box-shadow: 0 0 20px var(--color-accent-glow); }
+            100% { box-shadow: 0 0 0px transparent; }
+        }
+
+        @keyframes lineDashPulse {
+            to { stroke-dashoffset: -20; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-frame" id="rost-interactive-app">
+        
+        <!-- Шапка с переключателем стилей -->
+        <div class="theme-toggle-container">
+            <span class="theme-label" id="theme-text">Режим: Золотая классика</span>
+            <div class="theme-switch" onclick="toggleTheme()" title="Переключить тему оформления"></div>
+        </div>
+
+        <header>
+            <div class="logo-area">Автономная экосистема</div>
+            <h1>Управление бизнесом голосом: <span>РОСТ №2</span></h1>
+            <p class="subtitle">Интерактивный симулятор «для блондинок». Запусти оцифровку сырых мыслей обычным голосом и посмотри, как ИИ раскладывает их по ячейкам Второго Мозга.</p>
+            <div class="divider"></div>
+        </header>
+
+        <!-- Карточка РОСТ-Стиль -->
+        <section class="rost-highlight-card">
+            <h2 class="card-inner-title">Принцип оцифровки в один шаг</h2>
+            <p class="card-inner-text">
+                Ты просто наговариваешь голосовое сообщение в Телеграм-бот на ходу - умный ИИ-помощник считывает его, вычищает словесный мусор и воду, маршрутизирует в нужную папку Базы знаний и связывает с другими документами. Ты разгружаешь голову, сохраняешь важные активы и выходишь на стабильные 500к+ рублей в месяц, освобождая время для жизни.
+            </p>
+        </section>
+
+        <!-- Основная сетка симулятора -->
+        <section class="simulator-grid">
+            
+            <!-- Левая колонка: Чат-клиент -->
+            <div class="panel-chat">
+                <div class="chat-header">
+                    <div class="bot-avatar">Р</div>
+                    <div class="bot-meta">
+                        <h3>ИИ-помощник «РОСТ»</h3>
+                        <p>в сети | готов к оцифровке</p>
+                    </div>
+                </div>
+
+                <div class="chat-content" id="chat-box">
+                    <div class="msg-bubble msg-bot">
+                        Привет! Я твой цифровой ассистент РОСТ. Выбери один из кейсов в панели ниже, чтобы симулировать голосовой ввод, и понаблюдай, как ИИ мгновенно создаст цифровые активы в Базе знаний.
+                        <div class="msg-time">22:00</div>
+                    </div>
+                </div>
+
+                <!-- Контроллеры симуляции -->
+                <div class="chat-input-controls">
+                    <div class="controls-title">Выбери кейс для оцифровки голосом:</div>
+                    <div class="controls-grid">
+                        <button class="btn-case" id="btn-case-1" onclick="runSimulation(1)">
+                            🎤 Кейс 1: Услуга и ТЗ
+                        </button>
+                        <button class="btn-case" id="btn-case-2" onclick="runSimulation(2)">
+                            🎤 Кейс 2: Регламент 15м
+                        </button>
+                        <button class="btn-case" id="btn-case-3" onclick="runSimulation(3)">
+                            🎤 Кейс 3: Пост на ходу
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Правая колонка: Obsidian Проводник + Граф -->
+            <div class="panel-explorer">
+                <h2 class="panel-title">Второй Мозг (Obsidian)</h2>
+                
+                <!-- Интерактивный граф связей -->
+                <div class="graph-container">
+                    <div class="graph-label">Интерактивный граф связей (Obsidian-граф)</div>
+                    <svg class="graph-svg" id="obsidian-graph">
+                        <!-- Линии связей (будут активироваться через JS) -->
+                        <line id="link-bus-task" class="graph-link" x1="50" y1="40" x2="135" y2="40"></line>
+                        <line id="link-bus-mst" class="graph-link" x1="50" y1="40" x2="50" y2="120"></line>
+                        <line id="link-cln-task" class="graph-link" x1="220" y1="120" x2="135" y2="40"></line>
+                        <line id="link-mst-cln" class="graph-link" x1="50" y1="120" x2="220" y2="120"></line>
+                        <line id="link-bus-cln" class="graph-link" x1="50" y1="40" x2="220" y2="120"></line>
+                        
+                        <!-- Узлы графа -->
+                        <!-- 1. Бизнес -->
+                        <circle id="node-g-business" class="graph-node core" cx="50" cy="40" r="8"></circle>
+                        <!-- 2. План -->
+                        <circle id="node-g-plan" class="graph-node core" cx="135" cy="40" r="8"></circle>
+                        <!-- 3. Мой клон -->
+                        <circle id="node-g-clone" class="graph-node core" cx="220" cy="120" r="8"></circle>
+                        <!-- 4. Мастерство -->
+                        <circle id="node-g-mastery" class="graph-node core" cx="50" cy="120" r="8"></circle>
+                        
+                        <!-- Дополнительные лиф-узлы -->
+                        <circle id="node-g-file1" class="graph-node" cx="90" cy="80" r="4"></circle>
+                        <circle id="node-g-file2" class="graph-node" cx="170" cy="80" r="4"></circle>
+                        
+                        <!-- Подписи к узлам -->
+                        <text class="graph-node-text active" x="50" y="25">1. Бизнес</text>
+                        <text class="graph-node-text active" x="135" y="25">2. План</text>
+                        <text class="graph-node-text active" x="220" y="140">3. Мой клон</text>
+                        <text class="graph-node-text active" x="50" y="140">4. Мастерство</text>
+                    </svg>
+                </div>
+
+                <!-- Структура папок -->
+                <ul class="explorer-tree">
+                    <!-- Папка 1: Бизнес -->
+                    <li class="folder-branch" id="folder-box-business">
+                        <div class="folder-info">
+                            📂 1. Бизнес <span class="folder-badge-new" id="badge-box-business">+1</span>
+                        </div>
+                        <ul class="file-sublist" id="files-box-business">
+                            <li class="file-node">📄 тарифы-на-услуги.md</li>
+                            <li class="file-node">📄 описание-продуктов.md</li>
+                        </ul>
+                    </li>
+
+                    <!-- Папка 2: План -->
+                    <li class="folder-branch" id="folder-box-plan">
+                        <div class="folder-info">
+                            📂 2. План <span class="folder-badge-new" id="badge-box-plan">+1</span>
+                        </div>
+                        <ul class="file-sublist" id="files-box-plan">
+                            <li class="file-node">📄 входящие-задачи.md</li>
+                            <li class="file-node">📄 контент-план.md</li>
+                        </ul>
+                    </li>
+
+                    <!-- Папка 3: Мой клон -->
+                    <li class="folder-branch" id="folder-box-clone">
+                        <div class="folder-info">
+                            📂 3. Мой клон <span class="folder-badge-new" id="badge-box-clone">+1</span>
+                        </div>
+                        <ul class="file-sublist" id="files-box-clone">
+                            <li class="file-node">📄 голос-автора.md</li>
+                            <li class="file-node">📄 методология-РОСТ-2.md</li>
+                        </ul>
+                    </li>
+
+                    <!-- Папка 4: Мастерство -->
+                    <li class="folder-branch" id="folder-box-mastery">
+                        <div class="folder-info">
+                            📂 4. Мастерство <span class="folder-badge-new" id="badge-box-mastery">+1</span>
+                        </div>
+                        <ul class="file-sublist" id="files-box-mastery">
+                            <li class="file-node">📄 чек-лист-диагностики.md</li>
+                            <li class="file-node">📄 регламент-ассистента.md</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Раздел живого предпросмотра созданной заметки -->
+        <section class="panel-markdown-preview">
+            <h2 class="panel-title">📄 Содержимое сгенерированной заметки (Markdown)</h2>
+            <div class="preview-badge" id="preview-filename-badge">Ожидание запуска симуляции...</div>
+            <div class="preview-content-box" id="preview-editor-box">Выбери кейс в панели симулятора Телеграм-бота, чтобы ИИ сгенерировал заметку и отобразил ее чистый структурированный Markdown-код с YAML-метаданными и ссылками [[двойными скобками]]...</div>
+        </section>
+
+        <!-- Виджет контроля стандартов качества РОСТ -->
+        <section class="panel-checklist">
+            <h2 class="panel-title">⚡ Виджет контроля стандартов оцифровки РОСТ</h2>
+            <div class="checklist-grid" id="checklist-standards-box">
+                <div class="check-item" id="check-words">
+                    <div class="check-box">✓</div>
+                    <span>Без академического мусора</span>
+                </div>
+                <div class="check-item" id="check-english">
+                    <div class="check-box">✓</div>
+                    <span>Без англицизмов (100% русский)</span>
+                </div>
+                <div class="check-item" id="check-dashes">
+                    <div class="check-box">✓</div>
+                    <span>Короткие тире (запрет на длинные)</span>
+                </div>
+                <div class="check-item" id="check-tov">
+                    <div class="check-box">✓</div>
+                    <span>Манера речи собственника (3П)</span>
+                </div>
+                <div class="check-item" id="check-links">
+                    <div class="check-box">✓</div>
+                    <span>Смысловое связывание (двойные скобки)</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA кнопки внизу -->
+        <div class="cta-box">
+            <a href="file:///Users/anton_tsoy/Desktop/Обсидиан/3. Мой клон/методология-РОСТ-2.pdf" class="btn-action btn-accent" target="_blank">Скачать PDF РОСТ №2</a>
+            <a href="file:///Users/anton_tsoy/Desktop/Обсидиан/html/методология-РОСТ-сайт.html" class="btn-action btn-outline">Технический манифест РОСТ</a>
+        </div>
+
+        <footer>
+            © 2026 АВТОНОМНАЯ ЭКОСИСТЕМА РОСТ - КОНТРОЛЬ И СВОБОДА СОБСТВЕННИКА
+        </footer>
+    </div>
+
+    <!-- Логика интерактивного симулятора -->
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const previewEditorBox = document.getElementById('preview-editor-box');
+        const previewFilenameBadge = document.getElementById('preview-filename-badge');
+        
+        let isSimulationRunning = false;
+        
+        // Кейсы голосовых сообщений пользователя
+        const cases = {
+            1: {
+                text: "Давай сделаем для клиентов новую премиальную услугу - оцифровку их бизнес-процессов под ключ за 150 тысяч рублей. Запиши это описание в папку Бизнес. И еще, поставь задачу ассистенту на понедельник на 10 утра: подготовить шаблон КП под этот продукт...",
+                fileName: "услуга-оцифровка.md",
+                folderId: "business",
+                relatedFolderId: "plan",
+                relatedFileName: "задача-ассистенту.md",
+                markdown: `---
+вид: услуга
+цена: 150000 руб
+статус: активен
+---
+# 💼 Услуга: Оцифровка бизнес-процессов под ключ
+
+> **Оффер:** Оцифровка операционного хаоса и разработка регламентов под ключ.
+> **Выгода:** Полное освобождение личного времени собственника, выход на стабильные **500к+ рублей в месяц** и личную свободу.
+
+### 💰 Финансовые параметры:
+* Розничная стоимость: 150 000 руб (единоразовый платеж).
+* Сроки оцифровки: 14 рабочих дней.
+* Окупаемость: окупается за 1-2 месяца за счет высвобождения 30+ часов времени руководителя и устранения ошибок сотрудников.
+
+### 🔗 Смысловое связывание:
+* Условия делегирования: [[регламент-ассистента]]
+* Инструменты оцифровки: [[чек-лист-диагностики]]`,
+                botReply: `<b>Оцифровка сырого голоса успешно выполнена!</b><br><br>
+📁 Описание премиальной услуги создано и сохранено в <b>1. Бизнес/услуга-оцифровка.md</b>.<br>
+📁 Рабочая задача поставлена и сохранена в <b>2. План/задача-ассистенту.md</b>.<br><br>
+💬 <b>Сгенерировано ТЗ для ассистента:</b><br>
+<i>"В понедельник к 10:00 подготовить шаблон коммерческого предложения под продукт «Оцифровка бизнес-процессов под ключ» за 150 000 руб и направить собственнику на согласование."</i>`,
+                verifyList: ["words", "english", "dashes", "tov", "links"],
+                nodes: ["business", "plan"],
+                links: ["link-bus-task"]
+            },
+            2: {
+                text: "Запиши новое правило для менеджеров по продажам. Я сегодня заметил, что мы потеряли клиента, потому что менеджер ответил на заявку только через 3 часа. Вводим жесткий регламент: ответ на входящий запрос должен быть максимум в течение 15 минут. Оформи это как наш новый стандарт обслуживания.",
+                fileName: "регламент-15-минут.md",
+                folderId: "mastery",
+                relatedFolderId: null,
+                relatedFileName: null,
+                markdown: `---
+тип: стандарт
+отдел: отдел продаж
+SLA: 15 минут
+---
+# ⚡ Регламент обработки входящих запросов: правило 15 минут
+
+> **Цель:** Устранить потерю лидов и недополучение прибыли из-за медленной реакции сотрудников на заявки.
+
+### 📐 Стандарт работы менеджеров:
+1. Ответ на любой входящий запрос от потенциального клиента должен быть дан в течение **15 минут** с момента фиксации во Входящих задачах.
+2. Если менеджер перегружен и не укладывается в норматив - он обязан написать предупреждение в рабочий чат для подстраховки.
+3. Систематические просрочки напрямую сжигают рекламный бюджет и снижают общую маржинальность, что ведет к вычетам из бонусов.
+
+### 🔗 Смысловое связывание:
+* Проверка качества: [[чек-лист-диагностики]]
+* Манера общения: [[голос-автора]]`,
+                botReply: `<b>Новый стандарт успешно внедрен во Второй Мозг!</b><br><br>
+📁 Регламент составлен и интегрирован в <b>4. Мастерство/регламент-15-минут.md</b>.<br><br>
+📜 <b>Создан регламент обработки:</b><br>
+<i>«Регламент обработки заявок: правило 15 минут» - Ответ на входящую заявку от клиента должен быть строго в течение 15 минут. Нарушение ведет к сгоранию маржи и напрямую отражается на бонусах менеджеров.</i>`,
+                verifyList: ["words", "english", "dashes", "tov", "links"],
+                nodes: ["mastery", "clone"],
+                links: ["link-mst-cln", "link-bus-mst"]
+            },
+            3: {
+                text: "Я еду со встречи и понял важную вещь. Многие предприниматели пытаются внедрять сложные CRM-системы, но сотрудники саботируют работу и ведут клиентов в блокнотах. Потому что нет простых правил. Напиши об этом пост в мой канал. Объясни, что сначала нужно прописать правила на бумаге по нашей методологии РОСТ, а потом уже автоматизировать. Напиши с юмором, просто, как я общаюсь.",
+                fileName: "пост-про-CRM.md",
+                folderId: "plan",
+                relatedFolderId: "clone",
+                relatedFileName: "голос-автора.md",
+                markdown: `---
+тип: контент
+канал: Телеграм
+тема: CRM и регламенты
+---
+# 📝 Пост: Почему CRM не спасет от хаоса в продажах
+
+Слушай, многие думают, что если купить дорогую CRM-систему, то продажи волшебным образом взлетят сами собой. Но по факту менеджеры продолжают вести клиентов на коленке или в блокнотах, саботируя автоматизацию.
+
+Проблема не в программе. Проблема в том, что у тебя нет простых правил. 
+
+**Нельзя автоматизировать хаос** - на выходе ты получишь просто дорогой автоматизированный хаос. 
+
+Сначала оцифруй процессы и пропиши правила на бумаге по нашей методологии РОСТ, а потом уже настраивай систему. Иначе просто сожжешь рекламный бюджет и время. 
+
+### 🔗 Смысловое связывание:
+* Основной манифест оцифровки: [[методология-РОСТ-2]]
+* Манера речи автора: [[голос-автора]]`,
+                botReply: `<b>Текст для Телеграм-канала готов и сохранен в контент-план!</b><br><br>
+📁 Черновик поста сохранен в <b>2. План/пост-про-CRM.md</b>.<br>
+🧠 Анализатор считал манеру речи из <b>3. Мой клон/голос-автора.md</b> для адаптации Tone of Voice.<br><br>
+📝 <b>Текст поста:</b><br>
+<i>"Слушай, многие думают, что если купить дорогую CRM-систему, то продажи взлетят. Но менеджеры все равно пишут в блокнотах. Проблема не в софте, а в отсутствии простых правил. Сначала оцифруй регламенты РОСТ на бумаге, а потом автоматизируй. Иначе просто сожжешь бюджет..."</i>`,
+                verifyList: ["words", "english", "dashes", "tov", "links"],
+                nodes: ["plan", "clone"],
+                links: ["link-cln-task", "link-bus-cln"]
+            }
+        };
+
+        // 1. Смена визуальной темы (Золото / Неон)
+        function toggleTheme() {
+            const html = document.documentElement;
+            const themeText = document.getElementById('theme-text');
+            
+            if (html.classList.contains('theme-gold')) {
+                html.classList.replace('theme-gold', 'theme-neon');
+                themeText.textContent = "Режим: Кибер-неон";
+            } else {
+                html.classList.replace('theme-neon', 'theme-gold');
+                themeText.textContent = "Режим: Золотая классика";
+            }
+        }
+
+        // 2. Основной запуск симулятора
+        function runSimulation(caseId) {
+            if (isSimulationRunning) return;
+            isSimulationRunning = true;
+
+            // Блокируем кнопки
+            disableCaseButtons(true, caseId);
+
+            // Сброс проводника, превью и графа
+            resetExplorerAndGraph();
+
+            const c = cases[caseId];
+            const timeStr = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+            // Шаг А: Создание аудио-пузыря пользователя
+            const userAudioHtml = `
+                <div class="msg-bubble msg-user" id="user-audio-msg">
+                    <div class="audio-player-container playing" id="player-container">
+                        <div class="audio-main-row">
+                            <button class="btn-play-audio" id="audio-play-toggle" onclick="toggleAudioPlayback()">❚❚</button>
+                            <div class="audio-waves-wrapper">
+                                ${Array.from({length: 22}, () => `<div class="wave-bar" style="height: ${Math.floor(Math.random() * 16) + 4}px"></div>`).join('')}
+                            </div>
+                            <div class="audio-timer" id="timer-box">0:00</div>
+                        </div>
+                        <div class="whisper-text-box" id="whisper-type-box">
+                            <div class="whisper-label">Whisper-Распознавание:</div>
+                            <span id="whisper-type-content"></span>
+                        </div>
+                    </div>
+                    <div class="msg-time">${timeStr}</div>
+                </div>
+            `;
+            chatBox.insertAdjacentHTML('beforeend', userAudioHtml);
+            scrollChat();
+
+            // Анимация таймера и посимвольной печати текста Whisper
+            let timerSec = 0;
+            const timerInterval = setInterval(() => {
+                timerSec++;
+                document.getElementById('timer-box').textContent = `0:0${timerSec}`;
+                if (timerSec >= 5) clearInterval(timerInterval);
+            }, 1000);
+
+            const typeContentSpan = document.getElementById('whisper-type-content');
+            let charIndex = 0;
+            const typingInterval = setInterval(() => {
+                typeContentSpan.textContent += c.text.charAt(charIndex);
+                charIndex++;
+                if (charIndex >= c.text.length) {
+                    clearInterval(typingInterval);
+                    // Останавливаем воспроизведение
+                    document.getElementById('player-container').classList.remove('playing');
+                    document.getElementById('audio-play-toggle').textContent = "▶";
+                    // Переходим к ИИ-пайплайну анализа через 800мс
+                    setTimeout(() => {
+                        runAIPipeline(c, timeStr);
+                    }, 800);
+                }
+            }, 15); // Быстрая печать
+        }
+
+        // Шаг Б: Пайплайн размышлений ИИ-помощника
+        function runAIPipeline(caseData, timeStr) {
+            const pipelineHtml = `
+                <div class="ai-pipeline-card" id="ai-pipeline-box">
+                    <div class="pipeline-title">
+                        <span>Анализатор системы «РОСТ»</span>
+                        <span class="pipeline-status-indicator" id="pipeline-overall-status">Обработка...</span>
+                    </div>
+                    <div class="pipeline-step" id="p-step-1">
+                        <div class="pipeline-dot"></div>
+                        <span class="pipeline-step-text">Голосовой Whisper-ввод</span>
+                        <span class="pipeline-status-indicator" id="p-status-1">Ожидание...</span>
+                    </div>
+                    <div class="pipeline-step" id="p-step-2">
+                        <div class="pipeline-dot"></div>
+                        <span class="pipeline-step-text">Очистка текста от воды и мусора</span>
+                        <span class="pipeline-status-indicator" id="p-status-2">Ожидание...</span>
+                    </div>
+                    <div class="pipeline-step" id="p-step-3">
+                        <div class="pipeline-dot"></div>
+                        <span class="pipeline-step-text">Маршрутизация по квадрантам РОСТ</span>
+                        <span class="pipeline-status-indicator" id="p-status-3">Ожидание...</span>
+                    </div>
+                    <div class="pipeline-step" id="p-step-4">
+                        <div class="pipeline-dot"></div>
+                        <span class="pipeline-step-text">Смысловое связывание заметок</span>
+                        <span class="pipeline-status-indicator" id="p-status-4">Ожидание...</span>
+                    </div>
+                    <div class="pipeline-step" id="p-step-5">
+                        <div class="pipeline-dot"></div>
+                        <span class="pipeline-step-text">Синхронизация с манерой речи</span>
+                        <span class="pipeline-status-indicator" id="p-status-5">Ожидание...</span>
+                    </div>
+                </div>
+            `;
+            chatBox.insertAdjacentHTML('beforeend', pipelineHtml);
+            scrollChat();
+
+            const steps = [
+                {id: 1, text: "Выполнено", delay: 700},
+                {id: 2, text: "Очищено", delay: 800},
+                {id: 3, text: "Распределено", delay: 700},
+                {id: 4, text: "Связано", delay: 900},
+                {id: 5, text: "Адаптировано", delay: 800}
+            ];
+
+            let stepIdx = 0;
+            function nextStep() {
+                if (stepIdx < steps.length) {
+                    const step = steps[stepIdx];
+                    const stepEl = document.getElementById(`p-step-${step.id}`);
+                    const statusEl = document.getElementById(`p-status-${step.id}`);
+                    
+                    stepEl.classList.add('active');
+                    statusEl.textContent = "Анализ...";
+
+                    // Включаем пульсацию связей в графе при шаге "Смысловое связывание"
+                    if (step.id === 4) {
+                        animateGraphLinks(caseData.links);
+                    }
+
+                    setTimeout(() => {
+                        stepEl.classList.replace('active', 'completed');
+                        statusEl.textContent = step.text;
+                        
+                        // Активируем интерактивный виджет качества при завершении шагов
+                        triggerCheckItem(step.id);
+                        
+                        stepIdx++;
+                        nextStep();
+                    }, step.delay);
+                } else {
+                    // Пайплайн завершен
+                    document.getElementById('pipeline-overall-status').textContent = "Готово";
+                    document.getElementById('pipeline-overall-status').style.color = "var(--color-success)";
+                    
+                    // Показываем ответ ИИ и финальные изменения через 600мс
+                    setTimeout(() => {
+                        showFinalOutputs(caseData, timeStr);
+                    }, 600);
+                }
+            }
+
+            nextStep();
+        }
+
+        // Шаг В: Вывод финального ответа, обновление проводника и графа
+        function showFinalOutputs(caseData, timeStr) {
+            // Удаляем временный пайплайн для чистоты чата
+            const pipelineEl = document.getElementById('ai-pipeline-box');
+            if (pipelineEl) pipelineEl.remove();
+
+            // 1. Добавление сообщения ИИ в чат
+            const botMsgHtml = `
+                <div class="msg-bubble msg-bot">
+                    ${caseData.botReply}
+                    <div class="msg-time">${timeStr}</div>
+                </div>
+            `;
+            chatBox.insertAdjacentHTML('beforeend', botMsgHtml);
+            scrollChat();
+
+            // 2. Раскрытие проводника Obsidian
+            triggerExplorerUpdate(caseData.folderId, caseData.fileName);
+            if (caseData.relatedFolderId && caseData.relatedFileName) {
+                triggerExplorerUpdate(caseData.relatedFolderId, caseData.relatedFileName, true);
+            }
+
+            // 3. Подсветка узлов графа успехом
+            triggerGraphNodes(caseData.nodes);
+
+            // 4. Запись Markdown-кода в панель предпросмотра
+            previewFilenameBadge.textContent = `${caseData.folderId === 'business' ? '1. Бизнес' : caseData.folderId === 'plan' ? '2. План' : caseData.folderId === 'clone' ? '3. Мой клон' : '4. Мастерство'}/${caseData.fileName}`;
+            previewFilenameBadge.style.color = "var(--color-success)";
+            previewFilenameBadge.style.borderColor = "var(--color-success)";
+            previewEditorBox.textContent = caseData.markdown;
+
+            // Разблокируем кнопки
+            disableCaseButtons(false);
+            isSimulationRunning = false;
+        }
+
+        // Вспомогательные функции для анимации интерфейса
+        function scrollChat() {
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function disableCaseButtons(disable, activeId = null) {
+            for (let i = 1; i <= 3; i++) {
+                const btn = document.getElementById(`btn-case-${i}`);
+                btn.disabled = disable;
+                if (disable && i === activeId) {
+                    btn.classList.add('active-running');
+                } else {
+                    btn.classList.remove('active-running');
+                }
+            }
+        }
+
+        function triggerExplorerUpdate(folderId, fileName, isSecondary = false) {
+            const branch = document.getElementById(`folder-box-${folderId}`);
+            const badge = document.getElementById(`badge-box-${folderId}`);
+            const fileList = document.getElementById(`files-box-${folderId}`);
+
+            branch.classList.add('active-highlight');
+            badge.style.display = 'inline-block';
+            
+            // Проверка, есть ли уже этот файл, чтобы не дублировать
+            const existingFiles = Array.from(fileList.children).map(li => li.textContent.trim());
+            if (!existingFiles.includes(`📄 ${fileName}`)) {
+                const newFileHtml = `<li class="file-node file-node-new">📄 ${fileName}</li>`;
+                fileList.insertAdjacentHTML('beforeend', newFileHtml);
+            }
+        }
+
+        function triggerCheckItem(stepId) {
+            const stepToWidget = {
+                1: 'check-words',
+                2: 'check-english',
+                3: 'check-dashes',
+                4: 'check-links',
+                5: 'check-tov'
+            };
+            const widgetId = stepToWidget[stepId];
+            if (widgetId) {
+                document.getElementById(widgetId).classList.add('verified');
+            }
+        }
+
+        function animateGraphLinks(linkIds) {
+            linkIds.forEach(id => {
+                const link = document.getElementById(id);
+                if (link) link.classList.add('active-pulse');
+            });
+        }
+
+        function triggerGraphNodes(nodeIds) {
+            nodeIds.forEach(id => {
+                const node = document.getElementById(`node-g-${id}`);
+                const text = document.querySelector(`text[x="${node.cx.baseVal.value}"][y="${node.cy.baseVal.value + (id === 'business' || id === 'plan' ? -15 : 20)}"]`);
+                if (node) node.classList.add('active-success');
+                if (text) text.classList.add('active');
+            });
+        }
+
+        function resetExplorerAndGraph() {
+            // Сброс проводника
+            document.querySelectorAll('.folder-badge-new').forEach(b => b.style.display = 'none');
+            document.querySelectorAll('.folder-branch').forEach(br => br.classList.remove('active-highlight'));
+            document.querySelectorAll('.file-node-new').forEach(f => f.remove());
+
+            // Сброс графа
+            document.querySelectorAll('.graph-node').forEach(n => {
+                n.classList.remove('active');
+                n.classList.remove('active-success');
+            });
+            document.querySelectorAll('.graph-link').forEach(l => l.classList.remove('active-pulse'));
+
+            // Сброс чек-листа
+            document.querySelectorAll('.check-item').forEach(i => i.classList.remove('verified'));
+
+            // Сброс предпросмотра
+            previewFilenameBadge.textContent = "Ожидание запуска симуляции...";
+            previewFilenameBadge.style.color = "var(--color-accent)";
+            previewFilenameBadge.style.borderColor = "var(--color-border)";
+            previewEditorBox.textContent = "Выбери кейс в панели симулятора Телеграм-бота, чтобы ИИ сгенерировал заметку...";
+        }
+
+        function toggleAudioPlayback() {
+            const player = document.getElementById('player-container');
+            const btn = document.getElementById('audio-play-toggle');
+            if (player.classList.contains('playing')) {
+                player.classList.remove('playing');
+                btn.textContent = "▶";
+            } else {
+                player.classList.add('playing');
+                btn.textContent = "❚❚";
+            }
+        }
+    </script>
+</body>
+</html>

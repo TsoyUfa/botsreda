@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HR-баннер A4</title>
+  <style>
+    :root {
+      --paper-width: 210mm;
+      --paper-height: 297mm;
+      --white: #ffffff;
+      --soft-white: rgba(255, 255, 255, 0.86);
+      --muted: rgba(255, 255, 255, 0.74);
+      --line: rgba(255, 255, 255, 0.22);
+      --glass: rgba(11, 18, 32, 0.5);
+      --glass-strong: rgba(11, 18, 32, 0.68);
+      --accent: #d8b46a;
+      --accent-soft: rgba(216, 180, 106, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #111827;
+      font-family: Inter, Montserrat, Arial, sans-serif;
+      color: var(--white);
+    }
+
+    .poster {
+      position: relative;
+      width: var(--paper-width);
+      height: var(--paper-height);
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(5, 12, 24, 0.42) 0%, rgba(5, 12, 24, 0.58) 50%, rgba(5, 12, 24, 0.84) 100%),
+        url("hr-banner-photo.png") 44% center / cover no-repeat;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      isolation: isolate;
+    }
+
+    .poster::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 12%, rgba(216, 180, 106, 0.28), transparent 30%),
+        radial-gradient(circle at 84% 70%, rgba(255, 255, 255, 0.2), transparent 30%),
+        linear-gradient(90deg, rgba(6, 13, 26, 0.82) 0%, rgba(6, 13, 26, 0.44) 48%, rgba(6, 13, 26, 0.22) 100%);
+      z-index: -1;
+    }
+
+    .poster::after {
+      content: "";
+      position: absolute;
+      inset: 18mm;
+      border: 1px solid var(--line);
+      pointer-events: none;
+    }
+
+    .content {
+      height: 100%;
+      padding: 22mm 18mm 18mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14mm;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      width: max-content;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      color: var(--soft-white);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 18px rgba(216, 180, 106, 0.75);
+    }
+
+    h1 {
+      max-width: 132mm;
+      margin: 14mm 0 0;
+      font-size: 58px;
+      line-height: 0.95;
+      letter-spacing: -0.055em;
+      text-wrap: balance;
+    }
+
+    .lead {
+      max-width: 120mm;
+      margin: 7mm 0 0;
+      color: var(--soft-white);
+      font-size: 22px;
+      line-height: 1.28;
+      font-weight: 500;
+    }
+
+    .services {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 4mm;
+      max-width: 128mm;
+    }
+
+    .card {
+      display: grid;
+      grid-template-columns: 15mm 1fr;
+      gap: 5mm;
+      align-items: center;
+      padding: 5.2mm;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--glass);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 14px 42px rgba(0, 0, 0, 0.22);
+    }
+
+    .icon {
+      width: 15mm;
+      height: 15mm;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: var(--accent-soft);
+      border: 1px solid rgba(216, 180, 106, 0.34);
+      color: var(--accent);
+      font-size: 25px;
+      font-weight: 800;
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 19px;
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+    }
+
+    .card p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.32;
+    }
+
+    .bottom {
+      display: grid;
+      gap: 5mm;
+    }
+
+    .cta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10mm;
+      padding: 7mm;
+      border-radius: 26px;
+      background: var(--glass-strong);
+      border: 1px solid rgba(216, 180, 106, 0.35);
+      backdrop-filter: blur(18px);
+    }
+
+    .cta-title {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .cta-text {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .contact {
+      min-width: 48mm;
+      padding: 12px 16px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #172033;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .note {
+      color: rgba(255, 255, 255, 0.58);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    @media print {
+      body {
+        background: transparent;
+      }
+
+      .poster {
+        width: 210mm;
+        height: 297mm;
+        box-shadow: none;
+      }
+
+      @page {
+        size: A4 portrait;
+        margin: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="poster" aria-label="A4 баннер HR-услуг">
+    <section class="content">
+      <header>
+        <div class="eyebrow">HR-сервис</div>
+        <h1>Карьера под контролем</h1>
+        <p class="lead">Помогаем найти работу, уверенно пройти отбор и показать себя сильным кандидатом.</p>
+      </header>
+
+      <section class="services" aria-label="Услуги">
+        <article class="card">
+          <div class="icon">01</div>
+          <div>
+            <h2>Подбор персонала любой сложности</h2>
+            <p>Находим специалистов под конкретные задачи, сроки и требования бизнеса.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="icon">02</div>
+          <div>
+            <h2>Составление сильного резюме</h2>
+            <p>Упаковываем опыт, достижения и навыки так, чтобы вас заметили.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="icon">03</div>
+          <div>
+            <h2>Подготовка к собеседованию</h2>
+            <p>Разбираем вопросы, ответы, слабые места и уверенную самопрезентацию.</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="icon">04</div>
+          <div>
+            <h2>Репетиция интервью</h2>
+            <p>Проигрываем собеседование заранее: что говорить, чего избегать и как пройти отбор.</p>
+          </div>
+        </article>
+      </section>
+
+      <footer class="bottom">
+        <div class="cta">
+          <div>
+            <div class="cta-title">Запишитесь на консультацию</div>
+            <div class="cta-text">Разберём вашу задачу и подберём самый короткий путь к результату.</div>
+          </div>
+          <div class="contact">Telegram / WhatsApp</div>
+        </div>
+        <div class="note">Резюме · собеседование · подбор персонала · HR-консультации</div>
+      </footer>
+    </section>
+  </main>
+</body>
+</html>

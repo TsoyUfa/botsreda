@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B-Roll Motion Graphic: Снижение ставок по ипотеке</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #030611;
+      --accent-cyan: #00f2fe;
+      --accent-blue: #0072ff;
+      --accent-red: #ff3366;
+      --accent-green: #39ff14;
+      --text-white: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.5);
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-color);
+      font-family: var(--font-body);
+      color: var(--text-white);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    /* Видео-контейнер 16:9 для удобного захвата экрана */
+    .viewport-16-9 {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      background-color: #040816;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 80px 100px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transform: scale(0.6); /* Масштабирование для стандартных мониторов */
+      transform-origin: center center;
+      box-shadow: 0 50px 150px rgba(0, 0, 0, 0.8);
+      isolation: isolate;
+    }
+
+    /* Анимированное неоновое свечение на фоне */
+    .glow-effect {
+      position: absolute;
+      width: 800px;
+      height: 800px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0, 242, 254, 0.08) 0%, rgba(3, 6, 17, 0) 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: -2;
+      filter: blur(80px);
+      animation: pulse-glow 8s infinite alternate ease-in-out;
+    }
+
+    @keyframes pulse-glow {
+      0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.7; }
+      100% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+    }
+
+    /* Сетка на заднем плане (Tech Grid) */
+    .tech-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 50px 50px;
+      background-position: center center;
+      z-index: -1;
+    }
+
+    /* --- ШАПКА --- */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .badge-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .tag-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      background: rgba(0, 242, 254, 0.05);
+      border-radius: 999px;
+      color: var(--accent-cyan);
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+
+    .tag-badge::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--accent-cyan);
+      box-shadow: 0 0 12px var(--accent-cyan);
+    }
+
+    h1 {
+      font-family: var(--font-title);
+      font-size: 64px;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffffff 40%, rgba(255, 255, 255, 0.7) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    h1 span {
+      color: var(--accent-cyan);
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Правый блок: Статус тренда */
+    .trend-indicator {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 18px 30px;
+      border-radius: 24px;
+      backdrop-filter: blur(10px);
+    }
+
+    .arrow-down {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(0, 242, 254, 0.1);
+      border: 1px solid var(--accent-cyan);
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      color: var(--accent-cyan);
+      animation: slide-down 1.5s infinite ease-in-out;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+    }
+
+    @keyframes slide-down {
+      0% { transform: translateY(-4px); }
+      50% { transform: translateY(4px); }
+      100% { transform: translateY(-4px); }
+    }
+
+    .trend-text h4 {
+      font-family: var(--font-title);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      letter-spacing: -0.01em;
+    }
+
+    .trend-text p {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+
+    /* --- ЦЕНТРАЛЬНАЯ ЧАСТЬ (ГРАФИК И ЦИФРЫ) --- */
+    .visual-block {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 60px;
+      align-items: center;
+      height: 520px;
+    }
+
+    /* Анимированный График SVG */
+    .chart-container {
+      position: relative;
+      width: 100%;
+      height: 420px;
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      border-radius: 32px;
+      padding: 40px;
+      box-shadow: inset 0 20px 50px rgba(0, 0, 0, 0.3);
+    }
+
+    .chart-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    /* Сетка осей */
+    .axis-line {
+      stroke: rgba(255, 255, 255, 0.06);
+      stroke-width: 2;
+      stroke-dasharray: 6 6;
+    }
+
+    /* Линия тренда (Красная переходит в Бирюзовую) */
+    .trend-path {
+      fill: none;
+      stroke: url(#chart-gradient);
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 1200;
+      stroke-dashoffset: 1200;
+      animation: draw-chart 5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      filter: drop-shadow(0 15px 15px rgba(0, 242, 254, 0.25));
+    }
+
+    @keyframes draw-chart {
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* Неоновые анимированные узловые точки */
+    .node-point {
+      fill: var(--bg-color);
+      stroke-width: 6;
+      r: 0;
+      transition: r 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .node-start {
+      stroke: var(--accent-red);
+      animation: show-node-1 0.4s 0.2s forwards;
+    }
+
+    .node-end {
+      stroke: var(--accent-cyan);
+      animation: show-node-2 0.4s 4.8s forwards, pulse-node 2s 5.2s infinite alternate ease-in-out;
+    }
+
+    @keyframes show-node-1 { to { r: 10; } }
+    @keyframes show-node-2 { to { r: 12; } }
+    @keyframes pulse-node {
+      0% { stroke-width: 6; filter: drop-shadow(0 0 5px var(--accent-cyan)); }
+      100% { stroke-width: 10; filter: drop-shadow(0 0 20px var(--accent-cyan)); }
+    }
+
+    /* Заливка области под графиком */
+    .area-path {
+      fill: url(#area-gradient);
+      opacity: 0;
+      animation: show-area 1.5s 1.5s forwards ease-out;
+    }
+
+    @keyframes show-area {
+      to { opacity: 0.15; }
+    }
+
+    /* Значения над точками */
+    .chart-label {
+      font-family: var(--font-title);
+      font-size: 24px;
+      font-weight: 700;
+      fill: #ffffff;
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .label-start {
+      animation: show-label 0.5s 0.4s forwards cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .label-end {
+      fill: var(--accent-cyan);
+      font-size: 28px;
+      animation: show-label 0.5s 4.9s forwards cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes show-label {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+
+    /* --- ПРАВЫЙ БЛОК: СЧЕТЧИКИ ЦИФР --- */
+    .metrics-container {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .metric-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 28px;
+      padding: 30px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .metric-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 6px;
+    }
+
+    .card-red::before {
+      background-color: var(--accent-red);
+      box-shadow: 0 0 15px var(--accent-red);
+    }
+
+    .card-cyan::before {
+      background-color: var(--accent-cyan);
+      box-shadow: 0 0 15px var(--accent-cyan);
+    }
+
+    .metric-card h5 {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+    }
+
+    .metric-value {
+      font-family: var(--font-title);
+      font-size: 76px;
+      font-weight: 800;
+      line-height: 1;
+      margin-top: 6px;
+      letter-spacing: -0.03em;
+    }
+
+    .card-red .metric-value {
+      color: var(--text-white);
+    }
+
+    .card-cyan .metric-value {
+      color: var(--accent-cyan);
+      text-shadow: 0 0 25px rgba(0, 242, 254, 0.3);
+    }
+
+    /* Эффект выгоды в процентах */
+    .discount-badge {
+      align-self: flex-start;
+      margin-top: 15px;
+      padding: 6px 16px;
+      background: rgba(57, 255, 20, 0.1);
+      border: 1px solid var(--accent-green);
+      color: var(--accent-green);
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      animation: pulse-green 1.5s infinite alternate ease-in-out;
+    }
+
+    @keyframes pulse-green {
+      0% { box-shadow: 0 0 5px rgba(57, 255, 20, 0.2); }
+      100% { box-shadow: 0 0 20px rgba(57, 255, 20, 0.5); }
+    }
+
+
+    /* --- ПОДВАЛ --- */
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 40px;
+    }
+
+    .footer-text {
+      font-size: 16px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .footer-text strong {
+      color: #ffffff;
+    }
+
+    /* Кнопка перезапуска для записи дублей */
+    .control-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      padding: 14px 28px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s ease;
+    }
+
+    .control-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--accent-cyan);
+      transform: translateY(-2px);
+    }
+
+    .control-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    /* Скейлинг для отображения на экранах */
+    @media (max-width: 1200px) {
+      .viewport-16-9 {
+        transform: scale(0.4);
+      }
+    }
+    @media (max-width: 800px) {
+      .viewport-16-9 {
+        transform: scale(0.28);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Видео-контейнер 1080p для записи -->
+  <div class="viewport-16-9" id="screen-capture-area">
+    
+    <!-- Фоновые эффекты -->
+    <div class="glow-effect"></div>
+    <div class="tech-grid"></div>
+
+    <!-- --- ШАПКА --- -->
+    <header>
+      <div class="badge-wrapper">
+        <div class="tag-badge">Макроаналитика</div>
+        <h1>Ипотека: <span>Ставки идут вниз</span></h1>
+      </div>
+
+      <div class="trend-indicator">
+        <div class="arrow-down">▼</div>
+        <div class="trend-text">
+          <h4>ТРЕНД: СНИЖЕНИЕ</h4>
+          <p>Прогноз рынка недвижимости</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- --- ВИЗУАЛЬНАЯ ЧАСТЬ (СЕТКА) --- -->
+    <div class="visual-block">
+      
+      <!-- Секция графика -->
+      <div class="chart-container">
+        <svg class="chart-svg" viewBox="0 0 1000 340">
+          <defs>
+            <!-- Градиент для линии: от Красного к Бирюзовому -->
+            <linearGradient id="chart-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ff3366" />
+              <stop offset="50%" stop-color="#0072ff" />
+              <stop offset="100%" stop-color="#00f2fe" />
+            </linearGradient>
+
+            <!-- Градиент для заливки под графиком -->
+            <linearGradient id="area-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#00f2fe" stop-opacity="1" />
+              <stop offset="100%" stop-color="#040816" stop-opacity="0" />
+            </linearGradient>
+          </defs>
+
+          <!-- Сетка осей -->
+          <line class="axis-line" x1="50" y1="280" x2="950" y2="280" />
+          <line class="axis-line" x1="50" y1="50" x2="950" y2="50" />
+          <line class="axis-line" x1="50" y1="165" x2="950" y2="165" />
+
+          <!-- Путь заливки под графиком -->
+          <path class="area-path" id="chart-area" d="M 100,60 C 350,60 650,260 900,260 L 900,280 L 100,280 Z" />
+
+          <!-- Анимированная линия тренда -->
+          <path class="trend-path" id="chart-line" d="M 100,60 C 350,60 650,260 900,260" />
+
+          <!-- Узловые точки -->
+          <circle class="node-point node-start" id="node-1" cx="100" cy="60" />
+          <circle class="node-point node-end" id="node-2" cx="900" cy="260" />
+
+          <!-- Подписи значений -->
+          <text class="chart-label label-start" x="100" y="30" text-anchor="middle">18.5%</text>
+          <text class="chart-label label-end" x="900" y="230" text-anchor="middle">8.5%</text>
+        </svg>
+      </div>
+
+      <!-- Секция числовых счетчиков -->
+      <div class="metrics-container">
+        
+        <!-- Было -->
+        <div class="metric-card card-red">
+          <h5>Текущие условия (Пик)</h5>
+          <div class="metric-value" id="val-old">18.5%</div>
+        </div>
+
+        <!-- Станет -->
+        <div class="metric-card card-cyan">
+          <h5>Прогноз аналитиков</h5>
+          <div class="metric-value" id="val-new">8.5%</div>
+          <div class="discount-badge">Экономия платежа до -45%</div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- --- ПОДВАЛ --- -->
+    <footer>
+      <div class="footer-text">
+        Аналитика спикера <strong>Антона Цоя</strong> &copy; 2026. Данные оффлайн мастер-класса.
+      </div>
+
+      <button class="control-btn" onclick="restartAnimation()">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm-6 8c0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v-3l4 4-4 4v-3c-3.31 0-6-2.69-6-6z"/>
+        </svg>
+        Запустить заново
+      </button>
+    </footer>
+
+  </div>
+
+  <script>
+    // Скрипт перезапуска анимации для удобного дублирования записи
+    function restartAnimation() {
+      // Перезапуск SVG Линии
+      const line = document.getElementById('chart-line');
+      line.style.animation = 'none';
+      line.offsetHeight; /* триггер reflow */
+      line.style.animation = 'draw-chart 5s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+
+      // Перезапуск Заливки под графиком
+      const area = document.getElementById('chart-area');
+      area.style.animation = 'none';
+      area.offsetHeight;
+      area.style.animation = 'show-area 1.5s 1.5s forwards ease-out';
+
+      // Перезапуск Точек
+      const n1 = document.getElementById('node-1');
+      const n2 = document.getElementById('node-2');
+      n1.style.animation = 'none'; n1.offsetHeight; n1.style.animation = 'show-node-1 0.4s 0.2s forwards';
+      n2.style.animation = 'none'; n2.offsetHeight; n2.style.animation = 'show-node-2 0.4s 4.8s forwards, pulse-node 2s 5.2s infinite alternate ease-in-out';
+
+      // Перезапуск текстовых лейблов
+      const labels = document.querySelectorAll('.chart-label');
+      labels.forEach(l => {
+        l.style.animation = 'none';
+        l.offsetHeight;
+      });
+      labels[0].style.animation = 'show-label 0.5s 0.4s forwards cubic-bezier(0.16, 1, 0.3, 1)';
+      labels[1].style.animation = 'show-label 0.5s 4.9s forwards cubic-bezier(0.16, 1, 0.3, 1)';
+
+      // Анимированный счетчик цифр
+      animateValue("val-old", 12.0, 18.5, 1500);
+      animateValue("val-new", 18.5, 8.5, 5000);
+    }
+
+    // Функция плавного отсчета цифр
+    function animateValue(id, start, end, duration) {
+      const obj = document.getElementById(id);
+      const range = end - start;
+      const startTime = new Date().getTime();
+      
+      const timer = setInterval(() => {
+        const timePassed = new Date().getTime() - startTime;
+        let progress = timePassed / duration;
+        if (progress > 1) progress = 1;
+        
+        // Легкое замедление (Ease Out)
+        const ease = 1 - Math.pow(1 - progress, 3);
+        const currentValue = (start + (range * ease)).toFixed(1);
+        
+        obj.innerHTML = currentValue + "%";
+        
+        if (progress === 1) {
+          clearInterval(timer);
+        }
+      }, 16); // ~60fps
+    }
+
+    // Первый запуск при загрузке страницы
+    window.onload = () => {
+      animateValue("val-old", 12.0, 18.5, 1500);
+      animateValue("val-new", 18.5, 8.5, 5000);
+    };
+  </script>
+</body>
+</html>

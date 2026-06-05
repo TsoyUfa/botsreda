@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Афиша: Нейросети для бизнеса — Антон Цой</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper-width: 210mm;
+      --paper-height: 297mm;
+      --bg-dark: #050b14;
+      --text-white: #ffffff;
+      --text-soft: rgba(255, 255, 255, 0.88);
+      --text-muted: rgba(255, 255, 255, 0.65);
+      --accent-cyan: #00f2fe;
+      --accent-blue: #0072ff;
+      --accent-gold: #e5b869;
+      --glass-bg: rgba(10, 20, 38, 0.55);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --glass-glow: rgba(0, 242, 254, 0.08);
+      --font-title: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #03070d;
+      font-family: var(--font-body);
+      color: var(--text-white);
+      padding: 40px 0;
+      overflow-x: hidden;
+    }
+
+    /* Контейнер для отображения в браузере с эффектом глубины */
+    .poster-wrapper {
+      position: relative;
+      box-shadow: 0 35px 100px rgba(0, 0, 0, 0.8), 0 0 100px rgba(0, 242, 254, 0.05);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .poster {
+      position: relative;
+      width: var(--paper-width);
+      height: var(--paper-height);
+      overflow: hidden;
+      background: 
+        linear-gradient(180deg, rgba(5, 11, 20, 0.72) 0%, rgba(5, 11, 20, 0.85) 45%, rgba(5, 11, 20, 0.98) 100%),
+        url("ai_masterclass_bg.png") center center / cover no-repeat;
+      isolation: isolate;
+    }
+
+    /* Футуристические декоративные свечения */
+    .poster::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(circle at 10% 10%, rgba(0, 242, 254, 0.15), transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(229, 184, 105, 0.12), transparent 40%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Элегантная рамка формата А4 */
+    .poster-border {
+      position: absolute;
+      inset: 15mm;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* Основная сетка контента */
+    .content-grid {
+      height: 100%;
+      padding: 22mm 18mm 18mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Шапка афиши */
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 5mm;
+    }
+
+    .badge-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      border-radius: 999px;
+      background: rgba(0, 242, 254, 0.06);
+      color: var(--accent-cyan);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .badge::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      box-shadow: 0 0 10px var(--accent-cyan);
+    }
+
+    .duration-badge {
+      font-size: 12px;
+      color: var(--accent-gold);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    h1 {
+      font-family: var(--font-title);
+      font-size: 42px;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffffff 40%, rgba(255, 255, 255, 0.7) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-top: 2mm;
+    }
+
+    h1 span {
+      display: block;
+      color: var(--accent-cyan);
+      background: linear-gradient(90deg, var(--accent-cyan), #0072ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 800;
+    }
+
+    .lead {
+      font-size: 17px;
+      line-height: 1.4;
+      color: var(--text-soft);
+      max-width: 155mm;
+      margin-top: 3mm;
+      font-weight: 400;
+      border-left: 2px solid var(--accent-cyan);
+      padding-left: 15px;
+    }
+
+    /* Блок манифеста "Без воды" */
+    .manifesto-bar {
+      margin-top: 5mm;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      background: rgba(229, 184, 105, 0.07);
+      border: 1px solid rgba(229, 184, 105, 0.2);
+      border-radius: 12px;
+      max-width: max-content;
+    }
+
+    .manifesto-icon {
+      font-size: 16px;
+      color: var(--accent-gold);
+    }
+
+    .manifesto-text {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--accent-gold);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* Блок преимуществ / Кейсов */
+    .grid-benefits {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5mm;
+      margin: 6mm 0;
+    }
+
+    .card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 3mm;
+      padding: 5.5mm;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      transition: all 0.3s ease;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 18px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent, rgba(0, 242, 254, 0.15));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-num {
+      font-family: var(--font-title);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      background: rgba(0, 242, 254, 0.1);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(0, 242, 254, 0.25);
+    }
+
+    .card-icon {
+      font-size: 18px;
+      color: var(--accent-cyan);
+    }
+
+    .card h3 {
+      font-family: var(--font-title);
+      font-size: 17px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+    }
+
+    .card p {
+      font-size: 13px;
+      line-height: 1.4;
+      color: var(--text-muted);
+    }
+
+    /* Нижняя секция / Спикер, Цена и CTA */
+    .footer-block {
+      display: flex;
+      flex-direction: column;
+      gap: 5mm;
+    }
+
+    .info-bar {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 5mm;
+      align-items: stretch;
+    }
+
+    /* Блок спикера */
+    .speaker-card {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 16px 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    .speaker-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      display: grid;
+      place-items: center;
+      font-family: var(--font-title);
+      font-weight: 700;
+      font-size: 20px;
+      color: #03070d;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+    }
+
+    .speaker-info h4 {
+      font-family: var(--font-title);
+      font-size: 16px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .speaker-info p {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Блок стоимости */
+    .price-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 22px;
+      background: rgba(0, 242, 254, 0.04);
+      border: 1px solid rgba(0, 242, 254, 0.15);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    .price-label {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .price-label span:first-child {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+    }
+
+    .price-label span:last-child {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent-cyan);
+      margin-top: 1px;
+    }
+
+    .price-val {
+      font-family: var(--font-title);
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--accent-cyan);
+      text-shadow: 0 0 15px rgba(0, 242, 254, 0.25);
+    }
+
+    /* CTA Кнопка и резерв */
+    .cta-panel {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      padding: 18px 24px;
+      background: linear-gradient(135deg, rgba(10, 20, 38, 0.85) 0%, rgba(5, 11, 20, 0.95) 100%);
+      border: 1px solid rgba(0, 242, 254, 0.25);
+      border-radius: 24px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 15px 45px rgba(0,0,0,0.4);
+    }
+
+    .cta-title-block h3 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+    }
+
+    .cta-title-block p {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--accent-cyan) 0%, #0072ff 100%);
+      color: #03070d;
+      padding: 12px 24px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 13.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border: none;
+      box-shadow: 0 8px 25px rgba(0, 242, 254, 0.35);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(0, 242, 254, 0.5);
+    }
+
+    .bottom-tags {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      font-size: 9.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255, 255, 255, 0.35);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 4mm;
+      margin-top: 2mm;
+    }
+
+    /* Стили для печати формата А4 */
+    @media print {
+      body {
+        background: transparent;
+        padding: 0;
+        margin: 0;
+      }
+
+      .poster-wrapper {
+        box-shadow: none;
+        border-radius: 0;
+        transform: none !important;
+      }
+
+      .poster {
+        width: 210mm;
+        height: 297mm;
+        box-shadow: none;
+      }
+
+      .poster-border {
+        inset: 15mm;
+      }
+
+      @page {
+        size: A4 portrait;
+        margin: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="poster-wrapper">
+    <main class="poster" aria-label="Афиша А4: Нейросети для бизнеса">
+      <!-- Декоративная рамка -->
+      <div class="poster-border"></div>
+
+      <div class="content-grid">
+        <!-- Шапка -->
+        <header>
+          <div class="badge-row">
+            <div class="badge">Практический мастер-класс</div>
+            <div class="duration-badge">⏱ 1,5 часа практики</div>
+          </div>
+          
+          <h1>Нейросети для бизнеса: <span>Без воды и хайпа</span></h1>
+          
+          <p class="lead">Концентрированный разбор прикладных AI-инструментов. Узнайте, как предпринимателю делегировать рутину, оцифровать процессы и освободить до 50% личного времени.</p>
+          
+          <div class="manifesto-bar">
+            <span class="manifesto-icon">🚫</span>
+            <span class="manifesto-text">Никакой генерации картинок и развлекательных видео. Только бизнес-кейсы.</span>
+          </div>
+        </header>
+
+        <!-- Программа / 4 Карточки преимуществ -->
+        <section class="grid-benefits" aria-label="Программа мастер-класса">
+          <article class="card">
+            <div class="card-header">
+              <span class="card-num">01</span>
+              <span class="card-icon">🎯</span>
+            </div>
+            <h3>Отбор 5% из 95% мусора</h3>
+            <p>Научимся отделять бесполезный хайп от реальных инструментов и подбирать идеальный стек (0.0001% из всех AI) под ваши конкретные бизнес-задачи.</p>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <span class="card-num">02</span>
+              <span class="card-icon">🧠</span>
+            </div>
+            <h3>Создание «Второго мозга»</h3>
+            <p>Как настроить цифрового ИИ-советника, который помнит всю историю вашей компании, анализирует контекст и мгновенно помогает принимать решения.</p>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <span class="card-num">03</span>
+              <span class="card-icon">⚡</span>
+            </div>
+            <h3>DeepSeek, Gemini и ChatGPT</h3>
+            <p>Пошаговый разбор ключевых нейросетей, систем Antigravity No-code и NotebookLM на живых данных: от работы с документами до аналитики.</p>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <span class="card-num">04</span>
+              <span class="card-icon">👥</span>
+            </div>
+            <h3>Работа с командой и сайты</h3>
+            <p>Делегирование задач ИИ, умный автоматический анализ объёмных регламентов/документов и быстрый запуск сайтов без дорогой разработки.</p>
+          </article>
+        </section>
+
+        <!-- Подвал -->
+        <footer class="footer-block">
+          <div class="info-bar">
+            <!-- Блок спикера -->
+            <div class="speaker-card">
+              <div class="speaker-avatar">АЦ</div>
+              <div class="speaker-info">
+                <h4>Антон Цой</h4>
+                <p>Предприниматель & AI-практик</p>
+              </div>
+            </div>
+
+            <!-- Блок цены -->
+            <div class="price-card">
+              <div class="price-label">
+                <span>Стоимость участия</span>
+                <span>доступно 15 мест</span>
+              </div>
+              <div class="price-val">2 000 ₽</div>
+            </div>
+          </div>
+
+          <!-- CTA Панель -->
+          <div class="cta-panel">
+            <div class="cta-title-block">
+              <h3>Забронировать место</h3>
+              <p>Нажмите для связи и регистрации</p>
+            </div>
+            <button class="cta-btn" onclick="window.location.href='https://t.me/your_telegram_username'">Участвовать ➔</button>
+          </div>
+
+          <div class="bottom-tags">
+            <span>#нейросети</span>
+            <span>#бизнес_ассистент</span>
+            <span>#notebook_lm</span>
+            <span>#antigravity</span>
+            <span>#deepseek</span>
+          </div>
+        </footer>
+      </div>
+    </main>
+  </div>
+
+</body>
+</html>

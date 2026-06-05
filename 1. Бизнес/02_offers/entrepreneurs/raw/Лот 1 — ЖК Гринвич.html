@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B-Roll Punk Terminal: Лот 1 — ЖК Гринвич</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #090a0f;
+      --primary-color: #d1d5db;
+      --accent-pink: #ff2e93;
+      --accent-green: #00ff66;
+      --muted-color: #4b5563;
+      --font-mono: 'Share Tech Mono', 'Fira Code', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      background-color: #020205;
+      font-family: var(--font-mono);
+      color: var(--primary-color);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    /* 9:16 Vertical Viewport (1080x1920) */
+    .viewport-9-16 {
+      position: relative;
+      width: 1080px;
+      height: 1920px;
+      background-color: var(--bg-color);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 120px 80px;
+      border: 6px solid var(--muted-color);
+      transform: scale(0.36);
+      transform-origin: center center;
+      box-shadow: 0 50px 150px rgba(0, 0, 0, 0.9);
+      isolation: isolate;
+    }
+
+    /* Scanlines и ЭЛТ-сетка */
+    .viewport-9-16::before {
+      content: " ";
+      display: block;
+      position: absolute;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+      z-index: 10;
+      background-size: 100% 4px, 6px 100%;
+      pointer-events: none;
+    }
+
+    /* Cyberpunk Grid Background */
+    .terminal-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(255, 46, 147, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 46, 147, 0.02) 1px, transparent 1px);
+      background-size: 80px 80px;
+      background-position: center center;
+      z-index: -1;
+    }
+
+    /* --- ВЕРХНИЙ БЛОК (HEADER) --- */
+    header {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .tag-row {
+      font-size: 24px;
+      color: var(--accent-pink);
+      letter-spacing: 0.1em;
+      text-shadow: 0 0 10px rgba(255, 46, 147, 0.5);
+    }
+
+    .tag-row::before {
+      content: ">> ";
+    }
+
+    .title-box {
+      font-size: 78px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+      border-left: 10px solid var(--accent-pink);
+      padding-left: 30px;
+      animation: glitch-header 0.3s steps(2) infinite alternate;
+    }
+
+    @keyframes glitch-header {
+      0% { text-shadow: 2px 0 0 red, -2px 0 0 blue; }
+      100% { text-shadow: -2px 0 0 red, 2px 0 0 blue; }
+    }
+
+    /* --- ЦЕНТРАЛЬНЫЙ БЛОК (БРУТАЛЬНЫЙ КАРД-РЕВИЛ) --- */
+    .middle-section {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      flex-grow: 1;
+      gap: 60px;
+    }
+
+    /* Brutalist Card с глитч-эффектом появления */
+    .brutalist-card {
+      position: relative;
+      background: #0d0f17;
+      border: 8px solid var(--primary-color);
+      box-shadow: 20px 20px 0px var(--accent-pink);
+      padding: 60px 50px;
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+      opacity: 0;
+      transform: scale(0.95);
+      animation: glitch-appear 0.6s 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    @keyframes glitch-appear {
+      0% { opacity: 0; transform: scale(0.95) skewX(-10deg); filter: hue-rotate(90deg); }
+      50% { opacity: 0.5; transform: scale(1.02) skewX(10deg); }
+      100% { opacity: 1; transform: scale(1) skewX(0deg); }
+    }
+
+    /* Дисконт Метрика */
+    .discount-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .discount-label {
+      font-size: 20px;
+      color: var(--muted-color);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .discount-value {
+      font-size: 88px;
+      font-weight: 900;
+      color: var(--accent-pink);
+      line-height: 1;
+      text-shadow: 0 0 20px rgba(255, 46, 147, 0.3);
+    }
+
+    /* Блок цен */
+    .price-box {
+      border-top: 2px dashed var(--muted-color);
+      padding-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      position: relative;
+    }
+
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .price-title {
+      font-size: 22px;
+      color: var(--muted-color);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* Старая цена с анимированным вычеркиванием */
+    .old-price {
+      font-size: 56px;
+      color: var(--muted-color);
+      position: relative;
+      display: inline-block;
+    }
+
+    .old-price::after {
+      content: "";
+      position: absolute;
+      left: -5%;
+      top: 50%;
+      width: 0;
+      height: 6px;
+      background-color: var(--accent-pink);
+      transform: translateY(-50%) rotate(-4deg);
+      box-shadow: 0 0 10px var(--accent-pink);
+      animation: strike-out 0.6s 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    @keyframes strike-out {
+      to { width: 110%; }
+    }
+
+    /* Новая цена с глитч-пульсацией */
+    .new-price {
+      font-size: 92px;
+      font-weight: 900;
+      color: var(--primary-color);
+      opacity: 0;
+      transform: scale(0.9);
+      animation: reveal-new-price 0.5s 1.7s cubic-bezier(0.16, 1, 0.3, 1) forwards, pulse-glow 2s 2.2s infinite alternate ease-in-out;
+    }
+
+    @keyframes reveal-new-price {
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes pulse-glow {
+      0% { color: #ffffff; text-shadow: 0 0 10px rgba(0, 255, 102, 0.3); }
+      100% { color: var(--accent-green); text-shadow: 0 0 35px var(--accent-green); }
+    }
+
+    /* Ликвидация статус */
+    .status-badge {
+      position: absolute;
+      right: 0;
+      top: -24px;
+      background: var(--accent-pink);
+      color: #ffffff;
+      padding: 6px 20px;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      transform: rotate(3deg);
+      box-shadow: 5px 5px 0px #000000;
+      animation: blink-status 0.8s 2s infinite alternate steps(1);
+    }
+
+    @keyframes blink-status {
+      50% { opacity: 0.3; }
+    }
+
+    /* --- ПОДВАЛ (ФУТЕР) --- */
+    footer {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 35px;
+      align-items: center;
+      border-top: 3px solid var(--muted-color);
+      padding-top: 40px;
+      text-align: center;
+    }
+
+    .footer-terminal {
+      font-size: 20px;
+      color: var(--muted-color);
+      letter-spacing: 0.05em;
+    }
+
+    .footer-terminal span {
+      color: var(--accent-green);
+    }
+
+    /* Кнопка перезапуска */
+    .control-btn {
+      background: transparent;
+      border: 3px solid var(--primary-color);
+      color: var(--primary-color);
+      padding: 16px 36px;
+      font-family: var(--font-mono);
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      box-shadow: 8px 8px 0px var(--muted-color);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.15s ease;
+    }
+
+    .control-btn:hover {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+      box-shadow: 8px 8px 0px rgba(0, 242, 254, 0.3);
+      transform: translate(-2px, -2px);
+    }
+
+    .control-btn:active {
+      transform: translate(4px, 4px);
+      box-shadow: 0px 0px 0px transparent;
+    }
+
+    .control-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Видео-контейнер 9:16 -->
+  <div class="viewport-9-16" id="screen-capture-area">
+    
+    <!-- Сетка -->
+    <div class="terminal-grid"></div>
+
+    <!-- --- ШАПКА --- -->
+    <header>
+      <div class="tag-row">LOT_01 // UFA</div>
+      <div class="title-box">ЖК ГРИНВИЧ [2K]</div>
+    </header>
+
+    <!-- --- ЦЕНТРАЛЬНАЯ ЧАСТЬ (БРУТАЛИЗМ) --- -->
+    <div class="middle-section">
+      
+      <div class="brutalist-card" id="main-card">
+        
+        <!-- Ликвидация плашка -->
+        <div class="status-badge">LIQUIDATION</div>
+
+        <!-- Дисконт -->
+        <div class="discount-container">
+          <div class="discount-label">LIMITED TIME OFFER</div>
+          <div class="discount-value">-25% DISCOUNT</div>
+        </div>
+
+        <!-- Цены -->
+        <div class="price-box">
+          
+          <div class="price-row">
+            <span class="price-title">Рыночная цена:</span>
+            <span class="old-price" id="price-old">8 000 000 ₽</span>
+          </div>
+
+          <div class="price-row">
+            <span class="price-title">Спеццена:</span>
+            <span class="new-price" id="price-new">6 000 000 ₽</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- --- ПОДВАЛ --- -->
+    <footer>
+      <div class="footer-terminal">
+        STATUS: <span>READY_FOR_ACQUISITION</span> // TERMINAL_ACTIVE
+      </div>
+
+      <button class="control-btn" onclick="restartAnimation()">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm-6 8c0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v-3l4 4-4 4v-3c-3.31 0-6-2.69-6-6z"/>
+        </svg>
+        Запустить дубль
+      </button>
+    </footer>
+
+  </div>
+
+  <script>
+    function restartAnimation() {
+      // Сброс и перезапуск Brutalist Card
+      const card = document.getElementById('main-card');
+      card.style.animation = 'none';
+      card.offsetHeight;
+      card.style.animation = 'glitch-appear 0.6s 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+
+      // Сброс и перезапуск старой цены
+      const oldPrice = document.getElementById('price-old');
+      oldPrice.style.animation = 'none';
+      oldPrice.offsetHeight; // триггер reflow
+      
+      // Сброс и перезапуск новой цены
+      const newPrice = document.getElementById('price-new');
+      newPrice.style.animation = 'none';
+      newPrice.offsetHeight;
+      newPrice.style.animation = 'reveal-new-price 0.5s 1.7s cubic-bezier(0.16, 1, 0.3, 1) forwards, pulse-glow 2s 2.2s infinite alternate ease-in-out';
+    }
+  </script>
+</body>
+</html>

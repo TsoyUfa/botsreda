@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B-Roll Motion Graphic: Снижение ставок по ипотеке (Вертикальная)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #030611;
+      --accent-cyan: #00f2fe;
+      --accent-blue: #0072ff;
+      --accent-red: #ff3366;
+      --accent-green: #39ff14;
+      --text-white: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.5);
+      --font-title: 'Space Grotesk', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-color);
+      font-family: var(--font-body);
+      color: var(--text-white);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    /* Видео-контейнер 9:16 (Вертикальный Reels / Shorts) для записи */
+    .viewport-9-16 {
+      position: relative;
+      width: 1080px;
+      height: 1920px;
+      background-color: #040816;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 100px 70px 80px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transform: scale(0.36); /* Масштабирование для стандартных мониторов */
+      transform-origin: center center;
+      box-shadow: 0 50px 150px rgba(0, 0, 0, 0.85);
+      isolation: isolate;
+    }
+
+    /* Анимированное неоновое свечение на фоне */
+    .glow-effect {
+      position: absolute;
+      width: 900px;
+      height: 900px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0, 242, 254, 0.09) 0%, rgba(3, 6, 17, 0) 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: -2;
+      filter: blur(80px);
+      animation: pulse-glow 8s infinite alternate ease-in-out;
+    }
+
+    @keyframes pulse-glow {
+      0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.7; }
+      100% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+    }
+
+    /* Сетка на заднем плане (Tech Grid) */
+    .tech-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 60px 60px;
+      background-position: center center;
+      z-index: -1;
+    }
+
+    /* --- ШАПКА --- */
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      align-items: center;
+      text-align: center;
+      width: 100%;
+    }
+
+    .tag-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 20px;
+      border: 1px solid rgba(0, 242, 254, 0.35);
+      background: rgba(0, 242, 254, 0.06);
+      border-radius: 999px;
+      color: var(--accent-cyan);
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+
+    .tag-badge::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--accent-cyan);
+      box-shadow: 0 0 12px var(--accent-cyan);
+    }
+
+    h1 {
+      font-family: var(--font-title);
+      font-size: 68px;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffffff 40%, rgba(255, 255, 255, 0.7) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    h1 span {
+      display: block;
+      color: var(--accent-cyan);
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 78px;
+      margin-top: 5px;
+    }
+
+    /* Тренд-индикатор горизонтальный */
+    .trend-indicator {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 14px 28px;
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      margin-top: 10px;
+    }
+
+    .arrow-down {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(0, 242, 254, 0.15);
+      border: 1px solid var(--accent-cyan);
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      color: var(--accent-cyan);
+      animation: slide-down 1.5s infinite ease-in-out;
+      box-shadow: 0 0 12px rgba(0, 242, 254, 0.25);
+    }
+
+    @keyframes slide-down {
+      0% { transform: translateY(-4px); }
+      50% { transform: translateY(4px); }
+      100% { transform: translateY(-4px); }
+    }
+
+    .trend-text h4 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      letter-spacing: -0.01em;
+    }
+
+    .trend-text p {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* --- ЦЕНТРАЛЬНАЯ ЧАСТЬ (ГРАФИК СВЕРХУ, ЦИФРЫ СНИЗУ) --- */
+    .visual-block {
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+      width: 100%;
+      flex-grow: 1;
+      justify-content: center;
+    }
+
+    /* Крутой крутой вертикальный график SVG */
+    .chart-container {
+      position: relative;
+      width: 100%;
+      height: 520px;
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      border-radius: 36px;
+      padding: 40px 30px;
+      box-shadow: inset 0 20px 50px rgba(0, 0, 0, 0.4);
+    }
+
+    .chart-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .axis-line {
+      stroke: rgba(255, 255, 255, 0.05);
+      stroke-width: 2;
+      stroke-dasharray: 6 6;
+    }
+
+    /* Линия тренда с крутым перепадом */
+    .trend-path {
+      fill: none;
+      stroke: url(#chart-gradient);
+      stroke-width: 9;
+      stroke-linecap: round;
+      stroke-dasharray: 1200;
+      stroke-dashoffset: 1200;
+      animation: draw-chart 5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      filter: drop-shadow(0 15px 20px rgba(0, 242, 254, 0.25));
+    }
+
+    @keyframes draw-chart {
+      to { stroke-dashoffset: 0; }
+    }
+
+    .node-point {
+      fill: var(--bg-color);
+      stroke-width: 6;
+      r: 0;
+      transition: r 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .node-start {
+      stroke: var(--accent-red);
+      animation: show-node-1 0.4s 0.2s forwards;
+    }
+
+    .node-end {
+      stroke: var(--accent-cyan);
+      animation: show-node-2 0.4s 4.8s forwards, pulse-node 2s 5.2s infinite alternate ease-in-out;
+    }
+
+    @keyframes show-node-1 { to { r: 11; } }
+    @keyframes show-node-2 { to { r: 13; } }
+    @keyframes pulse-node {
+      0% { stroke-width: 6; filter: drop-shadow(0 0 5px var(--accent-cyan)); }
+      100% { stroke-width: 10; filter: drop-shadow(0 0 25px var(--accent-cyan)); }
+    }
+
+    .area-path {
+      fill: url(#area-gradient);
+      opacity: 0;
+      animation: show-area 1.5s 1.5s forwards ease-out;
+    }
+
+    @keyframes show-area {
+      to { opacity: 0.15; }
+    }
+
+    .chart-label {
+      font-family: var(--font-title);
+      font-size: 26px;
+      font-weight: 700;
+      fill: #ffffff;
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .label-start {
+      animation: show-label 0.5s 0.4s forwards cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .label-end {
+      fill: var(--accent-cyan);
+      font-size: 32px;
+      animation: show-label 0.5s 4.9s forwards cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes show-label {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+
+    /* --- СЕКЦИЯ ЧИСЛОВЫХ СЧЕТЧИКОВ --- */
+    .metrics-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+      width: 100%;
+    }
+
+    .metric-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 28px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .metric-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 6px;
+    }
+
+    .card-red::before {
+      background-color: var(--accent-red);
+      box-shadow: 0 0 15px var(--accent-red);
+    }
+
+    .card-cyan::before {
+      background-color: var(--accent-cyan);
+      box-shadow: 0 0 15px var(--accent-cyan);
+    }
+
+    .metric-card h5 {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    .metric-value {
+      font-family: var(--font-title);
+      font-size: 56px;
+      font-weight: 800;
+      line-height: 1;
+      margin-top: 6px;
+      letter-spacing: -0.03em;
+    }
+
+    .card-cyan .metric-value {
+      color: var(--accent-cyan);
+      text-shadow: 0 0 25px rgba(0, 242, 254, 0.3);
+    }
+
+    /* Зеленая плашка скидки */
+    .discount-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .discount-badge {
+      padding: 10px 24px;
+      background: rgba(57, 255, 20, 0.1);
+      border: 1px solid var(--accent-green);
+      color: var(--accent-green);
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      animation: pulse-green 1.5s infinite alternate ease-in-out;
+    }
+
+    @keyframes pulse-green {
+      0% { box-shadow: 0 0 5px rgba(57, 255, 20, 0.2); }
+      100% { box-shadow: 0 0 20px rgba(57, 255, 20, 0.5); }
+    }
+
+
+    /* --- ПОДВАЛ --- */
+    footer {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      align-items: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 40px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .footer-text {
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+
+    .footer-text strong {
+      color: #ffffff;
+    }
+
+    /* Кнопка перезапуска */
+    .control-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      padding: 16px 36px;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s ease;
+    }
+
+    .control-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--accent-cyan);
+      transform: translateY(-2px);
+    }
+
+    .control-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Видео-контейнер 9:16 (1080x1920) для Reels/Shorts -->
+  <div class="viewport-9-16" id="screen-capture-area">
+    
+    <!-- Фоновые эффекты -->
+    <div class="glow-effect"></div>
+    <div class="tech-grid"></div>
+
+    <!-- --- ШАПКА --- -->
+    <header>
+      <div class="tag-badge">Макроаналитика</div>
+      <h1>Ипотека: <span>Ставки идут вниз</span></h1>
+
+      <div class="trend-indicator">
+        <div class="arrow-down">▼</div>
+        <div class="trend-text">
+          <h4>ТРЕНД: СНИЖЕНИЕ</h4>
+          <p>Прогноз рынка недвижимости</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- --- ЦЕНТРАЛЬНАЯ ЧАСТЬ (ВИЗУАЛЬНАЯ СЕТКА) --- -->
+    <div class="visual-block">
+      
+      <!-- Секция вертикального графика -->
+      <div class="chart-container">
+        <svg class="chart-svg" viewBox="0 0 940 440">
+          <defs>
+            <linearGradient id="chart-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ff3366" />
+              <stop offset="50%" stop-color="#0072ff" />
+              <stop offset="100%" stop-color="#00f2fe" />
+            </linearGradient>
+
+            <linearGradient id="area-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#00f2fe" stop-opacity="1" />
+              <stop offset="100%" stop-color="#040816" stop-opacity="0" />
+            </linearGradient>
+          </defs>
+
+          <!-- Оси сетки -->
+          <line class="axis-line" x1="50" y1="380" x2="890" y2="380" />
+          <line class="axis-line" x1="50" y1="60" x2="890" y2="60" />
+          <line class="axis-line" x1="50" y1="220" x2="890" y2="220" />
+
+          <!-- Путь заливки под графиком -->
+          <path class="area-path" id="chart-area" d="M 100,70 C 350,70 600,340 840,340 L 840,380 L 100,380 Z" />
+
+          <!-- Анимированная линия тренда -->
+          <path class="trend-path" id="chart-line" d="M 100,70 C 350,70 600,340 840,340" />
+
+          <!-- Узловые точки -->
+          <circle class="node-point node-start" id="node-1" cx="100" cy="70" />
+          <circle class="node-point node-end" id="node-2" cx="840" cy="340" />
+
+          <!-- Значения -->
+          <text class="chart-label label-start" x="100" y="35" text-anchor="middle">18.5%</text>
+          <text class="chart-label label-end" x="840" y="295" text-anchor="middle">8.5%</text>
+        </svg>
+      </div>
+
+      <!-- Секция числовых счетчиков -->
+      <div>
+        <div class="metrics-container">
+          <!-- Было -->
+          <div class="metric-card card-red">
+            <h5>Текущий пик</h5>
+            <div class="metric-value" id="val-old">18.5%</div>
+          </div>
+
+          <!-- Станет -->
+          <div class="metric-card card-cyan">
+            <h5>Прогноз рынка</h5>
+            <div class="metric-value" id="val-new">8.5%</div>
+          </div>
+        </div>
+
+        <div class="discount-container">
+          <div class="discount-badge">Платеж снизится до -45%</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- --- ПОДВАЛ --- -->
+    <footer>
+      <div class="footer-text">
+        Спикер <strong>Антон Цой</strong> &copy; 2026.<br>Данные мастер-класса.
+      </div>
+
+      <button class="control-btn" onclick="restartAnimation()">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm-6 8c0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v-3l4 4-4 4v-3c-3.31 0-6-2.69-6-6z"/>
+        </svg>
+        Запустить заново
+      </button>
+    </footer>
+
+  </div>
+
+  <script>
+    function restartAnimation() {
+      const line = document.getElementById('chart-line');
+      line.style.animation = 'none';
+      line.offsetHeight;
+      line.style.animation = 'draw-chart 5s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+
+      const area = document.getElementById('chart-area');
+      area.style.animation = 'none';
+      area.offsetHeight;
+      area.style.animation = 'show-area 1.5s 1.5s forwards ease-out';
+
+      const n1 = document.getElementById('node-1');
+      const n2 = document.getElementById('node-2');
+      n1.style.animation = 'none'; n1.offsetHeight; n1.style.animation = 'show-node-1 0.4s 0.2s forwards';
+      n2.style.animation = 'none'; n2.offsetHeight; n2.style.animation = 'show-node-2 0.4s 4.8s forwards, pulse-node 2s 5.2s infinite alternate ease-in-out';
+
+      const labels = document.querySelectorAll('.chart-label');
+      labels.forEach(l => {
+        l.style.animation = 'none';
+        l.offsetHeight;
+      });
+      labels[0].style.animation = 'show-label 0.5s 0.4s forwards cubic-bezier(0.16, 1, 0.3, 1)';
+      labels[1].style.animation = 'show-label 0.5s 4.9s forwards cubic-bezier(0.16, 1, 0.3, 1)';
+
+      animateValue("val-old", 12.0, 18.5, 1500);
+      animateValue("val-new", 18.5, 8.5, 5000);
+    }
+
+    function animateValue(id, start, end, duration) {
+      const obj = document.getElementById(id);
+      const range = end - start;
+      const startTime = new Date().getTime();
+      
+      const timer = setInterval(() => {
+        const timePassed = new Date().getTime() - startTime;
+        let progress = timePassed / duration;
+        if (progress > 1) progress = 1;
+        
+        const ease = 1 - Math.pow(1 - progress, 3);
+        const currentValue = (start + (range * ease)).toFixed(1);
+        
+        obj.innerHTML = currentValue + "%";
+        
+        if (progress === 1) {
+          clearInterval(timer);
+        }
+      }, 16);
+    }
+
+    window.onload = () => {
+      animateValue("val-old", 12.0, 18.5, 1500);
+      animateValue("val-new", 18.5, 8.5, 5000);
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,1025 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ЖК Центральный Парк - Система эксклюзивных продаж СУ10</title>
+  <meta name="description" content="Интерактивная презентация ЖК Центральный Парк для агентств недвижимости. Дерзкий оранжево-черный стиль, калькуляторы окупаемости и ипотеки." />
+  <style>
+    :root {
+      --bg-deep: #070708;
+      --bg-card: rgba(18, 18, 20, 0.75);
+      --bg-card-strong: rgba(30, 20, 15, 0.45);
+      --orange: #ff5500;
+      --orange-neon: #ff6a00;
+      --gold: #d8b46a;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --line: #1e293b;
+      --line-active: #ff5500;
+      --radius: 20px;
+      --max: 1200px;
+      --shadow: 0 0 30px rgba(255, 85, 0, 0.15);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--bg-deep);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      line-height: 1.4;
+      overflow-x: hidden;
+    }
+
+    /* Сетчатый фон и градиенты */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(255, 85, 0, 0.12), transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(216, 180, 106, 0.08), transparent 45%),
+        linear-gradient(135deg, #050506 0%, #0c0c0e 50%, #050506 100%);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      opacity: 0.08;
+      background-image:
+        linear-gradient(rgba(255, 85, 0, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 85, 0, 0.1) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    /* Навигация */
+    .progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .progress__bar {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--orange), var(--gold));
+      box-shadow: 0 0 10px var(--orange-neon);
+      transition: width 0.2s ease-out;
+    }
+
+    .deck-nav {
+      position: fixed;
+      right: 30px;
+      bottom: 30px;
+      z-index: 90;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 99px;
+      background: rgba(7, 7, 8, 0.85);
+      backdrop-filter: blur(15px);
+    }
+
+    .deck-nav button {
+      border: 0;
+      border-radius: 99px;
+      padding: 12px 20px;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.08);
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .deck-nav button:hover {
+      background: var(--orange);
+      box-shadow: 0 0 15px rgba(255, 85, 0, 0.4);
+      transform: translateY(-2px);
+    }
+
+    /* Слайды */
+    .slide {
+      position: relative;
+      min-height: 100vh;
+      display: none;
+      align-items: center;
+      padding: 80px 40px;
+    }
+
+    .slide.active {
+      display: flex;
+    }
+
+    .wrap {
+      width: min(var(--max), 100%);
+      margin: 0 auto;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 20px;
+      padding: 8px 16px;
+      border: 1px solid rgba(255, 85, 0, 0.3);
+      border-radius: 99px;
+      background: rgba(255, 85, 0, 0.08);
+      color: #ffaa80;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .kicker::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 8px var(--gold);
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      max-width: 1000px;
+      margin-bottom: 24px;
+      font-size: clamp(38px, 6vw, 76px);
+      line-height: 1.05;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      text-wrap: balance;
+    }
+
+    h2 {
+      max-width: 950px;
+      margin-bottom: 24px;
+      font-size: clamp(28px, 4.5vw, 54px);
+      line-height: 1.1;
+      font-weight: 850;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+    }
+
+    h3 {
+      margin-bottom: 12px;
+      font-size: clamp(18px, 2vw, 26px);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .lead {
+      max-width: 800px;
+      color: var(--text);
+      font-size: clamp(18px, 2vw, 28px);
+      line-height: 1.35;
+      font-weight: 400;
+    }
+
+    .accent {
+      color: var(--orange);
+      text-shadow: 0 0 20px rgba(255, 85, 0, 0.2);
+    }
+
+    .gold {
+      color: var(--gold);
+    }
+
+    /* Сетки */
+    .grid {
+      display: grid;
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .card {
+      padding: clamp(20px, 2.5vw, 35px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--bg-card);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      border-color: var(--orange);
+      box-shadow: var(--shadow);
+      transform: translateY(-4px);
+    }
+
+    .card.strong {
+      background: var(--bg-card-strong);
+      border-color: rgba(255, 85, 0, 0.25);
+    }
+
+    .card.gold-border {
+      border-color: rgba(216, 180, 106, 0.4);
+    }
+
+    .number {
+      display: inline-grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 16px;
+      border-radius: 14px;
+      background: rgba(255, 85, 0, 0.15);
+      color: var(--orange);
+      font-weight: 900;
+      font-size: 20px;
+      box-shadow: 0 0 10px rgba(255, 85, 0, 0.2);
+    }
+
+    /* Таблицы */
+    .table-container {
+      margin-top: 30px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--bg-card);
+      font-size: clamp(14px, 1.2vw, 18px);
+      text-align: left;
+    }
+
+    th, td {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: middle;
+    }
+
+    th {
+      background: rgba(255, 85, 0, 0.12);
+      color: #ffaa80;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-size: 13px;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    tr:hover td {
+      background: rgba(255, 85, 0, 0.04);
+    }
+
+    /* Цитаты */
+    .quote {
+      margin: 30px 0 0;
+      padding: 24px 30px;
+      border-left: 6px solid var(--orange);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      background: rgba(255, 85, 0, 0.06);
+      color: var(--text);
+      font-size: clamp(18px, 1.8vw, 26px);
+      font-weight: 700;
+      line-height: 1.35;
+      box-shadow: inset 10px 0 20px rgba(0,0,0,0.2);
+    }
+
+    /* Интерактивные формы */
+    .calc-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 14px 18px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(20, 20, 22, 0.9);
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 700;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus, .form-group select:focus {
+      border-color: var(--orange);
+    }
+
+    .calc-result {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 30px;
+      border: 1px solid rgba(255, 85, 0, 0.2);
+      border-radius: var(--radius);
+      background: rgba(255, 85, 0, 0.03);
+      text-align: center;
+    }
+
+    .calc-result__val {
+      font-size: clamp(36px, 4vw, 56px);
+      font-weight: 900;
+      color: var(--orange);
+      text-shadow: 0 0 20px rgba(255, 85, 0, 0.3);
+      margin: 10px 0;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    .footer {
+      position: absolute;
+      left: 40px;
+      right: 40px;
+      bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    /* Авито-интеграция / Симулятор */
+    .sim-phone {
+      width: 320px;
+      height: 520px;
+      border: 8px solid #27272a;
+      border-radius: 36px;
+      background: #09090b;
+      margin: 0 auto;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(255, 85, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sim-header {
+      background: #18181b;
+      padding: 16px;
+      text-align: center;
+      font-weight: 800;
+      font-size: 13px;
+      border-bottom: 1px solid #27272a;
+      color: var(--orange);
+    }
+
+    .sim-body {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .msg {
+      max-width: 80%;
+      padding: 10px 14px;
+      border-radius: 16px;
+      font-size: 13px;
+      line-height: 1.3;
+    }
+
+    .msg.in {
+      background: #27272a;
+      color: var(--text);
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+
+    .msg.out {
+      background: var(--orange);
+      color: #fff;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+      font-weight: 600;
+    }
+
+    .sim-input {
+      border-top: 1px solid #27272a;
+      padding: 10px;
+      display: flex;
+      gap: 8px;
+      background: #18181b;
+    }
+
+    .sim-input input {
+      flex: 1;
+      border: 0;
+      border-radius: 20px;
+      padding: 8px 14px;
+      background: #09090b;
+      color: var(--text);
+      font-size: 13px;
+      outline: none;
+    }
+
+    .sim-input button {
+      border: 0;
+      border-radius: 50%;
+      width: 34px;
+      height: 34px;
+      background: var(--orange);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    /* Мобильная адаптивность */
+    @media (max-width: 900px) {
+      .grid.two, .grid.three, .grid.four, .split, .calc-row {
+        grid-template-columns: 1fr;
+      }
+      .slide {
+        padding: 60px 20px 100px;
+      }
+      .deck-nav {
+        left: 20px;
+        right: 20px;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress" aria-hidden="true"><div class="progress__bar" id="progressBar"></div></div>
+  
+  <nav class="deck-nav" aria-label="Панель презентации">
+    <button type="button" id="prevBtn">Назад</button>
+    <button type="button" id="nextBtn">Далее</button>
+  </nav>
+
+  <main>
+    <!-- Слайд 1: Обложка -->
+    <section class="slide active" id="slide-1">
+      <div class="wrap split">
+        <div>
+          <p class="kicker">СУ10 × Эксперт-Сити | Эксклюзивный запуск</p>
+          <h1>ЖК <span class="accent">Центральный Парк</span></h1>
+          <p class="lead">Главный недооцененный актив в самом сердце Уфы. Новая система и стратегия партнерских продаж.</p>
+        </div>
+        <div class="card strong gold-border" style="text-align: center; padding: 40px 30px;">
+          <h3 class="gold" style="font-size: 42px; margin-bottom: 10px;">5.0%</h3>
+          <p style="font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 20px;">Фиксированная комиссия</p>
+          <p class="lead" style="font-size: 18px;">От вас - только фиксация клиента в партнерском чате. Всю остальную работу мы берем на себя.</p>
+        </div>
+      </div>
+      <div class="footer"><span>ЖК Центральный Парк</span><span>Слайд 1 из 12</span></div>
+    </section>
+
+    <!-- Слайд 2: Локация -->
+    <section class="slide" id="slide-2">
+      <div class="wrap">
+        <p class="kicker">Престижное окружение</p>
+        <h2>Исторический и деловой <span class="accent">центр города</span></h2>
+        <p class="lead" style="margin-bottom: 30px;">Пересечение улиц Мустая Карима и Революционной. Уникальная точка Уфы с максимальным пешеходным и деловым трафиком.</p>
+        
+        <div class="grid three">
+          <div class="card">
+            <span class="number">5м</span>
+            <h3>Арт-Квадрат и Якутов</h3>
+            <p class="muted">Главный творческий кластер города и зеленый массив парка культуры и отдыха им. Ивана Якутова в шаговой доступности.</p>
+          </div>
+          <div class="card">
+            <span class="number">10м</span>
+            <h3>Деловой кластер</h3>
+            <p class="muted">Крупнейшие банки, офисы госкорпораций, штаб-квартира Башнефти, Уралсиб и ведущие бизнес-центры города.</p>
+          </div>
+          <div class="card">
+            <span class="number">15м</span>
+            <h3>Образование и спорт</h3>
+            <p class="muted">Гимназия №39, лицей №1, Башкирский государственный университет, Уфа-Арена и фитнес-центры премиум-класса.</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>Локация объекта</span><span>Слайд 2 из 12</span></div>
+    </section>
+
+    <!-- Слайд 3: Прописка -->
+    <section class="slide" id="slide-3">
+      <div class="wrap split">
+        <div>
+          <p class="kicker">Правовой статус</p>
+          <h2>С февраля в апартаментах официально <span class="accent">разрешена прописка</span></h2>
+          <p class="lead">Больше никаких юридических страхов у покупателей. Апартаменты получили полноценный статус жилого фонда.</p>
+          <p class="quote">Вы получаете все социальные и юридические права обычного жилья по цене коммерческой недвижимости.</p>
+        </div>
+        <div class="card strong">
+          <h3>Главные выгоды статуса:</h3>
+          <ul style="margin: 20px 0 0; padding-left: 20px; font-size: 18px; line-height: 1.6; color: var(--text);">
+            <li style="margin-bottom: 12px;">Официальная постоянная регистрация по месту жительства;</li>
+            <li style="margin-bottom: 12px;">Привязка к детским садам, школам и медицинским учреждениям района;</li>
+            <li style="margin-bottom: 12px;">Тарифы коммунальных услуг на уровне обычных квартир;</li>
+            <li style="margin-bottom: 12px;">Сохранение цены коммерческого метра при покупке.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer"><span>Правовой статус</span><span>Слайд 3 из 12</span></div>
+    </section>
+
+    <!-- Слайд 4: Дуэль цен -->
+    <section class="slide" id="slide-4">
+      <div class="wrap">
+        <p class="kicker">Золотой Квадрат по цене Затона</p>
+        <h2>Минимальная стоимость <span class="accent">входа в городе</span></h2>
+        <p class="lead">Ближайшие аналогичные цены на новостройки в Уфе есть только в отдаленных районах. Но здесь ваши клиенты покупают недвижимость в самом центре.</p>
+        
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Формат жилья</th>
+                <th>Особенности планировки</th>
+                <th>Цена кв. м (Центральный Парк)</th>
+                <th>Где еще есть такие цены в Уфе?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Студии</strong></td>
+                <td>Минимальный порог входа на рынок центра Уфы</td>
+                <td style="color: var(--orange); font-weight: 800;">от 140 300 ₽</td>
+                <td style="color: var(--gold); font-weight: 800;">Затон / Черниковка / Инорс</td>
+              </tr>
+              <tr>
+                <td><strong>Однокомнатные</strong></td>
+                <td>С гардеробной и большой ванной комнатой</td>
+                <td style="color: var(--orange); font-weight: 800;">от 143 900 ₽</td>
+                <td style="color: var(--gold); font-weight: 800;">Затон / Черниковка / Инорс</td>
+              </tr>
+              <tr>
+                <td><strong>Двухкомнатные (70 кв. м)</strong></td>
+                <td>Большая кухня-гостиная, 2 раздельных санузла</td>
+                <td style="color: var(--orange); font-weight: 800;">от 136 200 ₽</td>
+                <td style="color: var(--gold); font-weight: 800;">Затон / Черниковка / Инорс</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div style="display: flex; gap: 20px; align-items: stretch; margin-top: 15px;">
+          <div class="quote" style="flex: 1; margin: 0; display: flex; align-items: center;">
+            <p style="margin: 0;">Хотите вы этого или нет, но вы обязаны знать этот комплекс. Это единственная возможность жить в историческом центре Уфы по цене отдаленных спальных районов.</p>
+          </div>
+          <div class="card strong" style="flex: 1.2; border-left: 4px solid var(--gold); background: rgba(216, 180, 106, 0.05); padding: 15px 20px; display: flex; flex-direction: column; justify-content: center;">
+            <p style="margin: 0; font-size: 14px; color: var(--text); line-height: 1.5;">
+              <strong style="color: var(--gold);">Математика против страхов (Налоги и коммуналка):</strong> Разница в налоге и коммунальных платежах составляет всего 15-20 тыс. рублей в год. При этом цена входа в центре ниже на 3-4 млн рублей по сравнению с классическими квартирами. Эта разница полностью окупается за первый же месяц аренды, а сэкономленный капитал продолжает приносить доход.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>Сравнение цен</span><span>Слайд 4 из 12</span></div>
+    </section>
+
+    <!-- Слайд 5: Семейная ипотека -->
+    <section class="slide" id="slide-5">
+      <div class="wrap split">
+        <div>
+          <p class="kicker">Аналитика инвестора</p>
+          <h2>Конец искусственно <span class="accent">надутых цен</span></h2>
+          <p class="lead">Рынок новостроек перегрет субсидированными программами. Мы предлагаем честную стоимость квадратного метра.</p>
+          <p class="quote">Семейная ипотека надувает пузырь цен на 30-40%. После ее отмены выживут только объекты с реальной рыночной стоимостью. Центральный Парк готов к этому переходу лучше всех.</p>
+        </div>
+        <div class="grid one">
+          <div class="card strong">
+            <h3>Рыночный прогноз на 2026 год:</h3>
+            <p class="muted" style="margin-bottom: 15px;">1. Снижение объемов выдачи льготной ипотеки приведет к сдуванию ценовых пузырей на рынке новостроек.</p>
+            <p class="muted" style="margin-bottom: 15px;">2. Покупатели начнут оценивать реальную стоимость квадратного метра в локации.</p>
+            <p class="muted">3. ЖК «Центральный Парк» сохраняет ценовую стабильность и высокую ликвидность за счет отсутствия наценок.</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>Анализ рынка</span><span>Слайд 5 из 12</span></div>
+    </section>
+
+    <!-- Слайд 6: Финансовые инструменты -->
+    <section class="slide" id="slide-6">
+      <div class="wrap">
+        <p class="kicker">Выгодная покупка</p>
+        <h2>Минимальный <span class="accent">ежемесячный платеж</span></h2>
+        <p class="lead">Мы предлагаем три легких пути приобретения апартаментов с максимальной финансовой выгодой на период строительства.</p>
+        
+        <div style="max-width: 800px; margin: 30px auto 0;">
+          <div class="card">
+            <h3>Программы финансирования:</h3>
+            <div style="margin-top: 15px;">
+              <p style="font-weight: 700; color: var(--orange); margin-bottom: 4px;">1. Траншевая программа Сбербанка</p>
+              <p class="muted" style="font-size: 15px; margin-bottom: 15px;">Минимальный ежемесячный платеж до ввода дома в эксплуатацию. Идеально для тех, кто снимает жилье или распределяет финансовую нагрузку.</p>
+              
+              <p style="font-weight: 700; color: var(--orange); margin-bottom: 4px;">2. Программа Совкомбанка</p>
+              <p class="muted" style="font-size: 15px; margin-bottom: 15px;">Специальные комфортные условия по оплате первоначального взноса.</p>
+              
+              <p style="font-weight: 700; color: var(--orange); margin-bottom: 4px;">3. Рассрочка от застройщика</p>
+              <p class="muted" style="font-size: 15px;">Индивидуальный график платежей без переплат до окончания строительства.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>Финансовые инструменты</span><span>Слайд 6 из 12</span></div>
+    </section>
+
+    <!-- Слайд 7: Экономика инвестора -->
+    <section class="slide" id="slide-7">
+      <div class="wrap">
+        <p class="kicker">Бизнес-модель</p>
+        <h2>До <span class="accent">70 000 ₽</span> чистого дохода в месяц с аренды</h2>
+        <p class="lead">Реальные цифры посуточной и долгосрочной окупаемости апартаментов в центре города Уфы.</p>
+        
+        <div class="calc-row">
+          <div class="card strong gold-border" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <h3>Калькулятор окупаемости аренды</h3>
+              <div class="form-group" style="margin-top: 15px;">
+                <label for="rentInput">Ставка аренды за сутки (₽)</label>
+                <input type="number" id="rentInput" value="4500" step="500">
+              </div>
+              <div class="form-group">
+                <label for="daysInput">Загрузка в месяц (дней)</label>
+                <input type="number" id="daysInput" value="20" min="5" max="30">
+              </div>
+            </div>
+            <div class="calc-result">
+              <span class="muted" style="font-size: 13px; font-weight: 800; text-transform: uppercase;">Грязный доход в месяц:</span>
+              <div class="calc-result__val" id="grossIncome">90 000 ₽</div>
+              <span class="muted" style="font-size: 12px;" id="expensesNote">Чистый доход (после вычета расходов ~25%): 67 500 ₽</span>
+            </div>
+          </div>
+          
+          <div class="card">
+            <h3>Структура расходов и управления:</h3>
+            <div style="margin-top: 15px;">
+              <p style="font-weight: 700; color: var(--gold); margin-bottom: 4px;">Управляющая компания на аутсорсе</p>
+              <p class="muted" style="font-size: 15px; margin-bottom: 15px;">Полностью берет на себя заселение, уборку, стирку и продвижение лота. Пассивный доход без личного участия владельца.</p>
+              
+              <p style="font-weight: 700; color: var(--gold); margin-bottom: 4px;">Минимальные коммунальные платежи</p>
+              <p class="muted" style="font-size: 15px; margin-bottom: 15px;">Своя котельная и современные приборы учета снижают расходы на квартплату до уровня стандартных квартир Уфы.</p>
+              
+              <p style="font-weight: 700; color: var(--gold); margin-bottom: 4px;">Налоги и юр. сопровождение</p>
+              <p class="muted" style="font-size: 15px;">Удобная работа в статусе самозанятого или индивидуального предпринимателя с минимальной налоговой нагрузкой.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>Экономика инвестора</span><span>Слайд 7 из 12</span></div>
+    </section>
+
+    <!-- Слайд 8: Форматы -->
+    <section class="slide" id="slide-8">
+      <div class="wrap">
+        <p class="kicker">Продукт и сегментация</p>
+        <h2>Один объект - <span class="accent">четыре формата</span> под любые задачи</h2>
+        <p class="lead">ЖК «Центральный Парк» предлагает гибкое деление площадей в зависимости от целей вашего клиента.</p>
+        
+        <div class="grid four">
+          <div class="card">
+            <span class="number">1-2</span>
+            <h3>Коммерция на первых этажах</h3>
+            <p class="muted">Высота потолков 2,7 м, панорамные витражи и индивидуальные входные группы. Идеально под рестораны, супермаркеты и клиники.</p>
+          </div>
+          <div class="card">
+            <span class="number">2</span>
+            <h3>Используемый стилобат-парк</h3>
+            <p class="muted">2 уровень. Собственный благоустроенный парк на стилобате для комфортного отдыха жильцов и арендаторов коммерческой зоны.</p>
+          </div>
+          <div class="card">
+            <span class="number">3-5</span>
+            <h3>Офисные апартаменты</h3>
+            <p class="muted">Престижный адрес в центре города, контролируемая система доступа в здание, бесшумные скоростные лифты с доступом в двухуровневый паркинг.</p>
+          </div>
+          <div class="card">
+            <span class="number">14-32</span>
+            <h3>Видовые апартаменты</h3>
+            <p class="muted">14-32 этажи. Ограниченная серия лотов с черновой отделкой. Это плюс: вам не придется тратить деньги на демонтаж некачественной предчистовой отделки, который обходится дороже. Черновая отделка позволяет сразу заложить нужный уровень ремонта - от бюджетного до премиального.</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>Бизнес-форматы</span><span>Слайд 8 из 12</span></div>
+    </section>
+
+    <!-- Слайд 9: Планировки -->
+    <section class="slide" id="slide-9">
+      <div class="wrap">
+        <p class="kicker">Гибкость планировок</p>
+        <h2>Одна планировка - <span class="accent">два готовых решения</span></h2>
+        <p class="lead">Мы разработали и оцифровали схемы расстановки мебели, позволяющие использовать лот как для жизни, так и для бизнеса.</p>
+        
+        <div class="grid three">
+          <div class="card">
+            <span class="number">С</span>
+            <h3>Студии (24-43 кв. м)</h3>
+            <div style="margin-top: 15px;">
+              <p style="font-weight: 700; color: var(--orange); margin-bottom: 4px;">Вариант А: Жилая студия</p>
+              <p class="muted" style="font-size: 14px; margin-bottom: 10px;">Компактная функциональная студия для студента или сдачи в посуточную аренду.</p>
+              <p style="font-weight: 700; color: var(--gold); margin-bottom: 4px;">Вариант Б: Коворкинг</p>
+              <p class="muted" style="font-size: 14px;">Рабочее пространство на 4 оборудованных места для работы мини-команды.</p>
+            </div>
+          </div>
+          <div class="card">
+            <span class="number">1+</span>
+            <h3>Евродвушки (44-45 кв. м)</h3>
+            <div style="margin-top: 15px;">
+              <p style="font-weight: 700; color: var(--orange); margin-bottom: 4px;">Вариант А: Жилая квартира</p>
+              <p class="muted" style="font-size: 14px; margin-bottom: 10px;">Уютная квартира с изолированной спальней и большой кухней-гостиной.</p>
+              <p style="font-weight: 700; color: var(--gold); margin-bottom: 4px;">Вариант Б: Фотостудия / Офис</p>
+              <p class="muted" style="font-size: 14px;">Коммерческое рабочее пространство открытого типа с зоной отдыха.</p>
+            </div>
+          </div>
+          <div class="card">
+            <span class="number">2+</span>
+            <h3>Евротрешки (66-71 кв. м)</h3>
+            <div style="margin-top: 15px;">
+              <p style="font-weight: 700; color: var(--orange); margin-bottom: 4px;">Вариант А: Семейный лот</p>
+              <p class="muted" style="font-size: 14px; margin-bottom: 10px;">Просторная квартира для семьи с двумя спальнями и гардеробной комнатой.</p>
+              <p style="font-weight: 700; color: var(--gold); margin-bottom: 4px;">Вариант Б: Салон красоты</p>
+              <p class="muted" style="font-size: 14px;">Готовый бизнес: 3 кабинета массажа/косметологии и зона ресепшн.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>Планировочные решения</span><span>Слайд 9 из 12</span></div>
+    </section>
+
+    <!-- Слайд 10: Надежность -->
+    <section class="slide" id="slide-10">
+      <div class="wrap split">
+        <div>
+          <p class="kicker">Безопасность стройки</p>
+          <h2>Строит <span class="accent">ГК СУ10</span> - 25 лет надежности. Сдача - 2 квартал 2027</h2>
+          <p class="lead">Ввод в эксплуатацию во 2 квартале 2027 года. Готовность каркаса здания - 80%, активно идут фасадные и внутренние работы. Проект полностью застрахован эскроу-счетами.</p>
+          <p class="quote">За плечами застройщика - десятки сданных жилых домов, детских садов, школ и знаковых спортивных арен по всей России. Ваша сделка защищена законом.</p>
+        </div>
+        <div class="grid two">
+          <div class="card" style="text-align: center;">
+            <h3 style="font-size: 48px; color: var(--orange); margin-bottom: 5px;">62</h3>
+            <p style="font-weight: 800; text-transform: uppercase; font-size: 12px; color: var(--muted);">Жилых дома сдано</p>
+          </div>
+          <div class="card" style="text-align: center;">
+            <h3 style="font-size: 48px; color: var(--orange); margin-bottom: 5px;">23</h3>
+            <p style="font-weight: 800; text-transform: uppercase; font-size: 12px; color: var(--muted);">Школы построено</p>
+          </div>
+          <div class="card" style="text-align: center;">
+            <h3 style="font-size: 48px; color: var(--orange); margin-bottom: 5px;">16</h3>
+            <p style="font-weight: 800; text-transform: uppercase; font-size: 12px; color: var(--muted);">Детских садов</p>
+          </div>
+          <div class="card" style="text-align: center;">
+            <h3 style="font-size: 48px; color: var(--orange); margin-bottom: 5px;">8</h3>
+            <p style="font-weight: 800; text-transform: uppercase; font-size: 12px; color: var(--muted);">Спортсооружений</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>Надежность девелопера</span><span>Слайд 10 из 12</span></div>
+    </section>
+
+    <!-- Слайд 11: УТП для агентов -->
+    <section class="slide" id="slide-11">
+      <div class="wrap split">
+        <div>
+          <p class="kicker">Партнерская программа</p>
+          <h2><span class="accent">Совместное закрытие сделки</span>: поддержка на каждом шаге</h2>
+          <p class="lead">Агентоцентричность и партнерство. Мы гарантируем быструю, четкую обратную связь без лишней волокиты и помогаем вам вместе довести вашего клиента до сделки.</p>
+          <p class="quote">Регистрируйте клиента на партнерской линии. Мы вместе выберем подходящий вариант по шахматке, проведем экскурсию и поможем одобрить ипотеку. Оказываем экспертную поддержку на каждом этапе. Ваша комиссия - 5% фиксом.</p>
+        </div>
+        <div class="grid one">
+          <div class="card strong gold-border" style="padding: 20px;">
+            <h3>Регламент партнерской защиты:</h3>
+            <p class="muted" style="margin-bottom: 12px; font-size: 14px;"><strong style="color: var(--orange);">60 дней</strong> - жесткая фиксация клиента за агентом с момента отправки в чат.</p>
+            <p class="muted" style="margin-bottom: 12px; font-size: 14px;"><strong style="color: var(--orange);">Полная защита</strong> - сделка закрепляется за вами, даже если клиент ранее оставлял заявку на сайте застройщика, но не дошел до встречи.</p>
+            <p class="muted" style="margin-bottom: 12px; font-size: 14px;"><strong style="color: var(--orange);">+30 дней</strong> - автоматическое продление фиксации при любом целевом действии (показ, расчет).</p>
+            <p class="muted" style="font-size: 14px;"><strong style="color: var(--orange);">10 рабочих дней</strong> - выплата комиссии после регистрации договора долевого участия (ДДУ).</p>
+          </div>
+          <div class="card strong" style="border-left: 4px solid var(--orange); padding: 20px; margin-top: 15px;">
+            <h3>Маркетинговый пакет «Быстрый старт»:</h3>
+            <p class="muted" style="font-size: 14px; margin-bottom: 12px;">Получите готовые инструменты продаж на партнерской линии в одно нажатие:</p>
+            <p style="margin-bottom: 8px; font-size: 14px; color: var(--text);"><strong style="color: var(--gold);">✓</strong> Профессиональные рендеры и фотографии хода строительства;</p>
+            <p style="margin-bottom: 8px; font-size: 14px; color: var(--text);"><strong style="color: var(--gold);">✓</strong> Удобные планировки квартир и коммерческих лотов;</p>
+            <p style="margin-bottom: 8px; font-size: 14px; color: var(--text);"><strong style="color: var(--gold);">✓</strong> Шаблоны продающих постов для ваших социальных сетей;</p>
+            <p style="font-size: 14px; color: var(--text);"><strong style="color: var(--gold);">✓</strong> Готовые видео-обзоры для отправки клиентам в Ватсап.</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>Условия для АН</span><span>Слайд 11 из 12</span></div>
+    </section>
+
+    <!-- Слайд 12: Финал -->
+    <section class="slide" id="slide-12">
+      <div class="wrap split">
+        <div>
+          <p class="kicker">Интерактивный запуск</p>
+          <h2>Сканируй и забирай <span class="accent">5.5% комиссии</span> на первую сделку!</h2>
+          <p class="lead">Только для участников сегодняшней презентации при фиксации клиента в течение 2 дней.</p>
+          <p class="quote" style="border-color: var(--gold); background: rgba(216, 180, 106, 0.06);">Сканируйте QR-код, переходите в партнерский чат, отправляйте ФИО клиента с пометкой «Старт» и получайте повышенную комиссию.</p>
+          
+          <div class="grid two" style="margin-top: 30px;">
+            <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;">
+              <!-- Эмуляция QR-кода -->
+              <div style="width: 140px; height: 140px; background: #fff; padding: 10px; border-radius: 12px; display: grid; place-items: center;">
+                <div style="width: 120px; height: 120px; background: repeating-conic-gradient(from 45deg, #000 0% 25%, #fff 0% 50%) 50% / 20px 20px;"></div>
+              </div>
+              <p class="muted" style="font-size: 12px; margin-top: 10px; text-transform: uppercase; font-weight: 800;">Партнерский Телеграм-чат</p>
+            </div>
+            <div class="card strong" style="display: flex; flex-direction: column; justify-content: center;">
+              <h3 class="gold" style="font-size: 32px; margin-bottom: 5px;">+0.5%</h3>
+              <p class="lead" style="font-size: 15px;">Бонус к базовой ставке при отправке первого лида прямо сейчас из зала!</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <!-- Интерактивный симулятор чата на экране -->
+          <div class="sim-phone">
+            <div class="sim-header">ПАРТНЕРСКИЙ ЧАТ СУ10 (ЭКСПЕРТ-СИТИ)</div>
+            <div class="sim-body" id="chatBody">
+              <div class="msg in">Коллеги, привет! Рады видеть всех на запуске ЖК «Центральный Парк»!</div>
+              <div class="msg in">Для регистрации первого клиента и фиксации повышенной комиссии 5.5% отправьте ФИО и телефон клиента с пометкой «Старт».</div>
+            </div>
+            <div class="sim-input">
+              <input type="text" id="chatInput" placeholder="Иванов Иван Иванович, +7999..." aria-label="Сообщение в чат">
+              <button type="button" id="chatSendBtn" aria-label="Отправить">➔</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>Интерактивный старт</span><span>Слайд 12 из 12</span></div>
+    </section>
+  </main>
+
+  <script>
+    // Логика слайд-шоу
+    const slides = document.querySelectorAll('.slide');
+    let currentSlideIndex = 0;
+
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const progressBar = document.getElementById('progressBar');
+
+    function updateSlide() {
+      slides.forEach((slide, index) => {
+        if (index === currentSlideIndex) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+      progressBar.style.width = `${((currentSlideIndex + 1) / slides.length) * 100}%`;
+    }
+
+    prevBtn.addEventListener('click', () => {
+      if (currentSlideIndex > 0) {
+        currentSlideIndex--;
+        updateSlide();
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (currentSlideIndex < slides.length - 1) {
+        currentSlideIndex++;
+        updateSlide();
+      }
+    });
+
+    // Навигация с клавиатуры
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        if (currentSlideIndex < slides.length - 1) {
+          currentSlideIndex++;
+          updateSlide();
+        }
+      } else if (e.key === 'ArrowLeft') {
+        if (currentSlideIndex > 0) {
+          currentSlideIndex--;
+          updateSlide();
+        }
+      }
+    });
+
+    // Калькулятор ипотеки
+    const priceInput = document.getElementById('priceInput');
+    const termSelect = document.getElementById('termSelect');
+    const monthlyPaymentVal = document.getElementById('monthlyPayment');
+
+    if (priceInput && termSelect && monthlyPaymentVal) {
+      function calculateMortgage() {
+        const price = parseFloat(priceInput.value) || 0;
+        const termYears = parseInt(termSelect.value) || 30;
+        
+        // Минимальный расчет (упрощенная формула: первоначальный взнос 20%, ставка 8% годовых)
+        const downPayment = price * 0.2;
+        const loanAmount = price - downPayment;
+        const interestRate = 0.08;
+        const monthlyRate = interestRate / 12;
+        const totalMonths = termYears * 12;
+
+        const monthlyPayment = (loanAmount * monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / (Math.pow(1 + monthlyRate, totalMonths) - 1);
+        
+        if (isFinite(monthlyPayment)) {
+          monthlyPaymentVal.textContent = `${Math.round(monthlyPayment).toLocaleString('ru-RU')} ₽`;
+        } else {
+          monthlyPaymentVal.textContent = '0 ₽';
+        }
+      }
+
+      priceInput.addEventListener('input', calculateMortgage);
+      termSelect.addEventListener('change', calculateMortgage);
+      calculateMortgage();
+    }
+
+    // Калькулятор окупаемости аренды
+    const rentInput = document.getElementById('rentInput');
+    const daysInput = document.getElementById('daysInput');
+    const grossIncomeVal = document.getElementById('grossIncome');
+    const expensesNoteVal = document.getElementById('expensesNote');
+
+    function calculateRent() {
+      const rent = parseFloat(rentInput.value) || 0;
+      const days = parseInt(daysInput.value) || 20;
+
+      const gross = rent * days;
+      const net = gross * 0.75; // Вычет расходов ~25%
+
+      grossIncomeVal.textContent = `${Math.round(gross).toLocaleString('ru-RU')} ₽`;
+      expensesNoteVal.textContent = `Чистый доход (после вычета расходов ~25%): ${Math.round(net).toLocaleString('ru-RU')} ₽`;
+    }
+
+    rentInput.addEventListener('input', calculateRent);
+    daysInput.addEventListener('input', calculateRent);
+    calculateRent();
+
+    // Симулятор чата
+    const chatInput = document.getElementById('chatInput');
+    const chatSendBtn = document.getElementById('chatSendBtn');
+    const chatBody = document.getElementById('chatBody');
+
+    chatSendBtn.addEventListener('click', () => {
+      const text = chatInput.value.trim();
+      if (text) {
+        // Добавляем сообщение пользователя
+        const userMsg = document.createElement('div');
+        userMsg.className = 'msg out';
+        userMsg.textContent = `${text} Старт`;
+        chatBody.appendChild(userMsg);
+        chatInput.value = '';
+        chatBody.scrollTop = chatBody.scrollHeight;
+
+        // Эмулируем автоответ бота через 1.5 секунды
+        setTimeout(() => {
+          const botMsg = document.createElement('div');
+          botMsg.className = 'msg in';
+          botMsg.innerHTML = `<strong>Бот-модератор:</strong> Клиент успешно зафиксирован! Проверка уникальности по базе CRM... <span class="gold" style="font-weight: 800;">УНИКАЛЕН</span>. Закреплен за вашим агентством на 45 дней. Повышенная ставка 5.5% зафиксирована! 🚀`;
+          chatBody.appendChild(botMsg);
+          chatBody.scrollTop = chatBody.scrollHeight;
+        }, 1500);
+      }
+    });
+
+    chatInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        chatSendBtn.click();
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Афиша: ИИ для бизнеса — Антон Цой</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;800;900&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #f4ede2;
+      --poster-red: #d6231e;
+      --poster-black: #141414;
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --paper-width: 210mm;
+      --paper-height: 297mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #0d0d0d;
+      font-family: var(--font-body);
+      color: var(--poster-black);
+      padding: 40px 0;
+      overflow-x: hidden;
+    }
+
+    /* А4 Контейнер с эффектом глубины */
+    .poster-wrapper {
+      position: relative;
+      box-shadow: 0 45px 120px rgba(0, 0, 0, 0.9), 0 0 80px rgba(214, 35, 30, 0.05);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .poster {
+      position: relative;
+      width: var(--paper-width);
+      height: var(--paper-height);
+      overflow: hidden;
+      background-color: var(--bg-paper);
+      background-image: 
+        radial-gradient(var(--bg-paper) 60%, rgba(214, 35, 30, 0.03)),
+        repeating-linear-gradient(45deg, rgba(22, 22, 22, 0.01) 0px, rgba(22, 22, 22, 0.01) 2px, transparent 2px, transparent 10px);
+      padding: 16mm 14mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      isolation: isolate;
+    }
+
+    /* Эффект старой бумаги / Шума */
+    .poster::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.045'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 99;
+    }
+
+    /* Сетка конструктивизма: Черные и красные фоновые полосы */
+    .bg-strip-red-top {
+      position: absolute;
+      top: -30mm;
+      left: 30mm;
+      width: 140mm;
+      height: 90mm;
+      background-color: var(--poster-red);
+      transform: rotate(-12deg);
+      z-index: -1;
+    }
+
+    .bg-strip-black-bottom {
+      position: absolute;
+      bottom: -40mm;
+      right: -30mm;
+      width: 160mm;
+      height: 110mm;
+      background-color: var(--poster-black);
+      transform: rotate(-10deg);
+      z-index: -1;
+    }
+
+    /* --- ШАПКА АФИШИ --- */
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      width: 100%;
+      z-index: 10;
+    }
+
+    /* Логотипы / Площадка */
+    .brand-block {
+      transform: rotate(-3deg);
+      background-color: var(--poster-black);
+      color: #ffffff;
+      padding: 6px 14px;
+      font-family: var(--font-display);
+      font-size: 20px;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .brand-block span {
+      color: var(--poster-red);
+    }
+
+    /* Дата встречи (Верхний правый угол) */
+    .date-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      background: var(--bg-paper);
+      border: 3px solid var(--poster-black);
+      padding: 8px 16px;
+      transform: rotate(2deg);
+      box-shadow: 6px 6px 0px var(--poster-black);
+    }
+
+    .date-badge .day-time {
+      font-family: var(--font-display);
+      font-size: 32px;
+      line-height: 0.95;
+      font-weight: 900;
+      color: var(--poster-black);
+      letter-spacing: 0.02em;
+    }
+
+    .date-badge .day-week {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--poster-red);
+      margin-top: 1px;
+    }
+
+
+    /* --- ЦЕНТРАЛЬНАЯ ЧАСТЬ (ОФФЕР + ФОТО) --- */
+    .middle-section {
+      position: relative;
+      width: 100%;
+      height: 162mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      z-index: 5;
+    }
+
+    /* Крупные плакатные заголовки */
+    .title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 2mm;
+      margin-top: 2mm;
+    }
+
+    /* Slanted Title 1 */
+    .title-row-1 {
+      align-self: flex-start;
+      background-color: var(--poster-black);
+      color: #ffffff;
+      padding: 10px 24px 6px;
+      transform: rotate(-4deg);
+      box-shadow: 8px 8px 0px rgba(0,0,0,0.15);
+    }
+
+    .title-row-1 h1 {
+      font-family: var(--font-display);
+      font-size: 64px;
+      line-height: 0.85;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+    }
+
+    /* Slanted Title 2 */
+    .title-row-2 {
+      align-self: flex-start;
+      background-color: var(--poster-red);
+      color: #ffffff;
+      padding: 8px 20px 4px;
+      transform: rotate(-2deg);
+      margin-left: 4mm;
+      box-shadow: 8px 8px 0px rgba(0,0,0,0.1);
+    }
+
+    .title-row-2 h2 {
+      font-family: var(--font-display);
+      font-size: 38px;
+      line-height: 0.9;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    /* СЕКСУАЛЬНЫЙ КОЛЛАЖ (ФОТО АНТОНА) */
+    .collage-container {
+      position: absolute;
+      top: 25mm;
+      right: -2mm;
+      width: 82mm;
+      height: 105mm;
+      z-index: -1;
+    }
+
+    /* Черный круг позади фото */
+    .collage-circle {
+      position: absolute;
+      top: 5mm;
+      left: -5mm;
+      width: 78mm;
+      height: 78mm;
+      border-radius: 50%;
+      background-color: var(--poster-black);
+      transform: rotate(-15deg);
+      z-index: 1;
+    }
+
+    /* Портретное фото в конструктивистском стиле */
+    .collage-photo-frame {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 72mm;
+      height: 96mm;
+      border: 6px solid var(--poster-black);
+      background-color: #ffffff;
+      box-shadow: 12px 12px 0px rgba(0,0,0,0.12);
+      transform: rotate(3deg);
+      overflow: hidden;
+      z-index: 2;
+    }
+
+    .collage-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      /* Премиальный контрастный фильтр под плакатный стиль */
+      filter: grayscale(1) contrast(1.18) brightness(1.02);
+      transition: transform 0.4s ease;
+    }
+
+    .collage-photo-frame:hover .collage-photo {
+      transform: scale(1.04) rotate(-1deg);
+    }
+
+    /* Красный наклонный вектор поперек фото */
+    .collage-slash {
+      position: absolute;
+      bottom: 8mm;
+      left: -12mm;
+      width: 60mm;
+      height: 8mm;
+      background-color: var(--poster-red);
+      transform: rotate(-25deg);
+      z-index: 3;
+    }
+
+    /* Краткий текстовый оффер в стиле манифеста */
+    .manifesto-box {
+      margin-top: 4mm;
+      max-width: 90mm;
+      padding: 12px 16px;
+      background-color: #ffffff;
+      border: 3px solid var(--poster-black);
+      box-shadow: 6px 6px 0px var(--poster-black);
+      transform: rotate(-1.5deg);
+      align-self: flex-start;
+    }
+
+    .manifesto-box p {
+      font-size: 13.5px;
+      line-height: 1.35;
+      font-weight: 800;
+      color: var(--poster-black);
+      text-transform: uppercase;
+    }
+
+    .manifesto-box p span {
+      color: var(--poster-red);
+    }
+
+
+    /* --- СЕКЦИЯ КОНТЕНТА (ТЕЗИСЫ) --- */
+    .bullets-container {
+      display: flex;
+      flex-direction: column;
+      gap: 3.5mm;
+      max-width: 92mm;
+      margin-top: 18mm;
+      transform: rotate(-1deg);
+    }
+
+    .bullet-row {
+      display: flex;
+      align-items: start;
+      gap: 12px;
+      background-color: rgba(22, 22, 22, 0.03);
+      padding: 6px 12px;
+      border-left: 4px solid var(--poster-red);
+    }
+
+    .bullet-num {
+      font-family: var(--font-display);
+      font-size: 24px;
+      color: var(--poster-red);
+      line-height: 1;
+      margin-top: 1px;
+    }
+
+    .bullet-text h4 {
+      font-family: var(--font-display);
+      font-size: 19px;
+      text-transform: uppercase;
+      color: var(--poster-black);
+      letter-spacing: 0.02em;
+    }
+
+    .bullet-text p {
+      font-size: 10.5px;
+      color: rgba(22, 22, 22, 0.7);
+      line-height: 1.3;
+      font-weight: 600;
+      margin-top: 1px;
+    }
+
+
+    /* --- ПОДВАЛ АФИШИ --- */
+    .bottom-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      width: 100%;
+      margin-top: 4mm;
+      z-index: 10;
+    }
+
+    /* Имя спикера (Гигантский плакатный леттеринг внизу) */
+    .speaker-name-strip {
+      display: flex;
+      flex-direction: column;
+      transform: rotate(-3deg);
+    }
+
+    .speaker-label {
+      background-color: var(--poster-black);
+      color: #ffffff;
+      padding: 4px 10px;
+      font-family: var(--font-display);
+      font-size: 15px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      align-self: flex-start;
+      margin-bottom: -1px;
+    }
+
+    .speaker-name {
+      background-color: var(--poster-red);
+      color: #ffffff;
+      padding: 10px 24px 6px;
+      box-shadow: 8px 8px 0px rgba(0,0,0,0.15);
+    }
+
+    .speaker-name h2 {
+      font-family: var(--font-display);
+      font-size: 52px;
+      line-height: 0.85;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    /* Круглый штамп «ПРАКТИКА ЗДЕСЬ И СЕЙЧАС» (Справа) */
+    .circular-badge {
+      width: 32mm;
+      height: 32mm;
+      border-radius: 50%;
+      background-color: var(--poster-black);
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border: 4px solid var(--bg-paper);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      transform: rotate(6deg);
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .circular-badge:hover {
+      transform: rotate(-6deg) scale(1.05);
+    }
+
+    .circular-badge span:first-child {
+      font-family: var(--font-display);
+      font-size: 26px;
+      line-height: 0.9;
+      letter-spacing: 0.02em;
+      color: #ffffff;
+    }
+
+    .circular-badge span:nth-child(2) {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--poster-red);
+      margin: 2px 0;
+    }
+
+    .circular-badge span:last-child {
+      font-family: var(--font-display);
+      font-size: 21px;
+      line-height: 0.9;
+      color: #ffffff;
+    }
+
+
+    /* --- СТИЛИ ДЛЯ ПЕЧАТИ --- */
+    @media print {
+      body {
+        background: transparent;
+        padding: 0;
+        margin: 0;
+      }
+
+      .poster-wrapper {
+        box-shadow: none;
+        border-radius: 0;
+        transform: none !important;
+      }
+
+      .poster {
+        width: 210mm;
+        height: 297mm;
+      }
+
+      @page {
+        size: A4 portrait;
+        margin: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="poster-wrapper">
+    <main class="poster" aria-label="Афиша А4: ИИ для бизнеса">
+      
+      <!-- Срезы конструктивизма на фоне -->
+      <div class="bg-strip-red-top"></div>
+      <div class="bg-strip-black-bottom"></div>
+
+      <!-- --- ШАПКА --- -->
+      <section class="top-row">
+        <div class="brand-block">
+          ЛЮДИ <span>КО—ВОРКИНГ</span>
+        </div>
+        
+        <div class="date-badge">
+          <div class="day-time">9 ИЮНЯ / 15:00</div>
+          <div class="day-week">УФА / ЖИВАЯ ВСТРЕЧА</div>
+        </div>
+      </section>
+
+      <!-- --- ЦЕНТРАЛЬНАЯ ЧАСТЬ (ОФФЕР + КОЛЛАЖ) --- -->
+      <section class="middle-section">
+        
+        <div class="title-block">
+          <div class="title-row-1">
+            <h1>ИИ ДЛЯ БИЗНЕСА.</h1>
+          </div>
+          <div class="title-row-2">
+            <h2>БЕЗ ХАЙПА И ПРОМПТОВ</h2>
+          </div>
+          
+          <div class="manifesto-box">
+            <p>ЛИЧНЫЙ ИИ-ПОМОЩНИК В TELEGRAM ПО ЦЕНЕ <span>ЧАШКИ КОФЕ</span> В МЕСЯЦ</p>
+          </div>
+        </div>
+
+        <!-- Коллаж с твоей фотографией (Справа) -->
+        <div class="collage-container">
+          <div class="collage-circle"></div>
+          <div class="collage-photo-frame">
+            <img src="anton-photo.jpg" alt="Антон Цой" class="collage-photo">
+          </div>
+          <div class="collage-slash"></div>
+        </div>
+
+        <!-- Тезисы (Слева) -->
+        <div class="bullets-container">
+          <article class="bullet-row">
+            <span class="bullet-num">01</span>
+            <div class="bullet-text">
+              <h4>МАГИЯ ОДНОЙ КНОПКИ</h4>
+              <p>Наговариваешь ИИ мысли голосом — получаешь КП, скрипты и регламенты в своем стиле.</p>
+            </div>
+          </article>
+
+          <article class="bullet-row">
+            <span class="bullet-num">02</span>
+            <div class="bullet-text">
+              <h4>ВТОРОЙ МОЗГ БИЗНЕСА</h4>
+              <p>Объединение всех ваших файлов, документов и инструкций в единую систему.</p>
+            </div>
+          </article>
+
+          <article class="bullet-row">
+            <span class="bullet-num">03</span>
+            <div class="bullet-text">
+              <h4>МАКСИМАЛЬНАЯ ЭФФЕКТИВНОСТЬ</h4>
+              <p>Решение до 90% рутинных задач компании без раздувания штата и лишних подписок.</p>
+            </div>
+          </article>
+        </div>
+
+      </section>
+
+      <!-- --- ПОДВАЛ --- -->
+      <section class="bottom-row">
+        <!-- Блок спикера -->
+        <div class="speaker-name-strip">
+          <span class="speaker-label">СПИКЕР И AI-ПРАКТИК</span>
+          <div class="speaker-name">
+            <h2>АНТОН ЦОЙ</h2>
+          </div>
+        </div>
+
+        <!-- Круглый штамп в стиле авангард -->
+        <div class="circular-badge" onclick="window.location.href='https://t.me/your_telegram_username'">
+          <span>РАЗБОРЫ</span>
+          <span>КЕЙСОВ</span>
+          <span>НА МЕСТЕ</span>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,2002 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Агентская Академия Гранель — Интерактивное Предложение 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #070913;
+            --bg-card: rgba(17, 22, 43, 0.7);
+            --bg-card-hover: rgba(28, 35, 65, 0.8);
+            --accent-orange: #FF5A00;
+            --accent-orange-glow: rgba(255, 90, 0, 0.15);
+            --accent-orange-glow-strong: rgba(255, 90, 0, 0.4);
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 90, 0, 0.3);
+            --neon-blue: #00F0FF;
+            --neon-blue-glow: rgba(0, 240, 255, 0.15);
+            --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        /* Background Glows */
+        .glow-bg {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent-orange-glow) 0%, rgba(7, 9, 19, 0) 70%);
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(80px);
+        }
+
+        .glow-1 { top: -10%; right: -10%; }
+        .glow-2 { top: 40%; left: -20%; background: radial-gradient(circle, var(--neon-blue-glow) 0%, rgba(7, 9, 19, 0) 70%); }
+        .glow-3 { bottom: 10%; right: -10%; }
+
+        /* Container */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Navigation Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            background: rgba(7, 9, 19, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            transition: var(--transition-smooth);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo span {
+            color: var(--accent-orange);
+            position: relative;
+        }
+
+        .logo span::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--accent-orange);
+            box-shadow: 0 0 10px var(--accent-orange);
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: var(--transition-smooth);
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent-orange);
+            transition: var(--transition-smooth);
+        }
+
+        nav a:hover {
+            color: var(--text-primary);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .cta-btn {
+            background: linear-gradient(135deg, var(--accent-orange) 0%, #FF8C00 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(255, 90, 0, 0.3);
+            transition: var(--transition-smooth);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(255, 90, 0, 0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 180px 0 100px;
+            position: relative;
+            text-align: center;
+        }
+
+        .badge {
+            background: rgba(255, 90, 0, 0.1);
+            border: 1px solid rgba(255, 90, 0, 0.2);
+            color: var(--accent-orange);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            animation: pulse-orange 3s infinite;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-orange);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent-orange);
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, #FFFFFF 30%, #E2E8F0 60%, var(--accent-orange) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto 3rem;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+        }
+
+        .stat-item h3 {
+            font-size: 2.5rem;
+            color: var(--accent-orange);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-item p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        /* Section Layouts */
+        section {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Market Shift (2021 vs 2026) */
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: stretch;
+        }
+
+        .comp-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+        }
+
+        .comp-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--text-muted);
+        }
+
+        .comp-card.past::before {
+            background: #64748B;
+        }
+
+        .comp-card.present {
+            border-color: var(--border-hover);
+            box-shadow: 0 10px 30px var(--accent-orange-glow);
+        }
+
+        .comp-card.present::before {
+            background: linear-gradient(90deg, var(--accent-orange), #FF8C00);
+        }
+
+        .comp-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .comp-card.past h3 {
+            color: var(--text-secondary);
+        }
+
+        .comp-card.present h3 {
+            color: var(--accent-orange);
+        }
+
+        .comp-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .comp-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .comp-list li svg {
+            margin-top: 0.25rem;
+            flex-shrink: 0;
+        }
+
+        .comp-card.present .comp-list li {
+            color: var(--text-primary);
+        }
+
+        .nav-callout {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 90, 0, 0.05);
+            border-left: 4px solid var(--accent-orange);
+            border-radius: 0 16px 16px 0;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        /* Pillars Section */
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .pillar-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: var(--transition-smooth);
+        }
+
+        .pillar-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--border-hover);
+            background: var(--bg-card-hover);
+        }
+
+        .pillar-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: rgba(255, 90, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: var(--accent-orange);
+        }
+
+        .pillar-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .pillar-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Interactive Timeline Program */
+        .timeline-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .day-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .toggle-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .toggle-btn.active {
+            background: var(--accent-orange);
+            color: white;
+            border-color: var(--accent-orange);
+            box-shadow: 0 4px 20px rgba(255, 90, 0, 0.4);
+        }
+
+        .day-panel {
+            display: none;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .day-panel.active {
+            display: flex;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .block-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+        }
+
+        .block-header {
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.01);
+            transition: var(--transition-smooth);
+        }
+
+        .block-header:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .block-title-area {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .block-num {
+            background: rgba(255, 90, 0, 0.1);
+            color: var(--accent-orange);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .block-meta {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .block-meta h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .block-meta span {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .block-chevron {
+            color: var(--text-secondary);
+            transition: var(--transition-smooth);
+        }
+
+        .block-card.open .block-chevron {
+            transform: rotate(180deg);
+            color: var(--accent-orange);
+        }
+
+        .block-card.open {
+            border-color: var(--border-hover);
+        }
+
+        .block-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            padding: 0 2rem;
+            border-top: 1px solid transparent;
+            background: rgba(7, 9, 19, 0.2);
+        }
+
+        .block-card.open .block-content {
+            max-height: 1000px;
+            padding: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .topic-list {
+            margin-bottom: 1.5rem;
+        }
+
+        .topic-list h5 {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .topic-items {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .topic-items li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .topic-items li::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--accent-orange);
+            border-radius: 50%;
+        }
+
+        .block-details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .detail-item {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            padding: 1.25rem;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .detail-item h6 {
+            color: var(--accent-orange);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .detail-item p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        /* Toolkit Interactive Checklist */
+        .toolkit-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 28px;
+            padding: 4rem;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .toolkit-info h3 {
+            font-size: 2.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .toolkit-info p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+        }
+
+        .toolkit-progress {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .progress-circle {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .progress-circle svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: rotate(-90deg);
+        }
+
+        .progress-circle .bg-ring {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.05);
+            stroke-width: 8;
+        }
+
+        .progress-circle .bar-ring {
+            fill: none;
+            stroke: var(--accent-orange);
+            stroke-width: 8;
+            stroke-dasharray: 226;
+            stroke-dashoffset: 226;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.6s ease;
+        }
+
+        .progress-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .toolkit-checklist {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .check-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            user-select: none;
+        }
+
+        .check-item:hover {
+            border-color: rgba(255, 90, 0, 0.2);
+            background: rgba(255, 90, 0, 0.02);
+        }
+
+        .checkbox-custom {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: 2px solid var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-smooth);
+            flex-shrink: 0;
+        }
+
+        .checkbox-custom svg {
+            width: 12px;
+            height: 12px;
+            color: white;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: var(--transition-smooth);
+        }
+
+        .check-item.checked {
+            border-color: var(--border-hover);
+            background: rgba(255, 90, 0, 0.05);
+        }
+
+        .check-item.checked .checkbox-custom {
+            background: var(--accent-orange);
+            border-color: var(--accent-orange);
+            box-shadow: 0 0 8px rgba(255, 90, 0, 0.5);
+        }
+
+        .check-item.checked .checkbox-custom svg {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .check-item.checked span {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .check-item span {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            transition: var(--transition-smooth);
+        }
+
+        /* Business ROI Calculator */
+        .calculator-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 28px;
+            padding: 4rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .calc-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .slider-label span:first-child {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .slider-val {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--accent-orange);
+            background: rgba(255, 90, 0, 0.1);
+            padding: 0.25rem 0.75rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 90, 0, 0.15);
+        }
+
+        .input-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            outline: none;
+            transition: background 0.3s;
+        }
+
+        .input-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-orange);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 90, 0, 0.8);
+            transition: var(--transition-smooth);
+        }
+
+        .input-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .calc-results {
+            background: rgba(7, 9, 19, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calc-results::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: var(--accent-orange-glow);
+            filter: blur(50px);
+            pointer-events: none;
+        }
+
+        .result-block {
+            margin-bottom: 2rem;
+        }
+
+        .result-block:last-child {
+            margin-bottom: 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 2rem;
+        }
+
+        .result-block span {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            display: block;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .result-val {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 2.5rem;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+
+        .result-val.highlight {
+            color: var(--accent-orange);
+            font-size: 3.5rem;
+            text-shadow: 0 0 20px rgba(255, 90, 0, 0.2);
+        }
+
+        /* Results / Deliverables Section */
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .result-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: var(--transition-smooth);
+        }
+
+        .result-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-5px);
+            background: var(--bg-card-hover);
+        }
+
+        .result-card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 90, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: var(--accent-orange);
+        }
+
+        .result-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .result-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Pilot Launch Section */
+        .pilot-container {
+            background: linear-gradient(135deg, rgba(17, 22, 43, 0.8) 0%, rgba(7, 9, 19, 0.9) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 28px;
+            padding: 4rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .pilot-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .pilot-step {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .step-badge {
+            background: rgba(255, 90, 0, 0.1);
+            border: 1px solid rgba(255, 90, 0, 0.2);
+            color: var(--accent-orange);
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .step-info h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-info p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .pilot-form {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 20px;
+            padding: 3rem;
+        }
+
+        .pilot-form h3 {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .pilot-form p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .form-control {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 0.85rem 1.2rem;
+            color: white;
+            font-family: inherit;
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition-smooth);
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-orange);
+            background: rgba(255, 90, 0, 0.02);
+            box-shadow: 0 0 10px var(--accent-orange-glow);
+        }
+
+        .form-submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent-orange) 0%, #FF8C00 100%);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 90, 0, 0.25);
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .form-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 90, 0, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: #04050A;
+            border-top: 1px solid var(--border-color);
+            padding: 4rem 0;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer-logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-logo span {
+            color: var(--accent-orange);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition-smooth);
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+        }
+
+        /* Animations & Utilities */
+        @keyframes pulse-orange {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 90, 0, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 90, 0, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 90, 0, 0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .comparison-container,
+            .toolkit-container,
+            .calculator-container,
+            .pilot-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .toolkit-container,
+            .calculator-container,
+            .pilot-container {
+                padding: 2.5rem;
+            }
+
+            .pillars-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .results-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav, header .cta-btn {
+                display: none;
+            }
+
+            .pillars-grid,
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .section-header h2 {
+                font-size: 2.2rem;
+            }
+
+            .topic-items {
+                grid-template-columns: 1fr;
+            }
+
+            .block-details-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background effects -->
+    <div class="glow-bg glow-1"></div>
+    <div class="glow-bg glow-2"></div>
+    <div class="glow-bg glow-3"></div>
+
+    <!-- Navigation -->
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 2 7 12 12 22 7 12 2" fill="var(--accent-orange)" opacity="0.2"/>
+                    <polyline points="2 17 12 22 22 17"/>
+                    <polyline points="2 12 12 17 22 12"/>
+                </svg>
+                ГРАНЕЛЬ <span>АКАДЕМИЯ</span>
+            </a>
+            <nav>
+                <a href="#market">Вызов 2026</a>
+                <a href="#program">Программа</a>
+                <a href="#toolkit">Инструменты</a>
+                <a href="#roi">ROI-Эффект</a>
+                <a href="#pilot">Пилот</a>
+            </nav>
+            <a href="#pilot" class="cta-btn">Запустить пилот</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="badge">
+                <span class="badge-dot"></span> Эксклюзивная система продаж 2026
+            </div>
+            <h1>Агентская Академия Гранель:<br>Навигаторы рынка 2026</h1>
+            <p>Программа обучения партнеров нового поколения. Переход от пассивной демонстрации квартир к управлению сложным выбором клиента, росту лояльности к бренду Гранель и выводу конверсий в сделки на новый уровень.</p>
+            
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <h3>2 дня</h3>
+                    <p>интенсивной практики (8 блоков)</p>
+                </div>
+                <div class="stat-item">
+                    <h3>11+</h3>
+                    <p>готовых рабочих инструментов</p>
+                </div>
+                <div class="stat-item">
+                    <h3>30 дней</h3>
+                    <p>сопровождения пилотной группы</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Context -->
+    <section id="market">
+        <div class="container">
+            <div class="section-header">
+                <h2>Контекст рынка 2026: Новая реальность</h2>
+                <p>Рынок изменился навсегда. Простые продажи по шаблонам 2021 года больше не работают. Клиент перегружен инфошумом, а агенту необходима новая профессиональная роль.</p>
+            </div>
+
+            <div class="comparison-container">
+                <!-- 2021 -->
+                <div class="comp-card past">
+                    <h3>
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        Как было в 2021 году
+                    </h3>
+                    <ul class="comp-list">
+                        <li>
+                            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            Клиенту достаточно показать планировку, скидку и сказать «успей забронировать».
+                        </li>
+                        <li>
+                            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            Рынок сам подталкивал клиента к сделке за счет дешевой ипотеки и постоянного роста цен.
+                        </li>
+                        <li>
+                            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            Агент выступал «показчиком вариантов» и оператором бронирования.
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 2026 -->
+                <div class="comp-card present">
+                    <h3>
+                        <svg width="24" height="24" fill="none" stroke="var(--accent-orange)" stroke-width="2" viewBox="0 0 24 24">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                        </svg>
+                        Новая реальность 2026
+                    </h3>
+                    <ul class="comp-list">
+                        <li>
+                            <svg width="18" height="18" fill="none" stroke="#22C55E" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                            Клиент перегружен: Telegram-каналы, противоречивые ипотечные схемы, страх ошибки.
+                        </li>
+                        <li>
+                            <svg width="18" height="18" fill="none" stroke="#22C55E" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                            <strong>Информационное ожирение:</strong> много данных, критически мало ясности и доверия.
+                        </li>
+                        <li>
+                            <svg width="18" height="18" fill="none" stroke="#22C55E" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                            <strong>Агент нового времени — навигатор по решению.</strong> Его задача — убрать тревогу и дать структуру.
+                        </li>
+                    </ul>
+                    <div class="nav-callout">
+                        Выигрывает не просто застройщик с хорошим продуктом, а тот, чей продукт агенты умеют правильно объяснять, кому доверяют и кого хотят продавать.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Us (Pillars) -->
+    <section>
+        <div class="container">
+            <div class="section-header">
+                <h2>Практическая система, а не «продажи вообще»</h2>
+                <p>Мы не проводим абстрактные мотивационные тренинги. Мы создаем систему, которая глубоко связывает продукт Гранель с бизнес-результатом агента.</p>
+            </div>
+
+            <div class="pillars-grid">
+                <div class="pillar-card">
+                    <div class="pillar-icon">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                        </svg>
+                    </div>
+                    <h3>Специфика новостроек</h3>
+                    <p>Понимание сложной механики ипотечных программ, разбор реального конкурентного поля Гранель, сценариев жизни клиентов и честной отработки возражений.</p>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-icon">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <h3>Связка Агент-Застройщик</h3>
+                    <p>Выстраивание Win-Win коммуникации агента с менеджерами отдела продаж Гранель. Устранение конфликтов за клиента, соблюдение регламентов и SLA.</p>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-icon">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/>
+                        </svg>
+                    </div>
+                    <h3>Медиа-активность партнеров</h3>
+                    <p>Обучение агентов созданию экспертного контента в Instagram и Telegram. Агенты начинают регулярно генерировать бесплатный трафик и охваты на объекты Гранель.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Program Section -->
+    <section id="program">
+        <div class="container">
+            <div class="section-header">
+                <h2>Практическая программа академии</h2>
+                <p>Формат: 2 дня по 4 часа интенсивной практики. Компактно, без «воды», с фокусом на внедрение инструментов.</p>
+            </div>
+
+            <div class="timeline-wrapper">
+                <div class="day-toggle">
+                    <button class="toggle-btn active" onclick="switchDay(1)">День 1: Продукт и Диагностика</button>
+                    <button class="toggle-btn" onclick="switchDay(2)">День 2: Воронка и Личный бренд</button>
+                </div>
+
+                <!-- Day 1 Panel -->
+                <div id="day1" class="day-panel active">
+                    <!-- Block 1 -->
+                    <div class="block-card">
+                        <div class="block-header" onclick="toggleBlock(this)">
+                            <div class="block-title-area">
+                                <div class="block-num">01</div>
+                                <div class="block-meta">
+                                    <h4>Агент по новостройкам в 2026 году</h4>
+                                    <span>Хронометраж: 40 минут</span>
+                                </div>
+                            </div>
+                            <svg class="block-chevron" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                        <div class="block-content">
+                            <div class="topic-list">
+                                <h5>Основные темы блока:</h5>
+                                <ul class="topic-items">
+                                    <li>Почему клиент 2021 и 2026 — разные люди</li>
+                                    <li>Информационное ожирение и усталость</li>
+                                    <li>Агент как навигатор сложного выбора</li>
+                                    <li>Почему застройщик платит высокие комиссии</li>
+                                </ul>
+                            </div>
+                            <div class="block-details-grid">
+                                <div class="detail-item">
+                                    <h6>Практика на сессии</h6>
+                                    <p>Разбор карты страхов и барьеров современного покупателя квартир.</p>
+                                </div>
+                                <div class="detail-item">
+                                    <h6>Результат блока</h6>
+                                    <p>Агент понимает свою новую ценность и уходит от роли простого «показчика».</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Block 2 -->
+                    <div class="block-card">
+                        <div class="block-header" onclick="toggleBlock(this)">
+                            <div class="block-title-area">
+                                <div class="block-num">02</div>
+                                <div class="block-meta">
+                                    <h4>Продукт Гранель: как понимать и продавать объект</h4>
+                                    <span>Хронометраж: 70 минут</span>
+                                </div>
+                            </div>
+                            <svg class="block-chevron" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                        <div class="block-content">
+                            <div class="topic-list">
+                                <h5>Основные темы блока:</h5>
+                                <ul class="topic-items">
+                                    <li>Ключевые УТП объектов Гранель</li>
+                                    <li>Сценарии жизни, транспорт, инфраструктура</li>
+                                    <li>Планировки под разные типы семей</li>
+                                    <li>Как говорить об объекте без воды и честно</li>
+                                </ul>
+                            </div>
+                            <div class="block-details-grid">
+                                <div class="detail-item">
+                                    <h6>Практика на сессии</h6>
+                                    <p>Сборка идеальной «карточки объекта Гранель» под конкретный жизненный сценарий.</p>
+                                </div>
+                                <div class="detail-item">
+                                    <h6>Результат блока</h6>
+                                    <p>Агент умеет презентовать объекты Гранель простым, понятным и убедительным языком.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Block 3 -->
+                    <div class="block-card">
+                        <div class="block-header" onclick="toggleBlock(this)">
+                            <div class="block-title-area">
+                                <div class="block-num">03</div>
+                                <div class="block-meta">
+                                    <h4>Первая встреча и диагностика клиента</h4>
+                                    <span>Хронометраж: 70 минут</span>
+                                </div>
+                            </div>
+                            <svg class="block-chevron" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                        <div class="block-content">
+                            <div class="topic-list">
+                                <h5>Основные темы блока:</h5>
+                                <ul class="topic-items">
+                                    <li>Сценарий проведения первой встречи</li>
+                                    <li>Правильные вопросы для выявления мотивов</li>
+                                    <li>Бюджет, реальный платеж и первоначальный взнос</li>
+                                    <li>Как фиксировать понятный следующий шаг</li>
+                                </ul>
+                            </div>
+                            <div class="block-details-grid">
+                                <div class="detail-item">
+                                    <h6>Практика на сессии</h6>
+                                    <p>Ролевая игра: диагностика клиента по готовой авторской карте вопросов.</p>
+                                </div>
+                                <div class="detail-item">
+                                    <h6>Результат блока</h6>
+                                    <p>Агент не «сливает» клиентов на первой встрече и сразу определяет целевых покупателей.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Block 4 -->
+                    <div class="block-card">
+                        <div class="block-header" onclick="toggleBlock(this)">
+                            <div class="block-title-area">
+                                <div class="block-num">04</div>
+                                <div class="block-meta">
+                                    <h4>Психология продаж и современные возражения</h4>
+                                    <span>Хронометраж: 45 минут</span>
+                                </div>
+                            </div>
+                            <svg class="block-chevron" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                        <div class="block-content">
+                            <div class="topic-list">
+                                <h5>Основные темы блока:</h5>
+                                <ul class="topic-items">
+                                    <li>Причины сопротивления и страх ипотеки в 2026 году</li>
+                                    <li>Отработка: «дорого», «подумаю», «подожду снижения ставок»</li>
+                                    <li>Тактическая эмпатия без давления на клиента</li>
+                                    <li>Как объяснять сложные финансовые схемы простыми словами</li>
+                                </ul>
+                            </div>
+                            <div class="block-details-grid">
+                                <div class="detail-item">
+                                    <h6>Практика на сессии</h6>
+                                    <p>Интерактивный спарринг по отработке 5 ключевых возражений по объектам Гранель.</p>
+                                </div>
+                                <div class="detail-item">
+                                    <h6>Результат блока</h6>
+                                    <p>Агент не спорит с клиентом, а профессионально направляет его к принятию решения.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 2 Panel -->
+                <div id="day2" class="day-panel">
+                    <!-- Block 5 -->
+                    <div class="block-card">
+                        <div class="block-header" onclick="toggleBlock(this)">
+                            <div class="block-title-area">
+                                <div class="block-num">05</div>
+                                <div class="block-meta">
+                                    <h4>Алгоритм сопровождения: от первого контакта до сделки</h4>
+                                    <span>Хронометраж: 60 минут</span>
+                                </div>
+                            </div>
+                            <svg class="block-chevron" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                        <div class="block-content">
+                            <div class="topic-list">
+                                <h5>Основные темы блока:</h5>
+                                <ul class="topic-items">
+                                    <li>Полная карта пути клиента (Customer Journey)</li>
+                                    <li>Ненавязчивый follow-up: как писать, чтобы читали</li>
+                                    <li>Система ведения клиентов без потери фокуса</li>
+                                    <li>Как получать повторные сделки и рекомендации</li>
+                                </ul>
+                            </div>
+                            <div class="block-details-grid">
+                                <div class="detail-item">
+                                    <h6>Практика на сессии</h6>
+                                    <p>Составление текстовых шаблонов для переписок на каждом этапе воронки.</p>
+                                </div>
+                                <div class="detail-item">
+                                    <h6>Результат блока</h6>
+                                    <p>Повышение конверсии из отправленной подборки во встречу на объекте.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Block 6 -->
+                    <div class="block-card">
+                        <div class="block-header" onclick="toggleBlock(this)">
+                            <div class="block-title-area">
+                                <div class="block-num">06</div>
+                                <div class="block-meta">
+                                    <h4>Внутренняя кухня застройщика и партнерская этика</h4>
+                                    <span>Хронометраж: 45 минут</span>
+                                </div>
+                            </div>
+                            <svg class="block-chevron" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                        <div class="block-content">
+                            <div class="topic-list">
+                                <h5>Основные темы блока:</h5>
+                                <ul class="topic-items">
+                                    <li>Как устроен отдел продаж Гранель изнутри</li>
+                                    <li>Правила фиксации клиентов и бронирования</li>
+                                    <li>Как сделать менеджера Гранель своим лучшим союзником</li>
+                                    <li>SLA по ответам и этика партнерских продаж</li>
+                                </ul>
+                            </div>
+                            <div class="block-details-grid">
+                                <div class="detail-item">
+                                    <h6>Практика на сессии</h6>
+                                    <p>Разбор конфликтных кейсов «клиент зафиксирован дважды» и выработка регламентов.</p>
+                                </div>
+                                <div class="detail-item">
+                                    <h6>Результат блока</h6>
+                                    <p>Абсолютно прозрачное, бесконфликтное сотрудничество агента и отдела продаж Гранель.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Block 7 -->
+                    <div class="block-card">
+                        <div class="block-header" onclick="toggleBlock(this)">
+                            <div class="block-title-area">
+                                <div class="block-num">07</div>
+                                <div class="block-meta">
+                                    <h4>Привлечение клиентов через Reels, Instagram и Telegram</h4>
+                                    <span>Хронометраж: 60 минут</span>
+                                </div>
+                            </div>
+                            <svg class="block-chevron" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                        <div class="block-content">
+                            <div class="topic-list">
+                                <h5>Основные темы блока:</h5>
+                                <ul class="topic-items">
+                                    <li>Формула позиционирования эксперта в 2026 году</li>
+                                    <li>Instagram как яркая витрина для Reels-просмотров</li>
+                                    <li>Telegram как глубина: аналитика, расчеты, разборы ЖК</li>
+                                    <li>Связка: Просмотр Reels → Telegram → Диагностика</li>
+                                </ul>
+                            </div>
+                            <div class="block-details-grid">
+                                <div class="detail-item">
+                                    <h6>Практика на сессии</h6>
+                                    <p>Создание личной карты позиционирования и 5 готовых тем для Reels/постов по ЖК Гранель.</p>
+                                </div>
+                                <div class="detail-item">
+                                    <h6>Результат блока</h6>
+                                    <p>Агенты знают, как регулярно привлекать платежеспособных клиентов без рекламного бюджета.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Block 8 -->
+                    <div class="block-card">
+                        <div class="block-header" onclick="toggleBlock(this)">
+                            <div class="block-title-area">
+                                <div class="block-num">08</div>
+                                <div class="block-meta">
+                                    <h4>Система личной эффективности и воронка агента</h4>
+                                    <span>Хронометраж: 50 минут</span>
+                                </div>
+                            </div>
+                            <svg class="block-chevron" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                        <div class="block-content">
+                            <div class="topic-list">
+                                <h5>Основные темы блока:</h5>
+                                <ul class="topic-items">
+                                    <li>Построение личного календаря по принципу 80/20</li>
+                                    <li>Расчет личной юнит-экономики и воронки продаж</li>
+                                    <li>Борьба с профессиональным выгоранием</li>
+                                    <li>Повторяемые контент-единицы по новостройкам</li>
+                                </ul>
+                            </div>
+                            <div class="block-details-grid">
+                                <div class="detail-item">
+                                    <h6>Практика на сессии</h6>
+                                    <p>Сборка личного расписания и плана действий на неделю вперед.</p>
+                                </div>
+                                <div class="detail-item">
+                                    <h6>Результат блока</h6>
+                                    <p>Агент мыслит как бизнесмен, видит узкие места своей воронки и системно влияет на доход.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Deliverables (Checklist) -->
+    <section id="toolkit">
+        <div class="container">
+            <div class="toolkit-container">
+                <div class="toolkit-info">
+                    <span class="badge" style="margin-bottom:1rem;"><span class="badge-dot"></span> Арсенал Агента</span>
+                    <h3>Что агент забирает с собой в работу</h3>
+                    <p>Обучение — это не теория. Это набор готовых цифровых и текстовых инструментов, которые внедряются с первого дня.</p>
+                    
+                    <div class="toolkit-progress">
+                        <div class="progress-circle">
+                            <svg width="80" height="80">
+                                <circle class="bg-ring" cx="40" cy="40" r="36"/>
+                                <circle id="progressBar" class="bar-ring" cx="40" cy="40" r="36"/>
+                            </svg>
+                            <span id="progressText" class="progress-text">0%</span>
+                        </div>
+                        <div>
+                            <h4 style="margin-bottom:0.25rem;">Готовность чемодана</h4>
+                            <p style="margin:0; font-size:0.9rem; color:var(--text-muted);">Кликните на инструменты справа, чтобы изучить их и «упаковать» агента.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="toolkit-checklist">
+                    <div class="check-item" onclick="toggleCheckItem(this)">
+                        <div class="checkbox-custom">
+                            <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <span>Шаблон первой встречи</span>
+                    </div>
+                    <div class="check-item" onclick="toggleCheckItem(this)">
+                        <div class="checkbox-custom">
+                            <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <span>Карта диагностики</span>
+                    </div>
+                    <div class="check-item" onclick="toggleCheckItem(this)">
+                        <div class="checkbox-custom">
+                            <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <span>Структура подбора ЖК</span>
+                    </div>
+                    <div class="check-item" onclick="toggleCheckItem(this)">
+                        <div class="checkbox-custom">
+                            <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <span>Сценарии follow-up</span>
+                    </div>
+                    <div class="check-item" onclick="toggleCheckItem(this)">
+                        <div class="checkbox-custom">
+                            <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <span>Формула позиционирования</span>
+                    </div>
+                    <div class="check-item" onclick="toggleCheckItem(this)">
+                        <div class="checkbox-custom">
+                            <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <span>Контент-план по ЖК</span>
+                    </div>
+                    <div class="check-item" onclick="toggleCheckItem(this)">
+                        <div class="checkbox-custom">
+                            <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <span>Чек-лист сравнения объектов</span>
+                    </div>
+                    <div class="check-item" onclick="toggleCheckItem(this)">
+                        <div class="checkbox-custom">
+                            <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <span>Алгоритм работы с ОП</span>
+                    </div>
+                    <div class="check-item" onclick="toggleCheckItem(this)">
+                        <div class="checkbox-custom">
+                            <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <span>Личный календарь агента</span>
+                    </div>
+                    <div class="check-item" onclick="toggleCheckItem(this)">
+                        <div class="checkbox-custom">
+                            <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <span>Калькулятор личной воронки</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ROI Calculator (The core wow factor) -->
+    <section id="roi">
+        <div class="container">
+            <div class="section-header">
+                <h2>ROI-Калькулятор: Экономика Академии</h2>
+                <p>Оцените прямой финансовый эффект от повышения квалификации агентской сети. Обучение — это инвестиция с измеримым возвратом.</p>
+            </div>
+
+            <div class="calculator-container">
+                <div class="calc-inputs">
+                    <!-- Input 1 -->
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span>Количество обученных агентов</span>
+                            <span id="agentsVal" class="slider-val">100</span>
+                        </div>
+                        <input id="agentsSlider" type="range" class="input-slider" min="20" max="500" step="10" value="100" oninput="calculateROI()">
+                    </div>
+
+                    <!-- Input 2 -->
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span>Средняя стоимость квартиры Гранель, млн ₽</span>
+                            <span id="priceVal" class="slider-val">12</span>
+                        </div>
+                        <input id="priceSlider" type="range" class="input-slider" min="6" max="25" step="0.5" value="12" oninput="calculateROI()">
+                    </div>
+
+                    <!-- Input 3 -->
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span>Прирост сделок на 1 агента в месяц (за счет навыков)</span>
+                            <span id="dealsVal" class="slider-val">0.2</span>
+                        </div>
+                        <input id="dealsSlider" type="range" class="input-slider" min="0.05" max="1" step="0.05" value="0.2" oninput="calculateROI()">
+                    </div>
+                </div>
+
+                <div class="calc-results">
+                    <div class="result-block">
+                        <span>Дополнительные сделки сети / мес.</span>
+                        <div id="resDeals" class="result-val">20</div>
+                    </div>
+                    <div class="result-block">
+                        <span>Прирост объема продаж / мес.</span>
+                        <div id="resVolume" class="result-val">240 000 000 ₽</div>
+                    </div>
+                    <div class="result-block">
+                        <span>Оценочная прибыль Гранель / мес (при 15% марже)</span>
+                        <div id="resProfit" class="result-val highlight">36 000 000 ₽</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Expected Results for Developer -->
+    <section>
+        <div class="container">
+            <div class="section-header">
+                <h2>Что получает Гранель на выходе</h2>
+                <p>Академия решает главные задачи коммерческого департамента: рост продаж, управляемость партнерского канала и повышение маржинальности.</p>
+            </div>
+
+            <div class="results-grid">
+                <div class="result-card">
+                    <div class="result-card-icon">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                    </div>
+                    <h3>Рост конверсии</h3>
+                    <p>Агенты лучше понимают продукт, ипотеку и ведут качественный отбор клиентов. Быстрее доводят до встреч, брони и сделок.</p>
+                </div>
+                <div class="result-card">
+                    <div class="result-card-icon">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <h3>Лояльность к бренду</h3>
+                    <p>Агенты видят в Гранель надежного партнера, ценят прозрачность условий и с удовольствием предлагают объекты в первую очередь.</p>
+                </div>
+                <div class="result-card">
+                    <div class="result-card-icon">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                    </div>
+                    <h3>Активное ядро</h3>
+                    <p>Формируется сплоченная группа сильных партнеров-амбассадоров, регулярно приносящих стабильный поток качественных лидов.</p>
+                </div>
+                <div class="result-card">
+                    <div class="result-card-icon">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="22" y2="7"/><line x1="2" y1="17" x2="22" y2="17"/></svg>
+                    </div>
+                    <h3>Медиа-эффект</h3>
+                    <p>Сотни экспертных постов, Reels и видеообзоров жилых комплексов Гранель от самих агентов. Органический охват без вложений в рекламу.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pilot Launch & CTA Form -->
+    <section id="pilot">
+        <div class="container">
+            <div class="pilot-container">
+                <div>
+                    <span class="badge" style="margin-bottom:1rem;"><span class="badge-dot"></span> Быстрый старт</span>
+                    <h3 style="font-size:2.25rem; margin-bottom:1.5rem;">Как мы запустим Академию Гранель</h3>
+                    <p style="color:var(--text-secondary); margin-bottom:2.5rem; font-size:1.05rem;">Мы сторонники итерационного подхода: сначала качественный анализ, затем быстрый пилотный запуск и только после этого — масштабирование успешных практик.</p>
+                    
+                    <div class="pilot-steps">
+                        <div class="pilot-step">
+                            <div class="step-badge">01</div>
+                            <div class="step-info">
+                                <h4>Диагностика (7–14 дней)</h4>
+                                <p>Сбор гипотез, анализ болей менеджеров отдела продаж, разработка карты ключевых возражений по объектам Гранель.</p>
+                            </div>
+                        </div>
+                        <div class="pilot-step">
+                            <div class="step-badge">02</div>
+                            <div class="step-info">
+                                <h4>Пилотный запуск (30 дней)</h4>
+                                <p>Проведение первого практического интенсива для фокус-группы агентов и сопровождение их в закрытом чате.</p>
+                            </div>
+                        </div>
+                        <div class="pilot-step">
+                            <div class="step-badge">03</div>
+                            <div class="step-info">
+                                <h4>Оценка и Масштабирование</h4>
+                                <p>Анализ конверсий, отзывов, первых сделок пилотной группы. Масштабирование системы на всю партнерскую сеть.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pilot-form">
+                    <h3>Обсудить пилотный запуск</h3>
+                    <p>Заполните форму ниже, чтобы согласовать дату стратегической сессии с коммерческим директором Гранель.</p>
+                    
+                    <form onsubmit="handleFormSubmit(event)">
+                        <div class="form-group">
+                            <label for="name">Ваше имя</label>
+                            <input type="text" id="name" class="form-control" placeholder="Антон Цой" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact">Telegram / Телефон</label>
+                            <input type="text" id="contact" class="form-control" placeholder="@username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Желаемая дата сессии</label>
+                            <input type="date" id="date" class="form-control" required>
+                        </div>
+                        <button type="submit" class="form-submit-btn">
+                            Отправить заявку
+                            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <a href="#" class="footer-logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polygon points="12 2 2 7 12 12 22 7 12 2" fill="var(--accent-orange)" opacity="0.2"/>
+                    <polyline points="2 17 12 22 22 17"/>
+                    <polyline points="2 12 12 17 22 12"/>
+                </svg>
+                ГРАНЕЛЬ <span>АКАДЕМИЯ</span>
+            </a>
+            <div class="footer-links">
+                <a href="#market">Вызов 2026</a>
+                <a href="#program">Программа</a>
+                <a href="#toolkit">Инструменты</a>
+                <a href="#roi">ROI-Эффект</a>
+            </div>
+            <p>© 2026 Агентская Академия Гранель. Разработано в партнерстве с Антоном Цоем.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle day timeline
+        function switchDay(dayNum) {
+            document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.day-panel').forEach(panel => panel.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById('day' + dayNum).classList.add('active');
+        }
+
+        // Toggle accordion blocks
+        function toggleBlock(header) {
+            const card = header.parentElement;
+            const isOpen = card.classList.contains('open');
+            
+            // Close all
+            document.querySelectorAll('.block-card').forEach(c => {
+                c.classList.remove('open');
+                c.querySelector('.block-content').style.maxHeight = null;
+            });
+            
+            if (!isOpen) {
+                card.classList.add('open');
+                const content = card.querySelector('.block-content');
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        }
+
+        // Toolkit Interactive Checklist logic
+        let checkedCount = 0;
+        const totalItems = 10;
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+
+        function toggleCheckItem(element) {
+            element.classList.toggle('checked');
+            
+            checkedCount = document.querySelectorAll('.check-item.checked').length;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const percentage = Math.round((checkedCount / totalItems) * 100);
+            progressText.innerText = percentage + '%';
+            
+            // stroke-dasharray = 226
+            const offset = 226 - (226 * percentage) / 100;
+            progressBar.style.strokeDashoffset = offset;
+        }
+
+        // ROI Calculator Logic
+        function calculateROI() {
+            const agents = parseFloat(document.getElementById('agentsSlider').value);
+            const price = parseFloat(document.getElementById('priceSlider').value);
+            const deals = parseFloat(document.getElementById('dealsSlider').value);
+            
+            // Update labels
+            document.getElementById('agentsVal').innerText = agents;
+            document.getElementById('priceVal').innerText = price;
+            document.getElementById('dealsVal').innerText = deals.toFixed(2);
+            
+            // Calculations
+            const additionalDeals = Math.round(agents * deals);
+            const volume = additionalDeals * price * 1000000;
+            const profit = volume * 0.15; // 15% estimated developer margin
+            
+            // Update results UI
+            document.getElementById('resDeals').innerText = additionalDeals;
+            document.getElementById('resVolume').innerText = formatCurrency(volume);
+            document.getElementById('resProfit').innerText = formatCurrency(profit);
+        }
+
+        function formatCurrency(num) {
+            return num.toLocaleString('ru-RU') + ' ₽';
+        }
+
+        // Handle simple form submit
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const contact = document.getElementById('contact').value;
+            const date = document.getElementById('date').value;
+            
+            alert(`Спасибо, ${name}! Заявка на запуск пилота успешно отправлена. Мы свяжемся с вами в Telegram (${contact}) для согласования встречи на ${date}.`);
+        }
+
+        // Initial setup
+        window.onload = function() {
+            calculateROI();
+            updateProgress();
+            
+            // Open the first block on page load
+            const firstBlock = document.querySelector('.block-card');
+            if (firstBlock) {
+                toggleBlock(firstBlock.querySelector('.block-header'));
+            }
+        }
+    </script>
+</body>
+</html>

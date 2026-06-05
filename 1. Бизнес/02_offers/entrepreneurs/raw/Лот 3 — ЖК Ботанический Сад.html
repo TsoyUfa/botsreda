@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B-Roll Punk Terminal: Лот 3 — ЖК Ботанический Сад</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #090a0f;
+      --primary-color: #d1d5db;
+      --accent-pink: #ff2e93;
+      --accent-green: #00ff66;
+      --muted-color: #4b5563;
+      --font-mono: 'Share Tech Mono', 'Fira Code', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      background-color: #020205;
+      font-family: var(--font-mono);
+      color: var(--primary-color);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    /* 9:16 Vertical Viewport (1080x1920) */
+    .viewport-9-16 {
+      position: relative;
+      width: 1080px;
+      height: 1920px;
+      background-color: var(--bg-color);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 120px 80px;
+      border: 6px solid var(--muted-color);
+      transform: scale(0.36);
+      transform-origin: center center;
+      box-shadow: 0 50px 150px rgba(0, 0, 0, 0.9);
+      isolation: isolate;
+    }
+
+    /* CRT Scanlines */
+    .viewport-9-16::before {
+      content: " ";
+      display: block;
+      position: absolute;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+      z-index: 10;
+      background-size: 100% 4px, 6px 100%;
+      pointer-events: none;
+    }
+
+    .terminal-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(255, 46, 147, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 46, 147, 0.02) 1px, transparent 1px);
+      background-size: 80px 80px;
+      background-position: center center;
+      z-index: -1;
+    }
+
+    /* --- ШАПКА --- */
+    header {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .tag-row {
+      font-size: 24px;
+      color: var(--accent-pink);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px rgba(255, 46, 147, 0.5);
+    }
+
+    .tag-row::before {
+      content: ">> ";
+    }
+
+    .title-box {
+      font-size: 64px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+      border-left: 10px solid var(--accent-pink);
+      padding-left: 30px;
+      text-transform: uppercase;
+    }
+
+    /* --- ЦЕНТРАЛЬНАЯ ЧАСТЬ (СХЕМА TREE-FLOW) --- */
+    .flow-container {
+      width: 100%;
+      height: 700px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      flex-grow: 1;
+      margin: 80px 0;
+    }
+
+    /* Узлы блок-схемы */
+    .node {
+      position: relative;
+      width: 100%;
+      background: #0d0f17;
+      border: 4px solid var(--muted-color);
+      padding: 30px 40px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: 700;
+      box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      transform: translateY(20px);
+      z-index: 5;
+    }
+
+    .node-1 { border-color: var(--primary-color); animation: show-node 0.4s 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .node-2 { border-color: var(--accent-pink); animation: show-node 0.4s 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .node-3 { border-color: var(--accent-green); box-shadow: 12px 12px 0px var(--accent-green); color: var(--accent-green); text-shadow: 0 0 15px var(--accent-green); animation: show-node 0.5s 2.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+    @keyframes show-node {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Вертикальные линии связей */
+    .connection-line {
+      position: absolute;
+      width: 6px;
+      background: var(--muted-color);
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1;
+      height: 0;
+    }
+
+    .conn-1-2 {
+      top: 110px;
+      animation: draw-conn 0.4s 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    .conn-2-3 {
+      top: 360px;
+      animation: draw-conn-green 0.4s 1.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    @keyframes draw-conn {
+      to { height: 110px; background: var(--accent-pink); box-shadow: 0 0 10px var(--accent-pink); }
+    }
+
+    @keyframes draw-conn-green {
+      to { height: 110px; background: var(--accent-green); box-shadow: 0 0 15px var(--accent-green); }
+    }
+
+    /* --- ПОДВАЛ (ФУТЕР) --- */
+    footer {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 35px;
+      align-items: center;
+      border-top: 3px solid var(--muted-color);
+      padding-top: 40px;
+      text-align: center;
+    }
+
+    .footer-terminal {
+      font-size: 20px;
+      color: var(--muted-color);
+      letter-spacing: 0.05em;
+    }
+
+    .footer-terminal span {
+      color: var(--accent-green);
+    }
+
+    .control-btn {
+      background: transparent;
+      border: 3px solid var(--primary-color);
+      color: var(--primary-color);
+      padding: 16px 36px;
+      font-family: var(--font-mono);
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      box-shadow: 8px 8px 0px var(--muted-color);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.15s ease;
+    }
+
+    .control-btn:hover {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+      box-shadow: 8px 8px 0px rgba(0, 242, 254, 0.3);
+      transform: translate(-2px, -2px);
+    }
+
+    .control-btn:active {
+      transform: translate(4px, 4px);
+      box-shadow: 0px 0px 0px transparent;
+    }
+
+    .control-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Видео-контейнер 9:16 -->
+  <div class="viewport-9-16" id="screen-capture-area">
+    
+    <div class="terminal-grid"></div>
+
+    <!-- --- ШАПКА --- -->
+    <header>
+      <div class="tag-row">LOT_03 // FLOW</div>
+      <div class="title-box">ЖК Ботанический Сад</div>
+    </header>
+
+    <!-- --- ЦЕНТРАЛЬНАЯ ЧАСТЬ (TREE-FLOW) --- -->
+    <div class="flow-container">
+      
+      <!-- Линии связей (абсолютное позиционирование) -->
+      <div class="connection-line conn-1-2" id="conn1"></div>
+      <div class="connection-line conn-2-3" id="conn2"></div>
+
+      <!-- Узлы -->
+      <div class="node node-1" id="n1">
+        ЖК БОТАНИЧЕСКИЙ САД // 18 000 000 ₽
+      </div>
+
+      <div class="node node-2" id="n2">
+        ПАКЕТ АКЦИЙ: ДИСКОНТ -15%
+      </div>
+
+      <div class="node node-3" id="n3">
+        ФИНАЛЬНАЯ СТОИМОСТЬ: 15 300 000 ₽
+      </div>
+
+    </div>
+
+    <!-- --- ПОДВАЛ --- -->
+    <footer>
+      <div class="footer-terminal">
+        FLOW: <span>STRUCTURE_VERIFIED</span> // NODES_STABLE
+      </div>
+
+      <button class="control-btn" onclick="restartAnimation()">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm-6 8c0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v-3l4 4-4 4v-3c-3.31 0-6-2.69-6-6z"/>
+        </svg>
+        Запустить дубль
+      </button>
+    </footer>
+
+  </div>
+
+  <script>
+    function restartAnimation() {
+      // Сброс и перезапуск узлов
+      const n1 = document.getElementById('n1');
+      const n2 = document.getElementById('n2');
+      const n3 = document.getElementById('n3');
+      
+      n1.style.animation = 'none'; n1.offsetHeight; n1.style.animation = 'show-node 0.4s 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards';
+      n2.style.animation = 'none'; n2.offsetHeight; n2.style.animation = 'show-node 0.4s 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards';
+      n3.style.animation = 'none'; n3.offsetHeight; n3.style.animation = 'show-node 0.5s 2.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+
+      // Сброс и перезапуск линий связей
+      const c1 = document.getElementById('conn1');
+      const c2 = document.getElementById('conn2');
+      
+      c1.style.animation = 'none'; c1.offsetHeight; c1.style.animation = 'draw-conn 0.4s 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+      c2.style.animation = 'none'; c2.offsetHeight; c2.style.animation = 'draw-conn-green 0.4s 1.7s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+    }
+  </script>
+</body>
+</html>

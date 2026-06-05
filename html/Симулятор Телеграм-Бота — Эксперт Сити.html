@@ -1,0 +1,1806 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Симулятор Телеграм-Бота — Эксперт Сити</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons for premium feel -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Canvas Confetti for payment/pass success animations -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --bg-main: #0B0D17;
+            --bg-card: rgba(20, 24, 43, 0.7);
+            --bg-card-hover: rgba(28, 34, 61, 0.85);
+            --border-glow: rgba(0, 82, 255, 0.25);
+            --border-glow-success: rgba(0, 229, 163, 0.25);
+            
+            /* Curated HSL Color Scheme */
+            --color-primary: #0052FF;
+            --color-primary-glow: rgba(0, 82, 255, 0.4);
+            --color-secondary: #7000FF;
+            --color-accent: #00E5A3;
+            --color-accent-glow: rgba(0, 229, 163, 0.3);
+            --color-text-main: #F3F4F6;
+            --color-text-muted: #9CA3AF;
+            --color-tg-bg: #182533;
+            --color-tg-message-in: #202D3A;
+            --color-tg-message-out: #2B5278;
+            --color-tg-btn: #3390EC;
+            
+            --glass-bg: rgba(13, 17, 30, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--color-text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 82, 255, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(112, 0, 255, 0.12) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        header {
+            padding: 24px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+            background: rgba(11, 13, 23, 0.5);
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px var(--color-primary-glow);
+        }
+
+        .logo-text h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #FFFFFF, #A5C0FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-text p {
+            font-size: 11px;
+            color: var(--color-accent);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+        }
+
+        .badge-premium {
+            background: rgba(255, 179, 0, 0.1);
+            border: 1px solid rgba(255, 179, 0, 0.3);
+            color: #FFB300;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .main-container {
+            flex: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+        }
+
+        /* Course Dashboard Styling */
+        .dashboard-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 32px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-header {
+            margin-bottom: 28px;
+        }
+
+        .dashboard-header h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(to right, #FFFFFF, #E5E7EB);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .dashboard-header p {
+            color: var(--color-text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .progress-overall {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 28px;
+        }
+
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 14%; /* 1 block out of 7 completed initially */
+            background: linear-gradient(to right, var(--color-primary), var(--color-accent));
+            border-radius: 4px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modules-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .module-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 16px;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .module-card.active::before {
+            background: var(--color-primary);
+        }
+
+        .module-card.completed::before {
+            background: var(--color-accent);
+        }
+
+        .module-card.locked {
+            opacity: 0.65;
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        .module-icon-wrapper {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text-muted);
+            transition: all 0.3s ease;
+        }
+
+        .module-card.active .module-icon-wrapper {
+            background: rgba(0, 82, 255, 0.1);
+            border-color: rgba(0, 82, 255, 0.3);
+            color: var(--color-primary);
+            box-shadow: 0 0 15px rgba(0, 82, 255, 0.1);
+        }
+
+        .module-card.completed .module-icon-wrapper {
+            background: rgba(0, 229, 163, 0.1);
+            border-color: rgba(0, 229, 163, 0.3);
+            color: var(--color-accent);
+            box-shadow: 0 0 15px rgba(0, 229, 163, 0.1);
+        }
+
+        .module-info h3 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .module-info p {
+            font-size: 12px;
+            color: var(--color-text-muted);
+            line-height: 1.4;
+        }
+
+        .module-badge {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            width: fit-content;
+        }
+
+        .badge-free {
+            background: rgba(0, 229, 163, 0.1);
+            border: 1px solid rgba(0, 229, 163, 0.2);
+            color: var(--color-accent);
+        }
+
+        .badge-premium-pill {
+            background: rgba(255, 179, 0, 0.1);
+            border: 1px solid rgba(255, 179, 0, 0.2);
+            color: #FFB300;
+        }
+
+        .module-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--color-text-muted);
+        }
+
+        .module-card.completed .module-status {
+            background: rgba(0, 229, 163, 0.1);
+            color: var(--color-accent);
+        }
+
+        .module-card.locked .module-status {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Smartphone Phone Container Mockup */
+        .phone-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .phone-frame {
+            width: 380px;
+            height: 760px;
+            background: #000000;
+            border-radius: 48px;
+            padding: 12px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 0 3px rgba(255, 255, 255, 0.12);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            z-index: 5;
+        }
+
+        /* Screen Dynamic Notch */
+        .phone-notch {
+            width: 120px;
+            height: 25px;
+            background: #000000;
+            border-radius: 0 0 16px 16px;
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .phone-notch::before {
+            content: '';
+            width: 45px;
+            height: 4px;
+            background: #1F1F1F;
+            border-radius: 2px;
+            margin-right: 12px;
+        }
+
+        .phone-notch::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #111122;
+            border-radius: 50%;
+        }
+
+        .phone-screen {
+            flex: 1;
+            background-color: var(--color-tg-bg);
+            border-radius: 38px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background-image: radial-gradient(circle at center, rgba(30, 48, 69, 0.6) 0%, #0F1621 100%);
+        }
+
+        /* Telegram Bot Header */
+        .tg-header {
+            background: #17212B;
+            padding: 32px 16px 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            position: relative;
+        }
+
+        .tg-back-btn {
+            color: var(--color-tg-btn);
+            cursor: pointer;
+        }
+
+        .tg-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0052FF, #00E5A3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 82, 255, 0.2);
+        }
+
+        .tg-header-info {
+            flex: 1;
+        }
+
+        .tg-bot-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .tg-bot-status {
+            font-size: 11px;
+            color: #7A8E9F;
+        }
+
+        /* Telegram Chat Body */
+        .tg-chat-body {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            scroll-behavior: smooth;
+        }
+
+        .tg-chat-body::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .tg-chat-body::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+        }
+
+        .tg-message {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-size: 13px;
+            line-height: 1.45;
+            position: relative;
+            animation: slideUp 0.3s ease forwards;
+            word-wrap: break-word;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message-in {
+            background: var(--color-tg-message-in);
+            color: #F5F7FA;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .message-out {
+            background: var(--color-tg-message-out);
+            color: #FFFFFF;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message-time {
+            font-size: 9px;
+            color: #798E9E;
+            text-align: right;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .message-out .message-time {
+            color: #8CA9C4;
+        }
+
+        /* Custom UI in Messages */
+        .tg-audio-player {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-top: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .tg-audio-play-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--color-tg-btn);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .tg-audio-waveform {
+            flex: 1;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .tg-waveform-bar {
+            width: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 1px;
+            transition: background 0.3s;
+        }
+
+        .tg-audio-player.playing .tg-waveform-bar {
+            background: var(--color-tg-btn);
+            animation: dance 0.6s infinite alternate;
+        }
+
+        @keyframes dance {
+            from { height: 4px; }
+            to { height: 16px; }
+        }
+
+        .tg-audio-time {
+            font-size: 10px;
+            color: #798E9E;
+        }
+
+        /* Reply / Inline Buttons Styling */
+        .tg-inline-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 4px;
+            align-self: flex-start;
+            width: 85%;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .tg-btn {
+            background: #243547;
+            border: 1px solid rgba(51, 144, 236, 0.3);
+            color: #52AEFE;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 500;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .tg-btn:hover {
+            background: #2B3D52;
+            border-color: #3390EC;
+            color: #FFFFFF;
+        }
+
+        .tg-btn-primary {
+            background: #3390EC;
+            border: none;
+            color: white;
+            font-weight: 600;
+        }
+
+        .tg-btn-primary:hover {
+            background: #2884E0;
+        }
+
+        /* Mini App Web App Trigger Button */
+        .tg-webapp-bar {
+            background: #17212B;
+            padding: 8px 16px;
+            display: flex;
+            justify-content: center;
+            border-top: 1px solid rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+
+        .tg-webapp-trigger {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 82, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+        }
+
+        .tg-webapp-trigger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 82, 255, 0.5);
+        }
+
+        /* Telegram Input Bar */
+        .tg-input-bar {
+            background: #17212B;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .tg-input-field {
+            flex: 1;
+            background: #24303F;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 16px;
+            color: white;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .tg-input-field::placeholder {
+            color: #6C7A8E;
+        }
+
+        .tg-input-icon {
+            color: #6C7A8E;
+            cursor: pointer;
+        }
+
+        .tg-input-icon.send {
+            color: var(--color-tg-btn);
+        }
+
+        /* Custom Telegram WebApp Sliding Overlay */
+        .webapp-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0B0D17;
+            border-radius: 38px;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.1, 0.76, 0.55, 0.94);
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(0, 82, 255, 0.1) 0%, transparent 30%),
+                radial-gradient(circle at 90% 90%, rgba(0, 229, 163, 0.08) 0%, transparent 30%);
+        }
+
+        .webapp-overlay.open {
+            transform: translateY(0);
+        }
+
+        .webapp-header {
+            padding: 24px 16px 12px 16px;
+            background: rgba(20, 24, 43, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .webapp-header-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .webapp-header-title h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .webapp-header-title p {
+            font-size: 9px;
+            color: var(--color-accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .webapp-close-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            cursor: pointer;
+        }
+
+        .webapp-body {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .webapp-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .webapp-card h5 {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .webapp-card p {
+            font-size: 12px;
+            color: var(--color-text-muted);
+            line-height: 1.45;
+        }
+
+        .webapp-progress-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .webapp-btn {
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px var(--color-primary-glow);
+            transition: all 0.3s;
+        }
+
+        .webapp-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px var(--color-primary-glow);
+        }
+
+        /* Glassmorphism Premium Payment Modal overlay */
+        .payment-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 7, 12, 0.85);
+            backdrop-filter: blur(20px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .payment-modal.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .payment-card {
+            width: 440px;
+            background: rgba(20, 24, 43, 0.9);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 32px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 100px rgba(0, 82, 255, 0.15);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .payment-modal.open .payment-card {
+            transform: translateY(0);
+        }
+
+        .payment-header {
+            text-align: center;
+        }
+
+        .payment-star-glow {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 179, 0, 0.1);
+            border: 1px solid rgba(255, 179, 0, 0.2);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFB300;
+            margin: 0 auto 16px auto;
+            box-shadow: 0 0 30px rgba(255, 179, 0, 0.2);
+        }
+
+        .payment-header h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: white;
+        }
+
+        .payment-header p {
+            font-size: 13px;
+            color: var(--color-text-muted);
+            line-height: 1.45;
+        }
+
+        .price-badge {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .price-value {
+            font-size: 24px;
+            font-weight: 800;
+            color: #FFFFFF;
+            font-family: 'Outfit', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .payment-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .pay-option-btn {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 14px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pay-option-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--color-primary);
+        }
+
+        .pay-option-btn.stars:hover {
+            border-color: #FFB300;
+        }
+
+        .payment-footer {
+            font-size: 11px;
+            color: var(--color-text-muted);
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .payment-close {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            color: var(--color-text-muted);
+            cursor: pointer;
+        }
+
+        /* Typing indicator */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 12px 16px;
+            background: var(--color-tg-message-in);
+            border-radius: 16px;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            animation: slideUp 0.3s ease;
+            width: fit-content;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: #798E9E;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header bar -->
+    <header>
+        <div class="logo-container">
+            <div class="logo-icon">
+                <i data-lucide="navigation" style="color: white; transform: rotate(45deg); width: 22px; height: 22px;"></i>
+            </div>
+            <div class="logo-text">
+                <h1>Эксперт Сити</h1>
+                <p>Навигатор по Новостройкам</p>
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 16px; align-items: center;">
+            <div class="badge-premium" id="headerPremiumBadge">
+                <i data-lucide="sparkles" style="width: 14px; height: 14px;"></i>
+                <span>Учебный Стенд 2026</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <div class="main-container">
+        
+        <!-- Left Side: Dashboard -->
+        <div class="dashboard-panel">
+            <div class="dashboard-header">
+                <h2>Интерактивный курс обучения</h2>
+                <p>Фирменная система выращивания экспертов в недвижимости от «Эксперт Сити». Проходите блоки последовательно в симуляторе справа для открытия платных профессиональных модулей.</p>
+            </div>
+
+            <!-- Progress bar -->
+            <div class="progress-overall">
+                <div class="progress-labels">
+                    <span style="color: var(--color-text-muted);">Общий прогресс</span>
+                    <span style="font-weight: 700; color: var(--color-accent);" id="overallProgressPercent">14% (1 / 7 блоков)</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="overallProgressBar"></div>
+                </div>
+            </div>
+
+            <!-- List of Modules -->
+            <div class="modules-list" id="modulesList">
+                
+                <!-- Block 1 -->
+                <div class="module-card active completed" id="card-1">
+                    <div class="module-icon-wrapper">
+                        <i data-lucide="book-open"></i>
+                    </div>
+                    <div class="module-info">
+                        <h3>Блок 1. Роль Навигатора и Золотое Правило <span class="module-badge badge-free">Бесплатно</span></h3>
+                        <p>Философия "Я не продаю - я объясняю". Цепочка снижения рисков: Финансы → География → ЖК → Квартира.</p>
+                    </div>
+                    <div class="module-status">
+                        <i data-lucide="check" style="width: 18px; height: 18px;"></i>
+                    </div>
+                </div>
+
+                <!-- Block 2 -->
+                <div class="module-card locked" id="card-2">
+                    <div class="module-icon-wrapper">
+                        <i data-lucide="users"></i>
+                    </div>
+                    <div class="module-info">
+                        <h3>Блок 2. JTBD-Диагностика и Боли Клиента <span class="module-badge badge-premium-pill">Premium</span></h3>
+                        <p>Понимание истинных потребностей покупателя. Карта сил прогресса и скрипты первого звонка.</p>
+                    </div>
+                    <div class="module-status" id="status-icon-2">
+                        <i data-lucide="lock" style="width: 16px; height: 16px;"></i>
+                    </div>
+                </div>
+
+                <!-- Block 3 -->
+                <div class="module-card locked" id="card-3">
+                    <div class="module-icon-wrapper">
+                        <i data-lucide="line-chart"></i>
+                    </div>
+                    <div class="module-info">
+                        <h3>Блок 3. Финмоделирование и TCO за 5 лет <span class="module-badge badge-premium-pill">Premium</span></h3>
+                        <p>Расчет полной стоимости владения недвижимостью. Разбор субсидированных ставок и скрытых переплат.</p>
+                    </div>
+                    <div class="module-status" id="status-icon-3">
+                        <i data-lucide="lock" style="width: 16px; height: 16px;"></i>
+                    </div>
+                </div>
+
+                <!-- Block 4 -->
+                <div class="module-card locked" id="card-4">
+                    <div class="module-icon-wrapper">
+                        <i data-lucide="shield-check"></i>
+                    </div>
+                    <div class="module-info">
+                        <h3>Блок 4. Анализ Застройщиков и shortlist <span class="module-badge badge-premium-pill">Premium</span></h3>
+                        <p>Проверка эскроу-счетов на наш.дом.рф. Создание shortlist из 10 ЖК и сужение до 3 финалистов.</p>
+                    </div>
+                    <div class="module-status" id="status-icon-4">
+                        <i data-lucide="lock" style="width: 16px; height: 16px;"></i>
+                    </div>
+                </div>
+
+                <!-- Block 5 -->
+                <div class="module-card locked" id="card-5">
+                    <div class="module-icon-wrapper">
+                        <i data-lucide="eye"></i>
+                    </div>
+                    <div class="module-info">
+                        <h3>Блок 5. Регламент Показов и Презентация <span class="module-badge badge-premium-pill">Premium</span></h3>
+                        <p>Психология и сценарий проведения живых показов. Осмотр локации по профессиональным чек-листам.</p>
+                    </div>
+                    <div class="module-status" id="status-icon-5">
+                        <i data-lucide="lock" style="width: 16px; height: 16px;"></i>
+                    </div>
+                </div>
+
+                <!-- Block 6 -->
+                <div class="module-card locked" id="card-6">
+                    <div class="module-icon-wrapper">
+                        <i data-lucide="scale"></i>
+                    </div>
+                    <div class="module-info">
+                        <h3>Блок 6. Юридическая Безопасность и 214-ФЗ <span class="module-badge badge-premium-pill">Premium</span></h3>
+                        <p>Анализ договоров ДДУ, подводные камни броней. Регламент дефектовки при приеме квартиры.</p>
+                    </div>
+                    <div class="module-status" id="status-icon-6">
+                        <i data-lucide="lock" style="width: 16px; height: 16px;"></i>
+                    </div>
+                </div>
+
+                <!-- Block 7 -->
+                <div class="module-card locked" id="card-7">
+                    <div class="module-icon-wrapper">
+                        <i data-lucide="cpu"></i>
+                    </div>
+                    <div class="module-info">
+                        <h3>Блок 7. ИИ-Ассистенты в Работе Агента <span class="module-badge badge-premium-pill">Premium</span></h3>
+                        <p>Использование нейросетей для CRM, авто-транскрибации встреч и генерации JTBD-анализа для лидов.</p>
+                    </div>
+                    <div class="module-status" id="status-icon-7">
+                        <i data-lucide="lock" style="width: 16px; height: 16px;"></i>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Right Side: Telegram Bot Phone Mockup -->
+        <div class="phone-container">
+            <div class="phone-frame">
+                <div class="phone-notch"></div>
+                
+                <!-- Phone Screen -->
+                <div class="phone-screen">
+                    
+                    <!-- Telegram Header -->
+                    <div class="tg-header">
+                        <div class="tg-back-btn">
+                            <i data-lucide="chevron-left" style="width: 24px; height: 24px;"></i>
+                        </div>
+                        <div class="tg-avatar">ЭС</div>
+                        <div class="tg-header-info">
+                            <div class="tg-bot-title">
+                                Эксперт Сити Бот
+                                <i data-lucide="badge-check" style="width: 14px; height: 14px; fill: var(--color-tg-btn); color: white;"></i>
+                            </div>
+                            <div class="tg-bot-status">бот, обучает новостройкам</div>
+                        </div>
+                        <div style="color: #7A8E9F; cursor: pointer;">
+                            <i data-lucide="more-vertical" style="width: 20px; height: 20px;"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Telegram Mini App Top Bar Trigger (visible only in simulator) -->
+                    <div class="tg-webapp-bar">
+                        <button class="tg-webapp-trigger" onclick="toggleWebApp(true)">
+                            <i data-lucide="layout-grid" style="width: 13px; height: 13px;"></i>
+                            Открыть учебный кабинет
+                        </button>
+                    </div>
+
+                    <!-- Telegram Chat Body -->
+                    <div class="tg-chat-body" id="chatBody">
+                        
+                        <!-- System Date -->
+                        <div style="text-align: center; margin: 8px 0;">
+                            <span style="background: rgba(0, 0, 0, 0.2); padding: 4px 10px; border-radius: 12px; font-size: 10px; color: #798E9E;">Сегодня</span>
+                        </div>
+
+                        <!-- Bot Welcome Message -->
+                        <div class="tg-message message-in">
+                            Приветствую! 🤝 Я — обучающий ассистент «Эксперт Сити». <br><br>
+                            Моя задача — вырастить из вас <b>антихрупкого агента-навигатора</b> по новостройкам, который не просто показывает квартиры, а ведёт клиента по безопасному пути к сделке.<br><br>
+                            Вам доступен бесплатный <b>Блок 1</b>. Нажмите кнопку ниже, чтобы начать!
+                            <span class="message-time">10:50</span>
+                        </div>
+
+                        <!-- Inline Button 1 -->
+                        <div class="tg-inline-buttons" id="btn-group-welcome">
+                            <button class="tg-btn tg-btn-primary" onclick="startModule1()">🚀 Начать обучение (Блок 1)</button>
+                        </div>
+
+                    </div>
+
+                    <!-- Telegram Input Bar (Static) -->
+                    <div class="tg-input-bar">
+                        <i data-lucide="paperclip" class="tg-input-icon"></i>
+                        <input type="text" class="tg-input-field" placeholder="Сообщение..." disabled>
+                        <i data-lucide="send" class="tg-input-icon send"></i>
+                    </div>
+
+                    <!-- Custom Mini App Sliding Panel -->
+                    <div class="webapp-overlay" id="webAppOverlay">
+                        <div class="webapp-header">
+                            <div class="webapp-header-title">
+                                <i data-lucide="book-open" style="color: var(--color-accent); width: 18px; height: 18px;"></i>
+                                <div>
+                                    <h4>Учебный Кабинет</h4>
+                                    <p>Эксперт Сити • Mini App</p>
+                                </div>
+                            </div>
+                            <button class="webapp-close-btn" onclick="toggleWebApp(false)">
+                                <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- WebApp Scrollable Body -->
+                        <div class="webapp-body">
+                            
+                            <div class="webapp-card" style="background: linear-gradient(135deg, rgba(0, 82, 255, 0.1), rgba(112, 0, 255, 0.05)); border-color: rgba(0, 82, 255, 0.2);">
+                                <h5><i data-lucide="rocket" style="color: var(--color-primary); width: 16px; height: 16px;"></i> Добро пожаловать!</h5>
+                                <p>Это встроенное интерактивное Telegram Web App (Mini App). Здесь вы можете в удобном премиум-формате изучать лонгриды, слушать аудио, смотреть презентации и сдавать тесты!</p>
+                            </div>
+
+                            <div class="webapp-progress-container">
+                                <span style="color: var(--color-text-muted);">Пройдено блоков</span>
+                                <span style="font-weight: 700; color: var(--color-accent);" id="webappProgressText">1 из 7 блоков</span>
+                            </div>
+
+                            <div class="webapp-card">
+                                <h5><i data-lucide="headphones" style="color: var(--color-accent); width: 16px; height: 16px;"></i> Аудио-подкаст Блока 1</h5>
+                                <p>Прослушайте вводную лекцию Антона Цоя о роли Навигатора и Золотом Правиле отбора новостроек.</p>
+                                <div class="tg-audio-player" id="wa-player" style="margin-top: 4px; background: rgba(0,0,0,0.4);">
+                                    <button class="tg-audio-play-btn" onclick="playAudio('wa-player')">
+                                        <i data-lucide="play" style="width: 14px; height: 14px; fill: white;" class="play-icon"></i>
+                                    </button>
+                                    <div class="tg-audio-waveform">
+                                        <!-- Animated Bars -->
+                                        <div class="tg-waveform-bar" style="height: 10px;"></div>
+                                        <div class="tg-waveform-bar" style="height: 6px;"></div>
+                                        <div class="tg-waveform-bar" style="height: 12px;"></div>
+                                        <div class="tg-waveform-bar" style="height: 15px;"></div>
+                                        <div class="tg-waveform-bar" style="height: 8px;"></div>
+                                        <div class="tg-waveform-bar" style="height: 14px;"></div>
+                                        <div class="tg-waveform-bar" style="height: 11px;"></div>
+                                        <div class="tg-waveform-bar" style="height: 5px;"></div>
+                                    </div>
+                                    <span class="tg-audio-time">3:24</span>
+                                </div>
+                            </div>
+
+                            <div class="webapp-card" id="wa-quiz-card">
+                                <h5><i data-lucide="clipboard-list" style="color: #FFB300; width: 16px; height: 16px;"></i> Контрольный тест Блока 1</h5>
+                                <p>Ответьте на вопросы теста в боте для разблокировки следующих модулей обучения.</p>
+                                <button class="webapp-btn" onclick="startTestFromWebApp()">Пройти тест в чате бота</button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Payment & Checkout Dialog overlay -->
+    <div class="payment-modal" id="paymentModal">
+        <div class="payment-card">
+            <span class="payment-close" onclick="togglePaymentModal(false)">
+                <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+            </span>
+            <div class="payment-header">
+                <div class="payment-star-glow" style="background: rgba(0, 82, 255, 0.1); border-color: rgba(0, 82, 255, 0.2); color: var(--color-primary); box-shadow: 0 0 30px rgba(0, 82, 255, 0.2);">
+                    <i data-lucide="credit-card" style="width: 28px; height: 28px;"></i>
+                </div>
+                <h3>Купить Premium-доступ</h3>
+                <p>Разблокируйте все профессиональные Блоки 2–7. Получите доступ к JTBD-диагностике, финмоделированию, 18-шаговой воронке, юридической безопасности и ИИ-инструментам.</p>
+            </div>
+
+            <div class="price-badge">
+                <span style="color: var(--color-text-muted); font-weight: 500;">Стоимость пакета:</span>
+                <div class="price-value">
+                    <span>4 990 ₽</span>
+                </div>
+            </div>
+
+            <div class="payment-options" style="grid-template-columns: 1fr; gap: 12px;">
+                <button class="pay-option-btn" style="flex-direction: row; gap: 16px; padding: 16px; justify-content: flex-start; text-align: left;" onclick="processPayment('yookassa')">
+                    <div style="background: rgba(0, 82, 255, 0.1); width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--color-primary);">
+                        <i data-lucide="credit-card" style="width: 22px; height: 22px;"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight:700; font-size:13px; color:white;">Оплата через ЮKassa</div>
+                        <div style="font-size:11px; color:var(--color-text-muted);">Банковские карты РФ, СБП, Мир</div>
+                    </div>
+                </button>
+                
+                <button class="pay-option-btn" style="flex-direction: row; gap: 16px; padding: 16px; justify-content: flex-start; text-align: left;" onclick="processPayment('robokassa')">
+                    <div style="background: rgba(0, 229, 163, 0.1); width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--color-accent);">
+                        <i data-lucide="zap" style="width: 22px; height: 22px;"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight:700; font-size:13px; color:white;">Оплата через Robokassa</div>
+                        <div style="font-size:11px; color:var(--color-text-muted);">Зарубежные карты, СБП, Электронные кошельки</div>
+                    </div>
+                </button>
+            </div>
+
+            <div class="payment-footer">
+                <p>Безопасная оплата. Вы мгновенно получите доступ ко всем урокам и тестам в боте и Web App.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Engine & JS Logic -->
+    <script>
+        // Init Lucide Icons
+        lucide.createIcons();
+
+        // State Machine Variables
+        let isPremiumUnlocked = false;
+        let currentQuizQuestion = 0;
+        let quizAnswers = [];
+        const chatBody = document.getElementById('chatBody');
+
+        // Helper: sleep function to simulate typing delay
+        const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+        // Helper: show/hide typing indicator
+        async function showTypingIndicator(durationMs = 1500) {
+            const typing = document.createElement('div');
+            typing.className = 'typing-indicator';
+            typing.id = 'typingIndicator';
+            typing.innerHTML = `
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            `;
+            chatBody.appendChild(typing);
+            chatBody.scrollTop = chatBody.scrollHeight;
+            await sleep(durationMs);
+            const element = document.getElementById('typingIndicator');
+            if (element) element.remove();
+        }
+
+        // Toggle WebApp view
+        function toggleWebApp(show) {
+            const overlay = document.getElementById('webAppOverlay');
+            if (show) {
+                overlay.classList.add('open');
+            } else {
+                overlay.classList.remove('open');
+            }
+        }
+
+        // Toggle Payment Modal
+        function togglePaymentModal(show) {
+            const modal = document.getElementById('paymentModal');
+            if (show) {
+                modal.classList.add('open');
+            } else {
+                modal.classList.remove('open');
+            }
+        }
+
+        // Play/Pause Voice Messages
+        function playAudio(playerId) {
+            const player = document.getElementById(playerId);
+            const playIcon = player.querySelector('.play-icon');
+            
+            if (player.classList.contains('playing')) {
+                player.classList.remove('playing');
+                playIcon.setAttribute('data-lucide', 'play');
+                playIcon.style.fill = 'white';
+            } else {
+                player.classList.add('playing');
+                playIcon.setAttribute('data-lucide', 'pause');
+                playIcon.style.fill = 'none';
+            }
+            lucide.createIcons();
+        }
+
+        // Step 1: Start Module 1
+        async function startModule1() {
+            document.getElementById('btn-group-welcome').classList.add('hidden');
+            
+            // Add user message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'tg-message message-out';
+            userMsg.innerHTML = `🚀 Начать обучение (Блок 1) <span class="message-time">${getCurrentTime()}</span>`;
+            chatBody.appendChild(userMsg);
+            
+            await showTypingIndicator(1500);
+
+            // Bot response Lesson 1.1
+            const botMsg = document.createElement('div');
+            botMsg.className = 'tg-message message-in';
+            botMsg.innerHTML = `
+                <b>Тема 1.1: Почему Авито — худшее место для старта подбора?</b><br><br>
+                90% покупателей начинают с Авито, влюбляются в планировку, едут в офис продаж, а потом выясняется, что их бюджет не тянет сделку, или застройщик задерживает сдачу на 1.5 года.<br><br>
+                <b>Правило Эксперт Сити:</b> Сначала разбираемся с финансами и безопасностью, потом смотрим районы и ЖК, и только в конце — едем на показ лотов.<br><br>
+                Прослушайте мой аудио-гайд:
+                <div class="tg-audio-player" id="voice-1">
+                    <button class="tg-audio-play-btn" onclick="playAudio('voice-1')">
+                        <i data-lucide="play" style="width: 14px; height: 14px; fill: white;" class="play-icon"></i>
+                    </button>
+                    <div class="tg-audio-waveform">
+                        <div class="tg-waveform-bar" style="height: 6px;"></div>
+                        <div class="tg-waveform-bar" style="height: 10px;"></div>
+                        <div class="tg-waveform-bar" style="height: 14px;"></div>
+                        <div class="tg-waveform-bar" style="height: 8px;"></div>
+                        <div class="tg-waveform-bar" style="height: 12px;"></div>
+                        <div class="tg-waveform-bar" style="height: 5px;"></div>
+                    </div>
+                    <span class="tg-audio-time">2:18</span>
+                </div>
+                <span class="message-time">${getCurrentTime()}</span>
+            `;
+            chatBody.appendChild(botMsg);
+            lucide.createIcons();
+
+            // Inline buttons
+            const btns = document.createElement('div');
+            btns.className = 'tg-inline-buttons';
+            btns.id = 'btn-group-1';
+            btns.innerHTML = `<button class="tg-btn tg-btn-primary" onclick="showLesson1_2()">📖 Читать Тему 1.2 (Золотое Правило)</button>`;
+            chatBody.appendChild(btns);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // Step 2: Show Lesson 1.2
+        async function showLesson1_2() {
+            document.getElementById('btn-group-1').classList.add('hidden');
+
+            const userMsg = document.createElement('div');
+            userMsg.className = 'tg-message message-out';
+            userMsg.innerHTML = `📖 Читать Тему 1.2 (Золотое Правило) <span class="message-time">${getCurrentTime()}</span>`;
+            chatBody.appendChild(userMsg);
+
+            await showTypingIndicator(1500);
+
+            const botMsg = document.createElement('div');
+            botMsg.className = 'tg-message message-in';
+            botMsg.innerHTML = `
+                <b>Тема 1.2: Золотое Правило отбора новостроек</b><br><br>
+                Запомните цепочку снижения рисков:<br>
+                🛡️ <b>Финансы & Безопасность</b> (бюджет, ипотека, надежность эскроу)<br>
+                ➔ 📍 <b>География</b> (сценарий жизни, районы, транспорт)<br>
+                ➔ 🏢 <b>Жилой комплекс</b> (стадия стройки, инфраструктура)<br>
+                ➔ 📐 <b>Планировка</b> (комнаты, вид)<br>
+                ➔ ❤️ <b>Эмоции</b>.<br><br>
+                <b>Если клиент не прошел шаги 1–3 — мы не показываем ему ЖК!</b> Это уберегает от срыва сделок и разочарований.
+                <span class="message-time">${getCurrentTime()}</span>
+            `;
+            chatBody.appendChild(botMsg);
+
+            const btns = document.createElement('div');
+            btns.className = 'tg-inline-buttons';
+            btns.id = 'btn-group-2';
+            btns.innerHTML = `<button class="tg-btn tg-btn-primary" onclick="showLesson1_3()">📄 Читать Тему 1.3 (Паспорт и Красные Флаги)</button>`;
+            chatBody.appendChild(btns);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // Step 3: Show Lesson 1.3
+        async function showLesson1_3() {
+            document.getElementById('btn-group-2').classList.add('hidden');
+
+            const userMsg = document.createElement('div');
+            userMsg.className = 'tg-message message-out';
+            userMsg.innerHTML = `📄 Читать Тему 1.3 (Паспорт и Красные Флаги) <span class="message-time">${getCurrentTime()}</span>`;
+            chatBody.appendChild(userMsg);
+
+            await showTypingIndicator(1800);
+
+            const botMsg = document.createElement('div');
+            botMsg.className = 'tg-message message-in';
+            botMsg.innerHTML = `
+                <b>Тема 1.3: Паспорт Покупки & Красные Флаги Застройщиков</b><br><br>
+                <b>Паспорт покупки</b> — это 1 страница, где до выбора ЖК вы фиксируете:<br>
+                • Цель покупки и срок сдачи ключей<br>
+                • Первый взнос и <i>комфортный</i> платеж в месяц (а не максимум от банка!)<br>
+                • География (2–4 района) и Must have критерии.<br><br>
+                🛑 <b>Красные флаги (не брать ЖК!):</b><br>
+                1. Нет проектной декларации на наш.дом.рф.<br>
+                2. Застройщик просит перевести деньги мимо эскроу-счета.<br>
+                3. Системные задержки сдачи на прошлых объектах более 6 месяцев.
+                <span class="message-time">${getCurrentTime()}</span>
+            `;
+            chatBody.appendChild(botMsg);
+
+            const btns = document.createElement('div');
+            btns.className = 'tg-inline-buttons';
+            btns.id = 'btn-group-3';
+            btns.innerHTML = `<button class="tg-btn tg-btn-primary" onclick="startQuiz()">📝 Пройти тест Блока 1</button>`;
+            chatBody.appendChild(btns);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // Step 4: Start Quiz
+        async function startQuiz() {
+            document.getElementById('btn-group-3').classList.add('hidden');
+            toggleWebApp(false);
+
+            const userMsg = document.createElement('div');
+            userMsg.className = 'tg-message message-out';
+            userMsg.innerHTML = `📝 Пройти тест Блока 1 <span class="message-time">${getCurrentTime()}</span>`;
+            chatBody.appendChild(userMsg);
+
+            await showTypingIndicator(1200);
+
+            currentQuizQuestion = 1;
+            sendQuestion1();
+        }
+
+        // Q1
+        function sendQuestion1() {
+            const botMsg = document.createElement('div');
+            botMsg.className = 'tg-message message-in';
+            botMsg.innerHTML = `
+                <b>Вопрос 1 из 3:</b><br>
+                С чего правильно начинать подбор новостройки согласно методологии Эксперт Сити?<br><br>
+                1. С поиска красивых рендеров на Циан / Авито.<br>
+                2. С определения бюджета, одобрения ипотеки и заполнения Паспорта покупки.<br>
+                3. С поездки в офис продаж ближайшего крупного застройщика.
+                <span class="message-time">${getCurrentTime()}</span>
+            `;
+            chatBody.appendChild(botMsg);
+
+            const btns = document.createElement('div');
+            btns.className = 'tg-inline-buttons';
+            btns.id = 'quiz-options';
+            btns.innerHTML = `
+                <button class="tg-btn" onclick="handleQuizAnswer(1, 1)">1. С поиска красивых рендеров</button>
+                <button class="tg-btn" onclick="handleQuizAnswer(1, 2)">2. С определения бюджета и ипотеки</button>
+                <button class="tg-btn" onclick="handleQuizAnswer(1, 3)">3. С поездки в офис продаж</button>
+            `;
+            chatBody.appendChild(btns);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // Q2
+        function sendQuestion2() {
+            const botMsg = document.createElement('div');
+            botMsg.className = 'tg-message message-in';
+            botMsg.innerHTML = `
+                <b>Вопрос 2 из 3:</b><br>
+                Что такое TCO в оценке стоимости новостройки?<br><br>
+                1. Скидка, которую застройщик дает при бронировании.<br>
+                2. Полная стоимость владения (Total Cost of Ownership) за 5 лет с учетом ипотеки и ремонта.<br>
+                3. Техническое состояние отделки квартиры при приеме.
+                <span class="message-time">${getCurrentTime()}</span>
+            `;
+            chatBody.appendChild(botMsg);
+
+            const btns = document.createElement('div');
+            btns.className = 'tg-inline-buttons';
+            btns.id = 'quiz-options';
+            btns.innerHTML = `
+                <button class="tg-btn" onclick="handleQuizAnswer(2, 1)">1. Скидка при бронировании</button>
+                <button class="tg-btn" onclick="handleQuizAnswer(2, 2)">2. Полная стоимость владения за 5 лет</button>
+                <button class="tg-btn" onclick="handleQuizAnswer(2, 3)">3. Техническое состояние отделки</button>
+            `;
+            chatBody.appendChild(btns);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // Q3 (Free text case with AI analysis)
+        function sendQuestion3() {
+            const botMsg = document.createElement('div');
+            botMsg.className = 'tg-message message-in';
+            botMsg.innerHTML = `
+                <b>Вопрос 3 из 3 (Практический кейс — ИИ-проверка):</b><br><br>
+                Семья с двумя детьми хочет купить 3-комнатную квартиру, бюджет до 12 млн ₽, первый взнос — 3 млн ₽.<br><br>
+                Напишите <b>свободным текстом</b> (в поле ниже), какие 3 обязательных вопроса вы зададите клиенту на первой встрече перед тем, как предлагать конкретные ЖК?
+                <span class="message-time">${getCurrentTime()}</span>
+            `;
+            chatBody.appendChild(botMsg);
+
+            const btns = document.createElement('div');
+            btns.className = 'tg-inline-buttons';
+            btns.id = 'quiz-options';
+            btns.style.width = '100%';
+            btns.innerHTML = `
+                <textarea id="ai-answer-input" style="width:100%; background:#24303F; border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:10px; color:white; font-size:12px; height:60px; resize:none; outline:none; font-family:inherit;" placeholder="Например: Спрошу про комфортный ежемесячный платеж, про одобрение ипотеки и..."></textarea>
+                <button class="tg-btn tg-btn-primary" style="display:flex; align-items:center; justify-content:center; gap:6px; width:100%;" onclick="submitAIAnswer()">
+                    <i data-lucide="cpu" style="width:14px; height:14px;"></i>
+                    Отправить на ИИ-анализ
+                </button>
+            `;
+            chatBody.appendChild(btns);
+            lucide.createIcons();
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // Submit AI free-text answer
+        async function submitAIAnswer() {
+            const inputEl = document.getElementById('ai-answer-input');
+            const answerText = inputEl.value.trim();
+            if (!answerText) {
+                alert("Пожалуйста, введите ваш ответ для проверки нейросетью!");
+                return;
+            }
+
+            document.getElementById('quiz-options').remove();
+
+            // Display user text answer
+            const userMsg = document.createElement('div');
+            userMsg.className = 'tg-message message-out';
+            userMsg.innerHTML = `${answerText} <span class="message-time">${getCurrentTime()}</span>`;
+            chatBody.appendChild(userMsg);
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            // Custom typing indicator showing AI is thinking
+            const aiTyping = document.createElement('div');
+            aiTyping.className = 'typing-indicator';
+            aiTyping.id = 'aiTypingIndicator';
+            aiTyping.style.background = 'linear-gradient(135deg, rgba(0,82,255,0.15), rgba(0,229,163,0.15))';
+            aiTyping.style.border = '1px solid rgba(0,229,163,0.2)';
+            aiTyping.innerHTML = `
+                <i data-lucide="cpu" style="color:var(--color-accent); width:14px; height:14px; animation: pulse 1s infinite;" class="ai-spin"></i>
+                <span style="font-size:11px; color:var(--color-accent); margin: 0 4px; font-weight:600;">ИИ Эксперт Сити рецензирует ваш ответ...</span>
+                <div class="typing-dot" style="background:var(--color-accent);"></div>
+                <div class="typing-dot" style="background:var(--color-accent);"></div>
+            `;
+            chatBody.appendChild(aiTyping);
+            lucide.createIcons();
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            await sleep(3500); // realistic time for LLM evaluation
+
+            const element = document.getElementById('aiTypingIndicator');
+            if (element) element.remove();
+
+            // AI Evaluation text
+            const botMsg = document.createElement('div');
+            botMsg.className = 'tg-message message-in';
+            botMsg.style.borderLeft = '3px solid var(--color-accent)';
+            botMsg.innerHTML = `
+                🤖 <b>Рецензия ИИ «Эксперт Сити» на ваш ответ:</b><br><br>
+                ✅ <b>Отлично!</b> Вы верно подметили необходимость выявить <i>комфортный ежемесячный платеж</i> (а не максимальный лимит, одобренный банком). Это ключевой пункт безопасности в 2026 году.<br>
+                ✅ Вы зафиксировали <i>цели и срок сдачи ключей</i>, что является шагом 1 паспорта покупки.<br>
+                💡 <b>Рекомендация ИИ:</b> На реальной встрече не забудьте также уточнить наличие <i>предварительного одобрения ипотеки</i> до начала подбора ЖК.<br><br>
+                📊 <b>Оценка ИИ:</b> 88% (Зачет!)
+                <span class="message-time">${getCurrentTime()}</span>
+            `;
+            chatBody.appendChild(botMsg);
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            // Mark question 3 as passed
+            quizAnswers.push(true);
+            await sleep(1000);
+            evaluateQuiz();
+        }
+
+        // Handle Quiz answers
+        async function handleQuizAnswer(questionNum, optionSelected) {
+            document.getElementById('quiz-options').remove();
+            
+            let answerText = "";
+            if (questionNum === 1) {
+                answerText = optionSelected === 2 ? "2. С определения бюджета и ипотеки" : "Вариант " + optionSelected;
+            } else if (questionNum === 2) {
+                answerText = optionSelected === 2 ? "2. Полная стоимость владения за 5 лет" : "Вариант " + optionSelected;
+            }
+
+            const userMsg = document.createElement('div');
+            userMsg.className = 'tg-message message-out';
+            userMsg.innerHTML = `${answerText} <span class="message-time">${getCurrentTime()}</span>`;
+            chatBody.appendChild(userMsg);
+
+            await showTypingIndicator(1000);
+
+            quizAnswers.push(optionSelected === 2); // Option 2 is always correct in this mockup
+
+            if (questionNum === 1) {
+                sendQuestion2();
+            } else if (questionNum === 2) {
+                sendQuestion3();
+            }
+        }
+
+        // Evaluate Quiz results
+        async function evaluateQuiz() {
+            const allCorrect = quizAnswers.every(ans => ans === true);
+            
+            if (allCorrect) {
+                // Confetti animation
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+
+                const botMsg = document.createElement('div');
+                botMsg.className = 'tg-message message-in';
+                botMsg.innerHTML = `
+                    🎉 <b>Поздравляю! Вы успешно сдали тест Блока 1!</b><br>
+                    Результат: ИИ-оценка 88% (Зачет!)<br><br>
+                    Вы доказали, что отлично усвоили принципы Навигатора и правила отбора новостроек. <br><br>
+                    🔑 <b>Блок 2 (JTBD-Диагностика и боли клиента) готов к открытию!</b> Так как это премиальный блок курса, для открытия всех блоков 2–7 вам необходимо разблокировать Premium-доступ.
+                    <span class="message-time">${getCurrentTime()}</span>
+                `;
+                chatBody.appendChild(botMsg);
+
+                const btns = document.createElement('div');
+                btns.className = 'tg-inline-buttons';
+                btns.id = 'btn-group-premium';
+                btns.innerHTML = `<button class="tg-btn tg-btn-primary" onclick="togglePaymentModal(true)">💎 Разблокировать Блоки 2-7 (Premium)</button>`;
+                chatBody.appendChild(btns);
+                
+                // Active Card 2 unlocked look
+                const card2 = document.getElementById('card-2');
+                card2.classList.remove('locked');
+                card2.classList.add('active');
+                
+            } else {
+                const botMsg = document.createElement('div');
+                botMsg.className = 'tg-message message-in';
+                botMsg.innerHTML = `
+                    ⚠️ К сожалению, вы не набрали проходной балл (минимум 80%). Рекомендую повторно изучить темы Блока 1 и пройти тест заново.
+                    <span class="message-time">${getCurrentTime()}</span>
+                `;
+                chatBody.appendChild(botMsg);
+
+                const btns = document.createElement('div');
+                btns.className = 'tg-inline-buttons';
+                btns.id = 'btn-group-retry';
+                btns.innerHTML = `<button class="tg-btn tg-btn-primary" onclick="startQuiz()">🔄 Пройти тест заново</button>`;
+                chatBody.appendChild(btns);
+            }
+            
+            quizAnswers = [];
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // Process Mock Payment
+        async function processPayment(type) {
+            togglePaymentModal(false);
+            
+            // Show typing indicator on payment success
+            await showTypingIndicator(1500);
+
+            // Confetti explosion
+            confetti({
+                particleCount: 150,
+                spread: 100,
+                origin: { y: 0.5 }
+            });
+
+            isPremiumUnlocked = true;
+
+            // Update Left Course List
+            document.getElementById('overallProgressPercent').innerHTML = "100% (Все блоки разблокированы!)";
+            document.getElementById('overallProgressPercent').style.color = "var(--color-accent)";
+            document.getElementById('overallProgressBar').style.width = "100%";
+            document.getElementById('webappProgressText').innerHTML = "Все блоки разблокированы!";
+
+            const modules = document.querySelectorAll('.module-card');
+            modules.forEach((card, index) => {
+                card.classList.remove('locked');
+                card.classList.add('active', 'completed');
+                
+                const status = card.querySelector('.module-status');
+                status.innerHTML = `<i data-lucide="check" style="width: 18px; height: 18px;"></i>`;
+            });
+            lucide.createIcons();
+
+            // Web App Quiz Card Update
+            document.getElementById('wa-quiz-card').innerHTML = `
+                <h5><i data-lucide="sparkles" style="color: var(--color-accent); width: 16px; height: 16px;"></i> Доступ открыт!</h5>
+                <p>Вы успешно разблокировали все премиальные модули! Все уроки, подкасты и тесты теперь доступны без ограничений.</p>
+            `;
+            lucide.createIcons();
+
+            // Bot payment response
+            const botMsg = document.createElement('div');
+            botMsg.className = 'tg-message message-in';
+            botMsg.innerHTML = `
+                💎 <b>Премиум-доступ успешно разблокирован!</b><br><br>
+                Вам открыт доступ ко всем 7 обучающим блокам Эксперт Сити. Начинайте изучение Блока 2 в нашем <b>Учебном Кабинете (Mini App)</b>!<br><br>
+                Желаю успешного прохождения и грандиозных сделок! 🚀
+                <span class="message-time">${getCurrentTime()}</span>
+            `;
+            chatBody.appendChild(botMsg);
+            
+            if (document.getElementById('btn-group-premium')) {
+                document.getElementById('btn-group-premium').classList.add('hidden');
+            }
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // WebApp Start Test Trigger
+        function startTestFromWebApp() {
+            toggleWebApp(false);
+            startQuiz();
+        }
+
+        // Helper: get current system time
+        function getCurrentTime() {
+            const now = new Date();
+            const hrs = String(now.getHours()).padStart(2, '0');
+            const mins = String(now.getMinutes()).padStart(2, '0');
+            return `${hrs}:${mins}`;
+        }
+    </script>
+</body>
+</html>

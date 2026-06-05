@@ -1,0 +1,1016 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Гранель: амбассадорская программа для партнёрских продаж</title>
+  <meta name="description" content="Предложение для руководства Гранель: пилотная амбассадорская программа, обучение агентов и усиление партнёрского канала продаж." />
+  <style>
+    :root {
+      --bg: #07120f;
+      --bg-deep: #030706;
+      --card: rgba(255, 255, 255, 0.075);
+      --card-strong: rgba(255, 255, 255, 0.12);
+      --text: #f8faf7;
+      --muted: #b8c4bb;
+      --soft: #e5ece6;
+      --green: #57d68d;
+      --green-deep: #0f7a4a;
+      --gold: #f5c86a;
+      --orange: #ff9f43;
+      --red: #ff6b6b;
+      --line: rgba(255, 255, 255, 0.16);
+      --shadow: 0 32px 100px rgba(0, 0, 0, 0.42);
+      --radius: 28px;
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--bg-deep);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      background:
+        radial-gradient(circle at 16% 12%, rgba(87, 214, 141, 0.26), transparent 34%),
+        radial-gradient(circle at 86% 10%, rgba(245, 200, 106, 0.2), transparent 32%),
+        radial-gradient(circle at 78% 86%, rgba(15, 122, 74, 0.34), transparent 42%),
+        linear-gradient(135deg, #030706 0%, #07120f 46%, #10170d 100%);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      opacity: 0.18;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(circle at center, #000, transparent 82%);
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .nav {
+      position: fixed;
+      top: 18px;
+      left: 50%;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: min(980px, calc(100% - 28px));
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(3, 7, 6, 0.72);
+      backdrop-filter: blur(24px);
+      box-shadow: var(--shadow);
+      transform: translateX(-50%);
+    }
+
+    .nav__brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-right: auto;
+      padding: 9px 14px;
+      color: var(--soft);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+
+    .nav__brand::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 24px rgba(87, 214, 141, 0.95);
+    }
+
+    .nav a {
+      padding: 10px 13px;
+      border-radius: 999px;
+      color: rgba(248, 250, 247, 0.76);
+      font-size: 13px;
+      font-weight: 800;
+      text-decoration: none;
+      transition: 0.18s ease;
+    }
+
+    .nav a:hover {
+      color: var(--text);
+      background: rgba(87, 214, 141, 0.14);
+    }
+
+    .section {
+      position: relative;
+      padding: 110px clamp(20px, 5vw, 72px);
+    }
+
+    .section--hero {
+      min-height: 100vh;
+      display: grid;
+      align-items: center;
+      padding-top: 132px;
+    }
+
+    .wrap {
+      width: min(var(--max), 100%);
+      margin: 0 auto;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: clamp(28px, 5vw, 72px);
+      align-items: center;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 22px;
+      padding: 10px 14px;
+      border: 1px solid rgba(87, 214, 141, 0.34);
+      border-radius: 999px;
+      background: rgba(87, 214, 141, 0.1);
+      color: #dfffea;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .kicker::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 26px;
+      font-size: clamp(48px, 8vw, 96px);
+      line-height: 0.92;
+      letter-spacing: -0.075em;
+      text-wrap: balance;
+    }
+
+    h2 {
+      max-width: 900px;
+      margin-bottom: 20px;
+      font-size: clamp(34px, 5vw, 64px);
+      line-height: 0.96;
+      letter-spacing: -0.06em;
+      text-wrap: balance;
+    }
+
+    h3 {
+      margin-bottom: 12px;
+      font-size: 24px;
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+    }
+
+    .lead {
+      max-width: 720px;
+      margin-bottom: 30px;
+      color: var(--soft);
+      font-size: clamp(20px, 2vw, 27px);
+      line-height: 1.3;
+      font-weight: 650;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .accent {
+      color: var(--gold);
+    }
+
+    .hero__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin: 34px 0;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 54px;
+      padding: 16px 22px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      font-weight: 900;
+      text-decoration: none;
+      transition: 0.2s ease;
+    }
+
+    .button--primary {
+      color: #06100c;
+      background: linear-gradient(135deg, var(--green), var(--gold));
+      box-shadow: 0 18px 44px rgba(87, 214, 141, 0.24);
+    }
+
+    .button--primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 24px 60px rgba(245, 200, 106, 0.22);
+    }
+
+    .button--ghost {
+      border-color: var(--line);
+      color: var(--soft);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .button--ghost:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .hero__note {
+      max-width: 650px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .executive-card {
+      position: relative;
+      padding: clamp(24px, 3vw, 34px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.055)),
+        rgba(255, 255, 255, 0.035);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .executive-card::before {
+      content: "";
+      position: absolute;
+      inset: -120px -100px auto auto;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: rgba(245, 200, 106, 0.2);
+      filter: blur(8px);
+    }
+
+    .metric {
+      position: relative;
+      padding: 22px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .metric:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .metric__value {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--gold);
+      font-size: clamp(34px, 4vw, 52px);
+      line-height: 1;
+      font-weight: 950;
+      letter-spacing: -0.055em;
+    }
+
+    .metric__label {
+      color: var(--soft);
+      font-size: 17px;
+      font-weight: 750;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .chip {
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--soft);
+      background: rgba(255, 255, 255, 0.06);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .intro {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: clamp(24px, 4vw, 58px);
+      align-items: start;
+    }
+
+    .label {
+      display: inline-flex;
+      margin-bottom: 16px;
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 950;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .quote {
+      padding: clamp(24px, 3vw, 34px);
+      border: 1px solid rgba(245, 200, 106, 0.28);
+      border-radius: var(--radius);
+      background: rgba(245, 200, 106, 0.085);
+      color: var(--soft);
+      font-size: clamp(22px, 2.4vw, 34px);
+      line-height: 1.2;
+      font-weight: 850;
+      letter-spacing: -0.04em;
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid--3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .grid--2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .card {
+      position: relative;
+      min-height: 100%;
+      padding: clamp(22px, 2.5vw, 30px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--card);
+      box-shadow: 0 18px 70px rgba(0, 0, 0, 0.18);
+      overflow: hidden;
+    }
+
+    .card--strong {
+      background: linear-gradient(180deg, rgba(87, 214, 141, 0.16), rgba(255, 255, 255, 0.065));
+    }
+
+    .card__num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      color: #06100c;
+      background: var(--gold);
+      font-weight: 950;
+    }
+
+    .card p {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .problem {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 34px;
+    }
+
+    .problem__item {
+      padding: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.055);
+    }
+
+    .problem__item strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text);
+      font-size: 17px;
+    }
+
+    .problem__item span {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: clamp(28px, 5vw, 64px);
+      align-items: center;
+    }
+
+    .bullets {
+      display: grid;
+      gap: 13px;
+      margin: 24px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .bullets li {
+      position: relative;
+      padding: 15px 16px 15px 44px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.055);
+      color: var(--soft);
+      font-weight: 650;
+    }
+
+    .bullets li::before {
+      content: "";
+      position: absolute;
+      top: 20px;
+      left: 18px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 18px rgba(87, 214, 141, 0.7);
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-top: 34px;
+    }
+
+    .flow__step {
+      min-height: 172px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.065);
+    }
+
+    .flow__step span {
+      display: block;
+      margin-bottom: 24px;
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 950;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .flow__step strong {
+      display: block;
+      color: var(--soft);
+      font-size: 18px;
+      line-height: 1.16;
+      letter-spacing: -0.03em;
+    }
+
+    .offer {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 18px;
+      margin-top: 34px;
+    }
+
+    .offer .card {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .tag {
+      width: max-content;
+      padding: 8px 11px;
+      border-radius: 999px;
+      color: #06100c;
+      background: var(--green);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .price {
+      margin-top: auto;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--soft);
+      font-weight: 850;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 14px;
+      margin-top: 30px;
+    }
+
+    .timeline__item {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 18px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.055);
+    }
+
+    .timeline__item time {
+      color: var(--gold);
+      font-weight: 950;
+    }
+
+    .timeline__item strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--soft);
+      font-size: 18px;
+    }
+
+    .timeline__item p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .proof {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 34px;
+    }
+
+    .proof__box {
+      padding: clamp(22px, 2.5vw, 30px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.065);
+    }
+
+    .proof__box h3 {
+      color: var(--gold);
+    }
+
+    .cta {
+      position: relative;
+      padding: clamp(30px, 6vw, 74px);
+      border: 1px solid rgba(245, 200, 106, 0.28);
+      border-radius: 36px;
+      background:
+        radial-gradient(circle at 88% 14%, rgba(245, 200, 106, 0.22), transparent 30%),
+        linear-gradient(135deg, rgba(87, 214, 141, 0.2), rgba(255, 255, 255, 0.07));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .cta h2 {
+      max-width: 820px;
+    }
+
+    .cta p {
+      max-width: 760px;
+      color: var(--soft);
+      font-size: 21px;
+      font-weight: 650;
+    }
+
+    .footer {
+      padding: 34px clamp(20px, 5vw, 72px) 50px;
+      color: rgba(248, 250, 247, 0.54);
+      font-size: 14px;
+    }
+
+    .footer .wrap {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 14px;
+      border-top: 1px solid var(--line);
+      padding-top: 22px;
+    }
+
+    @media (max-width: 980px) {
+      .nav {
+        justify-content: center;
+        overflow-x: auto;
+      }
+
+      .nav__brand {
+        display: none;
+      }
+
+      .hero,
+      .intro,
+      .split,
+      .proof {
+        grid-template-columns: 1fr;
+      }
+
+      .grid--3,
+      .offer,
+      .flow {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .section {
+        padding: 82px 18px;
+      }
+
+      .section--hero {
+        padding-top: 118px;
+      }
+
+      .nav a {
+        padding: 9px 10px;
+        font-size: 12px;
+      }
+
+      .grid--2,
+      .grid--3,
+      .offer,
+      .problem,
+      .flow {
+        grid-template-columns: 1fr;
+      }
+
+      .timeline__item {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav" aria-label="Навигация">
+    <div class="nav__brand">Антон Цой × Гранель</div>
+    <a href="#problem">Проблема</a>
+    <a href="#solution">Решение</a>
+    <a href="#pilot">Пилот</a>
+    <a href="#formats">Форматы</a>
+    <a href="#cta">Первый шаг</a>
+  </nav>
+
+  <main>
+    <section class="section section--hero">
+      <div class="wrap hero">
+        <div>
+          <div class="kicker">Предложение для руководства Гранель</div>
+          <h1>Превратить агентский рынок в управляемый канал продаж</h1>
+          <p class="lead">
+            Амбассадорская программа, обучение агентов и живая обратная связь с рынка,
+            чтобы продукт Гранель объясняли увереннее, клиентов доводили быстрее,
+            а партнёрский канал работал системно.
+          </p>
+          <div class="hero__actions">
+            <a class="button button--primary" href="#pilot">Начать с пилота на 30 дней</a>
+            <a class="button button--ghost" href="#formats">Посмотреть форматы</a>
+          </div>
+          <p class="hero__note">
+            Это не мотивационный тренинг и не разовое выступление. Это внешний партнёр,
+            который соединяет продукт застройщика, агентскую сеть, отдел продаж,
+            AI-инструменты и измеримые управленческие выводы.
+          </p>
+        </div>
+
+        <aside class="executive-card" aria-label="Ключевые результаты">
+          <div class="metric">
+            <span class="metric__value">7-14 дней</span>
+            <span class="metric__label">на первичный срез агентского восприятия объекта</span>
+          </div>
+          <div class="metric">
+            <span class="metric__value">3-5</span>
+            <span class="metric__label">быстрых действий, которые можно проверить без сложного запуска</span>
+          </div>
+          <div class="metric">
+            <span class="metric__value">30 дней</span>
+            <span class="metric__label">на пилот: аудит, обучение, карта возражений и план масштабирования</span>
+          </div>
+          <div class="chips">
+            <span class="chip">Партнёрский канал</span>
+            <span class="chip">Агенты</span>
+            <span class="chip">CRM/SLA</span>
+            <span class="chip">AI</span>
+            <span class="chip">Уфа → Москва</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="problem">
+      <div class="wrap intro">
+        <div>
+          <span class="label">Почему сейчас</span>
+          <h2>Сильный объект сам себя не продаёт, если рынок не считывает его ценность</h2>
+        </div>
+        <div>
+          <p class="lead">
+            Клиент 2026 года перегружен информацией, боится ошибиться и не доверяет простым обещаниям.
+            Поэтому агент больше не просто показывает варианты. Он становится навигатором по сложному решению.
+          </p>
+          <div class="quote">
+            Выигрывает не тот застройщик, у кого просто есть объект. Выигрывает тот,
+            чей объект агенты умеют объяснять и кому доверяют.
+          </div>
+        </div>
+      </div>
+
+      <div class="wrap problem">
+        <div class="problem__item">
+          <strong>Агент не понял продукт</strong>
+          <span>Он ставит объект в подборку формально или ведёт клиента туда, где проще объяснить ценность.</span>
+        </div>
+        <div class="problem__item">
+          <strong>Клиент не видит сценарий покупки</strong>
+          <span>Метры, цена и планировка не превращаются в понятную жизненную или инвестиционную логику.</span>
+        </div>
+        <div class="problem__item">
+          <strong>Отдел продаж и партнёры живут отдельно</strong>
+          <span>Нет единого языка, прозрачных статусов, быстрых ответов и доверия в передаче клиента.</span>
+        </div>
+        <div class="problem__item">
+          <strong>Рынок даёт сигналы, но они поздно доходят до управления</strong>
+          <span>Возражения, слухи, вопросы и сравнение с конкурентами часто видны раньше в поле, чем в отчётах.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="solution">
+      <div class="wrap split">
+        <div>
+          <span class="label">Решение</span>
+          <h2>Внешний амбассадор и архитектор партнёрского канала</h2>
+          <p class="lead">
+            Моя роль для Гранель — быть переводчиком между застройщиком, агентом и клиентом.
+            Там, где появляется хороший перевод, появляются скорость, доверие и деньги.
+          </p>
+        </div>
+        <div class="card card--strong">
+          <h3>Главная управленческая задача</h3>
+          <p>
+            Сделать так, чтобы агенты понимали продукт Гранель глубже конкурентов,
+            уверенно объясняли его клиенту, приводили более подготовленных покупателей
+            и хотели быть частью активного агентского ядра вокруг бренда.
+          </p>
+          <ul class="bullets">
+            <li>Объяснить объект на языке агентского рынка и сценариев клиента.</li>
+            <li>Собрать активное ядро агентов, а не просто список партнёров в таблице.</li>
+            <li>Давать руководству живую обратную связь с рынка до того, как проблема ударит по продажам.</li>
+            <li>Усилить связку «агент — менеджер отдела продаж — клиент».</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <span class="label">Что получит Гранель</span>
+        <h2>Не обучение ради обучения, а система, влияющая на заявки, встречи, брони и сделки</h2>
+        <div class="grid grid--3">
+          <article class="card">
+            <div class="card__num">1</div>
+            <h3>Подготовленные агенты</h3>
+            <p>Меньше хаотичных вопросов, выше качество заявок, понятнее логика клиента и продукта.</p>
+          </article>
+          <article class="card">
+            <div class="card__num">2</div>
+            <h3>Рост доверия к объекту</h3>
+            <p>Объект перестаёт быть «ещё одним ЖК» и становится понятным решением под конкретный сценарий.</p>
+          </article>
+          <article class="card">
+            <div class="card__num">3</div>
+            <h3>Активное агентское ядро</h3>
+            <p>Появляется группа партнёров, которые знают продукт, получают материалы и работают системно.</p>
+          </article>
+          <article class="card">
+            <div class="card__num">4</div>
+            <h3>Обратная связь с рынка</h3>
+            <p>Руководство видит, что агенты говорят о продукте, какие вопросы повторяются и где теряется интерес.</p>
+          </article>
+          <article class="card">
+            <div class="card__num">5</div>
+            <h3>Дополнительный медиа-эффект</h3>
+            <p>Агенты создают больше экспертного контента: разборы объекта, видео, посты, подборки и объяснения.</p>
+          </article>
+          <article class="card">
+            <div class="card__num">6</div>
+            <h3>Масштабируемая модель</h3>
+            <p>Уфа может стать пилотом, после чего подход адаптируется под Москву и другие объекты.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <span class="label">Как работает система</span>
+        <h2>От рыночного шума к управляемой партнёрской воронке</h2>
+        <div class="flow">
+          <div class="flow__step">
+            <span>Шаг 01</span>
+            <strong>Слышим, как агенты реально воспринимают объект</strong>
+          </div>
+          <div class="flow__step">
+            <span>Шаг 02</span>
+            <strong>Находим возражения, конкурентов и слабые места упаковки</strong>
+          </div>
+          <div class="flow__step">
+            <span>Шаг 03</span>
+            <strong>Переводим продукт на язык клиента и агентской продажи</strong>
+          </div>
+          <div class="flow__step">
+            <span>Шаг 04</span>
+            <strong>Обучаем активное ядро и даём практические материалы</strong>
+          </div>
+          <div class="flow__step">
+            <span>Шаг 05</span>
+            <strong>Измеряем активность, качество заявок и точки роста</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="pilot">
+      <div class="wrap split">
+        <div>
+          <span class="label">Оптимальный первый шаг</span>
+          <h2>Пилот на 30 дней: быстро показать ценность без тяжёлого запуска</h2>
+          <p class="lead">
+            Не нужно сразу строить большую академию, платформу и десятки регламентов.
+            Сначала важно увидеть реальность, найти быстрые рычаги и спокойно масштабировать то, что работает.
+          </p>
+        </div>
+        <div class="executive-card">
+          <div class="metric">
+            <span class="metric__value">Аудит</span>
+            <span class="metric__label">текущего восприятия объекта агентским рынком</span>
+          </div>
+          <div class="metric">
+            <span class="metric__value">Интервью</span>
+            <span class="metric__label">5-10 разговоров с активными агентами или партнёрами</span>
+          </div>
+          <div class="metric">
+            <span class="metric__value">Сессия</span>
+            <span class="metric__label">стратегическая встреча с командой Гранель и план первых действий</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="wrap timeline">
+        <div class="timeline__item">
+          <time>Неделя 1</time>
+          <div>
+            <strong>Сбор рыночной картины</strong>
+            <p>Интервью, анализ вопросов агентов, карта возражений, первичное сравнение с конкурентами.</p>
+          </div>
+        </div>
+        <div class="timeline__item">
+          <time>Неделя 2</time>
+          <div>
+            <strong>Упаковка выводов</strong>
+            <p>Что рынок видит, что не считывает, какие материалы нужны агентам, где проседает коммуникация.</p>
+          </div>
+        </div>
+        <div class="timeline__item">
+          <time>Неделя 3</time>
+          <div>
+            <strong>Первая обучающая встреча</strong>
+            <p>Практический разбор продукта, сценариев клиента, возражений и алгоритма передачи в отдел продаж.</p>
+          </div>
+        </div>
+        <div class="timeline__item">
+          <time>Неделя 4</time>
+          <div>
+            <strong>Решение по масштабированию</strong>
+            <p>Отчёт, 3-5 быстрых действий, формат агентского ядра и предложение по программе на 3-6 месяцев.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="formats">
+      <div class="wrap">
+        <span class="label">Форматы сотрудничества</span>
+        <h2>Можно начать мягко и масштабировать только то, что даёт эффект</h2>
+        <div class="offer">
+          <article class="card">
+            <span class="tag">Быстрый вход</span>
+            <h3>Пилот на 30 дней</h3>
+            <p>Аудит восприятия объекта, интервью с агентами, стратегическая сессия, первая обучающая встреча и карта точек роста.</p>
+            <div class="price">Результат: понятный срез рынка и решение, что усиливать первым.</div>
+          </article>
+          <article class="card card--strong">
+            <span class="tag">Ядро агентов</span>
+            <h3>Агентская академия Гранель</h3>
+            <p>4-8 модулей, домашние задания, разборы кейсов, материалы по объекту, AI-шаблоны, чек-листы и закрытая группа.</p>
+            <div class="price">Результат: группа агентов, которые продают продукт глубже и профессиональнее.</div>
+          </article>
+          <article class="card">
+            <span class="tag">Система</span>
+            <h3>Амбассадорская программа 3-6 месяцев</h3>
+            <p>Регулярные встречи, агентские мероприятия, обратная связь с рынка, обновление материалов, консультации для отдела продаж.</p>
+            <div class="price">Результат: внешний партнёр на стыке рынка, агентов и команды продаж.</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap split">
+        <div>
+          <span class="label">Почему это не обычный тренинг</span>
+          <h2>Гранель получает не лектора, а практическую связку рынка, продаж и инструментов</h2>
+        </div>
+        <div>
+          <ul class="bullets">
+            <li>Я говорю с агентами на их языке: комиссия, скорость ответа, страх потерять клиента, доверие к менеджеру.</li>
+            <li>Я говорю с руководством языком денег: где теряется заявка, что влияет на бронь, какие действия проверять первыми.</li>
+            <li>Я говорю с отделом продаж языком процессов: CRM, статусы, SLA, передача клиента, прозрачность коммуникации.</li>
+            <li>Я добавляю AI без хайпа: только простые инструменты, которые экономят время и повышают качество консультаций.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="wrap proof">
+        <div class="proof__box">
+          <h3>Для директора</h3>
+          <p class="muted">
+            Это способ быстро понять, как партнёрский рынок реально воспринимает продукт,
+            какие барьеры мешают сделкам и какие управленческие решения дадут эффект без лишней сложности.
+          </p>
+        </div>
+        <div class="proof__box">
+          <h3>Для коммерческого блока</h3>
+          <p class="muted">
+            Это инструмент повышения качества заявок, скорости коммуникации и доверия между агентами,
+            менеджерами отдела продаж и клиентами.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="cta">
+      <div class="wrap cta">
+        <span class="label">Первый шаг</span>
+        <h2>Провести пилотную встречу и выбрать объект для мини-аудита</h2>
+        <p>
+          За 7-14 дней можно собрать картину агентского восприятия, ключевые возражения,
+          сравнение с конкурентами, список недостающих материалов и план первой обучающей сессии.
+        </p>
+        <div class="hero__actions">
+          <a class="button button--primary" href="mailto:?subject=Пилотная амбассадорская программа Гранель">Обсудить пилот</a>
+          <a class="button button--ghost" href="#pilot">Что входит в 30 дней</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <span>Антон Цой для Гранель</span>
+      <span>Амбассадорская программа · обучение агентов · партнёрский канал</span>
+    </div>
+  </footer>
+</body>
+</html>

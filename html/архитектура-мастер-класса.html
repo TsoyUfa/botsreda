@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Архитектура мастер-класса «Нейросети для бизнеса»</title>
+    <meta name="description" content="Интерактивная архитектура и пошаговый таймлайн 1.5-часового практического интенсива по ИИ для собственников бизнеса.">
+    <!-- Премиальные шрифты -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Цветовая палитра: Кибер-неон и Премиальный брутализм */
+        :root {
+            --color-bg: #030611;
+            --color-card-bg: #0b111e;
+            --color-accent: #00f2fe; /* Cyber Cyan */
+            --color-accent-glow: rgba(0, 242, 254, 0.2);
+            --color-accent-dim: rgba(0, 242, 254, 0.08);
+            --color-border: #132238;
+            --color-white: #ffffff;
+            --color-soft-white: #e2e8f0;
+            --color-muted: #64748b;
+            --color-pink: #ff3366; /* Neon Pink */
+            --color-pink-glow: rgba(255, 51, 102, 0.15);
+            --color-mint: #39ff14; /* Mint Green */
+            --color-mint-glow: rgba(57, 255, 20, 0.15);
+            --color-card-highlight: #0b222f;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-soft-white);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* CRT-эффект старого экрана для премиального стиля */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 9999;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+            opacity: 0.45;
+        }
+
+        /* Премиальная рамка А4-постера */
+        .page-frame {
+            border: 1px solid var(--color-border);
+            max-width: 1200px;
+            margin: 10px auto;
+            padding: 40px;
+            background-color: rgba(11, 18, 32, 0.7);
+            border-radius: 4px;
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.9);
+            position: relative;
+            backdrop-filter: blur(12px);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        .logo-badge {
+            font-family: 'Outfit', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--color-accent);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            border: 1px solid var(--color-accent);
+            padding: 4px 10px;
+            border-radius: 2px;
+            background-color: var(--color-accent-dim);
+            text-shadow: 0 0 10px var(--color-accent-glow);
+            box-shadow: 0 0 10px var(--color-accent-dim);
+        }
+
+        .ticket-price-badge {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--color-mint);
+            border: 1px solid var(--color-mint);
+            padding: 4px 12px;
+            border-radius: 2px;
+            background-color: var(--color-mint-glow);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 10px var(--color-mint-glow);
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 38px;
+            font-weight: 800;
+            color: var(--color-white);
+            line-height: 1.2;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+
+        h1 span {
+            color: var(--color-accent);
+            text-shadow: 0 0 20px var(--color-accent-glow);
+        }
+
+        .subtitle {
+            font-size: 15px;
+            color: var(--color-muted);
+            max-width: 800px;
+            margin: 0 auto 10px auto;
+            font-weight: 300;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+            margin: 20px 0;
+        }
+
+        /* Выделенная карточка РОСТ */
+        .rost-banner-card {
+            background-color: var(--color-card-highlight);
+            border: 1px solid var(--color-accent);
+            border-left: 4px solid var(--color-accent);
+            padding: 20px 25px;
+            border-radius: 4px;
+            margin-bottom: 35px;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        .banner-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .banner-text {
+            font-size: 13px;
+            color: var(--color-soft-white);
+            line-height: 1.5;
+        }
+
+        /* Интерактивный таймлайн */
+        .timeline-section {
+            margin-bottom: 35px;
+        }
+
+        .timeline-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .timeline-title-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .timeline-clock {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--color-accent);
+            background-color: var(--color-card-bg);
+            padding: 4px 12px;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Дорожка прогресса таймлайна */
+        .timeline-progress-track {
+            height: 6px;
+            background-color: var(--color-card-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 3px;
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .timeline-progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--color-accent);
+            box-shadow: 0 0 10px var(--color-accent);
+            border-radius: 3px;
+            transition: width 0.1s linear;
+        }
+
+        /* Сетка блоков лекции */
+        .timeline-blocks-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+        }
+
+        @media (max-width: 850px) {
+            .timeline-blocks-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+        }
+
+        .timeline-block-card {
+            background-color: var(--color-card-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .timeline-block-card:hover {
+            border-color: var(--color-accent);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px -8px var(--color-accent-glow);
+        }
+
+        .timeline-block-card.active-now {
+            border-color: var(--color-accent);
+            background-color: var(--color-card-highlight);
+            box-shadow: 0 0 15px var(--color-accent-glow);
+        }
+
+        .timeline-block-card.completed {
+            border-color: var(--color-mint);
+        }
+
+        .block-time {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--color-muted);
+            transition: color 0.3s ease;
+        }
+
+        .timeline-block-card.active-now .block-time {
+            color: var(--color-accent);
+        }
+
+        .timeline-block-card.completed .block-time {
+            color: var(--color-mint);
+        }
+
+        .block-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--color-white);
+            line-height: 1.3;
+        }
+
+        .block-number-overlay {
+            position: absolute;
+            bottom: -10px;
+            right: -5px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 40px;
+            font-weight: 800;
+            color: var(--color-border);
+            opacity: 0.15;
+            line-height: 1;
+            pointer-events: none;
+            transition: color 0.3s ease;
+        }
+
+        .timeline-block-card.active-now .block-number-overlay {
+            color: var(--color-accent);
+            opacity: 0.2;
+        }
+
+        /* Двухколоночный макет Dashboard */
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 900px) {
+            .dashboard-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Левая колонка: Управление + Калькулятор */
+        .dashboard-control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* Блок симулятора лекции */
+        .simulator-hud-card {
+            background-color: rgba(5, 10, 20, 0.9);
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            padding: 24px;
+            box-shadow: 0 15px 30px -10px rgba(0,0,0,0.5);
+        }
+
+        .hud-header {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .hud-status-blink {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--color-muted);
+        }
+
+        .hud-status-blink.active {
+            color: var(--color-pink);
+        }
+
+        .blink-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background-color: var(--color-muted);
+        }
+
+        .hud-status-blink.active .blink-dot {
+            background-color: var(--color-pink);
+            animation: redBlink 1s infinite alternate;
+        }
+
+        .btn-simulator-play {
+            width: 100%;
+            background-color: var(--color-accent);
+            color: var(--color-bg);
+            border: 1px solid var(--color-accent);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 13.5px;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px var(--color-accent-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-simulator-play:hover {
+            box-shadow: 0 0 25px var(--color-accent);
+            transform: translateY(-1px);
+        }
+
+        .btn-simulator-play.playing {
+            background-color: transparent;
+            color: var(--color-pink);
+            border-color: var(--color-pink);
+            box-shadow: 0 0 15px var(--color-pink-glow);
+        }
+
+        .btn-simulator-play.playing:hover {
+            box-shadow: 0 0 25px var(--color-pink);
+        }
+
+        /* Блок Калькулятора ROI */
+        .calculator-card {
+            background-color: var(--color-card-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            padding: 24px;
+            box-shadow: 0 15px 30px -10px rgba(0,0,0,0.5);
+        }
+
+        .retro-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+
+        .retro-input-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .retro-input-wrapper {
+            display: flex;
+            align-items: center;
+            background-color: rgba(5, 10, 20, 0.95);
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            padding: 0 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .retro-input-wrapper:focus-within {
+            border-color: var(--color-accent);
+        }
+
+        .retro-currency-prefix {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 14px;
+            color: var(--color-accent);
+            margin-right: 8px;
+        }
+
+        .retro-input-field {
+            background: transparent;
+            border: none;
+            color: var(--color-white);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 16px;
+            padding: 10px 0;
+            width: 100%;
+            outline: none;
+        }
+
+        .calculator-results {
+            background-color: rgba(5, 10, 20, 0.7);
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            padding: 15px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .calc-result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12.5px;
+        }
+
+        .calc-result-label {
+            color: var(--color-muted);
+        }
+
+        .calc-result-value {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--color-white);
+        }
+
+        .calc-result-value.highlight-mint {
+            color: var(--color-mint);
+            text-shadow: 0 0 8px var(--color-mint-glow);
+        }
+
+        /* Правая колонка: Детальная информационная панель */
+        .dashboard-detail-panel {
+            background-color: var(--color-card-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            padding: 30px;
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-detail-panel.glowing-transition {
+            animation: panelGlowBorder 0.6s ease;
+        }
+
+        .detail-time-header {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--color-accent);
+            background-color: var(--color-accent-dim);
+            padding: 3px 10px;
+            border: 1px solid var(--color-accent);
+            border-radius: 2px;
+            align-self: flex-start;
+            text-transform: uppercase;
+        }
+
+        .detail-title-heading {
+            font-family: 'Outfit', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--color-white);
+            line-height: 1.3;
+        }
+
+        /* Смысловые блоки подробностей */
+        .detail-block-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .detail-block-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--color-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .detail-block-label::after {
+            content: "";
+            flex-grow: 1;
+            height: 1px;
+            background-color: var(--color-border);
+        }
+
+        .detail-list {
+            list-style: none;
+            padding-left: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .detail-list-item {
+            position: relative;
+            padding-left: 18px;
+            font-size: 13.5px;
+            color: var(--color-soft-white);
+        }
+
+        .detail-list-item::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--color-accent);
+            font-weight: bold;
+        }
+
+        .detail-scenario-text {
+            font-size: 13px;
+            font-style: italic;
+            color: var(--color-soft-white);
+            background-color: rgba(5, 10, 20, 0.6);
+            border-left: 3px solid var(--color-pink);
+            padding: 12px 16px;
+            border-radius: 2px;
+            line-height: 1.5;
+        }
+
+        /* Карточка цифрового актива */
+        .digital-asset-card {
+            background-color: rgba(5, 10, 20, 0.95);
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            padding: 15px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            color: var(--color-soft-white);
+            white-space: pre-wrap;
+            line-height: 1.5;
+            position: relative;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+        }
+
+        .digital-asset-card::before {
+            content: "ЦИФРОВОЙ АКТИВ УЧАСТНИКА";
+            position: absolute;
+            top: -8px;
+            left: 12px;
+            background-color: var(--color-card-bg);
+            padding: 0 8px;
+            font-size: 8px;
+            color: var(--color-accent);
+            letter-spacing: 1px;
+            border: 1px solid var(--color-border);
+            border-radius: 2px;
+        }
+
+        /* Сплит-граф Obsidian под блоком деталей */
+        .detail-graph-indicator {
+            border: 1px solid var(--color-border);
+            background-color: rgba(5, 10, 20, 0.8);
+            padding: 10px 15px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .folder-node-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11.5px;
+            color: var(--color-muted);
+            transition: all 0.3s ease;
+        }
+
+        .folder-node-indicator.active {
+            color: var(--color-accent);
+            font-weight: 600;
+        }
+
+        .folder-node-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--color-border);
+            transition: all 0.3s ease;
+        }
+
+        .folder-node-indicator.active .folder-node-dot {
+            background-color: var(--color-accent);
+            box-shadow: 0 0 8px var(--color-accent);
+        }
+
+        /* CTA блок бронирования */
+        .booking-cta-section {
+            background-color: var(--color-card-bg);
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 15px 35px -10px rgba(0,0,0,0.6);
+            margin-top: 20px;
+        }
+
+        .booking-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--color-white);
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .booking-text {
+            font-size: 13.5px;
+            color: var(--color-muted);
+            max-width: 600px;
+            margin: 0 auto 24px auto;
+        }
+
+        .booking-btn-row {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        /* Ключевые анимации */
+        @keyframes redBlink {
+            from { opacity: 0.4; filter: drop-shadow(0 0 0px transparent); }
+            to { opacity: 1; filter: drop-shadow(0 0 6px var(--color-pink)); }
+        }
+
+        @keyframes panelGlowBorder {
+            0% { border-color: var(--color-border); box-shadow: 0 0 0px transparent; }
+            50% { border-color: var(--color-accent); box-shadow: 0 0 15px var(--color-accent-glow); }
+            100% { border-color: var(--color-border); box-shadow: 0 0 0px transparent; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-frame" id="rost-masterclass-app">
+        
+        <!-- Шапка -->
+        <header>
+            <div class="header-top">
+                <div class="logo-badge">Автономная экосистема РОСТ</div>
+                <div class="ticket-price-badge">Инвестиция: 2 000 ₽</div>
+            </div>
+            <h1>Нейросети для бизнеса: <span>Без воды и хайпа</span></h1>
+            <p class="subtitle">Интерактивный дашборд лекции. Исследуй 90-минутный пошаговый план мастер-класса собственника и рассчитай окупаемость своих инвестиций в оцифровку.</p>
+            <div class="divider"></div>
+        </header>
+
+        <!-- Карточка РОСТ-Стиль -->
+        <section class="rost-banner-card">
+            <h2 class="banner-title">Главный манифест выступления: «Только то, что работает»</h2>
+            <p class="banner-text">
+                Мы убираем 95% развлекательного мусора и хайпа вокруг ИИ. Никакой пустой теории и глупой генерации картиночек. Только реальные 5% инструментов, которые окупаются в рублях, снижают рутину в компании и освобождают до 50% твоего личного времени для выхода на стабильные 500к+ рублей в месяц и обретения личной автономии.
+            </p>
+        </section>
+
+        <!-- Интерактивный таймлайн-навигатор -->
+        <section class="timeline-section">
+            <div class="timeline-header-row">
+                <div class="timeline-title-label">Хронология мастер-класса (90 минут чистой пользы)</div>
+                <div class="timeline-clock" id="sim-time-display">00:00</div>
+            </div>
+
+            <!-- Шкала прогресса -->
+            <div class="timeline-progress-track">
+                <div class="timeline-progress-bar" id="sim-progress-bar"></div>
+            </div>
+
+            <!-- Сетка блоков (кликабельных) -->
+            <div class="timeline-blocks-grid">
+                <!-- Блок 1 -->
+                <div class="timeline-block-card active-now" id="t-block-1" onclick="selectBlock(1)">
+                    <div class="block-time">00:00 - 00:15 // 15 мин</div>
+                    <div class="block-title">Твердый стек ИИ без хайпа</div>
+                    <div class="block-number-overlay">01</div>
+                </div>
+
+                <!-- Блок 2 -->
+                <div class="timeline-block-card" id="t-block-2" onclick="selectBlock(2)">
+                    <div class="block-time">00:15 - 00:40 // 25 мин</div>
+                    <div class="block-title">Архитектура Второго Мозга</div>
+                    <div class="block-number-overlay">02</div>
+                </div>
+
+                <!-- Блок 3 -->
+                <div class="timeline-block-card" id="t-block-3" onclick="selectBlock(3)">
+                    <div class="block-time">00:40 - 01:05 // 25 мин</div>
+                    <div class="block-title">Оцифровка команды и SLA</div>
+                    <div class="block-number-overlay">03</div>
+                </div>
+
+                <!-- Блок 4 -->
+                <div class="timeline-block-card" id="t-block-4" onclick="selectBlock(4)">
+                    <div class="block-time">01:05 - 01:20 // 15 мин</div>
+                    <div class="block-title">Сайты под ключ без кода</div>
+                    <div class="block-number-overlay">04</div>
+                </div>
+
+                <!-- Блок 5 -->
+                <div class="timeline-block-card" id="t-block-5" onclick="selectBlock(5)">
+                    <div class="block-time">01:20 - 01:30 // 10 мин</div>
+                    <div class="block-title">Дорожная карта 500к+</div>
+                    <div class="block-number-overlay">05</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Двухколоночный дашборд -->
+        <section class="dashboard-layout">
+            
+            <!-- Левая колонка: Симулятор и Калькулятор -->
+            <div class="dashboard-control-panel">
+                
+                <!-- Симулятор -->
+                <div class="simulator-hud-card">
+                    <div class="hud-header">
+                        <span>Панель управления презентацией лектора</span>
+                        <div class="hud-status-blink" id="sim-blink-status">
+                            <div class="blink-dot"></div>
+                            <span id="sim-blink-text">РЕЖИМ: ОЖИДАНИЕ</span>
+                        </div>
+                    </div>
+                    <button class="btn-simulator-play" id="btn-play-sim" onclick="toggleSimulation()">
+                        ▶ Запустить демонстрационный таймлайн лекции
+                    </button>
+                </div>
+
+                <!-- Калькулятор ROI -->
+                <div class="calculator-card">
+                    <div class="hud-header">
+                        <span>Калькулятор окупаемости РОСТ (ROI)</span>
+                        <span style="color: var(--color-mint);">ЭФФЕКТИВНОСТЬ</span>
+                    </div>
+                    <p style="font-size: 12.5px; color: var(--color-muted); margin-top: 5px;">
+                        Введи стоимость своего часа работы, чтобы рассчитать экономику оцифровки личного времени.
+                    </p>
+
+                    <div class="retro-input-group">
+                        <label class="retro-input-label">Стоимость твоего часа работы:</label>
+                        <div class="retro-input-wrapper">
+                            <span class="retro-currency-prefix">₽/час</span>
+                            <input type="number" class="retro-input-field" id="user-hour-rate" value="1500" oninput="calculateROI()" min="1">
+                        </div>
+                    </div>
+
+                    <div class="calculator-results">
+                        <div class="calc-result-row">
+                            <span class="calc-result-label">Стоимость билета:</span>
+                            <span class="calc-result-value">2 000 ₽</span>
+                        </div>
+                        <div class="calc-result-row">
+                            <span class="calc-result-label">Сбереженное время в день:</span>
+                            <span class="calc-result-value">2 часа</span>
+                        </div>
+                        <div class="calc-result-row" style="border-top: 1px solid var(--color-border); padding-top: 8px; margin-top: 4px;">
+                            <span class="calc-result-label" style="font-weight: 600; color: var(--color-white);">Финансовая выгода в день:</span>
+                            <span class="calc-result-value highlight-mint" id="calc-day-profit">3 000 ₽</span>
+                        </div>
+                        <div class="calc-result-row">
+                            <span class="calc-result-label" style="font-weight: 600; color: var(--color-white);">Инвестиции окупятся за:</span>
+                            <span class="calc-result-value highlight-mint" id="calc-days-payback">0.7 дня</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Правая колонка: Детальная смысловая панель -->
+            <div class="dashboard-detail-panel" id="detail-panel-box">
+                <div class="detail-time-header" id="detail-time-range">00:00 - 00:15 // 15 минут</div>
+                <h2 class="detail-title-heading" id="detail-title">1. Разоблачение хайпа и Твердый стек</h2>
+                
+                <!-- Смысловое ядро -->
+                <div class="detail-block-row">
+                    <span class="detail-block-label">Что даем людям (Смысловое ядро)</span>
+                    <ul class="detail-list" id="detail-values-list">
+                        <li>Полный разбор ключевого стека нейросетей: Gemini, ChatGPT и DeepSeek.</li>
+                        <li>Критерии фильтрации 95% бесполезных развлекательных сетей.</li>
+                        <li>Почему стандартные промпты из интернета не работают для бизнеса.</li>
+                        <li>Внедрение принципа «Твердого ИИ»: только то, что сохраняет время и приносит деньги.</li>
+                    </ul>
+                </div>
+
+                <!-- Живой пример -->
+                <div class="detail-block-row">
+                    <span class="detail-block-label">Живой пример на ходу</span>
+                    <div class="detail-scenario-text" id="detail-scenario">
+                        «Собственник тратит 3 часа на ручной перевод сырых регламентов застройщика СУ10. ИИ-помощник выполняет экспресс-анализ SLA и находит 3 юридические нестыковки в договоре ровно за 45 секунд.»
+                    </div>
+                </div>
+
+                <!-- Цифровой актив -->
+                <div class="detail-block-row">
+                    <span class="detail-block-label">Цифровой актив участника</span>
+                    <div class="digital-asset-card" id="detail-asset">---
+вид: стек
+промпт: базовый
+---
+# ⚙️ Базовый промпт анализа договоров
+* [x] Настройка ИИ-советника под регламенты СУ10.
+* [x] Чек-лист проверки SLA партнеров.</div>
+                </div>
+
+                <!-- Obsidian Индикатор -->
+                <div class="detail-block-row">
+                    <span class="detail-block-label">Заполняемый квадрант Второго Мозга</span>
+                    <div class="detail-graph-indicator">
+                        <div class="folder-node-indicator" id="ind-business">
+                            <div class="folder-node-dot"></div>
+                            <span>1. Бизнес</span>
+                        </div>
+                        <div class="folder-node-indicator" id="ind-plan">
+                            <div class="folder-node-dot"></div>
+                            <span>2. План</span>
+                        </div>
+                        <div class="folder-node-indicator" id="ind-clone">
+                            <div class="folder-node-dot"></div>
+                            <span>3. Мой клон</span>
+                        </div>
+                        <div class="folder-node-indicator" id="ind-mastery">
+                            <div class="folder-node-dot"></div>
+                            <span>4. Мастерство</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA бронирования -->
+        <section class="booking-cta-section">
+            <h2 class="booking-title">Готов забронировать место на мастер-класс?</h2>
+            <p class="booking-text">
+                Инвестируй 1.5 часа практической проработки на интенсиве, чтобы сэкономить сотни часов рутинной работы твоей команды и оцифровать бизнес под личную свободу. Количество мест строго ограничено (всего 15 участников).
+            </p>
+            <div class="booking-btn-row">
+                <a href="https://t.me/your_telegram_username" class="btn-action btn-accent" target="_blank">Написать Антону в Телеграм</a>
+                <a href="file:///Users/anton_tsoy/Desktop/Обсидиан/html/методология-РОСТ-2-сайт.html" class="btn-action btn-outline">Симулятор Телеграм-бота</a>
+            </div>
+        </section>
+
+        <footer>
+            © 2026 АВТОНОМНАЯ ЭКОСИСТЕМА РОСТ - ДЛЯ ПРЕДПРИНИМАТЕЛЕЙ
+        </footer>
+    </div>
+
+    <!-- Скрипты управления -->
+    <script>
+        // Данные блоков мастер-класса
+        const blocksData = {
+            1: {
+                timeRange: "00:00 - 00:15 // 15 минут",
+                title: "1. Разоблачение хайпа и Твердый стек",
+                values: [
+                    "Детальный разбор ключевого рабочего стека: Gemini, ChatGPT и DeepSeek.",
+                    "Критерии фильтрации 95% бесполезных развлекательных нейросетей.",
+                    "Почему стандартные готовые промпты из интернета бесполезны для реального бизнеса.",
+                    "Внедрение принципа «Твердого ИИ»: только то, что сохраняет время и приносит деньги."
+                ],
+                scenario: "«Вместо 3 часов ручного анализа документов, ИИ-советник выполняет экспресс-анализ договора, вычленяет SLA партнерской сети и находит 3 скрытые нестыковки за 45 секунд.»",
+                asset: `---
+вид: стек
+роль: базовый анализ
+---
+# ⚙️ Базовый промпт анализа договоров застройщика
+* Настройка ИИ-анализа под параметры ЖК «Центральный Парк».
+* Ссылка на регламент: [[1. Бизнес/07_network/su10-partners-rules]]`,
+                activeFolders: ["business"]
+            },
+            2: {
+                timeRange: "00:15 - 00:40 // 25 минут",
+                title: "2. Архитектура «Второго мозга» собственника",
+                values: [
+                    "Оцифровка сырых мыслей, задач и регламентов на ходу через обычный голос в Телеграм.",
+                    "Внутреннее устройство базы знаний: четыре папки РОСТ (Бизнес, План, Мой клон, Мастерство).",
+                    "Разделение информации: как держать фокус и отсекать «воду» через черновики raw.",
+                    "Демонстрация работы автономного ИИ-ассистента в реальном времени."
+                ],
+                scenario: "«Ты едешь в машине со встречи, наговариваешь боту идею новой услуги за 150к руб и ТЗ для ассистента. ИИ сам раскладывает регламент в Бизнес, а задачу - во Входящие задачи в План.»",
+                asset: `---
+вид: база знаний
+папки: РОСТ
+---
+# 🧠 Шаблон оцифровки голосовых заметок
+* Устранение словесного мусора и структурирование ИИ.
+* Ссылка на методику: [[3. Мой клон/методология-РОСТ-2]]`,
+                activeFolders: ["clone", "plan"]
+            },
+            3: {
+                timeRange: "00:40 - 01:05 // 25 минут",
+                title: "3. Работа с командой, регламентами и SLA",
+                values: [
+                    "Как быстро оцифровать и автоматизировать длинные регламенты на основе ошибок команды.",
+                    "Разработка автоматических ТЗ для ассистента за 2 минуты.",
+                    "Контроль соблюдения нормативов работы менеджеров по продажам (SLA 15 минут).",
+                    "Оцифровка личного времени: переход от ручного тушения пожаров к системным регламентам."
+                ],
+                scenario: "«Менеджер ответил клиенту через 3 часа, сделка сорвалась. Ты наговариваешь регламент 15 минут в Телеграм-бот, ИИ создает жесткий стандарт в Мастерство и ставит задачу контроля.»",
+                asset: `---
+тип: стандарт
+раздел: Мастерство
+SLA: 15 минут
+---
+# ⚡ Регламент обработки входящих запросов
+* Контроль скорости реакции менеджеров.
+* Ссылка на оцифровку: [[СУ10/06. Регламент и Алгоритм Трейд-ин для СУ10]]`,
+                activeFolders: ["mastery", "plan"]
+            },
+            4: {
+                timeRange: "01:05 - 01:20 // 15 минут",
+                title: "4. Создание сайтов и приложений без разработчиков",
+                values: [
+                    "Быстрый и дешевый запуск лендингов, визиток и презентаций без программистов.",
+                    "Использование ИИ-генераторов для моментальной проверки гипотез и оцифровки офферов.",
+                    "Как запустить рабочий прототип веб-страницы за 5 минут, сэкономив до 100 000 ₽ на веб-студии.",
+                    "Практический разбор инструментов быстрой сборки."
+                ],
+                scenario: "«Для запуска новой партнерской программы СУ10 вместо 2 недель ожидания дизайнеров, ты собираешь интерактивный одностраничник презентации за 10 минут прямо во время лекции.»",
+                asset: `---
+тип: веб-прототип
+сервис: HTML/CSS
+---
+# 🌐 Код лендинга партнерской программы СУ10
+* Ссылка на интерактивную презентацию: [[методология-РОСТ-2-сайт.html]]`,
+                activeFolders: ["business", "mastery"]
+            },
+            5: {
+                timeRange: "01:20 - 01:30 // 10 минут",
+                title: "5. Финал: Дорожная карта на 500к+ рублей в месяц",
+                values: [
+                    "Пошаговый разбор бизнес-моделей участников мастер-класса в реальном времени.",
+                    "Сборка личной дорожной карты оцифровки времени собственника.",
+                    "Условия личного B2B-консалтинга и внедрения автономной экосистемы под ключ за 100к ₽.",
+                    "Сессия вопросов и ответов (Q&A) и бронирование мест."
+                ],
+                scenario: "«Собственник внедряет оцифровку по системе РОСТ, вычищает 20 часов рутины в неделю, настраивает партнерский канал и выходит на стабильный доход 500к+ руб без операционки.»",
+                asset: `---
+тип: дорожная карта
+цель: 500k+ руб/мес
+---
+# 📈 Стратегический план развития Второго Мозга
+* Личный B2B-консалтинг и сборка под ключ.
+* Ссылка на дашборд: [[1. Бизнес/00-dashboard]]`,
+                activeFolders: ["business", "plan", "clone", "mastery"]
+            }
+        };
+
+        let activeBlockId = 1;
+        let isSimulating = false;
+        let simTime = 0; // в секундах (всего 90 минут = 90 секунд симуляции)
+        let simInterval = null;
+
+        // Выбор блока по клику
+        function selectBlock(id) {
+            if (isSimulating) return; // во время симуляции клики заблокированы
+            setActiveBlockUI(id);
+        }
+
+        function setActiveBlockUI(id) {
+            activeBlockId = id;
+            const c = blocksData[id];
+
+            // Подсвечиваем активный блок на таймлайне
+            for (let i = 1; i <= 5; i++) {
+                const card = document.getElementById(`t-block-${i}`);
+                if (i === id) {
+                    card.classList.add('active-now');
+                } else {
+                    card.classList.remove('active-now');
+                }
+            }
+
+            // Добавляем эффект пульсирующего свечения при смене информации
+            const detailPanel = document.getElementById('detail-panel-box');
+            detailPanel.classList.remove('glowing-transition');
+            void detailPanel.offsetWidth; // Триггер перерисовки
+            detailPanel.classList.add('glowing-transition');
+
+            // Обновляем текстовые поля панели деталей
+            document.getElementById('detail-time-range').textContent = c.timeRange;
+            document.getElementById('detail-title').textContent = c.title;
+            document.getElementById('detail-scenario').textContent = c.scenario;
+            document.getElementById('detail-asset').textContent = c.asset;
+
+            // Обновляем список смыслового ядра
+            const listEl = document.getElementById('detail-values-list');
+            listEl.innerHTML = "";
+            c.values.forEach(v => {
+                const li = document.createElement('li');
+                li.className = "detail-list-item";
+                li.textContent = v;
+                listEl.appendChild(li);
+            });
+
+            // Обновляем индикаторы Obsidian-папок
+            const folders = ["business", "plan", "clone", "mastery"];
+            folders.forEach(f => {
+                const ind = document.getElementById(`ind-${f}`);
+                if (c.activeFolders.includes(f)) {
+                    ind.classList.add('active');
+                } else {
+                    ind.classList.remove('active');
+                }
+            });
+
+            // Обновляем текстовые часы и прогрессбар
+            const timeMap = { 1: "00:00", 2: "00:15", 3: "00:40", 4: "01:05", 5: "01:20" };
+            const progressMap = { 1: 0, 2: 17, 3: 45, 4: 72, 5: 88 };
+            
+            document.getElementById('sim-time-display').textContent = timeMap[id];
+            document.getElementById('sim-progress-bar').style.width = `${progressMap[id]}%`;
+        }
+
+        // Симулятор прогресса
+        function toggleSimulation() {
+            const btn = document.getElementById('btn-play-sim');
+            const blinkStatus = document.getElementById('sim-blink-status');
+            const blinkText = document.getElementById('sim-blink-text');
+
+            if (isSimulating) {
+                // Останавливаем симуляцию
+                clearInterval(simInterval);
+                isSimulating = false;
+                btn.classList.remove('playing');
+                btn.textContent = "▶ Запустить демонстрационный таймлайн лекции";
+                blinkStatus.classList.remove('active');
+                blinkText.textContent = "РЕЖИМ: ОЖИДАНИЕ";
+            } else {
+                // Запускаем симуляцию
+                isSimulating = true;
+                simTime = 0;
+                btn.classList.add('playing');
+                btn.textContent = "❚❚ Остановить таймлайн лекции";
+                blinkStatus.classList.add('active');
+                blinkText.textContent = "РЕЖИМ: ИДЕТ ЛЕКЦИЯ";
+
+                // Сбрасываем карточки
+                document.querySelectorAll('.timeline-block-card').forEach(c => c.classList.remove('completed'));
+
+                simInterval = setInterval(() => {
+                    simTime++;
+                    updateSimulationTime(simTime);
+
+                    if (simTime >= 90) {
+                        clearInterval(simInterval);
+                        isSimulating = false;
+                        btn.classList.remove('playing');
+                        btn.textContent = "▶ Запустить демонстрационный таймлайн лекции";
+                        blinkStatus.classList.remove('active');
+                        blinkText.textContent = "ЛЕКЦИЯ ЗАВЕРШЕНА";
+                        
+                        // Маркируем все как пройденное
+                        document.querySelectorAll('.timeline-block-card').forEach(c => c.classList.add('completed'));
+                    }
+                }, 100); // 100ms на каждую виртуальную минуту (всего 9 секунд)
+            }
+        }
+
+        function updateSimulationTime(t) {
+            // Рассчитываем строковое время
+            let hours = Math.floor(t / 60);
+            let mins = t % 60;
+            let hStr = hours < 10 ? `0${hours}` : hours;
+            let mStr = mins < 10 ? `0${mins}` : mins;
+            
+            document.getElementById('sim-time-display').textContent = `${hStr}:${mStr}`;
+            document.getElementById('sim-progress-bar').style.width = `${(t / 90) * 100}%`;
+
+            // Определяем, в какой блок попадает время, и переключаем UI
+            let currentBlock = 1;
+            if (t >= 0 && t < 15) {
+                currentBlock = 1;
+            } else if (t >= 15 && t < 40) {
+                currentBlock = 2;
+                markCompletedBlocks([1]);
+            } else if (t >= 40 && t < 65) {
+                currentBlock = 3;
+                markCompletedBlocks([1, 2]);
+            } else if (t >= 65 && t < 80) {
+                currentBlock = 4;
+                markCompletedBlocks([1, 2, 3]);
+            } else if (t >= 80 && t <= 90) {
+                currentBlock = 5;
+                markCompletedBlocks([1, 2, 3, 4]);
+            }
+
+            if (currentBlock !== activeBlockId) {
+                setActiveBlockUI(currentBlock);
+            }
+        }
+
+        function markCompletedBlocks(ids) {
+            ids.forEach(id => {
+                document.getElementById(`t-block-${id}`).classList.add('completed');
+            });
+        }
+
+        // Калькулятор окупаемости ROI
+        function calculateROI() {
+            const hourRateInput = document.getElementById('user-hour-rate');
+            let hourRate = parseFloat(hourRateInput.value);
+
+            if (isNaN(hourRate) || hourRate < 1) {
+                hourRate = 0;
+            }
+
+            // Мастер-класс экономит 2 часа в день
+            const dayProfit = hourRate * 2;
+            // Стоимость билета 2000 руб
+            const ticketPrice = 2000;
+            const paybackDays = dayProfit > 0 ? (ticketPrice / dayProfit) : 0;
+
+            document.getElementById('calc-day-profit').textContent = `${dayProfit.toLocaleString()} ₽`;
+            document.getElementById('calc-days-payback').textContent = paybackDays > 0 ? `${paybackDays.toFixed(1)} дня` : `0 дней`;
+        }
+
+        // Инициализация калькулятора при запуске
+        calculateROI();
+    </script>
+</body>
+</html>

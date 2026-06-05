@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Старт для новичка — Презентация Эксперт Сити</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --bg-main: #060813;
+            --bg-card: rgba(13, 17, 39, 0.7);
+            --bg-card-hover: rgba(22, 28, 61, 0.85);
+            --border-glow: rgba(0, 82, 255, 0.2);
+            --border-glow-success: rgba(0, 229, 163, 0.2);
+            
+            --color-primary: #0052FF;
+            --color-primary-glow: rgba(0, 82, 255, 0.4);
+            --color-secondary: #7000FF;
+            --color-accent: #00E5A3;
+            --color-accent-glow: rgba(0, 229, 163, 0.3);
+            --color-warning: #FFB300;
+            --color-danger: #FF3B30;
+            --color-text-main: #F3F4F6;
+            --color-text-muted: #9CA3AF;
+            
+            --glass-bg: rgba(9, 11, 28, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--color-text-main);
+            min-height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 82, 255, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(112, 0, 255, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(0, 229, 163, 0.04) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Header Styling */
+        header {
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+            background: rgba(6, 8, 19, 0.6);
+            backdrop-filter: blur(15px);
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px var(--color-primary-glow);
+        }
+
+        .logo-icon i {
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .logo-text h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #FFFFFF, #B9CDFF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-text p {
+            font-size: 10px;
+            color: var(--color-accent);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            margin-top: 1px;
+        }
+
+        .presentation-title-badge {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--color-text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .presentation-title-badge strong {
+            color: #FFFFFF;
+        }
+
+        /* Presentation Workspace Layout */
+        .workspace {
+            flex: 1;
+            display: flex;
+            position: relative;
+            height: calc(100vh - 81px);
+        }
+
+        /* Left Sidebar - Navigation */
+        .sidebar {
+            width: 320px;
+            border-right: 1px solid var(--glass-border);
+            background: rgba(6, 8, 19, 0.4);
+            backdrop-filter: blur(10px);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            overflow-y: auto;
+            z-index: 10;
+        }
+
+        .sidebar h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--color-text-muted);
+            font-weight: 700;
+            padding-left: 10px;
+        }
+
+        .slide-nav-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            list-style: none;
+        }
+
+        .slide-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            border: 1px solid transparent;
+            font-size: 13.5px;
+            font-weight: 500;
+            color: var(--color-text-muted);
+            text-align: left;
+            background: transparent;
+            width: 100%;
+        }
+
+        .slide-nav-item:hover {
+            background: rgba(255, 255, 255, 0.03);
+            color: #FFFFFF;
+        }
+
+        .slide-nav-item.active {
+            background: rgba(0, 82, 255, 0.08);
+            border-color: rgba(0, 82, 255, 0.25);
+            color: #FFFFFF;
+            font-weight: 600;
+        }
+
+        .slide-nav-num {
+            font-family: 'Outfit', sans-serif;
+            font-size: 12px;
+            background: rgba(255, 255, 255, 0.06);
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text-muted);
+            flex-shrink: 0;
+            transition: var(--transition-smooth);
+        }
+
+        .slide-nav-item.active .slide-nav-num {
+            background: var(--color-primary);
+            color: #FFFFFF;
+            box-shadow: 0 0 10px rgba(0, 82, 255, 0.3);
+        }
+
+        /* Slide Viewer Container */
+        .viewer {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        /* Slides Wrapper */
+        .slides-container {
+            width: 100%;
+            max-width: 1050px;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* General Slide Styling */
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(30px) scale(0.98);
+            transition: 
+                opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 1;
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0) scale(1);
+            z-index: 5;
+        }
+
+        /* Slide Content Structures */
+        .slide-header {
+            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .slide-subtitle {
+            font-size: 11px;
+            color: var(--color-accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .slide-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 34px;
+            font-weight: 800;
+            background: linear-gradient(to right, #FFFFFF, #B9CDFF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .slide-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Grid layouts inside slides */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .flex-col {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Interactive Premium Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 24px;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .card:hover {
+            background: var(--bg-card-hover);
+            border-color: rgba(0, 82, 255, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 82, 255, 0.1);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, transparent, transparent);
+            transition: var(--transition-smooth);
+        }
+
+        .card:hover::before {
+            background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-accent);
+            margin-bottom: 16px;
+            transition: var(--transition-smooth);
+        }
+
+        .card:hover .card-icon {
+            background: rgba(0, 82, 255, 0.15);
+            border-color: rgba(0, 82, 255, 0.3);
+            color: #FFFFFF;
+            box-shadow: 0 0 15px rgba(0, 82, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .card-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 8px;
+        }
+
+        .card-desc {
+            font-size: 13px;
+            color: var(--color-text-muted);
+            line-height: 1.6;
+        }
+
+        /* Specific Slide Designs */
+        /* Slide 1 - Title slide */
+        .intro-slide {
+            text-align: center;
+            align-items: center;
+        }
+
+        .intro-giga-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 54px;
+            font-weight: 800;
+            line-height: 1.15;
+            background: linear-gradient(135deg, #FFFFFF 30%, #B9CDFF 70%, #0052FF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+            letter-spacing: -1.5px;
+        }
+
+        .intro-manifest-card {
+            background: rgba(20, 24, 43, 0.5);
+            border: 1px solid rgba(0, 82, 255, 0.15);
+            border-radius: 24px;
+            padding: 30px;
+            max-width: 680px;
+            margin: 30px auto 0 auto;
+            backdrop-filter: blur(15px);
+            position: relative;
+        }
+
+        .intro-manifest-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(0, 82, 255, 0.3), rgba(112, 0, 255, 0.1), transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .intro-manifest-tag {
+            font-family: 'Outfit', sans-serif;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--color-accent);
+            font-weight: 800;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .intro-manifest-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 24px;
+            font-weight: 500;
+            line-height: 1.4;
+            color: #FFFFFF;
+        }
+
+        .intro-manifest-author {
+            font-size: 13px;
+            color: var(--color-text-muted);
+            margin-top: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Slide 3 - Calculator Slide */
+        .calculator-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.1fr;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .calc-panel {
+            background: rgba(13, 17, 39, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .calc-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .calc-input-group label {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--color-text-muted);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .calc-input-group label span {
+            color: var(--color-accent);
+        }
+
+        .calc-range {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+            transition: background 0.3s;
+        }
+
+        .calc-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--color-accent);
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--color-accent-glow);
+            transition: transform 0.2s;
+        }
+
+        .calc-range::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .calc-metrics-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 16px;
+        }
+
+        .calc-metric-box {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .calc-metric-val {
+            font-family: 'Outfit', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        .calc-metric-lbl {
+            font-size: 11px;
+            color: var(--color-text-muted);
+            margin-top: 4px;
+        }
+
+        /* Interactive Funnel Visualization */
+        .funnel-visual {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+            padding: 10px 0;
+        }
+
+        .funnel-stage {
+            display: flex;
+            align-items: center;
+            position: relative;
+            background: linear-gradient(to right, rgba(0, 82, 255, 0.03), rgba(0, 82, 255, 0.15));
+            border: 1px solid rgba(0, 82, 255, 0.15);
+            border-radius: 10px;
+            padding: 14px 20px;
+            transition: var(--transition-smooth);
+            overflow: hidden;
+        }
+
+        .funnel-stage::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--color-primary);
+        }
+
+        .funnel-stage:nth-child(2) {
+            width: 90%;
+            margin: 0 auto;
+            background: linear-gradient(to right, rgba(112, 0, 255, 0.03), rgba(112, 0, 255, 0.15));
+            border-color: rgba(112, 0, 255, 0.15);
+        }
+        .funnel-stage:nth-child(2)::before { background: var(--color-secondary); }
+
+        .funnel-stage:nth-child(3) {
+            width: 80%;
+            margin: 0 auto;
+            background: linear-gradient(to right, rgba(255, 179, 0, 0.03), rgba(255, 179, 0, 0.15));
+            border-color: rgba(255, 179, 0, 0.15);
+        }
+        .funnel-stage:nth-child(3)::before { background: var(--color-warning); }
+
+        .funnel-stage:nth-child(4) {
+            width: 70%;
+            margin: 0 auto;
+            background: linear-gradient(to right, rgba(0, 229, 163, 0.03), rgba(0, 229, 163, 0.15));
+            border-color: rgba(0, 229, 163, 0.15);
+        }
+        .funnel-stage:nth-child(4)::before { background: var(--color-accent); }
+
+        .funnel-stage:nth-child(5) {
+            width: 60%;
+            margin: 0 auto;
+            background: linear-gradient(to right, rgba(0, 229, 163, 0.08), rgba(0, 229, 163, 0.25));
+            border-color: rgba(0, 229, 163, 0.3);
+            box-shadow: 0 0 15px rgba(0, 229, 163, 0.1);
+        }
+        .funnel-stage:nth-child(5)::before { background: var(--color-accent); }
+
+        .funnel-stage-info {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            align-items: center;
+        }
+
+        .funnel-stage-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .funnel-stage-name i {
+            font-size: 14px;
+            color: var(--color-text-muted);
+        }
+
+        .funnel-stage-val {
+            font-family: 'Outfit', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        .funnel-stage-conv {
+            font-size: 10px;
+            color: var(--color-text-muted);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 8px;
+        }
+
+        /* Slide 4 & 5 - Channel Tab Layout */
+        .tab-slide-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .tab-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 14px 20px;
+            color: var(--color-text-muted);
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #FFFFFF;
+        }
+
+        .tab-btn.active {
+            background: rgba(0, 82, 255, 0.08);
+            border-color: rgba(0, 82, 255, 0.3);
+            color: #FFFFFF;
+        }
+
+        .tab-btn i {
+            font-size: 14px;
+            transition: var(--transition-smooth);
+        }
+
+        .tab-btn.active i {
+            color: var(--color-accent);
+            transform: translateX(3px);
+        }
+
+        .tab-content-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 30px;
+            min-height: 380px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative;
+        }
+
+        .tab-content {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: flex;
+        }
+
+        .badge-tab {
+            font-size: 10px;
+            background: rgba(0, 229, 163, 0.1);
+            color: var(--color-accent);
+            border: 1px solid rgba(0, 229, 163, 0.2);
+            padding: 4px 10px;
+            border-radius: 20px;
+            width: fit-content;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+
+        .tab-heading {
+            font-family: 'Outfit', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        .tab-description {
+            font-size: 13.5px;
+            line-height: 1.6;
+            color: var(--color-text-muted);
+        }
+
+        .script-box {
+            background: rgba(0, 0, 0, 0.25);
+            border-left: 3px solid var(--color-primary);
+            border-radius: 8px;
+            padding: 16px 20px;
+            position: relative;
+        }
+
+        .script-box::after {
+            content: 'Скрипт входа';
+            position: absolute;
+            top: -10px;
+            left: 15px;
+            background: var(--color-primary);
+            color: white;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .script-text {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #FFFFFF;
+            font-style: italic;
+        }
+
+        /* Slide 7 - Step list styling */
+        .step-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            position: relative;
+        }
+
+        .step-list::before {
+            content: '';
+            position: absolute;
+            top: 25px;
+            left: 27px;
+            width: 2px;
+            height: calc(100% - 50px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .step-item {
+            display: flex;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 16px 20px;
+            align-items: center;
+            transition: var(--transition-smooth);
+        }
+
+        .step-item:hover {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(0, 82, 255, 0.15);
+            transform: translateX(5px);
+        }
+
+        .step-num {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(0, 82, 255, 0.1);
+            border: 1px solid rgba(0, 82, 255, 0.2);
+            color: var(--color-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Outfit', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            flex-shrink: 0;
+            z-index: 2;
+        }
+
+        .step-item:hover .step-num {
+            background: var(--color-primary);
+            color: white;
+            box-shadow: 0 0 10px rgba(0, 82, 255, 0.3);
+        }
+
+        .step-info h4 {
+            font-size: 14.5px;
+            font-weight: 600;
+            color: #FFFFFF;
+            margin-bottom: 4px;
+        }
+
+        .step-info p {
+            font-size: 12.5px;
+            color: var(--color-text-muted);
+            line-height: 1.5;
+        }
+
+        /* Alert blocks */
+        .alert-card {
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 16px;
+            padding: 18px 24px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .alert-card i {
+            color: var(--color-danger);
+            font-size: 20px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .alert-info h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 4px;
+        }
+
+        .alert-info p {
+            font-size: 12px;
+            color: var(--color-text-muted);
+            line-height: 1.5;
+        }
+
+        /* Slide 9 - Fisherman vs Strategist contrast slider */
+        .versus-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .vs-card {
+            background: rgba(13, 17, 39, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transition: var(--transition-smooth);
+            position: relative;
+        }
+
+        .vs-card.fisherman {
+            border-color: rgba(239, 68, 68, 0.15);
+        }
+
+        .vs-card.strategist {
+            border-color: rgba(0, 229, 163, 0.15);
+            background: linear-gradient(135deg, rgba(13, 17, 39, 0.5) 0%, rgba(0, 82, 255, 0.05) 100%);
+        }
+
+        .vs-card.fisherman:hover {
+            border-color: rgba(239, 68, 68, 0.4);
+            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.05);
+            transform: translateY(-3px);
+        }
+
+        .vs-card.strategist:hover {
+            border-color: rgba(0, 229, 163, 0.4);
+            box-shadow: 0 10px 30px rgba(0, 229, 163, 0.08);
+            transform: translateY(-3px);
+        }
+
+        .vs-badge {
+            font-family: 'Outfit', sans-serif;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 20px;
+            width: fit-content;
+        }
+
+        .fisherman .vs-badge {
+            background: rgba(239, 68, 68, 0.1);
+            color: #FF3B30;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .strategist .vs-badge {
+            background: rgba(0, 229, 163, 0.1);
+            color: var(--color-accent);
+            border: 1px solid rgba(0, 229, 163, 0.2);
+        }
+
+        .vs-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .vs-desc {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--color-text-muted);
+        }
+
+        .vs-points {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 16px;
+        }
+
+        .vs-point {
+            display: flex;
+            gap: 10px;
+            font-size: 12.5px;
+            line-height: 1.45;
+        }
+
+        .vs-point i {
+            font-size: 14px;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .fisherman .vs-point i { color: var(--color-danger); }
+        .strategist .vs-point i { color: var(--color-accent); }
+
+        /* Slide 10 - Ready screen */
+        .action-layout {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .action-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 30px rgba(0, 82, 255, 0.3);
+            color: #FFFFFF;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .action-button {
+            background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            border-radius: 16px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            box-shadow: 0 8px 25px rgba(0, 82, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .action-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 82, 255, 0.5);
+        }
+
+        .action-button:active {
+            transform: translateY(-1px);
+        }
+
+        /* Footer Controls */
+        footer {
+            padding: 20px 40px;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(6, 8, 19, 0.5);
+            backdrop-filter: blur(15px);
+            z-index: 100;
+        }
+
+        .footer-info {
+            font-size: 12px;
+            color: var(--color-text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: var(--color-accent);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .progress-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .progress-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: var(--transition-smooth);
+        }
+
+        .progress-dot.active {
+            background: var(--color-accent);
+            width: 20px;
+            border-radius: 4px;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .sidebar {
+                display: none;
+            }
+            header {
+                padding: 15px 20px;
+            }
+            footer {
+                padding: 15px 20px;
+            }
+            .viewer {
+                padding: 20px;
+            }
+            .slide-title {
+                font-size: 26px;
+            }
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            .grid-2, .calculator-layout, .tab-slide-layout, .versus-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="logo-container">
+            <div class="logo-icon">
+                <i data-lucide="building-2"></i>
+            </div>
+            <div class="logo-text">
+                <h1>ЭКСПЕРТ СИТИ</h1>
+                <p>Академия Новостроек</p>
+            </div>
+        </div>
+        
+        <div class="presentation-title-badge">
+            <i data-lucide="play" style="color: var(--color-accent); width: 14px; height: 14px;"></i>
+            <span>Презентация: <strong>Быстрый старт для новичка</strong></span>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <div class="workspace">
+        
+        <!-- Sidebar - Slide List -->
+        <aside class="sidebar">
+            <h3>Слайды презентации</h3>
+            <ul class="slide-nav-list" id="slide-nav">
+                <!-- Javascript will populate this -->
+            </ul>
+        </aside>
+
+        <!-- Viewer -->
+        <main class="viewer">
+            <div class="slides-container" id="slides-wrapper">
+                
+                <!-- Slide 1: Welcome -->
+                <section class="slide active" data-nav-name="Старт и ДНК">
+                    <div class="slide-body intro-slide">
+                        <div class="intro-giga-title">Быстрый старт в новостройках</div>
+                        <p style="color: var(--color-text-muted); font-size: 15px; max-width: 600px; line-height: 1.6; margin-bottom: 20px;">
+                            Пошаговое руководство для начинающих агентов: как зайти в первичный рынок с нуля, где искать клиентов и как закрыть сделки на первые 150 000+ рублей.
+                        </p>
+                        
+                        <div class="intro-manifest-card">
+                            <span class="intro-manifest-tag">Манифест программы</span>
+                            <div class="intro-manifest-text">«Я не продаю — я объясняю»</div>
+                            <div class="intro-manifest-author">Вектор развития Эксперт Сити: честность, аналитика и польза для клиента</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Slide 2: Why New Builds -->
+                <section class="slide" data-nav-name="Почему новостройки?">
+                    <div class="slide-header">
+                        <span class="slide-subtitle">Часть 1. Очевидный старт</span>
+                        <h2 class="slide-title">Почему Новостройки — это золотая жила?</h2>
+                    </div>
+                    <div class="slide-body">
+                        <div class="grid-3">
+                            <div class="card">
+                                <div class="card-icon"><i data-lucide="check-circle-2"></i></div>
+                                <h3 class="card-title">Бесплатно для клиента</h3>
+                                <p class="card-desc">Нашу работу на 100% оплачивает застройщик. Клиент получает экспертную аналитику без единого рубля комиссии. Это полностью стирает барьеры при общении!</p>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="card-icon"><i data-lucide="users-2"></i></div>
+                                <h3 class="card-title">Продают профи</h3>
+                                <p class="card-desc">Вам не нужно знать каждый кирпич. Офисы застройщика, шоу-румы и девелоперские презентаторы сделают 90% работы, когда вы просто приведете клиента.</p>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="card-icon"><i data-lucide="wallet"></i></div>
+                                <h3 class="card-title">Огромные чеки</h3>
+                                <p class="card-desc">Средний процент комиссии у застройщиков Уфы составляет от 3% до 5%. Сделки чистые, быстрые и юридически защищенные эскроу-счетами.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Slide 3: Math and Dynamic Calculator -->
+                <section class="slide" data-nav-name="Интерактивный расчет">
+                    <div class="slide-header">
+                        <span class="slide-subtitle">Часть 1. Калькулятор Дохода</span>
+                        <h2 class="slide-title">Математика твоего успеха</h2>
+                    </div>
+                    <div class="slide-body">
+                        <div class="calculator-layout">
+                            <div class="calc-panel">
+                                <h3 class="card-title" style="margin-bottom: 10px; display:flex; align-items:center; gap:8px;">
+                                    <i data-lucide="calculator" style="color:var(--color-accent)"></i> Настрой свою цель
+                                </h3>
+                                
+                                <div class="calc-input-group">
+                                    <label>Желаемый доход: <span id="val-income">150 000 руб.</span></label>
+                                    <input type="range" class="calc-range" id="range-income" min="50000" max="500000" step="25000" value="150000">
+                                </div>
+                                
+                                <div class="calc-input-group">
+                                    <label>Средний чек квартиры в Уфе: <span id="val-apartment">5 000 000 руб.</span></label>
+                                    <input type="range" class="calc-range" id="range-apartment" min="3000000" max="10000000" step="500000" value="5000000">
+                                </div>
+                                
+                                <div class="calc-metrics-row">
+                                    <div class="calc-metric-box">
+                                        <div class="calc-metric-val" id="res-partner-commission">200 000 ₽</div>
+                                        <div class="calc-metric-lbl">Комиссия ЖК (4%)</div>
+                                    </div>
+                                    <div class="calc-metric-box">
+                                        <div class="calc-metric-val" id="res-agent-share">100 000 ₽</div>
+                                        <div class="calc-metric-lbl">Твои 50% с одной сделки</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="funnel-visual">
+                                <div class="funnel-stage">
+                                    <div class="funnel-stage-info">
+                                        <span class="funnel-stage-name"><i data-lucide="phone-call"></i> Касания в месяц</span>
+                                        <span class="funnel-stage-val" id="funnel-contacts">150</span>
+                                    </div>
+                                </div>
+                                <div class="funnel-stage">
+                                    <div class="funnel-stage-info">
+                                        <span class="funnel-stage-name"><i data-lucide="message-square"></i> Квал-диалоги (30%)</span>
+                                        <span class="funnel-stage-val" id="funnel-dialogs">45</span>
+                                    </div>
+                                </div>
+                                <div class="funnel-stage">
+                                    <div class="funnel-stage-info">
+                                        <span class="funnel-stage-name"><i data-lucide="file-text"></i> Отправлено подборок (30%)</span>
+                                        <span class="funnel-stage-val" id="funnel-matches">14</span>
+                                    </div>
+                                </div>
+                                <div class="funnel-stage">
+                                    <div class="funnel-stage-info">
+                                        <span class="funnel-stage-name"><i data-lucide="calendar"></i> Встречи/Показы (40%)</span>
+                                        <span class="funnel-stage-val" id="funnel-meetings">6</span>
+                                    </div>
+                                </div>
+                                <div class="funnel-stage">
+                                    <div class="funnel-stage-info">
+                                        <span class="funnel-stage-name" style="font-weight:700;"><i data-lucide="trophy" style="color:var(--color-accent)"></i> СДЕЛКИ (30%)</span>
+                                        <span class="funnel-stage-val" style="color:var(--color-accent)" id="funnel-deals">2</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Slide 4: Two Groups of Channels -->
+                <section class="slide" data-nav-name="Где брать клиентов?">
+                    <div class="slide-header">
+                        <span class="slide-subtitle">Часть 2. Ключевая задача</span>
+                        <h2 class="slide-title">Главный Вызов: Где брать клиентов?</h2>
+                    </div>
+                    <div class="slide-body">
+                        <div class="grid-2">
+                            <div class="card" style="border-color: rgba(0, 82, 255, 0.25); background: linear-gradient(135deg, rgba(13, 17, 39, 0.7) 0%, rgba(0, 82, 255, 0.05) 100%);">
+                                <div class="card-icon" style="color: var(--color-primary)"><i data-lucide="zap"></i></div>
+                                <h3 class="card-title">Группа А: «Здесь и Сейчас»</h3>
+                                <p class="card-desc" style="margin-bottom:12px;">Инструменты мгновенного действия. Здесь нет скрытых алгоритмов алгоритмов — вы полностью управляете результатом через свою дисциплину:</p>
+                                <ul style="list-style: none; display:flex; flex-direction:column; gap:8px; font-size:12.5px; color: var(--color-text-muted)">
+                                    <li><i data-lucide="arrow-right" style="width:12px; display:inline; color:var(--color-primary); margin-right:6px;"></i> <strong>Холодные звонки</strong> — прозвон собственников на Авито</li>
+                                    <li><i data-lucide="arrow-right" style="width:12px; display:inline; color:var(--color-primary); margin-right:6px;"></i> <strong>Топ-100</strong> — ближний круг контактов в телефоне</li>
+                                    <li><i data-lucide="arrow-right" style="width:12px; display:inline; color:var(--color-primary); margin-right:6px;"></i> <strong>Рассылка с оффером</strong> — личные сообщения с выгодой</li>
+                                    <li><i data-lucide="arrow-right" style="width:12px; display:inline; color:var(--color-primary); margin-right:6px;"></i> <strong>Расклейка</strong> — локальное оффлайн-привлечение</li>
+                                    <li><i data-lucide="arrow-right" style="width:12px; display:inline; color:var(--color-primary); margin-right:6px;"></i> <strong>Переориентация на показе</strong> — со вторички на новостройки</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="card" style="border-color: rgba(112, 0, 255, 0.25); background: linear-gradient(135deg, rgba(13, 17, 39, 0.7) 0%, rgba(112, 0, 255, 0.05) 100%);">
+                                <div class="card-icon" style="color: var(--color-secondary)"><i data-lucide="trending-up"></i></div>
+                                <h3 class="card-title">Группа Б: «Системное Накопление»</h3>
+                                <p class="card-desc" style="margin-bottom:12px;">Твои долгосрочные активы. Работают медленнее, но со временем превратятся в систему, которая сама кормит без твоего активного вмешательства:</p>
+                                <ul style="list-style: none; display:flex; flex-direction:column; gap:8px; font-size:12.5px; color: var(--color-text-muted)">
+                                    <li><i data-lucide="arrow-right" style="width:12px; display:inline; color:var(--color-secondary); margin-right:6px;"></i> <strong>Trade-In (Продажа + Покупка)</strong> — замена вторички на новостройку</li>
+                                    <li><i data-lucide="arrow-right" style="width:12px; display:inline; color:var(--color-secondary); margin-right:6px;"></i> <strong>Сарафанное радио</strong> — рекомендации довольных клиентов</li>
+                                    <li><i data-lucide="arrow-right" style="width:12px; display:inline; color:var(--color-secondary); margin-right:6px;"></i> <strong>Сторителлинг в статусах</strong> — кейсы из вашей практики</li>
+                                    <li><i data-lucide="arrow-right" style="width:12px; display:inline; color:var(--color-secondary); margin-right:6px;"></i> <strong>Экспертный блог в Instagram</strong> — жизненные сценарии ЖК</li>
+                                    <li><i data-lucide="arrow-right" style="width:12px; display:inline; color:var(--color-secondary); margin-right:6px;"></i> <strong>Аналитический Telegram-канал</strong> — разборы для инвесторов</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Slide 5: Direct Action Details -->
+                <section class="slide" data-nav-name="Детали: Здесь и Сейчас">
+                    <div class="slide-header">
+                        <span class="slide-subtitle">Часть 2. Горячие лиды</span>
+                        <h2 class="slide-title">Каналы «Здесь и Сейчас» — Скрипты</h2>
+                    </div>
+                    <div class="slide-body">
+                        <div class="tab-slide-layout">
+                            <div class="tab-menu" id="now-tabs-menu">
+                                <button class="tab-btn active" onclick="switchNowTab(0)">Холодные звонки <i data-lucide="phone"></i></button>
+                                <button class="tab-btn" onclick="switchNowTab(1)">Ваш «Топ-100» <i data-lucide="users"></i></button>
+                                <button class="tab-btn" onclick="switchNowTab(2)">Рассылка с оффером <i data-lucide="send"></i></button>
+                                <button class="tab-btn" onclick="switchNowTab(3)">Переориентация <i data-lucide="refresh-cw"></i></button>
+                            </div>
+                            
+                            <div class="tab-content-panel" id="now-tabs-content">
+                                <!-- Tab 1 -->
+                                <div class="tab-content active">
+                                    <span class="badge-tab">Самый быстрый старт</span>
+                                    <h3 class="tab-heading">Холодные звонки по базам собственников</h3>
+                                    <p class="tab-description">Мы звоним продавцам вторичной недвижимости. Мы не предлагаем им услуги агента — мы предлагаем им аналитическое плечо для их дальнейшего шага (поскольку они продают квартиру с какой-то целью: расширение, инвестиции, переезд).</p>
+                                    <div class="script-box">
+                                        <p class="script-text">«Здравствуйте! Я вижу, вы продаете квартиру в этом районе. Вы планируете просто выйти в кэш или хотите расшириться? Сейчас застройщики запустили семейные лимиты с экономией переплаты до 1,5 млн. Я могу прислать вам расчеты, чтобы вы сравнили выгоду...»</p>
+                                    </div>
+                                </div>
+                                <!-- Tab 2 -->
+                                <div class="tab-content">
+                                    <span class="badge-tab">Горячее доверие</span>
+                                    <h3 class="tab-heading">Ваш «Топ-100» (Контакты в телефоне)</h3>
+                                    <p class="tab-description">Работа по вашему ближайшему кругу. Вы звоните не как спамер, а делитесь «информационной заботой» с близкими людьми — предупреждаете о глобальных изменениях на рынке (закрытие программ, новые ставки, лимиты).</p>
+                                    <div class="script-box">
+                                        <p class="script-text">«Привет! Слушай, я сейчас плотно занимаюсь новостройками Уфы. Вижу, что творится с семейными лимитами в банках — их закрывают один за другим. Если вы думали о расширении, давай я тебе чисто для информации скину расчеты без давления, пока всё не закрыли?»</p>
+                                    </div>
+                                </div>
+                                <!-- Tab 3 -->
+                                <div class="tab-content">
+                                    <span class="badge-tab">Простой запуск</span>
+                                    <h3 class="tab-heading">Точечная рассылка по контактам</h3>
+                                    <p class="tab-description">Простое техническое сообщение. Оффер должен содержать дефицит (ограничение времени/лимитов), твердую выгоду в цифрах и низкий, комфортный порог входа (запрос подборки в PDF).</p>
+                                    <div class="script-box">
+                                        <p class="script-text">«[Имя], привет! Сейчас застройщики запустили акцию: квартиры со ставкой 3.5%, где экономия на переплате по ипотеке выходит до 1.5 млн рублей. Есть классные планировки с комфортным платежом. Если актуально, пришлю расчеты и подборку в PDF?»</p>
+                                    </div>
+                                </div>
+                                <!-- Tab 4 -->
+                                <div class="tab-content">
+                                    <span class="badge-tab">Магия контраста</span>
+                                    <h3 class="tab-heading">Переориентация покупателя на показе</h3>
+                                    <p class="tab-description">Клиент пришел смотреть вторичный объект, но он ему не подошел. Не отпускайте его! Покажите ему разницу в ежемесячном платеже между высокой ставкой вторички и субсидированной ставкой новостройки.</p>
+                                    <div class="script-box">
+                                        <p class="script-text">«Я вижу, этот дом вам не подходит. Но судя по вашему бюджету, есть смысл сравнить этот вариант с новостройкой. Там за счет льготных программ платеж в месяц выйдет в 2 раза меньше при той же стоимости квартиры, плюс дом новый и чистый. Сравним?»</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Slide 6: Long Term Channels Details -->
+                <section class="slide" data-nav-name="Детали: Накопление">
+                    <div class="slide-header">
+                        <span class="slide-subtitle">Часть 2. Долгосрочные активы</span>
+                        <h2 class="slide-title">Каналы «Системного Накопления»</h2>
+                    </div>
+                    <div class="slide-body">
+                        <div class="tab-slide-layout">
+                            <div class="tab-menu" id="long-tabs-menu">
+                                <button class="tab-btn active" onclick="switchLongTab(0)">Trade-In (Обмен) <i data-lucide="arrow-left-right"></i></button>
+                                <button class="tab-btn" onclick="switchLongTab(1)">Сарафан / Рекомендации <i data-lucide="smile"></i></button>
+                                <button class="tab-btn" onclick="switchLongTab(2)">Сторителлинг в статусах <i data-lucide="instagram"></i></button>
+                                <button class="tab-btn" onclick="switchLongTab(3)">Умный Telegram <i data-lucide="message-circle"></i></button>
+                            </div>
+                            
+                            <div class="tab-content-panel" id="long-tabs-content">
+                                <!-- Tab 1 -->
+                                <div class="tab-content active">
+                                    <span class="badge-tab">Максимальный чек</span>
+                                    <h3 class="tab-heading">Параллельная цепочка «Продажа + Покупка»</h3>
+                                    <p class="tab-description">Собственник согласится продать свою старую квартиру только тогда, когда влюбится в то, что купит взамен. Не ждите продажи вторички — начинайте возить его по нативным экскурсиям в новостройки сразу. Это ускорит его решение о продаже старого фонда.</p>
+                                </div>
+                                <!-- Tab 2 -->
+                                <div class="tab-content">
+                                    <span class="badge-tab">Автопилот продаж</span>
+                                    <h3 class="tab-heading">Сарафанное радио (Система 3-х касаний)</h3>
+                                    <p class="tab-description">Сделка завершена, но работа продолжается. Внедрите систему постсопровождения: <strong>1-й месяц</strong> — звонок-забота о переезде, <strong>3-й месяц</strong> — поздравление с ремонтом, <strong>6-й месяц</strong> — предложение бонуса 10-15 тыс. руб. за рекомендацию.</p>
+                                </div>
+                                <!-- Tab 3 -->
+                                <div class="tab-content">
+                                    <span class="badge-tab">Информационный прогрев</span>
+                                    <h3 class="tab-heading">Сторителлинг в WhatsApp и Telegram статусах</h3>
+                                    <p class="tab-description">Показывайте не рендеры из интернета, а ваши живые рабочие будни. Выстраивайте драматургию: «С какими трудностями пришел клиент» → «Что именно мы сделали» → «Результат с цифрами и выгодой». Люди покупают безопасный путь.</p>
+                                </div>
+                                <!-- Tab 4 -->
+                                <div class="tab-content">
+                                    <span class="badge-tab">Аналитический фильтр</span>
+                                    <h3 class="tab-heading">Умный контент для рациональных инвесторов</h3>
+                                    <p class="tab-description">Telegram-канал — это площадка для тех, кто принимает решение умом, а не сердцем. Публикуйте расчеты доходности, таблицы сравнения ЖК, изменения в законах и инсайды о закрытых стартах продаж до их выхода на рынок.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Slide 7: Golden Rule (Diagnostics) -->
+                <section class="slide" data-nav-name="Алгоритм диагностики">
+                    <div class="slide-header">
+                        <span class="slide-subtitle">Часть 3. Золотое правило</span>
+                        <h2 class="slide-title">Как правильно работать с клиентом?</h2>
+                    </div>
+                    <div class="slide-body" style="gap:20px; display:flex; flex-direction:column;">
+                        <div class="step-list">
+                            <div class="step-item">
+                                <div class="step-num">1</div>
+                                <div class="step-info">
+                                    <h4>Финансовый аудит</h4>
+                                    <p>Выясняем: одобрена ли ипотека? В каком банке? Каковы условия (первоначальный взнос/ПВА, субсидии)? Есть ли отказы?</p>
+                                </div>
+                            </div>
+                            
+                            <div class="step-item">
+                                <div class="step-num">2</div>
+                                <div class="step-info">
+                                    <h4>Выбор финансового коридора</h4>
+                                    <p>Мы работаем только с теми ЖК, которые технически подходят под одобренные условия клиента (например, исключаем ЖК без ПВА, если банк этого не допускает).</p>
+                                </div>
+                            </div>
+                            
+                            <div class="step-item">
+                                <div class="step-num">3</div>
+                                <div class="step-info">
+                                    <h4>Подбор ЖК и презентация планировок (JTBD)</h4>
+                                    <p>Выбираем объекты на основе реального жизненного сценария клиента (Jobs To Be Done): сад, школа, двор без машин, близость к ВУЗу или инвесторская окупаемость.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="alert-card">
+                            <i data-lucide="alert-triangle"></i>
+                            <div class="alert-info">
+                                <h4>ФАТАЛЬНАЯ ОШИБКА НОВИЧКА: Начинать с подбора квартир, а не с финансов!</h4>
+                                <p>Если влюбить клиента в ЖК до финансовой диагностики, а банк потом откажет в ипотеке — клиент испытает огромное разочарование, сделка развалится, а вы потеряете время.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Slide 8: Tools of Success -->
+                <section class="slide" data-nav-name="Инструменты Агента">
+                    <div class="slide-header">
+                        <span class="slide-subtitle">Часть 4. Инструментарий</span>
+                        <h2 class="slide-title">Твой цифровой супер-офис в кармане</h2>
+                    </div>
+                    <div class="slide-body">
+                        <div class="grid-2">
+                            <div class="card">
+                                <div class="card-icon"><i data-lucide="smartphone"></i></div>
+                                <h3 class="card-title">TrendAgent и Nmarket</h3>
+                                <p class="card-desc">Риелторские агрегаторы с балансом всех квартир Уфы в реальном времени. Интерактивная карта, планировки, бронирование в 1 клик, ипотечный модуль и отслеживание вашей комиссии.</p>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="card-icon"><i data-lucide="brain"></i></div>
+                                <h3 class="card-title">ИИ-Помощники риелтора</h3>
+                                <p class="card-desc">Нейросети транскрибируют сложные звонки, автоматически составляют точечные PDF-подборки с плюсами и минусами, а также помогают мгновенно сгенерировать офферы для рассылки.</p>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="card-icon"><i data-lucide="book-open"></i></div>
+                                <h3 class="card-title">Личная «Библия Агента»</h3>
+                                <p class="card-desc">Твоя база знаний по ЖК Уфы. Начни с глубокого понимания наших флагманов продаж: <strong>ЖК Некрасовский</strong> (36 сделок в 2025 году), <strong>ЖК Атмосфера</strong>, <strong>ЖК Урбан Мартен</strong>, <strong>ЖК 8 Небо</strong>, <strong>ЖК Новаленд</strong>.</p>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="card-icon"><i data-lucide="database"></i></div>
+                                <h3 class="card-title">CRM-Система</h3>
+                                <p class="card-desc">Инструмент системности и дисциплины. Фиксация уникальности каждого клиента у застройщиков для автоматической защиты твоего партнерского вознаграждения.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Slide 9: Fisherman vs Strategist -->
+                <section class="slide" data-nav-name="Рыбак или Стратег?">
+                    <div class="slide-header">
+                        <span class="slide-subtitle">Часть 5. Твое мышление</span>
+                        <h2 class="slide-title">Кто ты: Агент-Рыбак или Агент-Стратег?</h2>
+                    </div>
+                    <div class="slide-body">
+                        <div class="versus-layout">
+                            <!-- Fisherman -->
+                            <div class="vs-card fisherman">
+                                <span class="vs-badge">Агент-Рыбак</span>
+                                <h3 class="vs-title">Стратегия надежды</h3>
+                                <p class="vs-desc">Надеется на погоду, настроение рынка и случай. Занимает пассивную позицию наблюдателя и не влияет на свой доход напрямую.</p>
+                                <ul class="vs-points">
+                                    <li class="vs-point"><i data-lucide="x"></i> Ждет, пока клиент позвонит сам</li>
+                                    <li class="vs-point"><i data-lucide="x"></i> Выставляет случайные безликие сторис ЖК</li>
+                                    <li class="vs-point"><i data-lucide="x"></i> Паникует при отказах и выгорает от стресса</li>
+                                    <li class="vs-point"><i data-lucide="x"></i> Имитирует бурную деятельность на месте</li>
+                                </ul>
+                            </div>
+                            
+                            <!-- Strategist -->
+                            <div class="vs-card strategist">
+                                <span class="vs-badge">Агент-Стратег</span>
+                                <h3 class="vs-title">Управление реальностью</h3>
+                                <p class="vs-desc">Понимает, что доход — это математическое следствие системных действий. Сам создает входящий поток и направляет события.</p>
+                                <ul class="vs-points">
+                                    <li class="vs-point"><i data-lucide="check"></i> Сам инициирует 10 холодных контактов каждый день</li>
+                                    <li class="vs-point"><i data-lucide="check"></i> Прорабатывает индивидуальные PDF-офферы под боли базы</li>
+                                    <li class="vs-point"><i data-lucide="check"></i> Воспринимает отказ как топливо антихрупкости</li>
+                                    <li class="vs-point"><i data-lucide="check"></i> Работает экологично, без фальшивых объявлений</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Slide 10: Action Plan -->
+                <section class="slide" data-nav-name="Экшен-план!">
+                    <div class="slide-body action-layout">
+                        <div class="action-icon"><i data-lucide="rocket"></i></div>
+                        <h2 class="slide-title" style="font-size:36px; background: linear-gradient(to right, #FFFFFF, var(--color-accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Твое первое задание на 5 минут</h2>
+                        <p style="color:var(--color-text-muted); font-size:14px; line-height:1.6; max-width:600px;">
+                            Хватит теории! Переходи к практике прямо сейчас. Твои первые деньги лежат на расстоянии одного звонка или сообщения.
+                        </p>
+                        
+                        <div class="card" style="width:100%; border-color: rgba(0, 229, 163, 0.2); background: rgba(0, 229, 163, 0.02);">
+                            <ul style="list-style:none; text-align:left; display:flex; flex-direction:column; gap:12px; font-size:13.5px; color: #FFFFFF;">
+                                <li style="display:flex; gap:10px; align-items:center;"><i data-lucide="check-square" style="color:var(--color-accent); flex-shrink:0;"></i> Открой телефонную книгу и выбери 10 контактов.</li>
+                                <li style="display:flex; gap:10px; align-items:center;"><i data-lucide="check-square" style="color:var(--color-accent); flex-shrink:0;"></i> Отправь им точечные сообщения с оффером «Информационная забота».</li>
+                                <li style="display:flex; gap:10px; align-items:center;"><i data-lucide="check-square" style="color:var(--color-accent); flex-shrink:0;"></i> Зафиксируй первые отклики и передай наставнику для совместной отработки!</li>
+                            </ul>
+                        </div>
+                        
+                        <button class="action-button" onclick="triggerConfetti()">
+                            Я готов стартовать! <i data-lucide="arrow-right"></i>
+                        </button>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer Controls -->
+    <footer>
+        <div class="footer-info" id="footer-slide-info">
+            Слайд 1 из 10
+        </div>
+        
+        <div class="controls">
+            <div class="progress-dots" id="progress-dots">
+                <!-- Javascript will populate this -->
+            </div>
+            
+            <button class="nav-btn" id="prev-btn" onclick="navigateSlide(-1)">
+                <i data-lucide="chevron-left"></i>
+            </button>
+            <button class="nav-btn" id="next-btn" onclick="navigateSlide(1)">
+                <i data-lucide="chevron-right"></i>
+            </button>
+        </div>
+    </footer>
+
+    <script>
+        // Slides Configuration
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        let currentSlideIndex = 0;
+        
+        // Navigation generation
+        const slideNav = document.getElementById('slide-nav');
+        const progressDots = document.getElementById('progress-dots');
+        
+        slides.forEach((slide, index) => {
+            const navName = slide.getAttribute('data-nav-name') || `Слайд ${index + 1}`;
+            
+            // Sidebar Nav Item
+            const navItem = document.createElement('button');
+            navItem.className = `slide-nav-item ${index === 0 ? 'active' : ''}`;
+            navItem.innerHTML = `
+                <span class="slide-nav-num">${index + 1}</span>
+                <span>${navName}</span>
+            `;
+            navItem.onclick = () => jumpToSlide(index);
+            slideNav.appendChild(navItem);
+            
+            // Footer Dot
+            const dot = document.createElement('div');
+            dot.className = `progress-dot ${index === 0 ? 'active' : ''}`;
+            progressDots.appendChild(dot);
+        });
+
+        const navItems = document.querySelectorAll('.slide-nav-item');
+        const dots = document.querySelectorAll('.progress-dot');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const footerSlideInfo = document.getElementById('footer-slide-info');
+
+        function updateSlideUI() {
+            // Remove active classes
+            slides.forEach(s => s.classList.remove('active'));
+            navItems.forEach(n => n.classList.remove('active'));
+            dots.forEach(d => d.classList.remove('active'));
+            
+            // Set active class
+            slides[currentSlideIndex].classList.add('active');
+            navItems[currentSlideIndex].classList.add('active');
+            dots[currentSlideIndex].classList.add('active');
+            
+            // Control button statuses
+            prevBtn.disabled = currentSlideIndex === 0;
+            nextBtn.disabled = currentSlideIndex === totalSlides - 1;
+            
+            // Footer Info
+            footerSlideInfo.innerHTML = `Слайд ${currentSlideIndex + 1} из ${totalSlides} — <strong>${slides[currentSlideIndex].getAttribute('data-nav-name')}</strong>`;
+            
+            // Refresh icons for dynamically changed states if any
+            lucide.createIcons();
+        }
+
+        function navigateSlide(direction) {
+            currentSlideIndex += direction;
+            if (currentSlideIndex < 0) currentSlideIndex = 0;
+            if (currentSlideIndex >= totalSlides) currentSlideIndex = totalSlides - 1;
+            updateSlideUI();
+        }
+
+        function jumpToSlide(index) {
+            currentSlideIndex = index;
+            updateSlideUI();
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'Space' || e.key === ' ') {
+                if (currentSlideIndex < totalSlides - 1) {
+                    e.preventDefault();
+                    navigateSlide(1);
+                }
+            } else if (e.key === 'ArrowLeft') {
+                if (currentSlideIndex > 0) {
+                    e.preventDefault();
+                    navigateSlide(-1);
+                }
+            }
+        });
+
+        // Slide 3: Interactive Math Calculator
+        const rangeIncome = document.getElementById('range-income');
+        const rangeApartment = document.getElementById('range-apartment');
+        
+        const valIncome = document.getElementById('val-income');
+        const valApartment = document.getElementById('val-apartment');
+        
+        const resPartnerCommission = document.getElementById('res-partner-commission');
+        const resAgentShare = document.getElementById('res-agent-share');
+        
+        const funnelContacts = document.getElementById('funnel-contacts');
+        const funnelDialogs = document.getElementById('funnel-dialogs');
+        const funnelMatches = document.getElementById('funnel-matches');
+        const funnelMeetings = document.getElementById('funnel-meetings');
+        const funnelDeals = document.getElementById('funnel-deals');
+
+        function calculateFunnel() {
+            const income = parseInt(rangeIncome.value);
+            const apartmentPrice = parseInt(rangeApartment.value);
+            
+            // Average partner commission (4% of property price)
+            const commission = apartmentPrice * 0.04;
+            // Agent share is 50%
+            const agentShare = commission * 0.5;
+            
+            // Required deals to make desired income
+            const requiredDeals = Math.ceil(income / agentShare);
+            
+            // Funnel math (going backwards with standard conversions)
+            const requiredMeetings = Math.ceil(requiredDeals / 0.3); // 30% conversion from meetings to deals
+            const requiredMatches = Math.ceil(requiredMeetings / 0.4); // 40% conversion from matches to meetings
+            const requiredDialogs = Math.ceil(requiredMatches / 0.3);  // 30% conversion from dialogs to matches
+            const requiredContacts = Math.ceil(requiredDialogs / 0.3); // 30% conversion from contacts to dialogs
+
+            // Update range text values
+            valIncome.innerText = income.toLocaleString('ru-RU') + ' руб.';
+            valApartment.innerText = apartmentPrice.toLocaleString('ru-RU') + ' руб.';
+            
+            // Update financial metrics
+            resPartnerCommission.innerText = commission.toLocaleString('ru-RU') + ' ₽';
+            resAgentShare.innerText = agentShare.toLocaleString('ru-RU') + ' ₽';
+            
+            // Update Funnel stages
+            funnelDeals.innerHTML = `${requiredDeals} ${getNoun(requiredDeals, 'сделка', 'сделки', 'сделок')}`;
+            funnelMeetings.innerText = requiredMeetings;
+            funnelMatches.innerText = requiredMatches;
+            funnelDialogs.innerText = requiredDialogs;
+            funnelContacts.innerText = requiredContacts;
+        }
+
+        function getNoun(number, one, two, five) {
+            let n = Math.abs(number);
+            n %= 100;
+            if (n >= 5 && n <= 20) {
+                return five;
+            }
+            n %= 10;
+            if (n === 1) {
+                return one;
+            }
+            if (n >= 2 && n <= 4) {
+                return two;
+            }
+            return five;
+        }
+
+        rangeIncome.addEventListener('input', calculateFunnel);
+        rangeApartment.addEventListener('input', calculateFunnel);
+
+        // Slide 5: Direct channels tabs switcher
+        function switchNowTab(index) {
+            const tabs = document.querySelectorAll('#now-tabs-menu .tab-btn');
+            const contents = document.querySelectorAll('#now-tabs-content .tab-content');
+            
+            tabs.forEach(t => t.classList.remove('active'));
+            contents.forEach(c => c.classList.remove('active'));
+            
+            tabs[index].classList.add('active');
+            contents[index].classList.add('active');
+        }
+
+        // Slide 6: Long term channels tabs switcher
+        function switchLongTab(index) {
+            const tabs = document.querySelectorAll('#long-tabs-menu .tab-btn');
+            const contents = document.querySelectorAll('#long-tabs-content .tab-content');
+            
+            tabs.forEach(t => t.classList.remove('active'));
+            contents.forEach(c => c.classList.remove('active'));
+            
+            tabs[index].classList.add('active');
+            contents[index].classList.add('active');
+        }
+
+        // Slide 10 Confetti Explosion
+        function triggerConfetti() {
+            confetti({
+                particleCount: 150,
+                spread: 80,
+                origin: { y: 0.6 },
+                colors: ['#0052FF', '#00E5A3', '#7000FF', '#FFB300']
+            });
+        }
+
+        // Initialize UI
+        calculateFunnel();
+        updateSlideUI();
+        lucide.createIcons();
+    </script>
+</body>
+</html>
