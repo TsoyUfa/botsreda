@@ -331,7 +331,7 @@
 </head>
 <body>
     <!-- Matrix falling code background -->
-    <canvas id="matrix-canvas" style="position: absolute; top:0; left:0; width:100%; height:100%; z-index:2; opacity:0.12; pointer-events:none;"></canvas>
+    <canvas id="matrix-canvas" style="position: absolute; top:0; left:0; width:100%; height:100%; z-index:2; opacity:0.22; pointer-events:none;"></canvas>
 
     <!-- Floating Sparkles -->
     <div class="sparkles-container" id="sparkles"></div>
@@ -572,30 +572,42 @@
 
         const rainDrops = [];
         for (let x = 0; x < columns; x++) {
-            rainDrops[x] = Math.random() * -100;
+            rainDrops[x] = {
+                y: Math.random() * (canvas.height / fontSize),
+                speed: 0.8 + Math.random() * 1.5
+            };
         }
 
         function drawMatrix() {
-            ctx.fillStyle = 'rgba(5, 5, 8, 0.12)'; // Matches --bg-color
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.08)'; // Matches --bg-color
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             // Dynamically query --primary color from CSS variables
             const activeColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#00ffcc';
-            ctx.fillStyle = activeColor;
             ctx.font = fontSize + 'px monospace';
 
             for (let i = 0; i < rainDrops.length; i++) {
                 const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+                
+                // Draw falling trails in the slide's active accent color
+                ctx.fillStyle = activeColor;
+                ctx.fillText(text, i * fontSize, rainDrops[i].y * fontSize);
 
-                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    rainDrops[i] = 0;
+                // Draw a bright white character at the bottom of the line (matrix head glow)
+                if (Math.random() > 0.85) {
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillText(text, i * fontSize, rainDrops[i].y * fontSize);
                 }
-                rainDrops[i]++;
+
+                if (rainDrops[i].y * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i].y = 0;
+                    rainDrops[i].speed = 0.8 + Math.random() * 1.5;
+                }
+                rainDrops[i].y += rainDrops[i].speed;
             }
         }
 
-        setInterval(drawMatrix, 33);
+        setInterval(drawMatrix, 30);
     </script>
 </body>
 </html>
