@@ -330,6 +330,8 @@
     </style>
 </head>
 <body>
+    <!-- Matrix falling code background -->
+    <canvas id="matrix-canvas" style="position: absolute; top:0; left:0; width:100%; height:100%; z-index:2; opacity:0.04; pointer-events:none;"></canvas>
 
     <!-- Ambient glows -->
     <div class="ambient-bg">
@@ -556,6 +558,47 @@
 
         // Initialize state
         updateSlides();
+
+        // Matrix Falling Code Background Effect
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const alphabet = '010110010101011001101010101001101001101011010101';
+        const fontSize = 14;
+        const columns = Math.floor(canvas.width / fontSize) + 1;
+
+        const rainDrops = [];
+        for (let x = 0; x < columns; x++) {
+            rainDrops[x] = Math.random() * -100;
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.1)'; // Matches --bg-color
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Use the dynamic --primary color with transparency for matrix glow
+            ctx.fillStyle = 'rgba(0, 255, 204, 0.18)'; 
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 33);
     </script>
 </body>
 </html>
