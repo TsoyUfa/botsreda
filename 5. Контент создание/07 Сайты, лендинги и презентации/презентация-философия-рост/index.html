@@ -8,6 +8,22 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
+        @property --primary {
+            syntax: '<color>';
+            inherits: true;
+            initial-value: #00ffcc;
+        }
+        @property --accent-purple {
+            syntax: '<color>';
+            inherits: true;
+            initial-value: #8a2be2;
+        }
+        @property --accent-blue {
+            syntax: '<color>';
+            inherits: true;
+            initial-value: #0077ff;
+        }
+
         :root {
             --bg-color: #050508;
             --primary: #00ffcc;
@@ -17,6 +33,9 @@
             --text-muted: #8e929e;
             --card-border: rgba(255, 255, 255, 0.08);
             --card-bg: rgba(10, 10, 15, 0.7);
+            transition: --primary 1.5s cubic-bezier(0.16, 1, 0.3, 1),
+                        --accent-purple 1.5s cubic-bezier(0.16, 1, 0.3, 1),
+                        --accent-blue 1.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * {
@@ -474,6 +493,16 @@
             sparklesContainer.appendChild(sparkle);
         }
 
+        const colors = [
+            { primary: '#00ffcc', purple: '#8a2be2', blue: '#0077ff' }, // Slide 1 (Teal/Purple/Blue)
+            { primary: '#4f46e5', purple: '#7c3aed', blue: '#2563eb' }, // Slide 2 (Indigo/Violet/Royal)
+            { primary: '#10b981', purple: '#06b6d4', blue: '#047857' }, // Slide 3 (Emerald/Cyan/Mint)
+            { primary: '#ef4444', purple: '#f97316', blue: '#7f1d1d' }, // Slide 4 (Crimson/Orange/Deep Red)
+            { primary: '#ec4899', purple: '#d946ef', blue: '#4f46e5' }, // Slide 5 (Fuchsia/Magenta/Indigo)
+            { primary: '#06b6d4', purple: '#10b981', blue: '#0f172a' }, // Slide 6 (Cyan/Green/Slate)
+            { primary: '#eab308', purple: '#f97316', blue: '#451a03' }  // Slide 7 (Gold/Amber/Bronze)
+        ];
+
         function updateSlides() {
             slides.forEach((slide, index) => {
                 slide.classList.remove('active', 'passed', 'next');
@@ -486,6 +515,12 @@
                     slide.classList.add('next');
                 }
             });
+
+            // Update background color scheme
+            const currentColors = colors[currentSlideIndex];
+            document.documentElement.style.setProperty('--primary', currentColors.primary);
+            document.documentElement.style.setProperty('--accent-purple', currentColors.purple);
+            document.documentElement.style.setProperty('--accent-blue', currentColors.blue);
 
             indicator.innerText = `${currentSlideIndex + 1} / ${slides.length}`;
         }
