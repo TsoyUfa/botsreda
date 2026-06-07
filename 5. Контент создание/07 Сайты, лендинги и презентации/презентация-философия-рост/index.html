@@ -366,6 +366,101 @@
             color: var(--text-muted);
             letter-spacing: 3px;
         }
+        /* 5-second alternating state transitions for SVG icons */
+        .card-visual svg * {
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Slide 1 Mesh shift */
+        .card-visual svg.state-alt .animated-mesh {
+            transform: rotate(45deg);
+            transform-origin: center;
+        }
+        .card-visual svg.state-alt .animated-mesh circle:nth-child(1) {
+            r: 85px;
+        }
+        .card-visual svg.state-alt .animated-mesh circle:nth-child(2) {
+            r: 45px;
+        }
+
+        /* Slide 2 Ecosystem state changes */
+        .card-visual svg.state-alt rect[width="26"] ~ line:nth-of-type(1) {
+            x2: 112px;
+        }
+        .card-visual svg.state-alt rect[width="26"] ~ line:nth-of-type(2) {
+            x2: 102px;
+        }
+        .card-visual svg.state-alt rect[width="26"] ~ line:nth-of-type(3) {
+            x2: 110px;
+        }
+        .card-visual svg.state-alt rect[x="153"] ~ rect:nth-of-type(3) {
+            opacity: 0.1;
+        }
+        .card-visual svg.state-alt rect[x="153"] ~ rect:nth-of-type(4) {
+            fill: var(--primary);
+            opacity: 0.75;
+        }
+        .card-visual svg.state-alt path[stroke-dasharray="3 2"] {
+            stroke-dashoffset: -12;
+        }
+
+        /* Slide 3 Ingestion streams */
+        .card-visual svg.state-alt rect[x="75"] {
+            transform: scale(1.1);
+            transform-origin: 100px 110px;
+        }
+        .card-visual svg.state-alt circle[cx="100"][cy="110"][r="10"] {
+            r: 15px;
+            opacity: 0.5;
+        }
+        .card-visual svg.state-alt path[d*="Q"] {
+            stroke-dasharray: 6 3;
+            stroke-dashoffset: 8;
+        }
+
+        /* Slide 4 Chaos vs System */
+        .card-visual svg.state-alt rect[x="130"]:nth-of-type(2) {
+            fill: rgba(0, 168, 150, 0.25);
+            stroke: var(--primary);
+        }
+        .card-visual svg.state-alt rect[x="130"]:nth-of-type(3) {
+            fill: rgba(0, 168, 150, 0.1);
+            stroke: rgba(255, 255, 255, 0.15);
+        }
+        .card-visual svg.state-alt rect[x="35"] {
+            opacity: 0.2;
+        }
+
+        /* Slide 5 Clone core */
+        .card-visual svg.state-alt circle[cx="100"][cy="95"] {
+            r: 72px;
+        }
+        .card-visual svg.state-alt circle[cx="100"][cy="100"] {
+            fill: var(--primary);
+            opacity: 0.55;
+            transform: scale(1.15);
+            transform-origin: 100px 100px;
+        }
+
+        /* Slide 6 Autonomous Agents pathways */
+        .card-visual svg.state-alt line[stroke-dasharray="3 3"]:nth-of-type(1),
+        .card-visual svg.state-alt line[stroke-dasharray="3 3"]:nth-of-type(4) {
+            stroke-dashoffset: 10;
+            opacity: 0.2;
+        }
+        .card-visual svg.state-alt line[stroke-dasharray="3 3"]:nth-of-type(2),
+        .card-visual svg.state-alt line[stroke-dasharray="3 3"]:nth-of-type(3) {
+            stroke-dashoffset: -10;
+            opacity: 1;
+            stroke-width: 2px;
+        }
+
+        /* Slide 7 circular dial gauge */
+        .card-visual svg.state-alt circle[stroke-dasharray="320 471"] {
+            stroke-dasharray: 400 471;
+            transform: rotate(15deg);
+            transform-origin: 100px 100px;
+        }
     </style>
 </head>
 <body>
@@ -922,6 +1017,13 @@
         }
 
         setInterval(drawMatrix, 30);
+
+        // Toggle slide visual states every 5 seconds for animated transitions
+        setInterval(() => {
+            document.querySelectorAll('.card-visual svg').forEach(svg => {
+                svg.classList.toggle('state-alt');
+            });
+        }, 5000);
     </script>
 </body>
 </html>
