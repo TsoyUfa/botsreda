@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>РОСТ — Локальный Анализатор и Конструктор Договоров</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Plus+Jakarta+Sans:wght@300;400;550;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0a0c10;
+            --bg-card: rgba(18, 22, 30, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --primary: #00ffcc;
+            --primary-glow: rgba(0, 255, 204, 0.15);
+            --accent: #8a2be2;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --sidebar-width: 320px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            position: relative;
+        }
+
+        /* Background blur glows */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 255, 204, 0.15) 0%, rgba(0,0,0,0) 70%);
+            top: -100px;
+            right: -100px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(138, 43, 226, 0.1) 0%, rgba(0,0,0,0) 70%);
+            bottom: -150px;
+            left: -150px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Sidebar Styling */
+        aside {
+            width: var(--sidebar-width);
+            background: rgba(10, 12, 16, 0.85);
+            border-right: 1px solid var(--border-color);
+            backdrop-filter: blur(20px);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            gap: 28px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #000;
+            font-size: 1.2rem;
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.35rem;
+            letter-spacing: 1.5px;
+            background: linear-gradient(to right, #ffffff, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .upload-section {
+            border: 2px dashed var(--border-color);
+            border-radius: 16px;
+            padding: 32px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.01);
+            position: relative;
+        }
+
+        .upload-section:hover, .upload-section.dragover {
+            border-color: var(--primary);
+            background: rgba(0, 255, 204, 0.03);
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .upload-section:hover .upload-icon {
+            transform: translateY(-4px);
+        }
+
+        .upload-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .upload-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .file-list {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: var(--primary);
+            text-align: left;
+            word-break: break-all;
+            display: none;
+            background: rgba(0, 255, 204, 0.05);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 255, 204, 0.2);
+        }
+
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+        }
+
+        .mode-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 14px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 550;
+        }
+
+        .mode-btn:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .mode-btn.active {
+            border-color: var(--primary);
+            background: rgba(0, 255, 204, 0.05);
+            box-shadow: inset 0 0 10px rgba(0, 255, 204, 0.05);
+        }
+
+        .mode-btn::after {
+            content: '→';
+            opacity: 0.5;
+            transition: transform 0.3s ease;
+        }
+
+        .mode-btn.active::after {
+            opacity: 1;
+            color: var(--primary);
+            transform: translateX(4px);
+        }
+
+        .action-btn {
+            margin-top: auto;
+            background: linear-gradient(135deg, var(--primary), #00b3ff);
+            color: #000;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 255, 204, 0.25);
+            font-size: 1rem;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 255, 204, 0.4);
+        }
+
+        .action-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Main Area Styling */
+        main {
+            flex-grow: 1;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 1;
+            height: 100%;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 16px 24px;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-weight: 600;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .status-badge.processing {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+            border-color: rgba(245, 158, 11, 0.2);
+        }
+
+        .workspace {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            flex-grow: 1;
+            height: calc(100% - 100px);
+        }
+
+        .panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .panel-body {
+            padding: 24px;
+            flex-grow: 1;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* Custom Scrollbar */
+        .panel-body::-webkit-scrollbar {
+            width: 6px;
+        }
+        .panel-body::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .panel-body::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 30px;
+        }
+
+        /* Document Viewer Styling */
+        .document-view {
+            background: #ffffff;
+            color: #1f2937;
+            padding: 40px;
+            border-radius: 12px;
+            min-height: 100%;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            transition: opacity 0.5s ease;
+        }
+
+        .document-view.empty {
+            background: transparent;
+            color: var(--text-muted);
+            border: 2px dashed rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: none;
+        }
+
+        .doc-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 16px;
+        }
+
+        .doc-section {
+            margin-bottom: 20px;
+        }
+
+        .doc-section h4 {
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #111827;
+        }
+
+        .highlighted {
+            background-color: rgba(239, 68, 68, 0.15);
+            border-bottom: 2px solid var(--danger);
+            cursor: pointer;
+            padding: 2px 0;
+            transition: all 0.3s ease;
+        }
+
+        .highlighted.corrected {
+            background-color: rgba(16, 185, 129, 0.15);
+            border-bottom: 2px solid var(--success);
+        }
+
+        /* Analysis Sidebar Output styling */
+        .risk-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .risk-item:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateX(4px);
+        }
+
+        .risk-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .badge {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+
+        .badge.high {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .badge.success {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .risk-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .risk-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .suggestion {
+            background: rgba(0, 255, 204, 0.03);
+            border-left: 3px solid var(--primary);
+            padding: 8px 12px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.8rem;
+            color: #d1d5db;
+        }
+
+        /* Loading / Processing Screen */
+        .processing-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 12, 16, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 100;
+            gap: 30px;
+            border-radius: 20px;
+        }
+
+        .spinner {
+            width: 70px;
+            height: 70px;
+            border: 3px solid rgba(0, 255, 204, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s linear infinite;
+            position: relative;
+        }
+
+        .spinner::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            right: 6px;
+            bottom: 6px;
+            border: 3px solid transparent;
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 3s linear infinite;
+        }
+
+        .process-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 320px;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            opacity: 0.4;
+            transition: all 0.4s ease;
+        }
+
+        .step-item.active {
+            opacity: 1;
+            color: var(--primary);
+        }
+
+        .step-item.completed {
+            opacity: 0.8;
+            color: var(--success);
+        }
+
+        .step-circle {
+            width: 24px;
+            height: 24px;
+            border: 2px solid currentColor;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .step-text {
+            font-weight: 550;
+            font-size: 0.9rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Success screen button */
+        .download-btn {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--success);
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            display: none;
+        }
+
+        .download-btn:hover {
+            background: rgba(16, 185, 129, 0.2);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar controls -->
+    <aside>
+        <div class="logo-container">
+            <div class="logo-icon">Р</div>
+            <div class="logo-text">РОСТ.ИИ</div>
+        </div>
+
+        <div class="option-group">
+            <label class="option-label">Загрузка контракта</label>
+            <div class="upload-section" id="drop-zone" onclick="simulateUpload()">
+                <span class="upload-icon">📄</span>
+                <div class="upload-title">Перетащите договор</div>
+                <div class="upload-subtitle">или нажмите для выбора файла</div>
+                <div class="file-list" id="file-name">Договор_СУ10_Трейдин.docx</div>
+            </div>
+        </div>
+
+        <div class="option-group">
+            <label class="option-label">Режим ИИ-Ассистента</label>
+            <button class="mode-btn active" onclick="setMode('audit', this)">Аудит рисков</button>
+            <button class="mode-btn" onclick="setMode('templates', this)">Шаблонная сборка</button>
+            <button class="mode-btn" onclick="setMode('compare', this)">Сравнение версий</button>
+        </div>
+
+        <button class="action-btn" onclick="startAnalysis()">Анализировать</button>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main>
+        <header>
+            <div>
+                <h1 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 2px;">Анализ договора</h1>
+                <p style="font-size: 0.8rem; color: var(--text-muted);" id="contract-meta">Договор не выбран</p>
+            </div>
+            <div class="status-badge" id="global-status">
+                <span class="pulse-dot">●</span> Готов к работе
+            </div>
+            <button class="download-btn" id="download-btn" onclick="alert('Скачивание готового PDF договора...')">Скачать PDF</button>
+        </header>
+
+        <div class="workspace">
+            <!-- Left panel: Original Document view -->
+            <div class="panel">
+                <div class="panel-header">
+                    <span>Оригинальный текст договора</span>
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">Визуальный редактор</span>
+                </div>
+                <div class="panel-body" id="left-panel-body">
+                    <div class="document-view empty" id="document-viewer">
+                        Для начала анализа перетащите файл договора или нажмите кнопку «Анализировать»
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right panel: AI analysis output -->
+            <div class="panel">
+                <div class="panel-header">
+                    <span>ИИ-Анализ и рекомендации</span>
+                    <span style="font-size: 0.75rem; color: var(--primary);">Локальный узел</span>
+                </div>
+                <div class="panel-body" id="right-panel-body">
+                    <div style="height: 100%; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.9rem; text-align: center; padding: 40px;" id="analysis-placeholder">
+                        Результаты анализа появятся после обработки документа локальной языковой моделью
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hidden Loading/Processing Screen inside main workspace -->
+        <div class="processing-overlay" id="overlay">
+            <div class="spinner"></div>
+            <h3 style="font-size: 1.2rem; font-weight: 600;">Локальный ИИ обрабатывает контракт</h3>
+            <div class="process-steps">
+                <div class="step-item" id="step-1">
+                    <div class="step-circle">1</div>
+                    <div class="step-text">Чтение голосового контекста и параметров</div>
+                </div>
+                <div class="step-item" id="step-2">
+                    <div class="step-circle">2</div>
+                    <div class="step-text">Поиск регламентов в Базе знаний (Obsidian)</div>
+                </div>
+                <div class="step-item" id="step-3">
+                    <div class="step-circle">3</div>
+                    <div class="step-text">Анализ рисков и генерация правок</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let currentMode = 'audit';
+        let isUploaded = false;
+
+        function simulateUpload() {
+            const fileNameDiv = document.getElementById('file-name');
+            fileNameDiv.style.display = 'block';
+            fileNameDiv.innerText = 'Договор_СУ10_Трейдин.docx (148 КБ)';
+            document.getElementById('contract-meta').innerText = 'Файл: Договор_СУ10_Трейдин.docx | Загружен пользователем';
+            isUploaded = true;
+        }
+
+        function setMode(mode, btn) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        function startAnalysis() {
+            if (!isUploaded) {
+                simulateUpload();
+            }
+
+            const overlay = document.getElementById('overlay');
+            overlay.style.display = 'flex';
+            
+            // Set status to processing
+            const statusBadge = document.getElementById('global-status');
+            statusBadge.className = 'status-badge processing';
+            statusBadge.innerHTML = '● Анализ в процессе...';
+
+            const steps = [
+                document.getElementById('step-1'),
+                document.getElementById('step-2'),
+                document.getElementById('step-3')
+            ];
+
+            // Animated step-by-step progress
+            setTimeout(() => {
+                steps[0].classList.add('active');
+            }, 500);
+
+            setTimeout(() => {
+                steps[0].classList.replace('active', 'completed');
+                steps[1].classList.add('active');
+            }, 1500);
+
+            setTimeout(() => {
+                steps[1].classList.replace('active', 'completed');
+                steps[2].classList.add('active');
+            }, 3000);
+
+            setTimeout(() => {
+                steps[2].classList.replace('active', 'completed');
+                overlay.style.display = 'none';
+                showResults();
+            }, 4500);
+        }
+
+        function showResults() {
+            // Document Viewer View
+            const docViewer = document.getElementById('document-viewer');
+            docViewer.className = 'document-view';
+            docViewer.innerHTML = `
+                <div class="doc-title">Договор о сотрудничестве по программе Трейд-ин</div>
+                
+                <div class="doc-section">
+                    <h4>1. Предмет соглашения</h4>
+                    <p>1.1. Агент обязуется по поручению Застройщика осуществлять подбор клиентов для приобретения строящегося жилья в ЖК «Центральный Парк» в рамках программы Трейд-ин.</p>
+                </div>
+                
+                <div class="doc-section">
+                    <h4>2. Порядок расчетов</h4>
+                    <p>2.1. Размер агентского вознаграждения составляет 1.5% от общей цены приобретаемого объекта недвижимости.</p>
+                    <p>2.2. Застройщик выплачивает вознаграждение в течение <span class="highlighted" onclick="focusRisk(0)">90 календарных дней</span> после государственной регистрации договора долевого участия клиента.</p>
+                </div>
+
+                <div class="doc-section">
+                    <h4>3. Конфиденциальность и безопасность данных</h4>
+                    <p>3.1. Обе стороны обязуются соблюдать конфиденциальность в отношении клиентских баз данных.</p>
+                    <p>3.2. <span class="highlighted" onclick="focusRisk(1)">Застройщик оставляет за собой право в одностороннем порядке запрашивать перенос всей базы контактов на сторонние облачные сервера третьих лиц за пределами РФ.</span></p>
+                </div>
+            `;
+
+            // Risks View Panel
+            const rightPanel = document.getElementById('right-panel-body');
+            rightPanel.innerHTML = `
+                <div class="risk-item" id="risk-card-0">
+                    <div class="risk-header">
+                        <span class="risk-title">Задержка выплат (Пункт 2.2)</span>
+                        <span class="badge high">Критический риск</span>
+                    </div>
+                    <div class="risk-desc">Срок выплаты вознаграждения (90 дней) превышает стандарт по рынку в 3 раза. Наша методика требует выплаты в течение 30 календарных дней.</div>
+                    <div class="suggestion">
+                        <strong>Рекомендация:</strong> Изменить срок выплаты на 30 дней.
+                        <button style="display:block; margin-top:8px; background:var(--primary); border:none; padding:4px 8px; border-radius:4px; font-weight:700; cursor:pointer;" onclick="applyFix(0)">Принять правку ИИ</button>
+                    </div>
+                </div>
+
+                <div class="risk-item" id="risk-card-1">
+                    <div class="risk-header">
+                        <span class="risk-title">Безопасность персональных данных (Пункт 3.2)</span>
+                        <span class="badge high">Критический риск</span>
+                    </div>
+                    <div class="risk-desc">Передача баз данных за пределы РФ нарушает 152-ФЗ и несет риски полной потери конфиденциальности клиентов. Наш регламент требует хранения базы только на локальном сервере.</div>
+                    <div class="suggestion">
+                        <strong>Рекомендация:</strong> Исключить пункт о передаче за пределы РФ. Закрепить хранение баз на локальных серверах Застройщика внутри РФ.
+                        <button style="display:block; margin-top:8px; background:var(--primary); border:none; padding:4px 8px; border-radius:4px; font-weight:700; cursor:pointer;" onclick="applyFix(1)">Принять правку ИИ</button>
+                    </div>
+                </div>
+            `;
+
+            // Set global status to success
+            const statusBadge = document.getElementById('global-status');
+            statusBadge.className = 'status-badge';
+            statusBadge.innerHTML = '● Анализ завершен (2 риска)';
+            statusBadge.style.color = 'var(--warning)';
+
+            document.getElementById('download-btn').style.display = 'block';
+        }
+
+        function focusRisk(index) {
+            const card = document.getElementById(`risk-card-${index}`);
+            if (card) {
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                card.style.borderColor = 'var(--primary)';
+                setTimeout(() => {
+                    card.style.borderColor = 'var(--border-color)';
+                }, 1500);
+            }
+        }
+
+        function applyFix(index) {
+            const highlights = document.querySelectorAll('.highlighted');
+            if (highlights[index]) {
+                highlights[index].className = 'highlighted corrected';
+                if (index === 0) {
+                    highlights[index].innerText = '30 календарных дней (Исправлено ИИ)';
+                } else if (index === 1) {
+                    highlights[index].innerText = 'Все данные о клиентах обрабатываются строго в рамках законодательства РФ по 152-ФЗ без возможности экспорта на внешние облачные сервисы (Исправлено ИИ)';
+                }
+            }
+
+            const card = document.getElementById(`risk-card-${index}`);
+            if (card) {
+                card.style.opacity = '0.5';
+                card.querySelector('.badge').className = 'badge success';
+                card.querySelector('.badge').innerText = 'Правка внесена';
+            }
+        }
+    </script>
+</body>
+</html>
