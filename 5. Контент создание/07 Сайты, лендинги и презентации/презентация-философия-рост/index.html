@@ -431,16 +431,63 @@
                     <div class="bento-card col-6 row-12 delay-0 hero-card">
                         <div class="card-visual">
                             <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="20" y="30" width="70" height="140" rx="10" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,0,0,0.3)"/>
-                                <rect x="110" y="30" width="70" height="140" rx="10" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,0,0,0.3)" opacity="0.6"/>
-                                <circle cx="55" cy="70" r="15" stroke="var(--primary)" stroke-width="2" class="pulse-element"/>
-                                <path d="M45 110 H65 M45 125 H65 M45 140 H65" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
-                                <rect x="125" y="50" width="40" height="12" rx="3" stroke="var(--primary)" stroke-width="2" class="pulse-element-delay"/>
-                                <rect x="125" y="75" width="40" height="12" rx="3" stroke="var(--primary)" stroke-width="2" class="pulse-element-delay" opacity="0.7"/>
-                                <rect x="125" y="100" width="40" height="12" rx="3" stroke="var(--primary)" stroke-width="2" class="pulse-element-delay" opacity="0.4"/>
-                                <path d="M70 70 H110 M70 120 H110" stroke="var(--primary)" stroke-width="1.5" stroke-dasharray="4 2"/>
-                                <text x="55" y="160" text-anchor="middle" fill="#FFFFFF" font-size="8" font-family="monospace" letter-spacing="1">1ST BRAIN</text>
-                                <text x="145" y="160" text-anchor="middle" fill="#FFFFFF" font-size="8" font-family="monospace" letter-spacing="1" opacity="0.7">2ND BRAIN</text>
+                                <defs>
+                                    <radialGradient id="hologram-glow" cx="50%" cy="100%" r="100%">
+                                        <stop offset="0%" stop-color="var(--primary)" stop-opacity="0.3"/>
+                                        <stop offset="100%" stop-color="var(--primary)" stop-opacity="0"/>
+                                    </radialGradient>
+                                </defs>
+                                
+                                <!-- Hologram projection rays -->
+                                <polygon points="45,150 20,80 70,80" fill="url(#hologram-glow)"/>
+                                <ellipse cx="45" cy="150" rx="18" ry="4" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,168,150,0.1)"/>
+                                
+                                <!-- Brain hologram -->
+                                <path d="M 45,75 C 30,75 22,83 22,95 C 22,107 30,115 45,115" stroke="var(--primary)" stroke-width="2" fill="none" class="pulse-element"/>
+                                <path d="M 45,75 C 60,75 68,83 68,95 C 68,107 60,115 45,115" stroke="var(--primary)" stroke-width="2" fill="none" class="pulse-element"/>
+                                <path d="M 45,82 C 37,82 32,90 32,95 C 32,100 37,108 45,108" stroke="var(--primary)" stroke-width="1" fill="none" opacity="0.7"/>
+                                <path d="M 45,82 C 53,82 58,90 58,95 C 58,100 53,108 45,108" stroke="var(--primary)" stroke-width="1" fill="none" opacity="0.7"/>
+                                
+                                <!-- Brain mesh lines -->
+                                <line x1="22" y1="95" x2="45" y2="75" stroke="var(--primary)" stroke-width="0.8" opacity="0.5"/>
+                                <line x1="68" y1="95" x2="45" y2="75" stroke="var(--primary)" stroke-width="0.8" opacity="0.5"/>
+                                <line x1="22" y1="95" x2="45" y2="115" stroke="var(--primary)" stroke-width="0.8" opacity="0.5"/>
+                                <line x1="68" y1="95" x2="45" y2="115" stroke="var(--primary)" stroke-width="0.8" opacity="0.5"/>
+                                <line x1="32" y1="95" x2="58" y2="95" stroke="var(--primary)" stroke-width="0.8" opacity="0.3"/>
+                                
+                                <!-- Brain nodes -->
+                                <circle cx="45" cy="75" r="3" fill="#FFFFFF" class="pulse-element-delay"/>
+                                <circle cx="22" cy="95" r="3" fill="var(--primary)"/>
+                                <circle cx="68" cy="95" r="3" fill="var(--primary)"/>
+                                <circle cx="45" cy="115" r="3" fill="#FFFFFF" class="pulse-element-delay"/>
+                                
+                                <!-- Computer Workstation -->
+                                <rect x="92" y="90" width="26" height="18" rx="2" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,0,0,0.4)"/>
+                                <line x1="96" y1="95" x2="108" y2="95" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+                                <line x1="96" y1="99" x2="114" y2="99" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+                                <line x1="96" y1="103" x2="104" y2="103" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+                                <path d="M 85,112 L 125,112 L 130,118 L 80,118 Z" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,168,150,0.1)"/>
+                                
+                                <!-- User silhouette -->
+                                <circle cx="105" cy="74" r="6" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,0,0,0.2)" class="pulse-element"/>
+                                <path d="M 92,90 C 92,80 118,80 118,90 Z" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,168,150,0.05)"/>
+                                
+                                <!-- Smartphone -->
+                                <rect x="153" y="75" width="24" height="42" rx="4" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,0,0,0.3)"/>
+                                <rect x="161" y="77" width="8" height="2" rx="1" fill="var(--primary)"/>
+                                <rect x="157" y="83" width="10" height="4" rx="1" fill="var(--primary)" opacity="0.4"/>
+                                <rect x="163" y="91" width="10" height="4" rx="1" fill="rgba(255,255,255,0.2)"/>
+                                <rect x="157" y="99" width="12" height="4" rx="1" fill="var(--primary)" opacity="0.4"/>
+                                <rect x="161" y="107" width="12" height="4" rx="1" fill="rgba(255,255,255,0.2)"/>
+                                
+                                <!-- Ecosystem connection links -->
+                                <path d="M 60,95 Q 75,95 90,100" stroke="var(--primary)" stroke-width="1.2" stroke-dasharray="3 2" class="pulse-element-delay"/>
+                                <path d="M 120,108 Q 135,108 151,95" stroke="var(--primary)" stroke-width="1.2" stroke-dasharray="3 2" class="pulse-element"/>
+                                <path d="M 151,82 Q 100,55 60,82" stroke="var(--primary)" stroke-width="1.2" stroke-dasharray="3 2" class="pulse-element-delay"/>
+                                
+                                <!-- Labels -->
+                                <text x="45" y="168" text-anchor="middle" fill="#FFFFFF" font-size="8" font-family="monospace" letter-spacing="1">1ST BRAIN</text>
+                                <text x="135" y="168" text-anchor="middle" fill="#FFFFFF" font-size="8" font-family="monospace" letter-spacing="1" opacity="0.7">2ND BRAIN</text>
                             </svg>
                         </div>
                         <div>
