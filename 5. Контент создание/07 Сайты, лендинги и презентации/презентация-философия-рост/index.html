@@ -163,13 +163,65 @@
             padding: 60px;
             backdrop-filter: blur(30px);
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
             opacity: 0;
             transform: translateZ(-200px) rotateX(10deg) scale(0.85);
             pointer-events: none;
             transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1);
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .slide-content {
+            flex: 1.3;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .slide-visual {
+            flex: 0.7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            position: relative;
+        }
+
+        .slide-visual svg {
+            width: 100%;
+            max-width: 280px;
+            height: auto;
+            filter: drop-shadow(0 0 25px var(--primary));
+            transition: filter 1.5s ease;
+        }
+
+        /* Ambient pulse and rotation for SVGs */
+        .animated-mesh {
+            animation: spin-visual 25s linear infinite;
+            transform-origin: center;
+        }
+
+        .pulse-element {
+            animation: glow-pulse 3s ease-in-out infinite alternate;
+        }
+
+        .pulse-element-delay {
+            animation: glow-pulse 3s ease-in-out infinite alternate;
+            animation-delay: -1.5s;
+        }
+
+        @keyframes spin-visual {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes glow-pulse {
+            0% { opacity: 0.3; filter: brightness(0.8); }
+            100% { opacity: 1; filter: brightness(1.3) drop-shadow(0 0 15px var(--primary)); }
         }
 
         /* Active slide style */
@@ -342,120 +394,221 @@
         <!-- Slide 1: Intro -->
         <div class="slide active">
             <div class="glow-dot"></div>
-            <div class="slide-header">
-                <span class="slide-category">Методология РОСТ</span>
-                <h2 class="slide-title">Философия и главные посылы</h2>
-            </div>
-            <div class="slide-body">
-                <p style="font-size: 1.4rem; line-height: 1.5; color: #e5e7eb; margin-bottom: 20px;">
-                    Оцифровка вашего опыта и взращивание персонального ИИ-клона для освобождения времени и масштабирования бизнеса.
-                </p>
-                <div class="metaphor-box" style="border-left-color: var(--primary);">
-                    <strong>Главный посыл:</strong> ИИ - это не волшебная таблетка, которая сделает всю работу сама. Это высокотехнологичный усилитель вашей системы, если эта система у вас уже выстроена.
+            <div class="slide-content">
+                <div class="slide-header">
+                    <span class="slide-category">Методология РОСТ</span>
+                    <h2 class="slide-title">Философия и главные посылы</h2>
                 </div>
+                <div class="slide-body">
+                    <p style="font-size: 1.4rem; line-height: 1.5; color: #e5e7eb; margin-bottom: 20px;">
+                        Оцифровка вашего опыта и взращивание персонального ИИ-клона для освобождения времени и масштабирования бизнеса.
+                    </p>
+                    <div class="metaphor-box" style="border-left-color: var(--primary);">
+                        <strong>Главный посыл:</strong> ИИ - это не волшебная таблетка, которая сделает всю работу сама. Это высокотехнологичный усилитель вашей системы, если эта система у вас уже выстроена.
+                    </div>
+                </div>
+            </div>
+            <div class="slide-visual">
+                <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g class="animated-mesh">
+                        <circle cx="100" cy="100" r="80" stroke="var(--primary)" stroke-width="1.5" stroke-dasharray="10 5" opacity="0.3"/>
+                        <circle cx="100" cy="100" r="50" stroke="var(--primary)" stroke-width="2" opacity="0.5"/>
+                        <circle cx="100" cy="100" r="20" stroke="var(--primary)" stroke-width="3"/>
+                        <line x1="100" y1="20" x2="100" y2="180" stroke="var(--primary)" stroke-width="1" opacity="0.3"/>
+                        <line x1="20" y1="100" x2="180" y2="100" stroke="var(--primary)" stroke-width="1" opacity="0.3"/>
+                        <line x1="43.4" y1="43.4" x2="156.6" y2="156.6" stroke="var(--primary)" stroke-width="1" opacity="0.2"/>
+                        <line x1="43.4" y1="156.6" x2="156.6" y2="43.4" stroke="var(--primary)" stroke-width="1" opacity="0.2"/>
+                        <circle cx="100" cy="20" r="6" fill="var(--primary)" class="pulse-element"/>
+                        <circle cx="100" cy="180" r="6" fill="var(--primary)" class="pulse-element"/>
+                        <circle cx="20" cy="100" r="6" fill="var(--primary)" class="pulse-element"/>
+                        <circle cx="180" cy="100" r="6" fill="var(--primary)" class="pulse-element"/>
+                    </g>
+                </svg>
             </div>
         </div>
 
         <!-- Slide 2: Первый и второй мозг -->
         <div class="slide">
             <div class="glow-dot"></div>
-            <div class="slide-header">
-                <span class="slide-category">Баланс систем</span>
-                <h2 class="slide-title">Второй мозг не работает без первого</h2>
-            </div>
-            <div class="slide-body">
-                <ul>
-                    <li>ИИ - это инструмент усиления в зонах дефицита человеческого ресурса (память, тайм-менеджмент).</li>
-                    <li>Вы не перекладываете ответственность, а расширяете свои возможности.</li>
-                </ul>
-                <div class="metaphor-box">
-                    <strong>Метафора покупки квартиры:</strong> Вы не покупаете жилье вслепую. Сначала вы определяете: для чего она нужна, какая инфраструктура вокруг, как вы будете ее обслуживать и каков ее жизненный цикл на 10 лет. Точно так же и с ИИ - перед внедрением нужно четко спроектировать архитектуру и принципы его работы.
+            <div class="slide-content">
+                <div class="slide-header">
+                    <span class="slide-category">Баланс систем</span>
+                    <h2 class="slide-title">Второй мозг не работает без первого</h2>
                 </div>
+                <div class="slide-body">
+                    <ul>
+                        <li>ИИ - это инструмент усиления в зонах дефицита человеческого ресурса (память, тайм-менеджмент).</li>
+                        <li>Вы не перекладываете ответственность, а расширяете свои возможности.</li>
+                    </ul>
+                    <div class="metaphor-box">
+                        <strong>Метафора покупки квартиры:</strong> Вы не покупаете жилье вслепую. Сначала вы определяете: для чего она нужна, какая инфраструктура вокруг, как вы будете ее обслуживать и каков ее жизненный цикл на 10 лет. Точно так же и с ИИ - перед внедрением нужно выстроить жесткую систему.
+                    </div>
+                </div>
+            </div>
+            <div class="slide-visual">
+                <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M60 80C50 80 40 90 40 100C40 110 50 120 60 120H80V80H60Z" fill="var(--primary)" opacity="0.2" class="pulse-element"/>
+                    <path d="M140 80C150 80 160 90 160 100C160 110 150 120 140 120H120V80H140Z" fill="var(--primary)" opacity="0.4" class="pulse-element-delay"/>
+                    <rect x="85" y="60" width="30" height="80" rx="6" stroke="var(--primary)" stroke-width="2" class="pulse-element"/>
+                    <line x1="60" y1="100" x2="85" y2="100" stroke="var(--primary)" stroke-width="2" stroke-dasharray="4 2"/>
+                    <line x1="115" y1="100" x2="140" y2="100" stroke="var(--primary)" stroke-width="2" stroke-dasharray="4 2"/>
+                    <circle cx="60" cy="100" r="8" fill="var(--primary)" class="pulse-element"/>
+                    <circle cx="140" cy="100" r="8" fill="var(--primary)" class="pulse-element-delay"/>
+                </svg>
             </div>
         </div>
 
         <!-- Slide 3: Постоянное обучение -->
         <div class="slide">
             <div class="glow-dot"></div>
-            <div class="slide-header">
-                <span class="slide-category">Контекст-Инженерия</span>
-                <h2 class="slide-title">Постоянное обучение системы</h2>
+            <div class="slide-content">
+                <div class="slide-header">
+                    <span class="slide-category">Контекст-Инженерия</span>
+                    <h2 class="slide-title">Постоянное обучение системы</h2>
+                </div>
+                <div class="slide-body">
+                    <ul>
+                        <li>Суть методологии РОСТ - непрерывное пополнение базы знаний, а не покупка статичных промптов из интернета.</li>
+                        <li>Техническая интеграция настраивается один раз. Вся остальная работа - это постоянное обучение вашего ИИ-клона.</li>
+                        <li>Все ваши экспертные инсайты и решения должны моментально выгружаться из вашей головы в систему в режиме реального времени.</li>
+                    </ul>
+                </div>
             </div>
-            <div class="slide-body">
-                <ul>
-                    <li>Суть методологии РОСТ - непрерывное пополнение базы знаний, а не покупка статичных промптов из интернета.</li>
-                    <li>Техническая интеграция настраивается один раз. Вся остальная работа - это постоянное обучение вашего ИИ-клона.</li>
-                    <li>Все ваши экспертные инсайты и решения должны моментально выгружаться из вашей головы в систему в режиме реального времени.</li>
-                </ul>
+            <div class="slide-visual">
+                <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g class="animated-mesh">
+                        <circle cx="100" cy="100" r="60" stroke="var(--primary)" stroke-width="1.5" stroke-dasharray="8 4"/>
+                    </g>
+                    <path d="M100 50V120" stroke="var(--primary)" stroke-width="3" stroke-linecap="round" class="pulse-element"/>
+                    <path d="M85 70L100 50L115 70" stroke="var(--primary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="pulse-element"/>
+                    <rect x="70" y="130" width="60" height="20" rx="4" fill="var(--primary)" opacity="0.3" class="pulse-element-delay"/>
+                    <circle cx="80" cy="140" r="3" fill="var(--primary)"/>
+                    <circle cx="100" cy="140" r="3" fill="var(--primary)"/>
+                    <circle cx="120" cy="140" r="3" fill="var(--primary)"/>
+                </svg>
             </div>
         </div>
 
         <!-- Slide 4: Борьба с хаосом -->
         <div class="slide">
             <div class="glow-dot"></div>
-            <div class="slide-header">
-                <span class="slide-category">Порядок и Систематизация</span>
-                <h2 class="slide-title">Критика хаоса заметок и отчетов</h2>
+            <div class="slide-content">
+                <div class="slide-header">
+                    <span class="slide-category">Порядок и Систематизация</span>
+                    <h2 class="slide-title">Критика хаоса заметок и отчетов</h2>
+                </div>
+                <div class="slide-body">
+                    <ul>
+                        <li>У предпринимателей в телефонах лежат сотни мертвых заметок с обучений, которые никогда больше не открываются.</li>
+                        <li>Отчеты ради отчетов («кладбище отчетов» в CRM) не показывают реальных проблем: выгорания кадров и сбоев в бизнес-процессах.</li>
+                        <li><strong>Решение:</strong> Моментальная фиксация ценной мысли голосом с автоматической раскладкой ИИ-ассистентом по папкам вашей Базы знаний.</li>
+                    </ul>
+                </div>
             </div>
-            <div class="slide-body">
-                <ul>
-                    <li>У предпринимателей в телефонах лежат сотни мертвых заметок с обучений, которые никогда больше не открываются.</li>
-                    <li>Отчеты ради отчетов («кладбище отчетов» в CRM) не показывают реальных проблем: выгорания кадров и сбоев в бизнес-процессах.</li>
-                    <li><strong>Решение:</strong> Моментальная фиксация ценной мысли голосом с автоматической раскладкой ИИ-ассистентом по папкам вашей Базы знаний.</li>
-                </ul>
+            <div class="slide-visual">
+                <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Cabinet outline -->
+                    <rect x="50" y="40" width="100" height="120" rx="8" stroke="var(--primary)" stroke-width="2.5"/>
+                    <line x1="50" y1="80" x2="150" y2="80" stroke="var(--primary)" stroke-width="1.5"/>
+                    <line x1="50" y1="120" x2="150" y2="120" stroke="var(--primary)" stroke-width="1.5"/>
+                    <!-- Drawer Handles pulsing -->
+                    <rect x="90" y="55" width="20" height="6" rx="3" fill="var(--primary)" class="pulse-element"/>
+                    <rect x="90" y="95" width="20" height="6" rx="3" fill="var(--primary)" class="pulse-element-delay"/>
+                    <rect x="90" y="135" width="20" height="6" rx="3" fill="var(--primary)" class="pulse-element"/>
+                </svg>
             </div>
         </div>
 
         <!-- Slide 5: Взращивание клона -->
         <div class="slide">
             <div class="glow-dot"></div>
-            <div class="slide-header">
-                <span class="slide-category">Жизненный Цикл ИИ</span>
-                <h2 class="slide-title">Философия взращивания ИИ-клона</h2>
-            </div>
-            <div class="slide-body">
-                <ul>
-                    <li>Не существует готового идеального решения ИИ «из коробки».</li>
-                    <li>Ваш ИИ-клон вначале подобен младенцу. Ваша задача - вырастить его с «9 месяцев» до «совершеннолетия» своими знаниями и регламентами.</li>
-                    <li>Первичная оцифровка и настройка занимает от 1 до 6 месяцев, но дообучаться на вашем опыте система будет всю жизнь.</li>
-                </ul>
-                <div class="metaphor-box" style="border-left-color: var(--accent-blue);">
-                    <strong>Метафора Аиста:</strong> Я выступаю в роли «аиста», который приносит вам вашего новорожденного цифрового двойника. Дальнейший рост и зрелость ИИ зависят исключительно от вашей готовности делиться с ним контекстом.
+            <div class="slide-content">
+                <div class="slide-header">
+                    <span class="slide-category">Жизненный Цикл ИИ</span>
+                    <h2 class="slide-title">Философия взращивания ИИ-клона</h2>
                 </div>
+                <div class="slide-body">
+                    <ul>
+                        <li>Не существует готового идеального решения ИИ «из коробки».</li>
+                        <li>Ваш ИИ-клон вначале подобен младенцу. Ваша задача - вырастить его с «9 месяцев» до «совершеннолетия» своими знаниями и регламентами.</li>
+                        <li>Первичная оцифровка и настройка занимает от 1 до 6 месяцев, но дообучаться на вашем опыте система будет всю жизнь.</li>
+                    </ul>
+                    <div class="metaphor-box" style="border-left-color: var(--accent-blue);">
+                        <strong>Метафора Аиста:</strong> Я выступаю в роли «аиста», который приносит вам вашего новорожденного цифрового двойника. Дальнейший рост и зрелость ИИ зависят исключительно от вашей готовности делиться с ним контекстом.
+                    </div>
+                </div>
+            </div>
+            <div class="slide-visual">
+                <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Nesting Egg / Avatar visual -->
+                    <circle cx="100" cy="100" r="75" stroke="var(--primary)" stroke-width="1" stroke-dasharray="10 6" opacity="0.3" class="animated-mesh"/>
+                    <path d="M100 45C75 45 60 70 60 105C60 140 75 155 100 155C125 155 140 140 140 105C140 70 125 45 100 45Z" stroke="var(--primary)" stroke-width="2" class="pulse-element"/>
+                    <circle cx="100" cy="95" r="16" fill="var(--primary)" opacity="0.4" class="pulse-element"/>
+                    <path d="M75 130C75 120 85 115 100 115C115 115 125 120 125 130" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" class="pulse-element"/>
+                </svg>
             </div>
         </div>
 
         <!-- Slide 6: Подготовка к 2027 -->
         <div class="slide">
             <div class="glow-dot"></div>
-            <div class="slide-header">
-                <span class="slide-category">Эра Агентов</span>
-                <h2 class="slide-title">Подготовка к 2027 году</h2>
+            <div class="slide-content">
+                <div class="slide-header">
+                    <span class="slide-category">Эра Агентов</span>
+                    <h2 class="slide-title">Подготовка к 2027 году</h2>
+                </div>
+                <div class="slide-body">
+                    <ul>
+                        <li>К 2027 году наступит эра тотальной интеграции персональных ИИ-агентов.</li>
+                        <li>Если ваша база знаний оцифрована сегодня, вы внедрите новых агентов за 10 минут, пока конкуренты будут только начинать обучение.</li>
+                        <li>Взрослый ИИ-клон сам спроектирует и запустит нужных автономных агентов под ваши операционные задачи. Вам даже не придется писать алгоритмы их работы.</li>
+                    </ul>
+                </div>
             </div>
-            <div class="slide-body">
-                <ul>
-                    <li>К 2027 году наступит эра тотальной интеграции персональных ИИ-агентов.</li>
-                    <li>Если ваша база знаний оцифрована сегодня, вы внедрите новых агентов за 10 минут, пока конкуренты будут только начинать обучение.</li>
-                    <li>Взрослый ИИ-клон сам спроектирует и запустит нужных автономных агентов под ваши операционные задачи. Вам даже не придется писать алгоритмы их работы.</li>
-                </ul>
+            <div class="slide-visual">
+                <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g class="animated-mesh">
+                        <circle cx="100" cy="100" r="15" fill="var(--primary)" class="pulse-element"/>
+                        <!-- Connected Nodes -->
+                        <line x1="100" y1="100" x2="60" y2="60" stroke="var(--primary)" stroke-width="1.5" class="pulse-element-delay"/>
+                        <line x1="100" y1="100" x2="140" y2="60" stroke="var(--primary)" stroke-width="1.5" class="pulse-element-delay"/>
+                        <line x1="100" y1="100" x2="60" y2="140" stroke="var(--primary)" stroke-width="1.5" class="pulse-element-delay"/>
+                        <line x1="100" y1="100" x2="140" y2="140" stroke="var(--primary)" stroke-width="1.5" class="pulse-element-delay"/>
+                        <circle cx="60" cy="60" r="10" fill="var(--primary)" opacity="0.6"/>
+                        <circle cx="140" cy="60" r="10" fill="var(--primary)" opacity="0.6"/>
+                        <circle cx="60" cy="140" r="10" fill="var(--primary)" opacity="0.6"/>
+                        <circle cx="140" cy="140" r="10" fill="var(--primary)" opacity="0.6"/>
+                    </g>
+                </svg>
             </div>
         </div>
 
         <!-- Slide 7: Принципы работы -->
         <div class="slide">
             <div class="glow-dot"></div>
-            <div class="slide-header">
-                <span class="slide-category">Эффективность</span>
-                <h2 class="slide-title">Ключевые принципы работы с ИИ</h2>
+            <div class="slide-content">
+                <div class="slide-header">
+                    <span class="slide-category">Эффективность</span>
+                    <h2 class="slide-title">Ключевые принципы работы с ИИ</h2>
+                </div>
+                <div class="slide-body" style="font-size: 1rem;">
+                    <ul style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                        <li><strong class="highlight">Голос против Письма:</strong> Набор текста дает 60 слов/мин, голос - более 300 слов/мин. Голосовой ввод эффективнее в 5 раз.</li>
+                        <li><strong class="highlight">Контекст-Инженерия:</strong> Промпты мертвы. Значение имеет только контекст вашего бизнеса и личности.</li>
+                        <li><strong class="highlight">Мобильность (24/7):</strong> Управление ИИ через Телеграм-бот прямо в телефоне во время поездок и встреч.</li>
+                        <li><strong class="highlight">Экономия времени:</strong> Единственный критерий полезности ИИ. Если инструмент забирает больше времени, чем экономит - он вам не нужен.</li>
+                        <li><strong class="highlight">Безопасность:</strong> Хранение баз на локальных серверах в РФ, полное соответствие закону 152-ФЗ.</li>
+                    </ul>
+                </div>
             </div>
-            <div class="slide-body" style="font-size: 1rem;">
-                <ul style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
-                    <li><strong class="highlight">Голос против Письма:</strong> Набор текста дает 60 слов/мин, голос - более 300 слов/мин. Голосовой ввод эффективнее в 5 раз.</li>
-                    <li><strong class="highlight">Контекст-Инженерия:</strong> Промпты мертвы. Значение имеет только контекст вашего бизнеса и личности.</li>
-                    <li><strong class="highlight">Мобильность (24/7):</strong> Управление ИИ через Телеграм-бот прямо в телефоне во время поездок и встреч.</li>
-                    <li><strong class="highlight">Экономия времени:</strong> Единственный критерий полезности ИИ. Если инструмент забирает больше времени, чем экономит - он вам не нужен.</li>
-                    <li><strong class="highlight">Безопасность:</strong> Хранение баз на локальных серверах в РФ, полное соответствие закону 152-ФЗ.</li>
-                </ul>
+            <div class="slide-visual">
+                <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Tech Shield Gauge -->
+                    <circle cx="100" cy="100" r="70" stroke="var(--primary)" stroke-width="2" stroke-dasharray="12 6"/>
+                    <circle cx="100" cy="100" r="50" stroke="var(--primary)" stroke-width="4" stroke-dasharray="200 60" class="animated-mesh"/>
+                    <path d="M100 75V100L120 115" stroke="var(--primary)" stroke-width="3" stroke-linecap="round" class="pulse-element"/>
+                    <circle cx="100" cy="100" r="6" fill="var(--primary)"/>
+                </svg>
             </div>
         </div>
 
