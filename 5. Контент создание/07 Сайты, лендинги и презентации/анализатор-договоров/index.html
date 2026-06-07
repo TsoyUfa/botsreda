@@ -550,6 +550,8 @@
     </style>
 </head>
 <body>
+    <!-- Matrix falling code background -->
+    <canvas id="matrix-canvas" style="position: absolute; top:0; left:0; width:100%; height:100%; z-index:0; opacity:0.04; pointer-events:none;"></canvas>
 
     <!-- Sidebar controls -->
     <aside>
@@ -831,8 +833,47 @@
                 card.style.opacity = '0.5';
                 card.querySelector('.badge').className = 'badge success';
                 card.querySelector('.badge').innerText = 'Правка внесена';
+        }
+
+        // Matrix Falling Code Background Effect
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const alphabet = '010110010101011001101010101001101001101011010101';
+        const fontSize = 14;
+        const columns = Math.floor(canvas.width / fontSize) + 1;
+
+        const rainDrops = [];
+        for (let x = 0; x < columns; x++) {
+            rainDrops[x] = Math.random() * -100;
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(10, 12, 16, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = 'rgba(0, 255, 204, 0.25)'; // Semi-transparent teal
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
             }
         }
+
+        setInterval(drawMatrix, 33);
     </script>
 </body>
 </html>
