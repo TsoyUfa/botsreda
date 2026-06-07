@@ -331,14 +331,7 @@
 </head>
 <body>
     <!-- Matrix falling code background -->
-    <canvas id="matrix-canvas" style="position: absolute; top:0; left:0; width:100%; height:100%; z-index:2; opacity:0.04; pointer-events:none;"></canvas>
-
-    <!-- Ambient glows -->
-    <div class="ambient-bg">
-        <div class="glow-orb orb-1"></div>
-        <div class="glow-orb orb-2"></div>
-        <div class="glow-orb orb-3"></div>
-    </div>
+    <canvas id="matrix-canvas" style="position: absolute; top:0; left:0; width:100%; height:100%; z-index:2; opacity:0.12; pointer-events:none;"></canvas>
 
     <!-- Floating Sparkles -->
     <div class="sparkles-container" id="sparkles"></div>
@@ -570,7 +563,10 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        const alphabet = '010110010101011001101010101001101001101011010101';
+        const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰグズヅブペエェケセテネヘメレヱゲゼデベポオォコソトノホмоヨョロヲゴゾドボヴッン';
+        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const nums = '0123456789';
+        const alphabet = katakana + latin + nums;
         const fontSize = 14;
         const columns = Math.floor(canvas.width / fontSize) + 1;
 
@@ -580,11 +576,12 @@
         }
 
         function drawMatrix() {
-            ctx.fillStyle = 'rgba(5, 5, 8, 0.1)'; // Matches --bg-color
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.12)'; // Matches --bg-color
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Use the dynamic --primary color with transparency for matrix glow
-            ctx.fillStyle = 'rgba(0, 255, 204, 0.18)'; 
+            // Dynamically query --primary color from CSS variables
+            const activeColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#00ffcc';
+            ctx.fillStyle = activeColor;
             ctx.font = fontSize + 'px monospace';
 
             for (let i = 0; i < rainDrops.length; i++) {
