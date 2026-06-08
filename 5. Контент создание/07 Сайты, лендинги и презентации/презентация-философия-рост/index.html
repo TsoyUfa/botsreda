@@ -383,55 +383,59 @@
             r: 45px;
         }
 
-        /* Slide 2 Ecosystem state changes */
-        .card-visual svg.state-alt rect[width="26"] ~ line:nth-of-type(1) {
-            x2: 112px;
+        /* Slide 2 Ecosystem state changes (Unified First & Second Brain) */
+        .card-visual svg.state-alt .ecosystem-path {
+            stroke-dashoffset: -20;
         }
-        .card-visual svg.state-alt rect[width="26"] ~ line:nth-of-type(2) {
-            x2: 102px;
-        }
-        .card-visual svg.state-alt rect[width="26"] ~ line:nth-of-type(3) {
-            x2: 110px;
-        }
-        .card-visual svg.state-alt rect[x="153"] ~ rect:nth-of-type(3) {
-            opacity: 0.1;
-        }
-        .card-visual svg.state-alt rect[x="153"] ~ rect:nth-of-type(4) {
-            fill: var(--primary);
-            opacity: 0.75;
-        }
-        .card-visual svg.state-alt path[stroke-dasharray="3 2"] {
-            stroke-dashoffset: -12;
+        .card-visual svg.state-alt .brain-core {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 15px var(--primary));
         }
 
-        /* Slide 3 Ingestion core & source nodes */
-        .card-visual svg.state-alt rect[x="85"][y="90"] {
-            transform: scale(1.1);
-            transform-origin: 100px 108px;
+        /* Slide 4 Chaos to System transition */
+        .chaos-node {
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .card-visual svg.state-alt .source-node {
-            transform: scale(1.15);
-        }
-        .source-node {
-            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        svg .source-node:nth-of-type(1) { transform-origin: 40px 50px; }
-        svg .source-node:nth-of-type(2) { transform-origin: 80px 35px; }
-        svg .source-node:nth-of-type(3) { transform-origin: 120px 35px; }
-        svg .source-node:nth-of-type(4) { transform-origin: 160px 50px; }
+        /* State 0-1: Messy Chaos */
+        .chaos-svg.state-0 .chaos-node:nth-child(1) { transform: translate(35px, 60px) rotate(15deg); fill: #ff3366; }
+        .chaos-svg.state-0 .chaos-node:nth-child(2) { transform: translate(55px, 95px) rotate(-25deg); fill: #ff3366; }
+        .chaos-svg.state-0 .chaos-node:nth-child(3) { transform: translate(40px, 115px) rotate(45deg); fill: #ff3366; }
+        .chaos-svg.state-0 .chaos-node:nth-child(4) { transform: translate(65px, 75px) rotate(-10deg); fill: #ff3366; }
+        .chaos-svg.state-0 .system-group { opacity: 0.1; }
+        .chaos-svg.state-0 .transfer-beam { opacity: 0; }
 
-        /* Slide 4 Chaos vs System */
-        .card-visual svg.state-alt rect[x="130"]:nth-of-type(2) {
-            fill: rgba(0, 168, 150, 0.25);
-            stroke: var(--primary);
+        /* State 2-3: Transferring/structuring */
+        .chaos-svg.state-1 .chaos-node:nth-child(1) { transform: translate(75px, 80px) scale(0.8); fill: var(--primary); }
+        .chaos-svg.state-1 .chaos-node:nth-child(2) { transform: translate(85px, 95px) scale(0.8); fill: var(--primary); }
+        .chaos-svg.state-1 .chaos-node:nth-child(3) { transform: translate(70px, 105px) scale(0.8); fill: var(--primary); }
+        .chaos-svg.state-1 .chaos-node:nth-child(4) { transform: translate(90px, 90px) scale(0.8); fill: var(--primary); }
+        .chaos-svg.state-1 .system-group { opacity: 0.4; }
+        .chaos-svg.state-1 .transfer-beam { opacity: 0.8; stroke-dashoffset: -10; }
+
+        /* State 4: Structured system */
+        .chaos-svg.state-2 .chaos-node,
+        .chaos-svg.state-3 .chaos-node,
+        .chaos-svg.state-4 .chaos-node {
+            transform: translate(145px, 85px) scale(0);
+            opacity: 0;
         }
-        .card-visual svg.state-alt rect[x="130"]:nth-of-type(3) {
-            fill: rgba(0, 168, 150, 0.1);
-            stroke: rgba(255, 255, 255, 0.15);
+        .chaos-svg.state-2 .system-group,
+        .chaos-svg.state-3 .system-group,
+        .chaos-svg.state-4 .system-group {
+            opacity: 1;
         }
-        .card-visual svg.state-alt rect[x="35"] {
-            opacity: 0.2;
-        }
+        .chaos-svg.state-2 .system-row:nth-child(1),
+        .chaos-svg.state-3 .system-row:nth-child(1),
+        .chaos-svg.state-4 .system-row:nth-child(1) { fill: rgba(0, 168, 150, 0.35); stroke: var(--primary); }
+        .chaos-svg.state-2 .system-row:nth-child(2),
+        .chaos-svg.state-3 .system-row:nth-child(2),
+        .chaos-svg.state-4 .system-row:nth-child(2) { fill: rgba(0, 168, 150, 0.25); stroke: var(--primary); }
+        .chaos-svg.state-2 .system-row:nth-child(3),
+        .chaos-svg.state-3 .system-row:nth-child(3),
+        .chaos-svg.state-4 .system-row:nth-child(3) { fill: rgba(0, 168, 150, 0.15); stroke: var(--primary); }
+        .chaos-svg.state-2 .transfer-beam,
+        .chaos-svg.state-3 .transfer-beam,
+        .chaos-svg.state-4 .transfer-beam { opacity: 0.2; }
 
         /* Slide 5 Growth stages visibility (Egg to Specialist) */
         .growth-stage {
@@ -455,24 +459,271 @@
             opacity: 1;
         }
 
-        /* Slide 6 Autonomous Agents pathways */
-        .card-visual svg.state-alt line[stroke-dasharray="3 3"]:nth-of-type(1),
-        .card-visual svg.state-alt line[stroke-dasharray="3 3"]:nth-of-type(4) {
-            stroke-dashoffset: 10;
-            opacity: 0.2;
-        }
-        .card-visual svg.state-alt line[stroke-dasharray="3 3"]:nth-of-type(2),
-        .card-visual svg.state-alt line[stroke-dasharray="3 3"]:nth-of-type(3) {
-            stroke-dashoffset: -10;
-            opacity: 1;
-            stroke-width: 2px;
+        /* Slide 1 Unified Philosophy Animation (1 Person -> 3 -> 6 -> Network -> Brain) */
+        .philosophy-cycle-svg .person,
+        .philosophy-cycle-svg .node,
+        .philosophy-cycle-svg .brain-outline,
+        .philosophy-cycle-svg .lines-s1,
+        .philosophy-cycle-svg .lines-s2,
+        .philosophy-cycle-svg .lines-s3,
+        .philosophy-cycle-svg .lines-s4 {
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Slide 7 circular dial gauge */
-        .card-visual svg.state-alt circle[stroke-dasharray="320 471"] {
-            stroke-dasharray: 400 471;
-            transform: rotate(15deg);
+        .philosophy-cycle-svg .body {
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        /* STATE 0: 1 Person, Center, Large */
+        .philosophy-cycle-svg:not(.state-1):not(.state-2):not(.state-3):not(.state-4) .p1,
+        .philosophy-cycle-svg.state-0 .p1 {
+            transform: translate(100px, 90px) scale(1.6);
+            opacity: 1;
+        }
+        .philosophy-cycle-svg:not(.state-1):not(.state-2):not(.state-3):not(.state-4) .p2,
+        .philosophy-cycle-svg.state-0 .p2,
+        .philosophy-cycle-svg:not(.state-1):not(.state-2):not(.state-3):not(.state-4) .p3,
+        .philosophy-cycle-svg.state-0 .p3,
+        .philosophy-cycle-svg:not(.state-1):not(.state-2):not(.state-3):not(.state-4) .p4,
+        .philosophy-cycle-svg.state-0 .p4,
+        .philosophy-cycle-svg:not(.state-1):not(.state-2):not(.state-3):not(.state-4) .p5,
+        .philosophy-cycle-svg.state-0 .p5,
+        .philosophy-cycle-svg:not(.state-1):not(.state-2):not(.state-3):not(.state-4) .p6,
+        .philosophy-cycle-svg.state-0 .p6 {
+            transform: translate(100px, 90px) scale(0);
+            opacity: 0;
+        }
+        .philosophy-cycle-svg:not(.state-1):not(.state-2):not(.state-3):not(.state-4) .node,
+        .philosophy-cycle-svg.state-0 .node {
+            transform: translate(100px, 90px) scale(0);
+            opacity: 0;
+        }
+        .philosophy-cycle-svg:not(.state-1):not(.state-2):not(.state-3):not(.state-4) .brain-outline,
+        .philosophy-cycle-svg.state-0 .brain-outline {
+            opacity: 0;
+            transform: scale(0.9);
             transform-origin: 100px 100px;
+        }
+        .philosophy-cycle-svg:not(.state-1):not(.state-2):not(.state-3):not(.state-4) .lines-s1,
+        .philosophy-cycle-svg.state-0 .lines-s1,
+        .philosophy-cycle-svg:not(.state-1):not(.state-2):not(.state-3):not(.state-4) .lines-s2,
+        .philosophy-cycle-svg.state-0 .lines-s2,
+        .philosophy-cycle-svg:not(.state-1):not(.state-2):not(.state-3):not(.state-4) .lines-s3,
+        .philosophy-cycle-svg.state-0 .lines-s3,
+        .philosophy-cycle-svg:not(.state-1):not(.state-2):not(.state-3):not(.state-4) .lines-s4,
+        .philosophy-cycle-svg.state-0 .lines-s4 {
+            opacity: 0;
+        }
+
+        /* STATE 1: 3 People */
+        .philosophy-cycle-svg.state-1 .p1 {
+            transform: translate(100px, 75px) scale(1.1);
+            opacity: 1;
+        }
+        .philosophy-cycle-svg.state-1 .p2 {
+            transform: translate(55px, 105px) scale(0.9);
+            opacity: 1;
+        }
+        .philosophy-cycle-svg.state-1 .p3 {
+            transform: translate(145px, 105px) scale(0.9);
+            opacity: 1;
+        }
+        .philosophy-cycle-svg.state-1 .p4,
+        .philosophy-cycle-svg.state-1 .p5,
+        .philosophy-cycle-svg.state-1 .p6 {
+            transform: translate(100px, 75px) scale(0);
+            opacity: 0;
+        }
+        .philosophy-cycle-svg.state-1 .node {
+            transform: translate(100px, 75px) scale(0);
+            opacity: 0;
+        }
+        .philosophy-cycle-svg.state-1 .brain-outline {
+            opacity: 0;
+        }
+        .philosophy-cycle-svg.state-1 .lines-s1 {
+            opacity: 0.6;
+        }
+        .philosophy-cycle-svg.state-1 .lines-s2,
+        .philosophy-cycle-svg.state-1 .lines-s3,
+        .philosophy-cycle-svg.state-1 .lines-s4 {
+            opacity: 0;
+        }
+
+        /* STATE 2: 6 People */
+        .philosophy-cycle-svg.state-2 .p1 {
+            transform: translate(100px, 65px) scale(0.75);
+            opacity: 1;
+        }
+        .philosophy-cycle-svg.state-2 .p2 {
+            transform: translate(60px, 90px) scale(0.75);
+            opacity: 1;
+        }
+        .philosophy-cycle-svg.state-2 .p3 {
+            transform: translate(140px, 90px) scale(0.75);
+            opacity: 1;
+        }
+        .philosophy-cycle-svg.state-2 .p4 {
+            transform: translate(45px, 130px) scale(0.75);
+            opacity: 1;
+        }
+        .philosophy-cycle-svg.state-2 .p5 {
+            transform: translate(100px, 135px) scale(0.75);
+            opacity: 1;
+        }
+        .philosophy-cycle-svg.state-2 .p6 {
+            transform: translate(155px, 130px) scale(0.75);
+            opacity: 1;
+        }
+        .philosophy-cycle-svg.state-2 .node {
+            transform: translate(100px, 95px) scale(0);
+            opacity: 0;
+        }
+        .philosophy-cycle-svg.state-2 .brain-outline {
+            opacity: 0;
+        }
+        .philosophy-cycle-svg.state-2 .lines-s1,
+        .philosophy-cycle-svg.state-2 .lines-s3,
+        .philosophy-cycle-svg.state-2 .lines-s4 {
+            opacity: 0;
+        }
+        .philosophy-cycle-svg.state-2 .lines-s2 {
+            opacity: 0.5;
+        }
+
+        /* STATE 3: Large Network */
+        .philosophy-cycle-svg.state-3 .body,
+        .philosophy-cycle-svg.state-4 .body {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .philosophy-cycle-svg.state-3 .p1 { transform: translate(100px, 95px) scale(0.5); opacity: 1; }
+        .philosophy-cycle-svg.state-3 .p2 { transform: translate(60px, 70px) scale(0.5); opacity: 1; }
+        .philosophy-cycle-svg.state-3 .p3 { transform: translate(140px, 70px) scale(0.5); opacity: 1; }
+        .philosophy-cycle-svg.state-3 .p4 { transform: translate(40px, 100px) scale(0.5); opacity: 1; }
+        .philosophy-cycle-svg.state-3 .p5 { transform: translate(100px, 150px) scale(0.5); opacity: 1; }
+        .philosophy-cycle-svg.state-3 .p6 { transform: translate(160px, 100px) scale(0.5); opacity: 1; }
+
+        .philosophy-cycle-svg.state-3 .n7 { transform: translate(100px, 50px) scale(0.8); opacity: 1; }
+        .philosophy-cycle-svg.state-3 .n8 { transform: translate(60px, 130px) scale(0.8); opacity: 1; }
+        .philosophy-cycle-svg.state-3 .n9 { transform: translate(140px, 130px) scale(0.8); opacity: 1; }
+        .philosophy-cycle-svg.state-3 .n10 { transform: translate(80px, 95px) scale(0.8); opacity: 0.4; }
+        .philosophy-cycle-svg.state-3 .n11 { transform: translate(120px, 95px) scale(0.8); opacity: 0.4; }
+        .philosophy-cycle-svg.state-3 .n12 { transform: translate(100px, 110px) scale(0.8); opacity: 0.4; }
+        .philosophy-cycle-svg.state-3 .n13 { transform: translate(120px, 120px) scale(0.8); opacity: 0.4; }
+
+        .philosophy-cycle-svg.state-3 .brain-outline {
+            opacity: 0;
+        }
+        .philosophy-cycle-svg.state-3 .lines-s1,
+        .philosophy-cycle-svg.state-3 .lines-s2,
+        .philosophy-cycle-svg.state-3 .lines-s4 {
+            opacity: 0;
+        }
+        .philosophy-cycle-svg.state-3 .lines-s3 {
+            opacity: 0.5;
+        }
+
+        /* STATE 4: Brain Scheme */
+        .philosophy-cycle-svg.state-4 .p1 { transform: translate(100px, 90px) scale(0.55); opacity: 1; }
+        .philosophy-cycle-svg.state-4 .p2 { transform: translate(60px, 80px) scale(0.55); opacity: 1; }
+        .philosophy-cycle-svg.state-4 .p3 { transform: translate(140px, 80px) scale(0.55); opacity: 1; }
+        .philosophy-cycle-svg.state-4 .p4 { transform: translate(55px, 105px) scale(0.55); opacity: 1; }
+        .philosophy-cycle-svg.state-4 .p5 { transform: translate(100px, 135px) scale(0.55); opacity: 1; }
+        .philosophy-cycle-svg.state-4 .p6 { transform: translate(145px, 105px) scale(0.55); opacity: 1; }
+
+        .philosophy-cycle-svg.state-4 .n7 { transform: translate(100px, 52px) scale(0.85); opacity: 1; }
+        .philosophy-cycle-svg.state-4 .n8 { transform: translate(75px, 125px) scale(0.85); opacity: 1; }
+        .philosophy-cycle-svg.state-4 .n9 { transform: translate(125px, 125px) scale(0.85); opacity: 1; }
+        .philosophy-cycle-svg.state-4 .n10 { transform: translate(80px, 60px) scale(0.85); opacity: 1; }
+        .philosophy-cycle-svg.state-4 .n11 { transform: translate(120px, 60px) scale(0.85); opacity: 1; }
+        .philosophy-cycle-svg.state-4 .n12 { transform: translate(80px, 95px) scale(0.85); opacity: 1; }
+        .philosophy-cycle-svg.state-4 .n13 { transform: translate(120px, 95px) scale(0.85); opacity: 1; }
+
+        .philosophy-cycle-svg.state-4 .brain-outline {
+            opacity: 1;
+            transform: scale(1);
+            transform-origin: 100px 100px;
+        }
+        .philosophy-cycle-svg.state-4 .lines-s1,
+        .philosophy-cycle-svg.state-4 .lines-s2,
+        .philosophy-cycle-svg.state-4 .lines-s3 {
+            opacity: 0;
+        }
+        .philosophy-cycle-svg.state-4 .lines-s4 {
+            opacity: 0.6;
+        }
+
+        /* Slide 6 Agent timeline stages */
+        .timeline-year {
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        /* State 0-1: 2026 (1-2 agents) */
+        .agent-timeline-svg.state-0 .timeline-2026 { opacity: 1; filter: drop-shadow(0 0 10px var(--primary)); }
+        .agent-timeline-svg.state-0 .timeline-2027 { opacity: 0.25; }
+        .agent-timeline-svg.state-0 .timeline-2028 { opacity: 0.15; }
+        .agent-timeline-svg.state-0 .t-line-1 { stroke-dashoffset: 0; }
+        .agent-timeline-svg.state-0 .t-line-2 { opacity: 0.2; }
+
+        /* State 2-3: 2027 (multiple agents) */
+        .agent-timeline-svg.state-1 .timeline-2026 { opacity: 0.4; }
+        .agent-timeline-svg.state-1 .timeline-2027 { opacity: 1; filter: drop-shadow(0 0 10px var(--primary)); }
+        .agent-timeline-svg.state-1 .timeline-2028 { opacity: 0.25; }
+        .agent-timeline-svg.state-1 .t-line-1 { stroke: var(--primary); }
+        .agent-timeline-svg.state-1 .t-line-2 { stroke-dashoffset: -10; opacity: 0.6; }
+
+        /* State 4: 2028 (Full agentic ecosystem) */
+        .agent-timeline-svg.state-2 .timeline-2026,
+        .agent-timeline-svg.state-3 .timeline-2026,
+        .agent-timeline-svg.state-4 .timeline-2026 { opacity: 0.3; }
+        .agent-timeline-svg.state-2 .timeline-2027,
+        .agent-timeline-svg.state-3 .timeline-2027,
+        .agent-timeline-svg.state-4 .timeline-2027 { opacity: 0.4; }
+        .agent-timeline-svg.state-2 .timeline-2028,
+        .agent-timeline-svg.state-3 .timeline-2028,
+        .agent-timeline-svg.state-4 .timeline-2028 { opacity: 1; filter: drop-shadow(0 0 15px var(--primary)); }
+        .agent-timeline-svg.state-2 .t-line-1,
+        .agent-timeline-svg.state-3 .t-line-1,
+        .agent-timeline-svg.state-4 .t-line-1 { stroke: var(--primary); }
+        .agent-timeline-svg.state-2 .t-line-2,
+        .agent-timeline-svg.state-3 .t-line-2,
+        .agent-timeline-svg.state-4 .t-line-2 { stroke: var(--primary); stroke-dashoffset: -20; opacity: 1; }
+
+        /* Slide 7 circular dial gauge & principles highlight */
+        .principle-quadrant {
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0.25;
+        }
+        /* State 1 -> Voice */
+        .principles-svg.state-1 .quadrant-voice { opacity: 1; filter: drop-shadow(0 0 12px var(--primary)); }
+        /* State 2 -> Context */
+        .principles-svg.state-2 .quadrant-context { opacity: 1; filter: drop-shadow(0 0 12px var(--primary)); }
+        /* State 3 -> Mobility */
+        .principles-svg.state-3 .quadrant-mobility { opacity: 1; filter: drop-shadow(0 0 12px var(--primary)); }
+        /* State 4 -> Time saving */
+        .principles-svg.state-4 .quadrant-time { opacity: 1; filter: drop-shadow(0 0 12px var(--primary)); }
+        
+        /* Default state: show all slightly active */
+        .principles-svg.state-0 .principle-quadrant { opacity: 0.8; }
+
+        /* Focus Mode Styles */
+        .presentation-container.focus-mode .slide.active .bento-card.hero-card {
+            grid-column: span 12 !important;
+            grid-row: span 12 !important;
+            transform: scale(1.02) !important;
+            z-index: 50 !important;
+        }
+        .presentation-container.focus-mode .slide.active .bento-card.hero-card .card-visual {
+            height: 70% !important;
+        }
+        .presentation-container.focus-mode .slide.active .bento-card.hero-card .card-visual svg {
+            max-width: 460px !important;
+        }
+        .presentation-container.focus-mode .slide.active .bento-card:not(.hero-card) {
+            opacity: 0 !important;
+            transform: translateY(30px) scale(0.95) !important;
+            pointer-events: none !important;
+            transition-delay: 0s !important;
         }
     </style>
 </head>
@@ -490,19 +741,115 @@
                     <!-- Card 1: Hero Card (Title & Visual) -->
                     <div class="bento-card col-7 row-12 delay-0 hero-card">
                         <div class="card-visual">
-                            <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g class="animated-mesh">
-                                    <circle cx="100" cy="100" r="80" stroke="var(--primary)" stroke-width="1.5" stroke-dasharray="10 5" opacity="0.3"/>
-                                    <circle cx="100" cy="100" r="50" stroke="var(--primary)" stroke-width="2" opacity="0.5"/>
-                                    <circle cx="100" cy="100" r="20" stroke="var(--primary)" stroke-width="3"/>
-                                    <line x1="100" y1="20" x2="100" y2="180" stroke="var(--primary)" stroke-width="1" opacity="0.3"/>
-                                    <line x1="20" y1="100" x2="180" y2="100" stroke="var(--primary)" stroke-width="1" opacity="0.3"/>
-                                    <line x1="43.4" y1="43.4" x2="156.6" y2="156.6" stroke="var(--primary)" stroke-width="1" opacity="0.2"/>
-                                    <line x1="43.4" y1="156.6" x2="156.6" y2="43.4" stroke="var(--primary)" stroke-width="1" opacity="0.2"/>
-                                    <circle cx="100" cy="20" r="6" fill="var(--primary)" class="pulse-element"/>
-                                    <circle cx="100" cy="180" r="6" fill="var(--primary)" class="pulse-element"/>
-                                    <circle cx="20" cy="100" r="6" fill="var(--primary)" class="pulse-element"/>
-                                    <circle cx="180" cy="100" r="6" fill="var(--primary)" class="pulse-element"/>
+                            <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="philosophy-cycle-svg">
+                                <!-- Unified background brain profile -->
+                                <path class="brain-outline pulse-element" d="M 100,45 C 55,45 35,70 35,100 C 35,120 45,130 65,130 C 70,140 85,150 100,150 C 115,150 130,140 135,130 C 155,130 165,120 165,100 C 165,70 145,45 100,45 Z" stroke="var(--primary)" stroke-width="1.2" fill="rgba(0,168,150,0.04)"/>
+
+                                <!-- Connections (Lines) groups -->
+                                <!-- State 1 Lines: P1-P2, P1-P3 -->
+                                <g class="lines-s1">
+                                    <line x1="100" y1="75" x2="55" y2="105" stroke="var(--primary)" stroke-width="1.2" opacity="0.6"/>
+                                    <line x1="100" y1="75" x2="145" y2="105" stroke="var(--primary)" stroke-width="1.2" opacity="0.6"/>
+                                </g>
+
+                                <!-- State 2 Lines: Connect the 6 nodes -->
+                                <g class="lines-s2">
+                                    <line x1="100" y1="65" x2="60" y2="90" stroke="var(--primary)" stroke-width="1" opacity="0.5"/>
+                                    <line x1="100" y1="65" x2="140" y2="90" stroke="var(--primary)" stroke-width="1" opacity="0.5"/>
+                                    <line x1="60" y1="90" x2="45" y2="130" stroke="var(--primary)" stroke-width="1" opacity="0.5"/>
+                                    <line x1="60" y1="90" x2="100" y2="135" stroke="var(--primary)" stroke-width="1" opacity="0.5"/>
+                                    <line x1="140" y1="90" x2="155" y2="130" stroke="var(--primary)" stroke-width="1" opacity="0.5"/>
+                                    <line x1="140" y1="90" x2="100" y2="135" stroke="var(--primary)" stroke-width="1" opacity="0.5"/>
+                                    <line x1="45" y1="130" x2="100" y2="135" stroke="var(--primary)" stroke-width="1" opacity="0.4"/>
+                                    <line x1="155" y1="130" x2="100" y2="135" stroke="var(--primary)" stroke-width="1" opacity="0.4"/>
+                                </g>
+
+                                <!-- State 3 Lines: Network lines -->
+                                <g class="lines-s3">
+                                    <line x1="100" y1="50" x2="60" y2="70" stroke="var(--primary)" stroke-width="0.8"/>
+                                    <line x1="100" y1="50" x2="140" y2="70" stroke="var(--primary)" stroke-width="0.8"/>
+                                    <line x1="100" y1="50" x2="100" y2="95" stroke="var(--primary)" stroke-width="0.8"/>
+                                    <line x1="60" y1="70" x2="40" y2="100" stroke="var(--primary)" stroke-width="0.8"/>
+                                    <line x1="60" y1="70" x2="100" y2="95" stroke="var(--primary)" stroke-width="0.8"/>
+                                    <line x1="140" y1="70" x2="160" y2="100" stroke="var(--primary)" stroke-width="0.8"/>
+                                    <line x1="140" y1="70" x2="100" y2="95" stroke="var(--primary)" stroke-width="0.8"/>
+                                    <line x1="40" y1="100" x2="60" y2="130" stroke="var(--primary)" stroke-width="0.8"/>
+                                    <line x1="160" y1="100" x2="140" y2="130" stroke="var(--primary)" stroke-width="0.8"/>
+                                    <line x1="60" y1="130" x2="100" y2="150" stroke="var(--primary)" stroke-width="0.8"/>
+                                    <line x1="140" y1="130" x2="100" y2="150" stroke="var(--primary)" stroke-width="0.8"/>
+                                    <line x1="100" y1="95" x2="100" y2="150" stroke="var(--primary)" stroke-width="0.8"/>
+                                </g>
+
+                                <!-- State 4 Lines: Brain connections -->
+                                <g class="lines-s4">
+                                    <line x1="60" y1="80" x2="80" y2="60" stroke="var(--primary)" stroke-width="0.8"/>
+                                    <line x1="80" y1="60" x2="100" y2="52" stroke="var(--primary)" stroke-width="0.8"/>
+                                    <line x1="100" y1="52" x2="120" y2="60" stroke="var(--primary)" stroke-width="0.8"/>
+                                    <line x1="120" y1="60" x2="140" y2="80" stroke="var(--primary)" stroke-width="0.8"/>
+                                    <line x1="140" y1="80" x2="145" y2="105" stroke="var(--primary)" stroke-width="0.8"/>
+                                    <line x1="145" y1="105" x2="125" y2="125" stroke="var(--primary)" stroke-width="0.8"/>
+                                    <line x1="125" y1="125" x2="100" y2="135" stroke="var(--primary)" stroke-width="0.8"/>
+                                    <line x1="100" y1="135" x2="75" y2="125" stroke="var(--primary)" stroke-width="0.8"/>
+                                    <line x1="75" y1="125" x2="55" y2="105" stroke="var(--primary)" stroke-width="0.8"/>
+                                    <line x1="55" y1="105" x2="60" y2="80" stroke="var(--primary)" stroke-width="0.8"/>
+                                    
+                                    <line x1="80" y1="95" x2="60" y2="80" stroke="var(--primary)" stroke-width="0.6" opacity="0.5"/>
+                                    <line x1="80" y1="95" x2="75" y2="125" stroke="var(--primary)" stroke-width="0.6" opacity="0.5"/>
+                                    <line x1="120" y1="95" x2="140" y2="80" stroke="var(--primary)" stroke-width="0.6" opacity="0.5"/>
+                                    <line x1="120" y1="95" x2="125" y2="125" stroke="var(--primary)" stroke-width="0.6" opacity="0.5"/>
+                                    <line x1="100" y1="90" x2="100" y2="52" stroke="var(--primary)" stroke-width="0.6" opacity="0.5"/>
+                                    <line x1="100" y1="90" x2="100" y2="135" stroke="var(--primary)" stroke-width="0.6" opacity="0.5"/>
+                                    <line x1="80" y1="95" x2="100" y2="90" stroke="var(--primary)" stroke-width="0.6" opacity="0.6"/>
+                                    <line x1="120" y1="95" x2="100" y2="90" stroke="var(--primary)" stroke-width="0.6" opacity="0.6"/>
+                                </g>
+
+                                <!-- Unified Person Groups (P1-P6) -->
+                                <g class="person p1">
+                                    <circle class="head pulse-element" cx="0" cy="0" r="8" stroke="var(--primary)" stroke-width="2" fill="rgba(0,168,150,0.1)"/>
+                                    <path class="body" d="M -14,22 C -14,10 14,10 14,22" stroke="var(--primary)" stroke-width="2" fill="none"/>
+                                </g>
+                                <g class="person p2">
+                                    <circle class="head" cx="0" cy="0" r="8" stroke="var(--primary)" stroke-width="1.8" fill="rgba(0,168,150,0.1)"/>
+                                    <path class="body" d="M -12,20 C -12,9 12,9 12,20" stroke="var(--primary)" stroke-width="1.8" fill="none"/>
+                                </g>
+                                <g class="person p3">
+                                    <circle class="head" cx="0" cy="0" r="8" stroke="var(--primary)" stroke-width="1.8" fill="rgba(0,168,150,0.1)"/>
+                                    <path class="body" d="M -12,20 C -12,9 12,9 12,20" stroke="var(--primary)" stroke-width="1.8" fill="none"/>
+                                </g>
+                                <g class="person p4">
+                                    <circle class="head" cx="0" cy="0" r="8" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,168,150,0.1)"/>
+                                    <path class="body" d="M -11,18 C -11,8 11,8 11,18" stroke="var(--primary)" stroke-width="1.5" fill="none"/>
+                                </g>
+                                <g class="person p5">
+                                    <circle class="head" cx="0" cy="0" r="8" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,168,150,0.1)"/>
+                                    <path class="body" d="M -11,18 C -11,8 11,8 11,18" stroke="var(--primary)" stroke-width="1.5" fill="none"/>
+                                </g>
+                                <g class="person p6">
+                                    <circle class="head" cx="0" cy="0" r="8" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,168,150,0.1)"/>
+                                    <path class="body" d="M -11,18 C -11,8 11,8 11,18" stroke="var(--primary)" stroke-width="1.5" fill="none"/>
+                                </g>
+
+                                <!-- Unified Extra Nodes (N7-N13) -->
+                                <g class="node n7">
+                                    <circle cx="0" cy="0" r="5" stroke="var(--primary)" stroke-width="1.5" fill="#FFFFFF" class="pulse-element"/>
+                                </g>
+                                <g class="node n8">
+                                    <circle cx="0" cy="0" r="5" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,168,150,0.1)"/>
+                                </g>
+                                <g class="node n9">
+                                    <circle cx="0" cy="0" r="5" stroke="var(--primary)" stroke-width="1.5" fill="#FFFFFF" class="pulse-element"/>
+                                </g>
+                                <g class="node n10">
+                                    <circle cx="0" cy="0" r="5" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,168,150,0.1)"/>
+                                </g>
+                                <g class="node n11">
+                                    <circle cx="0" cy="0" r="5" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,168,150,0.1)"/>
+                                </g>
+                                <g class="node n12">
+                                    <circle cx="0" cy="0" r="5" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,168,150,0.1)"/>
+                                </g>
+                                <g class="node n13">
+                                    <circle cx="0" cy="0" r="5" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,168,150,0.1)"/>
                                 </g>
                             </svg>
                         </div>
@@ -512,12 +859,16 @@
                         </div>
                     </div>
 
-                    <!-- Card 2: Intro Description (Top Right) -->
+                    <!-- Card 2: Acronym Definition (Top Right) -->
                     <div class="bento-card col-5 row-6 delay-12">
-                        <div class="card-content">
-                            <p class="slide-body-p">
-                                Оцифровка вашего опыта и взращивание персонального ИИ-клона для освобождения времени и масштабирования бизнеса.
-                            </p>
+                        <div class="card-content" style="gap: 15px;">
+                            <span class="slide-category" style="font-size: 14pt; margin-bottom: 5px;">Методология РОСТ:</span>
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <div style="font-size: 20pt; line-height: 1.25; color: var(--text-color);"><strong style="color: var(--primary); font-size: 26pt; font-weight: 800;">Р</strong>егламенты,</div>
+                                <div style="font-size: 20pt; line-height: 1.25; color: var(--text-color);"><strong style="color: var(--primary); font-size: 26pt; font-weight: 800;">О</strong>свобождающие ваше время,</div>
+                                <div style="font-size: 20pt; line-height: 1.25; color: var(--text-color);">дающие <strong style="color: var(--primary); font-size: 26pt; font-weight: 800;">С</strong>вободу,</div>
+                                <div style="font-size: 20pt; line-height: 1.25; color: var(--text-color);">где вы сможете применить <strong style="color: var(--primary); font-size: 26pt; font-weight: 800;">Т</strong>ехнологии.</div>
+                            </div>
                         </div>
                     </div>
 
@@ -540,62 +891,54 @@
                         <div class="card-visual">
                             <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <defs>
-                                    <radialGradient id="hologram-glow" cx="50%" cy="100%" r="100%">
-                                        <stop offset="0%" stop-color="var(--primary)" stop-opacity="0.3"/>
+                                    <radialGradient id="brain-glow" cx="50%" cy="50%" r="50%">
+                                        <stop offset="0%" stop-color="var(--primary)" stop-opacity="0.25"/>
                                         <stop offset="100%" stop-color="var(--primary)" stop-opacity="0"/>
                                     </radialGradient>
                                 </defs>
-                                
-                                <!-- Hologram projection rays -->
-                                <polygon points="45,150 20,80 70,80" fill="url(#hologram-glow)"/>
-                                <ellipse cx="45" cy="150" rx="18" ry="4" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,168,150,0.1)"/>
-                                
-                                <!-- Brain hologram -->
-                                <path d="M 45,75 C 30,75 22,83 22,95 C 22,107 30,115 45,115" stroke="var(--primary)" stroke-width="2" fill="none" class="pulse-element"/>
-                                <path d="M 45,75 C 60,75 68,83 68,95 C 68,107 60,115 45,115" stroke="var(--primary)" stroke-width="2" fill="none" class="pulse-element"/>
-                                <path d="M 45,82 C 37,82 32,90 32,95 C 32,100 37,108 45,108" stroke="var(--primary)" stroke-width="1" fill="none" opacity="0.7"/>
-                                <path d="M 45,82 C 53,82 58,90 58,95 C 58,100 53,108 45,108" stroke="var(--primary)" stroke-width="1" fill="none" opacity="0.7"/>
-                                
-                                <!-- Brain mesh lines -->
-                                <line x1="22" y1="95" x2="45" y2="75" stroke="var(--primary)" stroke-width="0.8" opacity="0.5"/>
-                                <line x1="68" y1="95" x2="45" y2="75" stroke="var(--primary)" stroke-width="0.8" opacity="0.5"/>
-                                <line x1="22" y1="95" x2="45" y2="115" stroke="var(--primary)" stroke-width="0.8" opacity="0.5"/>
-                                <line x1="68" y1="95" x2="45" y2="115" stroke="var(--primary)" stroke-width="0.8" opacity="0.5"/>
-                                <line x1="32" y1="95" x2="58" y2="95" stroke="var(--primary)" stroke-width="0.8" opacity="0.3"/>
-                                
-                                <!-- Brain nodes -->
-                                <circle cx="45" cy="75" r="3" fill="#FFFFFF" class="pulse-element-delay"/>
-                                <circle cx="22" cy="95" r="3" fill="var(--primary)"/>
-                                <circle cx="68" cy="95" r="3" fill="var(--primary)"/>
-                                <circle cx="45" cy="115" r="3" fill="#FFFFFF" class="pulse-element-delay"/>
-                                
-                                <!-- Computer Workstation -->
-                                <rect x="92" y="90" width="26" height="18" rx="2" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,0,0,0.4)"/>
-                                <line x1="96" y1="95" x2="108" y2="95" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
-                                <line x1="96" y1="99" x2="114" y2="99" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
-                                <line x1="96" y1="103" x2="104" y2="103" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
-                                <path d="M 85,112 L 125,112 L 130,118 L 80,118 Z" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,168,150,0.1)"/>
-                                
-                                <!-- User silhouette -->
-                                <circle cx="105" cy="74" r="6" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,0,0,0.2)" class="pulse-element"/>
-                                <path d="M 92,90 C 92,80 118,80 118,90 Z" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,168,150,0.05)"/>
-                                
-                                <!-- Smartphone -->
-                                <rect x="153" y="75" width="24" height="42" rx="4" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,0,0,0.3)"/>
-                                <rect x="161" y="77" width="8" height="2" rx="1" fill="var(--primary)"/>
-                                <rect x="157" y="83" width="10" height="4" rx="1" fill="var(--primary)" opacity="0.4"/>
-                                <rect x="163" y="91" width="10" height="4" rx="1" fill="rgba(255,255,255,0.2)"/>
-                                <rect x="157" y="99" width="12" height="4" rx="1" fill="var(--primary)" opacity="0.4"/>
-                                <rect x="161" y="107" width="12" height="4" rx="1" fill="rgba(255,255,255,0.2)"/>
-                                
-                                <!-- Ecosystem connection links -->
-                                <path d="M 60,95 Q 75,95 90,100" stroke="var(--primary)" stroke-width="1.2" stroke-dasharray="3 2" class="pulse-element-delay"/>
-                                <path d="M 120,108 Q 135,108 151,95" stroke="var(--primary)" stroke-width="1.2" stroke-dasharray="3 2" class="pulse-element"/>
-                                <path d="M 151,82 Q 100,55 60,82" stroke="var(--primary)" stroke-width="1.2" stroke-dasharray="3 2" class="pulse-element-delay"/>
-                                
+
+                                <!-- Central glowing First Brain -->
+                                <circle cx="100" cy="95" r="35" fill="url(#brain-glow)"/>
+                                <path class="brain-core pulse-element" d="M 100,70 C 82,70 73,78 73,95 C 73,103 78,108 85,108 C 87,113 93,117 100,117 C 107,117 113,113 115,108 C 122,108 127,103 127,95 C 127,78 118,70 100,70 Z" stroke="var(--primary)" stroke-width="2" fill="rgba(0,168,150,0.05)"/>
+                                <path d="M 100,78 C 88,78 82,85 82,95 C 82,102 88,104 100,104" stroke="var(--primary)" stroke-width="1" opacity="0.5"/>
+                                <path d="M 100,78 C 112,78 118,85 118,95 C 118,102 112,104 100,104" stroke="var(--primary)" stroke-width="1" opacity="0.5"/>
+                                <circle cx="100" cy="95" r="4" fill="#FFFFFF" class="pulse-element"/>
+
+                                <!-- Workstation (Second Brain component) on Left -->
+                                <g transform="translate(20, 100)">
+                                    <!-- Laptop/PC screen -->
+                                    <rect x="5" y="0" width="26" height="18" rx="2" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,0,0,0.5)"/>
+                                    <!-- Keyboard stand -->
+                                    <path d="M 0,20 L 36,20 L 32,24 L 4,24 Z" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,168,150,0.2)"/>
+                                    <circle cx="18" cy="9" r="2" fill="var(--primary)" class="pulse-element-delay"/>
+                                </g>
+
+                                <!-- Smartphone (Second Brain component) on Right -->
+                                <g transform="translate(148, 85)">
+                                    <!-- Phone frame -->
+                                    <rect x="0" y="0" width="22" height="38" rx="3" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,0,0,0.5)"/>
+                                    <!-- Screen contents -->
+                                    <rect x="4" y="6" width="14" height="3" rx="0.5" fill="var(--primary)" opacity="0.6"/>
+                                    <rect x="4" y="12" width="14" height="3" rx="0.5" fill="rgba(255,255,255,0.3)"/>
+                                    <rect x="4" y="18" width="14" height="3" rx="0.5" fill="var(--primary)" opacity="0.6"/>
+                                    <circle cx="11" cy="33" r="1.5" fill="var(--primary)"/>
+                                </g>
+
+                                <!-- Ecosystem connection lines (Brain to Devices) -->
+                                <path class="ecosystem-path" d="M 73,95 Q 45,95 40,100" stroke="var(--primary)" stroke-width="1.5" stroke-dasharray="3 3"/>
+                                <path class="ecosystem-path" d="M 127,95 Q 155,95 158,100" stroke="var(--primary)" stroke-width="1.5" stroke-dasharray="3 3"/>
+
+                                <!-- Animated data packets -->
+                                <circle r="2" fill="#FFFFFF">
+                                    <animateMotion dur="2.5s" repeatCount="indefinite" path="M 73,95 Q 45,95 40,100" />
+                                </circle>
+                                <circle r="2" fill="#FFFFFF">
+                                    <animateMotion dur="2s" repeatCount="indefinite" path="M 127,95 Q 155,95 158,100" />
+                                </circle>
+
                                 <!-- Labels -->
-                                <text x="45" y="168" text-anchor="middle" fill="#FFFFFF" font-size="8" font-family="monospace" letter-spacing="1">1ST BRAIN</text>
-                                <text x="135" y="168" text-anchor="middle" fill="#FFFFFF" font-size="8" font-family="monospace" letter-spacing="1" opacity="0.7">2ND BRAIN</text>
+                                <text x="100" y="55" text-anchor="middle" fill="#FFFFFF" font-size="8" font-family="monospace" letter-spacing="1">1-Й МОЗГ (ГОЛОВА)</text>
+                                <text x="100" y="155" text-anchor="middle" fill="var(--primary)" font-size="8" font-family="monospace" letter-spacing="1">2-Й МОЗГ (КОМПЬЮТЕР И ТЕЛЕФОН)</text>
                             </svg>
                         </div>
                         <div>
@@ -657,7 +1000,7 @@
                                 <circle cx="160" cy="50" r="12" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,168,150,0.15)" class="source-node pulse-element-delay"/>
                                 <text x="160" y="52" text-anchor="middle" fill="#FFFFFF" font-size="4.5" font-family="sans-serif" font-weight="bold">ССЫЛКИ</text>
 
-                                <!-- Hardware accelerated moving data packets (circles moving along pathways) -->
+                                <!-- Hardware accelerated moving data packets -->
                                 <circle r="2.5" fill="#FFFFFF">
                                     <animateMotion dur="2.2s" repeatCount="indefinite" path="M 40,60 Q 60,110 85,110" />
                                 </circle>
@@ -707,24 +1050,34 @@
                     <!-- Card 1: Hero Card (Title & Visual) -->
                     <div class="bento-card col-6 row-12 delay-0 hero-card">
                         <div class="card-visual">
-                            <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="25" y="45" width="55" height="110" rx="6" stroke="rgba(255,255,255,0.1)" stroke-width="1.5" fill="rgba(0,0,0,0.2)"/>
-                                <rect x="35" y="60" width="35" height="8" rx="2" fill="rgba(255,51,102,0.3)"/>
-                                <rect x="35" y="75" width="20" height="8" rx="2" fill="rgba(255,51,102,0.3)"/>
-                                <rect x="35" y="90" width="30" height="8" rx="2" fill="rgba(255,51,102,0.3)"/>
-                                <circle cx="70" cy="64" r="3" fill="#ff3366" class="pulse-element"/>
-                                <circle cx="60" cy="79" r="3" fill="#ff3366" class="pulse-element-delay"/>
-                                <text x="52.5" y="140" text-anchor="middle" fill="#ff3366" font-size="7" font-family="monospace">ХАОС</text>
-
-                                <rect x="120" y="45" width="55" height="110" rx="6" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,0,0,0.3)"/>
-                                <rect x="130" y="60" width="35" height="10" rx="2" fill="rgba(0,168,150,0.2)" stroke="var(--primary)" stroke-width="1"/>
-                                <rect x="130" y="80" width="35" height="10" rx="2" fill="rgba(0,168,150,0.1)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-                                <rect x="130" y="100" width="35" height="10" rx="2" fill="rgba(0,168,150,0.1)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-                                <circle cx="158" cy="65" r="2" fill="var(--primary)" class="pulse-element"/>
-                                <text x="147.5" y="140" text-anchor="middle" fill="var(--primary)" font-size="7" font-family="monospace">СИСТЕМА</text>
+                            <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="chaos-svg">
+                                <!-- Left Device: Chaos / Raw input -->
+                                <rect x="20" y="45" width="55" height="110" rx="6" stroke="rgba(255,255,255,0.1)" stroke-width="1.5" fill="rgba(0,0,0,0.2)"/>
+                                <text x="47.5" y="142" text-anchor="middle" fill="#ff3366" font-size="7" font-family="monospace" font-weight="bold">ХАОС В СЕТИ</text>
                                 
-                                <path d="M85 100 H115" stroke="var(--primary)" stroke-width="1.5" stroke-dasharray="4 2"/>
-                                <path d="M100 95 L108 100 L100 105" fill="var(--primary)"/>
+                                <!-- Chaos nodes flying around (State 0) -->
+                                <g>
+                                    <circle class="chaos-node" cx="0" cy="0" r="4" fill="#ff3366" />
+                                    <circle class="chaos-node" cx="0" cy="0" r="4.5" fill="#ff3366" />
+                                    <circle class="chaos-node" cx="0" cy="0" r="3.5" fill="#ff3366" />
+                                    <circle class="chaos-node" cx="0" cy="0" r="5" fill="#ff3366" />
+                                </g>
+
+                                <!-- Transfer Beam / Funnel filter -->
+                                <path class="transfer-beam" d="M 75,100 H 120" stroke="var(--primary)" stroke-width="2" stroke-dasharray="4 2" />
+                                <polygon class="transfer-beam" points="102,96 110,100 102,104" fill="var(--primary)"/>
+
+                                <!-- Right Device: System / Organized Knowledge -->
+                                <rect x="125" y="45" width="55" height="110" rx="6" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,0,0,0.3)"/>
+                                <text x="152.5" y="142" text-anchor="middle" fill="var(--primary)" font-size="7" font-family="monospace" font-weight="bold">СИСТЕМАТИЗАЦИЯ</text>
+
+                                <!-- Structured system items (State 2-4) -->
+                                <g class="system-group">
+                                    <rect class="system-row" x="133" y="60" width="39" height="12" rx="2" fill="rgba(0,168,150,0.1)" stroke="rgba(255,255,255,0.1)"/>
+                                    <rect class="system-row" x="133" y="77" width="39" height="12" rx="2" fill="rgba(0,168,150,0.1)" stroke="rgba(255,255,255,0.1)"/>
+                                    <rect class="system-row" x="133" y="94" width="39" height="12" rx="2" fill="rgba(0,168,150,0.1)" stroke="rgba(255,255,255,0.1)"/>
+                                    <circle cx="152.5" cy="115" r="4.5" fill="var(--primary)" class="pulse-element"/>
+                                </g>
                             </svg>
                         </div>
                         <div>
@@ -824,33 +1177,61 @@
                 </div>
             </div>
 
-            <!-- Slide 6: Подготовка к 2027 -->
+            <!-- Slide 6: Подготовка к 2028 -->
             <div class="slide">
                 <div class="bento-grid">
                     <!-- Card 1: Hero Card (Title & Visual) -->
                     <div class="bento-card col-6 row-12 delay-0 hero-card">
                         <div class="card-visual">
-                            <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="80" y="80" width="40" height="40" rx="8" stroke="var(--primary)" stroke-width="2.5" fill="rgba(0,168,150,0.1)" class="pulse-element"/>
-                                <circle cx="100" cy="100" r="8" fill="var(--primary)"/>
-                                <circle cx="45" cy="45" r="12" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,0,0,0.4)" class="pulse-element-delay"/>
-                                <circle cx="155" cy="45" r="12" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,0,0,0.4)" class="pulse-element-delay"/>
-                                <circle cx="45" cy="155" r="12" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,0,0,0.4)" class="pulse-element-delay"/>
-                                <circle cx="155" cy="155" r="12" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,0,0,0.4)" class="pulse-element-delay"/>
-                                <line x1="80" y1="88" x2="55" y2="55" stroke="var(--primary)" stroke-width="1.5" stroke-dasharray="3 3"/>
-                                <line x1="120" y1="88" x2="145" y2="55" stroke="var(--primary)" stroke-width="1.5" stroke-dasharray="3 3"/>
-                                <line x1="80" y1="112" x2="55" y2="145" stroke="var(--primary)" stroke-width="1.5" stroke-dasharray="3 3"/>
-                                <line x1="120" y1="112" x2="145" y2="145" stroke="var(--primary)" stroke-width="1.5" stroke-dasharray="3 3"/>
-                                <circle cx="45" cy="45" r="4" fill="var(--primary)"/>
-                                <circle cx="155" cy="45" r="4" fill="var(--primary)"/>
-                                <circle cx="45" cy="155" r="4" fill="var(--primary)"/>
-                                <circle cx="155" cy="155" r="4" fill="var(--primary)"/>
-                                <text x="100" y="165" text-anchor="middle" fill="#FFFFFF" font-size="8" font-family="monospace" letter-spacing="1">СЕТЬ АГЕНТОВ 2027</text>
+                            <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="agent-timeline-svg">
+                                <!-- Horizontal transition timeline lines -->
+                                <line class="t-line-1" x1="65" y1="100" x2="80" y2="100" stroke="var(--primary)" stroke-width="1.5" stroke-dasharray="3 2"/>
+                                <line class="t-line-2" x1="125" y1="100" x2="140" y2="100" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" stroke-dasharray="3 2"/>
+
+                                <!-- 2026 Year (1-2 Agents) -->
+                                <g class="timeline-year timeline-2026" transform="translate(40, 100)">
+                                    <circle cx="0" cy="0" r="18" fill="rgba(0,168,150,0.05)" stroke="var(--primary)" stroke-width="1.5"/>
+                                    <circle cx="-6" cy="-6" r="3.5" fill="var(--primary)"/>
+                                    <circle cx="6" cy="6" r="3.5" fill="var(--primary)"/>
+                                    <line x1="-6" y1="-6" x2="6" y2="6" stroke="var(--primary)" stroke-width="0.8"/>
+                                    <text x="0" y="32" text-anchor="middle" fill="#FFFFFF" font-size="6.5" font-family="monospace">2026</text>
+                                    <text x="0" y="42" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="5" font-family="monospace">1-2 АГЕНТА</text>
+                                </g>
+
+                                <!-- 2027 Year (Network of Agents) -->
+                                <g class="timeline-year timeline-2027" transform="translate(100, 100)">
+                                    <circle cx="0" cy="0" r="22" fill="rgba(0,168,150,0.08)" stroke="var(--primary)" stroke-width="1.5"/>
+                                    <circle cx="0" cy="-10" r="3" fill="var(--primary)"/>
+                                    <circle cx="-9" cy="5" r="3" fill="var(--primary)"/>
+                                    <circle cx="9" cy="5" r="3" fill="var(--primary)"/>
+                                    <line x1="0" y1="-10" x2="-9" y2="5" stroke="var(--primary)" stroke-width="0.8"/>
+                                    <line x1="0" y1="-10" x2="9" y2="5" stroke="var(--primary)" stroke-width="0.8"/>
+                                    <line x1="-9" y1="5" x2="9" y2="5" stroke="var(--primary)" stroke-width="0.8"/>
+                                    <text x="0" y="32" text-anchor="middle" fill="#FFFFFF" font-size="6.5" font-family="monospace">2027</text>
+                                    <text x="0" y="42" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="5" font-family="monospace">СЕТЬ ИИ</text>
+                                </g>
+
+                                <!-- 2028 Year (Full Agentic Ecosystem) -->
+                                <g class="timeline-year timeline-2028" transform="translate(160, 100)">
+                                    <circle cx="0" cy="0" r="20" fill="rgba(0,168,150,0.15)" stroke="var(--primary)" stroke-width="2" class="pulse-element"/>
+                                    <!-- Central brain node -->
+                                    <circle cx="0" cy="0" r="4.5" fill="#FFFFFF" class="pulse-element-delay"/>
+                                    <!-- Surrounding orbit nodes -->
+                                    <circle cx="-10" cy="-10" r="2" fill="var(--primary)"/>
+                                    <circle cx="10" cy="-10" r="2" fill="var(--primary)"/>
+                                    <circle cx="-10" cy="10" r="2" fill="var(--primary)"/>
+                                    <circle cx="10" cy="10" r="2" fill="var(--primary)"/>
+                                    <path d="M-10,-10 Q0,0 10,-10" stroke="var(--primary)" stroke-width="0.5"/>
+                                    <text x="0" y="32" text-anchor="middle" fill="#FFFFFF" font-size="6.5" font-family="monospace">2028</text>
+                                    <text x="0" y="42" text-anchor="middle" fill="var(--primary)" font-size="5" font-family="monospace">АВТОНОМИЯ</text>
+                                </g>
+
+                                <text x="100" y="170" text-anchor="middle" fill="#FFFFFF" font-size="8" font-family="monospace" letter-spacing="1">ЭВОЛЮЦИЯ АГЕНТОВ</text>
                             </svg>
                         </div>
                         <div>
                             <span class="slide-category">Эра Агентов</span>
-                            <h2 class="slide-title">Подготовка к 2027 году</h2>
+                            <h2 class="slide-title">Подготовка к 2028 году</h2>
                         </div>
                     </div>
 
@@ -858,8 +1239,8 @@
                     <div class="bento-card col-6 row-6 delay-12">
                         <div class="card-content">
                             <ul>
-                                <li>К 2027 году наступит эра тотальной интеграции персональных ИИ-агентов.</li>
-                                <li>Если ваша база знаний оцифрована сегодня, вы внедрите новых агентов за 10 минут, пока конкуренты будут только начинать обучение.</li>
+                                <li><strong>2026 год:</strong> Текущий этап — внедрение первых 1-2 ИИ-агентов для точечного закрытия узких операционных мест.</li>
+                                <li><strong>2027 год:</strong> Развертывание полноценной сети взаимодействующих ИИ-агентов. Оцифрованная база знаний — фундамент для мгновенного старта.</li>
                             </ul>
                         </div>
                     </div>
@@ -868,7 +1249,7 @@
                     <div class="bento-card col-6 row-6 delay-32">
                         <div class="card-content">
                             <ul>
-                                <li>Взрослый ИИ-клон сам спроектирует и запустит нужных автономных агентов под ваши операционные задачи. Вам даже не придется писать алгоритмы их работы.</li>
+                                <li><strong>2028 год:</strong> Переход на полностью автономные агентские экосистемы, самостоятельно управляющие бизнес-процессами без написания алгоритмов.</li>
                             </ul>
                         </div>
                     </div>
@@ -881,13 +1262,54 @@
                     <!-- Card 1: Hero Card (Title & Visual) -->
                     <div class="bento-card col-5 row-12 delay-0 hero-card">
                         <div class="card-visual">
-                            <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="100" cy="100" r="75" stroke="rgba(255,255,255,0.06)" stroke-width="12"/>
-                                <circle cx="100" cy="100" r="75" stroke="var(--primary)" stroke-width="12" stroke-dasharray="320 471" class="pulse-element"/>
-                                <circle cx="100" cy="100" r="50" stroke="rgba(255,255,255,0.1)" stroke-width="1" stroke-dasharray="4 4"/>
-                                <text x="100" y="95" text-anchor="middle" fill="#FFFFFF" font-size="24" font-weight="800" font-family="monospace">5X</text>
-                                <text x="100" y="115" text-anchor="middle" fill="var(--primary)" font-size="8" font-family="monospace" letter-spacing="1">ЭФФЕКТИВНОСТЬ</text>
-                                <text x="100" y="130" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="6" font-family="monospace">БЕЗОПАСНО / локально</text>
+                            <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="principles-svg">
+                                <!-- Connection lines -->
+                                <line x1="74" y1="50" x2="126" y2="50" stroke="rgba(255,255,255,0.08)" stroke-width="1" />
+                                <line x1="74" y1="140" x2="126" y2="140" stroke="rgba(255,255,255,0.08)" stroke-width="1" />
+                                <line x1="50" y1="74" x2="50" y2="116" stroke="rgba(255,255,255,0.08)" stroke-width="1" />
+                                <line x1="150" y1="74" x2="150" y2="116" stroke="rgba(255,255,255,0.08)" stroke-width="1" />
+
+                                <!-- Quadrant 1: Voice -->
+                                <g class="principle-quadrant quadrant-voice" transform="translate(50, 50)">
+                                    <circle cx="0" cy="0" r="24" fill="rgba(0,168,150,0.03)" stroke="var(--primary)" stroke-width="1.5"/>
+                                    <path d="M-5,-9 C-5,-12 5,-12 5,-9 L5,1 C5,4 -5,4 -5,1 Z" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,168,150,0.1)"/>
+                                    <path d="M-10,-1 C-10,7 10,7 10,-1" stroke="var(--primary)" stroke-width="1.5" fill="none"/>
+                                    <line x1="0" y1="7" x2="0" y2="11" stroke="var(--primary)" stroke-width="1.5"/>
+                                    <text x="0" y="31" text-anchor="middle" fill="#FFFFFF" font-size="5" font-family="monospace">ГОЛОС</text>
+                                </g>
+
+                                <!-- Quadrant 2: Context -->
+                                <g class="principle-quadrant quadrant-context" transform="translate(150, 50)">
+                                    <circle cx="0" cy="0" r="24" fill="rgba(0,168,150,0.03)" stroke="var(--primary)" stroke-width="1.5"/>
+                                    <rect x="-9" y="-11" width="18" height="6" rx="1" stroke="var(--primary)" stroke-width="1.2" fill="none"/>
+                                    <rect x="-9" y="-2" width="18" height="6" rx="1" stroke="var(--primary)" stroke-width="1.2" fill="none"/>
+                                    <rect x="-9" y="7" width="18" height="6" rx="1" stroke="var(--primary)" stroke-width="1.2" fill="none"/>
+                                    <line x1="-5" y1="-8" x2="5" y2="-8" stroke="var(--primary)" stroke-width="1" opacity="0.6"/>
+                                    <line x1="-5" y1="1" x2="5" y2="1" stroke="var(--primary)" stroke-width="1" opacity="0.6"/>
+                                    <line x1="-5" y1="10" x2="5" y2="10" stroke="var(--primary)" stroke-width="1" opacity="0.6"/>
+                                    <text x="0" y="31" text-anchor="middle" fill="#FFFFFF" font-size="5" font-family="monospace">КОНТЕКСТ</text>
+                                </g>
+
+                                <!-- Quadrant 3: Mobility -->
+                                <g class="principle-quadrant quadrant-mobility" transform="translate(50, 140)">
+                                    <circle cx="0" cy="0" r="24" fill="rgba(0,168,150,0.03)" stroke="var(--primary)" stroke-width="1.5"/>
+                                    <rect x="-8" y="-12" width="16" height="24" rx="2" stroke="var(--primary)" stroke-width="1.2" fill="rgba(0,0,0,0.3)"/>
+                                    <circle cx="0" cy="9" r="1" fill="var(--primary)"/>
+                                    <polygon points="-4,-2 4,-6 0,4" fill="var(--primary)" opacity="0.8"/>
+                                    <text x="0" y="31" text-anchor="middle" fill="#FFFFFF" font-size="5" font-family="monospace">МОБИЛЬНОСТЬ</text>
+                                </g>
+
+                                <!-- Quadrant 4: Time Saving -->
+                                <g class="principle-quadrant quadrant-time" transform="translate(150, 140)">
+                                    <circle cx="0" cy="0" r="24" fill="rgba(0,168,150,0.03)" stroke="var(--primary)" stroke-width="1.5"/>
+                                    <path d="M-7,-9 H7 L2,0 L7,9 H-7 L-2,0 Z" stroke="var(--primary)" stroke-width="1.5" fill="rgba(0,168,150,0.1)"/>
+                                    <circle cx="0" cy="4" r="1.5" fill="var(--primary)" class="pulse-element"/>
+                                    <text x="0" y="31" text-anchor="middle" fill="#FFFFFF" font-size="5" font-family="monospace">ВРЕМЯ</text>
+                                </g>
+
+                                <!-- Center Hub -->
+                                <circle cx="100" cy="95" r="14" fill="#0D0D11" stroke="var(--primary)" stroke-width="1.5" class="pulse-element"/>
+                                <text x="100" y="98" text-anchor="middle" fill="#FFFFFF" font-size="6.5" font-family="monospace" font-weight="bold">РОСТ</text>
                             </svg>
                         </div>
                         <div>
@@ -962,6 +1384,87 @@
             { primary: '#00A896', purple: '#8a2be2', blue: '#0077ff' }  // Slide 7 (Teal)
         ];
 
+        const container = document.querySelector('.presentation-container');
+        let currentStepIndex = 0;
+
+        function getActiveSubCards() {
+            const activeSlide = slides[currentSlideIndex];
+            if (!activeSlide) return [];
+            return Array.from(activeSlide.querySelectorAll('.bento-card:not(.hero-card)'));
+        }
+
+        function applyBuildStep() {
+            const subCards = getActiveSubCards();
+            
+            if (currentStepIndex === 0) {
+                // Step 0: Only Hero Card is visible. All other cards are hidden.
+                container.classList.remove('focus-mode');
+                subCards.forEach(card => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(30px) scale(0.95)';
+                    card.style.pointerEvents = 'none';
+                    card.style.transitionDelay = '0s';
+                });
+            } else if (currentStepIndex <= subCards.length) {
+                // Step 1 to N: Reveal cards one by one
+                container.classList.remove('focus-mode');
+                subCards.forEach((card, index) => {
+                    if (index < currentStepIndex) {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0) scale(1)';
+                        card.style.pointerEvents = 'auto';
+                    } else {
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(30px) scale(0.95)';
+                        card.style.pointerEvents = 'none';
+                    }
+                    card.style.transitionDelay = '0s';
+                });
+            } else if (currentStepIndex === subCards.length + 1) {
+                // Step N + 1: Focus Mode (expand Hero Card, hide others)
+                container.classList.add('focus-mode');
+                subCards.forEach(card => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(30px) scale(0.95)';
+                    card.style.pointerEvents = 'none';
+                    card.style.transitionDelay = '0s';
+                });
+            }
+        }
+
+        function handleNextAction() {
+            const subCards = getActiveSubCards();
+            const totalSteps = subCards.length + 1; // Step 0 up to Step N+1 (Focus Mode)
+
+            if (currentStepIndex < totalSteps) {
+                currentStepIndex++;
+                applyBuildStep();
+            } else {
+                // Advance slide
+                if (currentSlideIndex < slides.length - 1) {
+                    currentSlideIndex++;
+                    currentStepIndex = 0;
+                    updateSlides();
+                }
+            }
+        }
+
+        function handlePrevAction() {
+            if (currentStepIndex > 0) {
+                currentStepIndex--;
+                applyBuildStep();
+            } else {
+                // Go to previous slide, start at Focus Mode (last step)
+                if (currentSlideIndex > 0) {
+                    currentSlideIndex--;
+                    const prevSlide = slides[currentSlideIndex];
+                    const prevSubCards = prevSlide.querySelectorAll('.bento-card:not(.hero-card)');
+                    currentStepIndex = prevSubCards.length + 1;
+                    updateSlides();
+                }
+            }
+        }
+
         function updateSlides() {
             slides.forEach((slide, index) => {
                 slide.classList.remove('active', 'passed', 'next');
@@ -982,35 +1485,34 @@
             document.documentElement.style.setProperty('--accent-blue', currentColors.blue);
 
             indicator.innerText = `${currentSlideIndex + 1} / ${slides.length}`;
+
+            // Sync visual steps for the active slide
+            applyBuildStep();
         }
 
         prevBtn.addEventListener('click', () => {
-            if (currentSlideIndex > 0) {
-                currentSlideIndex--;
-                updateSlides();
-            }
+            handlePrevAction();
         });
 
         nextBtn.addEventListener('click', () => {
-            if (currentSlideIndex < slides.length - 1) {
-                currentSlideIndex++;
-                updateSlides();
-            }
+            handleNextAction();
         });
 
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight' || e.key === 'Space') {
-                if (currentSlideIndex < slides.length - 1) {
-                    currentSlideIndex++;
-                    updateSlides();
-                }
+                handleNextAction();
             } else if (e.key === 'ArrowLeft') {
-                if (currentSlideIndex > 0) {
-                    currentSlideIndex--;
-                    updateSlides();
-                }
+                handlePrevAction();
             }
+        });
+
+        // Global page click for clicker presentation advancing
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('#prev-btn') || e.target.closest('#next-btn') || e.target.closest('.nav-btn')) {
+                return;
+            }
+            handleNextAction();
         });
 
         // Initialize state
@@ -1044,7 +1546,7 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        const katakana = 'アァカサтанамaヤャラワガザダバパイィキシチニヒミリヰグズヅブペエェケセテнехемелеヱゲзедебепооォコсотонохомоёョлоヲгозодобовуッン';
+        const katakana = 'アァカサтанамaヤャラワгазадабапаиыкишичинихимиривыгуздубупееекесетенехемелевегезедебепооокосотонохомоёоловогозодобовун';
         const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         const nums = '0123456789';
         const alphabet = katakana + latin + nums;
