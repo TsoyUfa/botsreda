@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+
+{% block title %}Главная - Аналитика Р.О.С.Т.{% endblock %}
+{% block page_title %}Общая статистика{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <!-- Карточки с основной статистикой -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stat-card bg-primary text-white">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h5 class="text-white-50">Всего агентов</h5>
+                        <h2 class="mb-0">{{ stats.total_users }}</h2>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-users fa-2x text-white-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stat-card bg-success text-white">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h5 class="text-white-50">Активных (7 дней)</h5>
+                        <h2 class="mb-0">{{ stats.active_users }}</h2>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-user-check fa-2x text-white-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stat-card bg-info text-white">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h5 class="text-white-50">Сертифицированных</h5>
+                        <h2 class="mb-0">{{ stats.certified_agents }}</h2>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-graduation-cap fa-2x text-white-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stat-card bg-warning text-white">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h5 class="text-white-50">Сессий сегодня</h5>
+                        <h2 class="mb-0">{{ stats.today_sessions }}</h2>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-clock fa-2x text-white-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Дополнительная статистика -->
+    <div class="col-lg-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-chart-line me-2"></i>
+                <strong>Динамика регистраций</strong>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <small class="text-muted">Новых за 30 дней</small>
+                        <h4>{{ stats.new_users_30d }}</h4>
+                    </div>
+                    <div class="col-md-6">
+                        <small class="text-muted">Завершено уроков</small>
+                        <h4>{{ stats.completed_lessons }}</h4>
+                    </div>
+                </div>
+                
+                <div class="progress mb-3" style="height: 10px;">
+                    <div class="progress-bar bg-success" role="progressbar" 
+                         style="width: {{ (stats.active_users / max(stats.total_users, 1) * 100) | round }}%"
+                         aria-valuenow="{{ stats.active_users }}" 
+                         aria-valuemin="0" 
+                         aria-valuemax="{{ stats.total_users }}">
+                        Активность: {{ (stats.active_users / max(stats.total_users, 1) * 100) | round }}%
+                    </div>
+                </div>
+                <small class="text-muted">Процент активных пользователей</small>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-trophy me-2"></i>
+                <strong>Популярные модули</strong>
+            </div>
+            <div class="card-body">
+                {% for module in stats.popular_modules %}
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <i class="fas fa-book me-2"></i>
+                        <span>Блок {{ module.module_id }}</span>
+                    </div>
+                    <span class="badge bg-primary">{{ module.views }} просмотров</span>
+                </div>
+                {% endfor %}
+                
+                {% if not stats.popular_modules %}
+                <p class="text-muted">Нет данных о просмотренных модулях</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-bullhorn me-2"></i>
+                <strong>Быстрые действия</strong>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="/agents" class="btn btn-outline-primary">
+                        <i class="fas fa-users me-2"></i>
+                        Просмотреть всех агентов
+                    </a>
+                    <a href="/analytics" class="btn btn-outline-info">
+                        <i class="fas fa-chart-bar me-2"></i>
+                        Детальная аналитика
+                    </a>
+                    <a href="/export" class="btn btn-outline-success">
+                        <i class="fas fa-download me-2"></i>
+                        Экспортировать данные
+                    </a>
+                    <a href="/api/stats" class="btn btn-outline-secondary" target="_blank">
+                        <i class="fas fa-code me-2"></i>
+                        Открыть API (JSON)
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Информация о системе</strong>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <small class="text-muted">Версия системы</small>
+                        <p>Р.О.С.Т. Analytics v1.0</p>
+                    </div>
+                    <div class="col-6">
+                        <small class="text-muted">База данных</small>
+                        <p>SQLite + AI интеграция</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="alert alert-info mb-0">
+                    <i class="fas fa-lightbulb me-2"></i>
+                    <strong>Подсказка:</strong> Используйте Telegram-команду <code>/admin</code> для доступа к админ-панели напрямую в мессенджере.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для подробной информации -->
+<div class="modal fade" id="infoModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Информация</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Контент будет загружен динамически -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

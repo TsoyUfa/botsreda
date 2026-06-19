@@ -1,0 +1,281 @@
+{% extends "base.html" %}
+
+{% block title %}Аналитика - Р.О.С.Т.{% endblock %}
+{% block page_title %}Аналитика и графики{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <!-- График активности -->
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Активность пользователей</h5>
+            </div>
+            <div class="card-body">
+                <div id="activityChart" style="height: 400px;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Ключевые показатели -->
+    <div class="col-lg-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-tachometer-alt me-2"></i>Ключевые показатели</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>Активность сегодня</span>
+                        <span class="badge bg-primary" id="todayActivity">0</span>
+                    </div>
+                    <div class="progress mt-1" style="height: 6px;">
+                        <div class="progress-bar bg-primary" id="todayProgressBar" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>Средняя активность</span>
+                        <span class="badge bg-info" id="avgActivity">0</span>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>Пик активности</span>
+                        <span class="badge bg-success" id="peakActivity">0</span>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <small class="text-muted">Данные за последние 30 дней</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <!-- Популярность модулей -->
+    <div class="col-lg-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-book me-2"></i>Популярность модулей</h5>
+            </div>
+            <div class="card-body">
+                <div id="moduleChart" style="height: 350px;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Типы действий -->
+    <div class="col-lg-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-mouse-pointer me-2"></i>Распределение действий</h5>
+            </div>
+            <div class="card-body">
+                <div id="actionsChart" style="height: 350px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Детальная статистика -->
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-table me-2"></i>Детальная статистика</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Метрика</th>
+                                <th>Значение</th>
+                                <th>Изменение (24ч)</th>
+                                <th>Тренд</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Новые пользователи</td>
+                                <td id="newUsersCount">-</td>
+                                <td><span class="badge" id="newUsersChange">-</span></td>
+                                <td><i class="fas fa-minus text-muted" id="newUsersTrend"></i></td>
+                            </tr>
+                            <tr>
+                                <td>Активные пользователи</td>
+                                <td id="activeUsersCount">-</td>
+                                <td><span class="badge" id="activeUsersChange">-</span></td>
+                                <td><i class="fas fa-minus text-muted" id="activeUsersTrend"></i></td>
+                            </tr>
+                            <tr>
+                                <td>Завершенные уроки</td>
+                                <td id="completedLessonsCount">-</td>
+                                <td><span class="badge" id="completedLessonsChange">-</span></td>
+                                <td><i class="fas fa-minus text-muted" id="completedLessonsTrend"></i></td>
+                            </tr>
+                            <tr>
+                                <td>Пройденные тесты</td>
+                                <td id="passedQuizzesCount">-</td>
+                                <td><span class="badge" id="passedQuizzesChange">-</span></td>
+                                <td><i class="fas fa-minus text-muted" id="passedQuizzesTrend"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для деталей -->
+<div class="modal fade" id="detailsModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Детали показателя</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="modalDetailsContent">
+                <!-- Динамический контент -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Подключаем Plotly -->
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+<script>
+// Данные для графиков (в реальном приложении будут загружаться с сервера)
+const activityData = {
+    x: ['2024-01-15', '2024-01-16', '2024-01-17', '2024-01-18', '2024-01-19', 
+        '2024-01-20', '2024-01-21', '2024-01-22', '2024-01-23', '2024-01-24'],
+    y: [45, 52, 38, 65, 59, 72, 68, 83, 76, 91],
+    type: 'scatter',
+    mode: 'lines+markers',
+    name: 'Действия пользователей',
+    line: {color: '#007bff'}
+};
+
+const moduleData = {
+    x: ['Блок 1', 'Блок 2', 'Блок 3', 'Блок 4', 'Блок 5', 'Блок 6', 'Блок 7'],
+    y: [120, 95, 87, 65, 58, 42, 38],
+    type: 'bar',
+    name: 'Просмотры модулей',
+    marker: {color: '#28a745'}
+};
+
+const actionsData = {
+    labels: ['Просмотр уроков', 'Прохождение тестов', 'Прослушивание аудио', 'Навигация по меню'],
+    values: [45, 25, 20, 10],
+    type: 'pie',
+    name: 'Типы действий'
+};
+
+// Создание графиков
+function createCharts() {
+    // График активности
+    Plotly.newPlot('activityChart', [activityData], {
+        title: 'Динамика активности пользователей',
+        xaxis: { title: 'Дата' },
+        yaxis: { title: 'Количество действий' },
+        margin: { t: 50, r: 20, b: 50, l: 60 }
+    });
+    
+    // График популярности модулей
+    Plotly.newPlot('moduleChart', [moduleData], {
+        title: 'Просмотры по модулям',
+        xaxis: { title: 'Модуль' },
+        yaxis: { title: 'Количество просмотров' },
+        margin: { t: 50, r: 20, b: 50, l: 60 }
+    });
+    
+    // График типов действий
+    Plotly.newPlot('actionsChart', [actionsData], {
+        title: 'Распределение по типам действий',
+        margin: { t: 50, r: 20, b: 50, l: 20 }
+    });
+}
+
+// Обновление ключевых показателей
+function updateMetrics() {
+    // Симуляция загрузки данных (в реальности будет AJAX-запрос)
+    const metrics = {
+        todayActivity: Math.floor(Math.random() * 50) + 50,
+        avgActivity: Math.floor(Math.random() * 30) + 40,
+        peakActivity: Math.floor(Math.random() * 100) + 80,
+        newUsers: Math.floor(Math.random() * 10) + 5,
+        activeUsers: Math.floor(Math.random() * 20) + 30,
+        completedLessons: Math.floor(Math.random() * 15) + 10,
+        passedQuizzes: Math.floor(Math.random() * 8) + 3
+    };
+    
+    // Обновление элементов
+    document.getElementById('todayActivity').textContent = metrics.todayActivity;
+    document.getElementById('avgActivity').textContent = metrics.avgActivity;
+    document.getElementById('peakActivity').textContent = metrics.peakActivity;
+    
+    // Обновление прогресс-бара
+    const progressPercent = (metrics.todayActivity / metrics.peakActivity) * 100;
+    document.getElementById('todayProgressBar').style.width = progressPercent + '%';
+    
+    // Обновление таблицы
+    document.getElementById('newUsersCount').textContent = metrics.newUsers;
+    document.getElementById('activeUsersCount').textContent = metrics.activeUsers;
+    document.getElementById('completedLessonsCount').textContent = metrics.completedLessons;
+    document.getElementById('passedQuizzesCount').textContent = metrics.passedQuizzes;
+    
+    // Симуляция изменений и трендов
+    updateChangeIndicators();
+}
+
+function updateChangeIndicators() {
+    const indicators = [
+        { id: 'newUsersChange', trendId: 'newUsersTrend' },
+        { id: 'activeUsersChange', trendId: 'activeUsersTrend' },
+        { id: 'completedLessonsChange', trendId: 'completedLessonsTrend' },
+        { id: 'passedQuizzesChange', trendId: 'passedQuizzesTrend' }
+    ];
+    
+    indicators.forEach(indicator => {
+        const change = Math.floor(Math.random() * 20) - 10; // -10 до +10
+        const element = document.getElementById(indicator.id);
+        const trendElement = document.getElementById(indicator.trendId);
+        
+        if (change > 0) {
+            element.textContent = '+' + change + '%';
+            element.className = 'badge bg-success';
+            trendElement.className = 'fas fa-arrow-up text-success';
+        } else if (change < 0) {
+            element.textContent = change + '%';
+            element.className = 'badge bg-danger';
+            trendElement.className = 'fas fa-arrow-down text-danger';
+        } else {
+            element.textContent = '0%';
+            element.className = 'badge bg-secondary';
+            trendElement.className = 'fas fa-minus text-muted';
+        }
+    });
+}
+
+// Автообновление данных
+function startAutoUpdate() {
+    updateMetrics();
+    setInterval(updateMetrics, 30000); // Обновление каждые 30 секунд
+}
+
+// Инициализация при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    createCharts();
+    startAutoUpdate();
+});
+</script>
+{% endblock %}

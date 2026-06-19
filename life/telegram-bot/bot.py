@@ -8,11 +8,21 @@ from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, LabeledPrice, PreCheckoutQuery
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from datetime import datetime
 
 import db
 import config
-from lessons import LESSONS
+import lessons
+import analytics_db as adb
+from simple_admin import SimpleAdminPanel, register_simple_admin_handlers
+from student_monitoring import (
+    log_text_response, 
+    log_choice_response, 
+    init_student_monitoring,
+    register_voice_handlers
+)
+from webapp_manager import webapp_content
 
 # Enable logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
@@ -27,7 +37,7 @@ class QuizState(StatesGroup):
     answering = State()  # Storing: module_id, current_q_idx, correct_count, total_questions
 
 # Gemini API Key configuration
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+GEMINI_API_KEY = config.GEMINI_API_KEY
 
 async def evaluate_answer_with_ai(question: str, rubric: str, user_answer: str) -> tuple[float, str]:
     """
@@ -100,14 +110,14 @@ async def evaluate_answer_with_ai(question: str, rubric: str, user_answer: str) 
 # Main Menu Keyboards
 def get_main_menu_keyboard():
     keyboard = [
-        [types.KeyboardButton(text="📚 Мое Обучение"), types.KeyboardButton(text="💎 Купить Premium")],
-        [types.KeyboardButton(text="💡 О методологии"), types.KeyboardButton(text="❓ Помощь / Контакты")]
+        [types.KeyboardButton(text="📚 Мое Обучение"), types.KeyboardButton(text="💡 О методологии Р.О.С.Т.")],
+        [types.KeyboardButton(text="❓ Помощь / Контакты")]
     ]
     return types.ReplyKeyboardMarkup(keyboard=keyboard, resize_keyboard=True)
 
 @dp.message(Command("start"))
 async def start_cmd(message: types.Message):
-    """Start command handler."""
+    """Start command handler with Web App integration."""
     user_id = message.from_user.id
     username = message.from_user.username or ""
     first_name = message.from_user.first_name or ""
@@ -115,24 +125,211 @@ async def start_cmd(message: types.Message):
     # Save/create user in DB
     await db.create_user(user_id, username, first_name)
     
+    # Log registration/start and begin analytics session
+    session_id = await adb.start_learning_session(user_id)
+    await adb.log_user_action(user_id, 'start_bot', {'first_start': True}, session_id)
+    
+    # Create keyboard with Web App button
+    webapp_keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(
+            text="🎓 Открыть курс в Web App",
+            web_app=types.WebAppInfo(
+                url="https://your-web-app-url.com"  # Замените на ваш URL
+            )
+        )],
+        [InlineKeyboardButton(
+            text="📊 Мой прогресс",
+            callback_data="user_progress"
+        )]
+    ])
+    
     welcome_text = (
-        f"Приветствуем, {first_name}! 🤝\n\n"
-        "Вы подключились к обучающей системе <b>«Эксперт Сити»</b>.\n\n"
-        "Мы готовим <b>антихрупких агентов-навигаторов</b> по новостройкам, которые ведут "
-        "клиента по понятному и безопасному пути к сделке:\n"
-        "<i>Финансы & Безопасность ➔ География ➔ ЖК ➔ Планировка ➔ Эмоции.</i>\n\n"
-        "Вам открыт бесплатный <b>Блок 1</b>. Пройдите его и сдайте тест, чтобы начать!\n\n"
-        "👇 Используйте меню ниже для навигации."
+        f"🎓 Добро пожаловать в <b>«Среда Обучение»</b>, {first_name}! 🤝\n\n"
+        "Вы подключились к обучающей системе <b>«Р.О.С.Т.»</b>.\n\n"
+        "Мы готовим <b>антихрупких агентов-навигаторов</b> по новому стандарту работы с недвижимостью.\n\n"
+        "<b>🌟 Что вас ждет:</b>\n"
+        "• 7 мощных модулей обучения\n"
+        "• Полная система тестирования с ИИ-проверкой\n"
+        "• Голосовые задания и обратная связь\n"
+        "• Удобный Web App интерфейс\n\n"
+        "<b>🚀 Как начать:</b>\n"
+        "Нажмите кнопку ниже для открытия курса в Web App или изучайте модули прямо здесь."
     )
     
-    await message.answer(welcome_text, reply_markup=get_main_menu_keyboard(), parse_mode="HTML")
+    # Send welcome message with Web App button
+    await message.answer(welcome_text, reply_markup=webapp_keyboard, parse_mode="HTML")
+    
+    # Also send regular keyboard for other functions
+    await message.answer("Или используйте меню ниже:", reply_markup=get_main_menu_keyboard())
 
-@dp.message(F.text == "📚 Мое Обучение")
+@dp.callback_query(F.data == "user_progress")
+async def show_user_progress(callback: types.CallbackQuery):
+    """Показать прогресс пользователя в Web App формате"""
+    user_id = callback.from_user.id
+    first_name = callback.from_user.first_name or "Студент"
+    
+    # Получаем прогресс пользователя
+    progress = await db.get_user_progress(user_id)
+    progress_dict = {row[0]: {"completed": row[2], "score": row[3]} for row in progress}
+    
+    # Формируем сообщение с прогрессом
+    progress_text = f"📊 <b>Ваш прогресс обучения</b>, {first_name}!\n\n"
+    
+    completed_modules = 0
+    total_score = 0
+    score_count = 0
+    
+    for module_id, module_data in config.MODULES.items():
+        module_progress = progress_dict.get(int(module_id), {"completed": False, "score": None})
+        is_completed = module_progress["completed"]
+        score = module_progress["score"]
+        
+        if is_completed:
+            completed_modules += 1
+            
+        status_icon = "✅" if is_completed else "🔓"
+        progress_text += f"{status_icon} <b>Блок {module_id}:</b> {module_data['title']}\n"
+        
+        if score is not None:
+            progress_text += f"   Результат теста: {int(score*100)}%\n"
+            total_score += score
+            score_count += 1
+        
+        progress_text += "\n"
+    
+    # Общая статистика
+    total_modules = len(config.MODULES)
+    completion_rate = (completed_modules / total_modules) * 100 if total_modules > 0 else 0
+    avg_score = (total_score / score_count * 100) if score_count > 0 else 0
+    
+    progress_text += f"📈 <b>Общая статистика:</b>\n"
+    progress_text += f"• Завершено модулей: {completed_modules}/{total_modules} ({completion_rate:.0f}%)\n"
+    progress_text += f"• Средний балл: {avg_score:.0f}%\n"
+    
+    if completion_rate == 100:
+        progress_text += "\n🎉 Поздравляем! Вы завершили все модули обучения!"
+    
+    # Создаем клавиатуру
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(
+            text="🎓 Открыть Web App",
+            web_app=types.WebAppInfo(
+                url="https://your-web-app-url.com"  # ← ЗАМЕНИТЬ НА ВАШ URL ПОСЛЕ ДЕПЛОЯ
+            )
+        )],
+        [InlineKeyboardButton(
+            text="📚 Продолжить обучение",
+            callback_data="continue_learning"
+        )],
+        [InlineKeyboardButton(
+            text="🔄 Обновить",
+            callback_data="user_progress"
+        )]
+    ])
+    
+    await callback.message.edit_text(progress_text, reply_markup=keyboard, parse_mode="HTML")
+    await callback.answer()
+
+@dp.callback_query(F.data == "continue_learning")
+async def continue_learning(callback: types.CallbackQuery):
+    """Показать доступные модули для продолжения обучения"""
+    user_id = callback.from_user.id
+    progress = await db.get_user_progress(user_id)
+    progress_dict = {row[0]: {"unlocked": row[1], "completed": row[2], "score": row[3]} for row in progress}
+    
+    response_text = "<b>📚 Продолжить обучение:</b>\n\n"
+    keyboard_buttons = []
+    
+    for m_id, m_data in config.MODULES.items():
+        m_prog = progress_dict.get(int(m_id), {"unlocked": 1, "completed": 0, "score": None})
+        
+        # Все блоки теперь бесплатны и открыты
+        unlocked = True
+        completed = bool(m_prog["completed"])
+        
+        # Determine icon
+        if completed:
+            status_icon = "✅"
+        else:
+            status_icon = "🔓"
+            
+        m_title = m_data["title"]
+        
+        response_text += f"{status_icon} <b>Блок {m_id}:</b> {m_title}\n"
+        if completed and m_prog['score'] is not None:
+            response_text += f"   └ Результат теста: {int(m_prog['score']*100)}%\n"
+        response_text += "\n"
+        
+        # Add buttons to view unlocked blocks
+        btn_label = f"Блок {m_id}" + (" (Пройден)" if completed else " (Начать)")
+        keyboard_buttons.append([InlineKeyboardButton(text=btn_label, callback_data=f"lesson_{m_id}")])
+    
+    markup = InlineKeyboardMarkup(inline_keyboard=keyboard_buttons)
+    await callback.message.edit_text(response_text, reply_markup=markup, parse_mode="HTML")
+    await callback.answer()
+
+@dp.message(Command("progress"))
+async def progress_cmd(message: types.Message):
+    """Command to show user progress"""
+    user_id = message.from_user.id
+    first_name = message.from_user.first_name or "Студент"
+    
+    # Получаем прогресс пользователя
+    progress = await db.get_user_progress(user_id)
+    progress_dict = {row[0]: {"completed": row[2], "score": row[3]} for row in progress}
+    
+    # Формируем сообщение с прогрессом
+    progress_text = f"📊 <b>Ваш прогресс обучения</b>, {first_name}!\n\n"
+    
+    completed_modules = 0
+    total_score = 0
+    score_count = 0
+    
+    for module_id, module_data in config.MODULES.items():
+        module_progress = progress_dict.get(int(module_id), {"completed": False, "score": None})
+        is_completed = module_progress["completed"]
+        score = module_progress["score"]
+        
+        if is_completed:
+            completed_modules += 1
+            
+        status_icon = "✅" if is_completed else "🔓"
+        progress_text += f"{status_icon} <b>Блок {module_id}:</b> {module_data['title']}\n"
+        
+        if score is not None:
+            progress_text += f"   Результат теста: {int(score*100)}%\n"
+            total_score += score
+            score_count += 1
+        
+        progress_text += "\n"
+    
+    # Общая статистика
+    total_modules = len(config.MODULES)
+    completion_rate = (completed_modules / total_modules) * 100 if total_modules > 0 else 0
+    avg_score = (total_score / score_count * 100) if score_count > 0 else 0
+    
+    progress_text += f"📈 <b>Общая статистика:</b>\n"
+    progress_text += f"• Завершено модулей: {completed_modules}/{total_modules} ({completion_rate:.0f}%)\n"
+    progress_text += f"• Средний балл: {avg_score:.0f}%\n"
+    
+    if completion_rate == 100:
+        progress_text += "\n🎉 Поздравляем! Вы завершили все модули обучения!"
+    
+    # Create keyboard with Web App button
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(
+            text="🎓 Открыть курс в Web App",
+            web_app=types.WebAppInfo(
+                url="https://your-web-app-url.com"  # ← ЗАМЕНИТЬ НА ВАШ URL ПОСЛЕ ДЕПЛОЯ
+            )
+        )]
+    ])
+    
+    await message.answer(progress_text, reply_markup=keyboard, parse_mode="HTML")
 async def show_my_learning(message: types.Message):
     """Lists all modules with their current unlock/completed status."""
     user_id = message.from_user.id
     progress = await db.get_user_progress(user_id)
-    is_user_premium = await db.is_premium(user_id)
     
     # Map progress for quick lookup
     progress_dict = {row[0]: {"unlocked": row[1], "completed": row[2], "score": row[3]} for row in progress}
@@ -141,28 +338,27 @@ async def show_my_learning(message: types.Message):
     keyboard_buttons = []
     
     for m_id, m_data in config.MODULES.items():
-        m_prog = progress_dict.get(m_id, {"unlocked": 0, "completed": 0, "score": None})
-        unlocked = bool(m_prog["unlocked"]) or m_id == 1 or is_user_premium
+        m_prog = progress_dict.get(m_id, {"unlocked": 1, "completed": 0, "score": None})
+        
+        # Все блоки теперь бесплатны и открыты
+        unlocked = True
         completed = bool(m_prog["completed"])
         
         # Determine icon
         if completed:
             status_icon = "✅"
-        elif unlocked:
-            status_icon = "🔓"
         else:
-            status_icon = "🔒"
+            status_icon = "🔓"
             
         m_title = m_data["title"]
-        badge = " [Бесплатно]" if m_data["is_free"] else " [Premium]"
         
-        response_text += f"{status_icon} <b>Блок {m_id}</b>: {m_title}{badge}\n"
+        response_text += f"{status_icon} <b>Блок {m_id}</b>: {m_title}\n"
         if completed and m_prog['score'] is not None:
             response_text += f"   └ Результат теста: {int(m_prog['score']*100)}%\n"
         response_text += "\n"
         
         # Add buttons to view unlocked blocks
-        btn_label = f"Блок {m_id}" + (" (Пройден)" if completed else " (Начать)" if unlocked else " (🔒 Заблокирован)")
+        btn_label = f"Блок {m_id}" + (" (Пройден)" if completed else " (Начать)")
         keyboard_buttons.append([InlineKeyboardButton(text=btn_label, callback_data=f"lesson_{m_id}")])
 
     markup = InlineKeyboardMarkup(inline_keyboard=keyboard_buttons)
@@ -170,35 +366,25 @@ async def show_my_learning(message: types.Message):
 
 @dp.callback_query(F.data.startswith("lesson_"))
 async def view_lesson(callback: types.CallbackQuery):
-    """Displays lesson content or checkout if locked."""
+    """Displays lesson content."""
     user_id = callback.from_user.id
     module_id = int(callback.data.split("_")[1])
     
-    # Check if block is unlocked
-    unlocked = await db.is_module_unlocked(user_id, module_id)
-    
-    if not unlocked:
-        # Show purchase invitation
-        await callback.message.answer(
-            f"🔒 <b>{config.MODULES[module_id]['title']} является Premium-блоком.</b>\n\n"
-            "Вы можете мгновенно разблокировать все профессиональные Блоки 2–7 (JTBD, Финмоделирование, "
-            "Анализ эскроу, Стандарты показов, Скрипты, Юр. безопасность и ИИ-помощники).\n\n"
-            "Для покупки выберите удобный способ оплаты через <b>ЮKassa / Robokassa</b>👇",
-            reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-                [InlineKeyboardButton(text="💳 Оплатить картой (4,990₽)", callback_data="buy_premium_fiat")],
-                [InlineKeyboardButton(text="⬅️ Назад к списку", callback_data="back_to_list")]
-            ]),
-            parse_mode="HTML"
-        )
-        await callback.answer()
-        return
-
-    # Unlocked - send lesson content
-    lesson_data = LESSONS.get(module_id)
+    lesson_data = lessons.LESSONS.get(module_id)
     if not lesson_data:
         await callback.message.answer("Материалы данного блока находятся в разработке.")
         await callback.answer()
         return
+    
+    # Все блоки теперь доступны - показываем контент
+    
+    # Log lesson start with analytics
+    lesson_start_time = datetime.now()
+    await adb.log_lesson_start(user_id, module_id, session_id=f"lesson_{module_id}_{user_id}")
+    await adb.log_user_action(user_id, 'view_lesson', {
+        'module_id': module_id,
+        'module_title': lesson_data['title']
+    })
         
     await callback.message.answer(
         f"<b>{lesson_data['title']}</b>\n\n"
@@ -235,7 +421,7 @@ async def start_quiz(callback: types.CallbackQuery, state: FSMContext):
     user_id = callback.from_user.id
     module_id = int(callback.data.split("_")[1])
     
-    lesson_data = LESSONS.get(module_id)
+    lesson_data = lessons.LESSONS.get(module_id)
     if not lesson_data or "quiz" not in lesson_data or not lesson_data["quiz"]:
         await callback.message.answer("Для этого блока тест не предусмотрен.")
         await callback.answer()
@@ -260,7 +446,7 @@ async def send_quiz_question(message: types.Message, state: FSMContext):
     module_id = data["module_id"]
     q_idx = data["current_q_idx"]
     
-    quiz_list = LESSONS[module_id]["quiz"]
+    quiz_list = lessons.LESSONS[module_id]["quiz"]
     question_data = quiz_list[q_idx]
     
     q_type = question_data.get("type", "choice")
@@ -301,7 +487,7 @@ async def handle_choice_answer(callback: types.CallbackQuery, state: FSMContext)
     current_q_idx = data["current_q_idx"]
     total_questions = data["total_questions"]
     
-    quiz_list = LESSONS[module_id]["quiz"]
+    quiz_list = lessons.LESSONS[module_id]["quiz"]
     correct_idx = quiz_list[q_idx]["correct_idx"]
     
     is_correct = (opt_idx == correct_idx)
@@ -311,6 +497,17 @@ async def handle_choice_answer(callback: types.CallbackQuery, state: FSMContext)
     else:
         correct_opt = quiz_list[q_idx]["options"][correct_idx]
         await callback.message.answer(f"❌ Неверно. Правильный ответ:\n<i>«{correct_opt}»</i>", parse_mode="HTML")
+    
+    # Логируем ответ студента
+    question_text = quiz_list[q_idx]["question"]
+    selected_answer = quiz_list[q_idx]["options"][opt_idx]
+    await log_choice_response(
+        user_id=user_id,
+        module_id=module_id,
+        question=question_text,
+        answer=selected_answer,
+        is_correct=is_correct
+    )
         
     current_q_idx += 1
     await state.update_data(correct_count=correct_count, current_q_idx=current_q_idx)
@@ -330,7 +527,7 @@ async def handle_free_text_answer(message: types.Message, state: FSMContext):
     correct_count = data["correct_count"]
     total_questions = data["total_questions"]
     
-    quiz_list = LESSONS[module_id]["quiz"]
+    quiz_list = lessons.LESSONS[module_id]["quiz"]
     question_data = quiz_list[q_idx]
     
     if question_data.get("type") != "free_text":
@@ -360,6 +557,18 @@ async def handle_free_text_answer(message: types.Message, state: FSMContext):
         
     # Send custom AI evaluation critique to the student
     await message.answer(AI_critique, parse_mode="HTML")
+    
+    # Логируем текстовый ответ студента
+    question_data = quiz_list[q_idx]
+    await log_text_response(
+        user_id=user_id,
+        module_id=module_id,
+        question=question_data["question"],
+        answer=message.text,
+        is_correct=passed_question,
+        score=score_ratio,
+        ai_feedback=AI_critique
+    )
     
     threshold = config.MODULES[module_id]["quiz_threshold"]
     passed_question = (score_ratio >= threshold)
@@ -392,16 +601,16 @@ async def finish_quiz(message: types.Message, state: FSMContext):
     
     if passed:
         await message.answer(
-            f"🎉 <b>Поздравляем! Вы прошли тест Блока {module_id}!</b>\n\n"
-            f"Результат: {correct_count} из {total_questions} пройденных шагов ({int(score*100)}%).\n"
-            "Следующий блок разблокирован (если он бесплатный или у вас разблокирован Premium-доступ).",
+            f"🎉 <b>Поздравляем! Вы прошли тест Блока {module_id}!</b>\\n\\n"
+            f"Результат: {correct_count} из {total_questions} пройденных шагов ({int(score*100)}%).\\n"
+            "Следующий блок разблокирован для продолжения обучения.",
             parse_mode="HTML"
         )
     else:
         await message.answer(
-            f"⚠️ <b>Тест Блока {module_id} не пройден.</b>\n\n"
-            f"Ваш результат: {correct_count} из {total_questions} ({int(score*100)}%).\n"
-            f"Для прохождения необходимо набрать минимум {int(threshold*100)}%.\n"
+            f"⚠️ <b>Тест Блока {module_id} не пройден.</b>\\n\\n"
+            f"Ваш результат: {correct_count} из {total_questions} ({int(score*100)}%).\\n"
+            f"Для прохождения необходимо набрать минимум {int(threshold*100)}%.\\n"
             "Изучите материалы повторно и попробуйте еще раз!",
             reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                 [InlineKeyboardButton(text="🔄 Пройти заново", callback_data=f"quiz_{module_id}")],
@@ -410,96 +619,27 @@ async def finish_quiz(message: types.Message, state: FSMContext):
             parse_mode="HTML"
         )
 
-# --- PAYMENTS LOGIC (YOOKASSA / ROBOKASSA) ---
+# --- PAYMENTS REMOVED (ALL MODULES NOW FREE) ---
 
-@dp.message(F.text == "💎 Купить Premium")
-async def send_premium_invoice_button(message: types.Message):
-    """Sends premium purchase panel."""
-    user_id = message.from_user.id
-    premium = await db.is_premium(user_id)
-    if premium:
-        await message.answer("💎 У вас уже разблокирован Premium-доступ ко всем блокам курса!")
-        return
-        
-    await message.answer(
-        "💎 <b>Premium-доступ Эксперт Сити</b>\n\n"
-        "Разблокируйте все профессиональные Блоки 2–7. Получите готовые финмодели, чек-листы осмотров, "
-        "шаблоны CRM-интеграций и ИИ-помощников.\n\n"
-        "Прием платежей осуществляется безопасно через банковские карты РФ / СБП (ЮKassa/Robokassa):",
-        reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="💳 Оплатить картой (4,990₽)", callback_data="buy_premium_fiat")],
-            [InlineKeyboardButton(text="⬅️ Назад", callback_data="back_to_list")]
-        ]),
-        parse_mode="HTML"
-    )
 
-@dp.callback_query(F.data == "buy_premium_fiat")
-async def send_fiat_invoice(callback: types.CallbackQuery):
-    """Sends fiat currency invoice (e.g. YooKassa/Robokassa)."""
-    user_id = callback.from_user.id
-    
-    if not config.PAYMENT_PROVIDER_TOKEN:
-        # Fallback for mock sandbox environment
-        await db.unlock_premium(user_id)
-        await callback.message.answer(
-            "💎 <b>[ТЕСТОВЫЙ РЕЖИМ]</b>\n"
-            "Токен ЮKassa не задан в конфигурации. Бот автоматически разблокировал вам Premium-доступ!"
-        )
-        await callback.answer()
-        return
-
-    prices = [LabeledPrice(label="Premium Курс Эксперт Сити", amount=config.PREMIUM_PRICE_RUB * 100)] # Price in kopecks
-    await bot.send_invoice(
-        chat_id=callback.message.chat.id,
-        title="Эксперт Сити Premium",
-        description="Полный доступ ко всем учебным блокам 2–7",
-        provider_token=config.PAYMENT_PROVIDER_TOKEN,
-        currency="rub",
-        prices=prices,
-        start_parameter="expert-city-premium",
-        payload="premium_fiat_payload"
-    )
-    await callback.answer()
-
-@dp.pre_checkout_query()
-async def checkout_handler(pre_checkout_q: PreCheckoutQuery):
-    """Approves pre-checkout queries from payment gateway."""
-    await bot.answer_pre_checkout_query(pre_checkout_q.id, ok=True)
-
-@dp.message(F.successful_payment)
-async def got_successful_payment(message: types.Message):
-    """Triggered by Telegram on successful payment confirmation."""
-    user_id = message.from_user.id
-    amount = message.successful_payment.total_amount
-    currency = message.successful_payment.currency
-    payload = message.successful_payment.invoice_payload
-    
-    # Rubles comes in kopecks
-    amount_val = amount / 100.0
-        
-    await db.log_payment(user_id, amount_val, currency, payload)
-    await db.unlock_premium(user_id)
-    
-    congrats_text = (
-        "🎉 <b>Оплата успешно получена!</b>\n\n"
-        "💎 Вам разблокирован вечный Premium-доступ ко всем учебным материалам Эксперт Сити!\n\n"
-        "Все Блоки 2–7 теперь полностью разблокированы и доступны в меню <b>📚 Мое Обучение</b>. "
-        "Начните изучение прямо сейчас!"
-    )
-    await message.answer(congrats_text, reply_markup=get_main_menu_keyboard(), parse_mode="HTML")
 
 # --- OTHER MENUS ---
 
-@dp.message(F.text == "💡 О методологии")
+@dp.message(F.text == "💡 О методологии Р.О.С.Т.")
 async def show_about(message: types.Message):
     """Shows about methodology text."""
     about_text = (
-        "💡 <b>Методология «Эксперт Сити»</b>\n\n"
-        "Мы строим работу на трех столпах:\n\n"
-        "1. <b>Принцип Антихрупкости</b>: Отказы и ошибки клиента — это точки роста, фиксируемые в Дневнике.\n"
-        "2. <b>«Я не продаю — я объясняю»</b>: Отказ от давления, честность с клиентом на основе цифр.\n"
-        "3. <b>Jobs To Be Done (JTBD)</b>: Квартира нанимается на работу для решения конкретных сценариев жизни.\n"
-        "4. <b>TCO (Total Cost of Ownership)</b>: Оценка полной стоимости за 5 лет вместо цены на баннере."
+        "💡 <b>Методология «Р.О.С.Т.»</b>\n\n"
+        "<b>Р.</b>иск-менеджмент — снижение рисков для клиента и агента\n"
+        "<b>О.</b>бъективность — честные данные, без давления, факты\n"
+        "<b>С.</b>истемность — алгоритм сделки от финансов до ключей\n"
+        "<b>Т.</b>ехнологии — ИИ-поддержка, автоматизация аналитики\n\n"
+        "<b>Куратор Академии:</b> @Anton_soy\n"
+        "<b>Руководитель:</b> Антон Цой\n\n"
+        "Методология готовит <b>антихрупких агентов</b>, которые:\n"
+        "• Не теряют клиентов из-за задержек строительства\n"
+        "• Выстраивают долгосрочные отношения с клиентами\n"
+        "• Получают стабильный доход без стресса"
     )
     await message.answer(about_text, reply_markup=get_main_menu_keyboard(), parse_mode="HTML")
 
@@ -508,9 +648,9 @@ async def show_help(message: types.Message):
     """Shows help info."""
     help_text = (
         "❓ <b>Помощь и поддержка</b>\n\n"
-        "Если у вас возникли вопросы по работе бота, прохождению тестов или оплате, свяжитесь с куратором:\n"
-        "👤 Куратор Академии: @expert_city_support\n\n"
-        "📍 Руководители: Антон Цой, Тимур Мустакимов."
+        "Если у вас возникли вопросы по работе бота или прохождению тестов, свяжитесь с куратором:\n\n"
+        "👤 Куратор Академии: @Anton_soy\n\n"
+        "📍 Руководитель: Антон Цой."
     )
     await message.answer(help_text, reply_markup=get_main_menu_keyboard(), parse_mode="HTML")
 
@@ -518,7 +658,24 @@ async def show_help(message: types.Message):
 async def main():
     # Initialize Database
     await db.init_db()
-    logger.info("Database initialized successfully.")
+    logger.info("Basic database initialized successfully.")
+    
+    # Initialize Analytics System
+    await adb.init_analytics_db()
+    logger.info("Analytics database initialized successfully.")
+    
+    # Initialize Student Monitoring System
+    await init_student_monitoring()
+    logger.info("Student monitoring system initialized successfully.")
+    
+    # Initialize Simple Admin Panel
+    admin_panel = SimpleAdminPanel(config.BOT_TOKEN)
+    register_simple_admin_handlers(dp, admin_panel)
+    logger.info("Simple admin panel handlers registered.")
+    
+    # Register Voice Handlers
+    register_voice_handlers(dp, bot)
+    logger.info("Voice message handlers registered.")
     
     # Start Polling
     logger.info("Bot starting polling...")

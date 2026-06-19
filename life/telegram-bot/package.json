@@ -1,0 +1,27 @@
+{
+  "name": "sreda-obuchenie-webapp",
+  "version": "1.0.0",
+  "description": "Telegram Web App для образовательной платформы 'Среда Обучение'",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 webapp_server.py",
+    "dev": "python3 webapp_server.py"
+  },
+  "keywords": [
+    "telegram",
+    "webapp",
+    "education",
+    "lms",
+    "bot"
+  ],
+  "author": "Anton Tsoy",
+  "license": "MIT",
+  "dependencies": {
+    "flask": "^2.3.0",
+    "pyyaml": "^6.0",
+    "python-dotenv": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

@@ -1,0 +1,289 @@
+{% extends "base.html" %}
+
+{% block title %}{{ analytics.user_info.first_name }} - Аналитика Р.О.С.Т.{% endblock %}
+{% block page_title %}Детали агента: {{ analytics.user_info.first_name }}{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <!-- Основная информация -->
+    <div class="col-lg-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-user me-2"></i>Информация об агенте</h5>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-3">
+                    <div class="avatar-circle-lg mb-2">
+                        {{ analytics.user_info.first_name[:1]|upper }}
+                    </div>
+                    <h4>{{ analytics.user_info.first_name }}</h4>
+                    <p class="text-muted">@{{ analytics.user_info.username or 'нет username' }}</p>
+                </div>
+                
+                <hr>
+                
+                <dl class="row">
+                    <dt class="col-sm-5">ID пользователя:</dt>
+                    <dd class="col-sm-7">
+                        <code>{{ analytics.user_info.user_id }}</code>
+                        <button class="btn btn-sm btn-outline-secondary ms-2" 
+                                onclick="copyToClipboard('{{ analytics.user_info.user_id }}')">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </dd>
+                    
+                    <dt class="col-sm-5">Регистрация:</dt>
+                    <dd class="col-sm-7">
+                        {{ analytics.user_info.registration_date[:10] }}
+                    </dd>
+                    
+                    <dt class="col-sm-5">Последняя активность:</dt>
+                    <dd class="col-sm-7">
+                        {% if analytics.user_info.last_activity %}
+                            {{ analytics.user_info.last_activity[:16] }}
+                        {% else %}
+                            <span class="text-muted">Нет данных</span>
+                        {% endif %}
+                    </dd>
+                    
+                    <dt class="col-sm-5">Всего сессий:</dt>
+                    <dd class="col-sm-7">{{ analytics.user_info.total_sessions }}</dd>
+                    
+                    <dt class="col-sm-5">Обучение:</dt>
+                    <dd class="col-sm-7">
+                        <span class="badge bg-primary">
+                            {{ analytics.progress|selectattr('is_completed')|list|length }}/7 модулей
+                        </span>
+                    </dd>
+                </dl>
+                
+                <hr>
+                
+                <div class="d-grid">
+                    <a href="https://t.me/{{ analytics.user_info.username or analytics.user_info.user_id }}" 
+                       target="_blank" class="btn btn-outline-primary">
+                        <i class="fab fa-telegram me-2"></i>
+                        Открыть в Telegram
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Статистика обучения -->
+    <div class="col-lg-8">
+        <!-- Прогресс по модулям -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-graduation-cap me-2"></i>Прогресс обучения</h5>
+            </div>
+            <div class="card-body">
+                {% for module in analytics.progress %}
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span>{{ module.module_id }}. {% if module.module_id == 1 %}Роль Навигатора и Золотое Правило{% elif module.module_id == 2 %}JTBD-Диагностика и Боли Клиента{% elif module.module_id == 3 %}Финмоделирование и TCO за 5 лет{% else %}Профессиональный модуль {{ module.module_id }}{% endif %}</span>
+                        {% if module.is_completed %}
+                            <span class="badge bg-success">✅ {{ (module.best_score * 100)|round }}%</span>
+                        {% elif module.started %}
+                            <span class="badge bg-warning">🔄 В процессе</span>
+                        {% else %}
+                            <span class="badge bg-secondary">⏸ Не начат</span>
+                        {% endif %}
+                    </div>
+                    <div class="progress module-progress">
+                        {% if module.is_completed %}
+                        <div class="progress-bar bg-success" style="width: 100%"></div>
+                        {% elif module.best_score %}
+                        <div class="progress-bar bg-warning" style="width: {{ (module.best_score * 100)|round }}%"></div>
+                        {% else %}
+                        <div class="progress-bar" style="width: 0%"></div>
+                        {% endif %}
+                    </div>
+                    <small class="text-muted">
+                        {% if module.started %}
+                            Начат: {{ module.started[:10] }}
+                            {% if module.completed %}
+                                | Завершен: {{ module.completed[:10] }}
+                            {% endif %}
+                        {% else %}
+                                Модуль не начат
+                        {% endif %}
+                    </small>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Статистика тестов -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Статистика тестов</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3 mb-3">
+                        <h3 class="text-primary">{{ analytics.quiz_stats.total_attempts }}</h3>
+                        <p class="text-muted mb-0">Всего попыток</p>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <h3 class="text-success">{{ analytics.quiz_stats.avg_score }}%</h3>
+                        <p class="text-muted mb-0">Средний балл</p>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <h3 class="text-info">{{ analytics.quiz_stats.correct_answers }}</h3>
+                        <p class="text-muted mb-0">Правильных ответов</p>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <h3 class="text-warning">{{ analytics.quiz_stats.modules_tested }}</h3>
+                        <p class="text-muted mb-0">Тестировано модулей</p>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <div class="alert alert-info" role="alert">
+                    <i class="fas fa-lightbulb me-2"></i>
+                    <strong>Рекомендация:</strong>
+                    {% if analytics.quiz_stats.avg_score >= 80 %}
+                        Отличный результат! Агент хорошо усваивает материал.
+                    {% elif analytics.quiz_stats.avg_score >= 60 %}
+                        Хороший прогресс, но есть возможности для улучшения.
+                    {% else %}
+                        Рекомендуется дополнительное изучение материалов.
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Активность за неделю -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-clock me-2"></i>Активность за последние 7 дней</h5>
+            </div>
+            <div class="card-body">
+                {% if analytics.weekly_activity %}
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Дата</th>
+                                <th>Действий</th>
+                                <th>Активность</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for day in analytics.weekly_activity %}
+                            <tr>
+                                <td>{{ day.date }}</td>
+                                <td><span class="badge bg-primary">{{ day.actions }}</span></td>
+                                <td>
+                                    {% if day.actions >= 10 %}
+                                        <span class="badge bg-success">Высокая</span>
+                                    {% elif day.actions >= 5 %}
+                                        <span class="badge bg-warning">Средняя</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Низкая</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-3">
+                    <i class="fas fa-chart-line fa-2x text-muted mb-2"></i>
+                    <p class="text-muted mb-0">Нет данных об активности за последние 7 дней</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Общее время обучения -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-hourglass-half fa-3x text-primary"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h4 class="mb-1">Общее время в системе</h4>
+                        <p class="mb-0">
+                            <span class="fw-bold">{{ (analytics.total_learning_time // 60) }} минут</span>
+                            за все время использования
+                        </p>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <button class="btn btn-outline-secondary" onclick="exportAgentData()">
+                            <i class="fas fa-download me-2"></i>Экспорт данных
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<style>
+.avatar-circle-lg {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 32px;
+    margin: 0 auto;
+}
+
+.module-progress {
+    height: 8px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+}
+</style>
+
+<script>
+// Копирование данных в буфер обмена
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        // Показываем уведомление
+        const toast = document.createElement('div');
+        toast.className = 'position-fixed bottom-0 end-0 p-3';
+        toast.style.zIndex = '5';
+        toast.innerHTML = `
+            <div class="toast show" role="alert">
+                <div class="toast-header">
+                    <strong class="me-auto">Скопировано!</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+                </div>
+                <div class="toast-body">
+                    ${text}
+                </div>
+            </div>
+        `;
+        document.body.appendChild(toast);
+        
+        // Удаляем через 3 секунды
+        setTimeout(() => {
+            toast.remove();
+        }, 3000);
+    });
+}
+
+// Экспорт данных агента
+function exportAgentData() {
+    // Здесь можно добавить логику экспорта
+    alert('Функция экспорта будет добавлена в следующей версии');
+}
+</script>
+{% endblock %}
