@@ -1,0 +1,1923 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конструктор и Симулятор Курса — СРЕДА 2.0</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --panel-bg: rgba(17, 24, 39, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --accent-color: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.15);
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --warning-color: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.2) 0, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(88, 28, 135, 0.15) 0, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header.top-bar {
+            padding: 20px 40px;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .logo-section h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            background: linear-gradient(to right, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-section p {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        /* Container */
+        .workspace {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 78px);
+            position: relative;
+        }
+
+        .editor-container {
+            width: 50%;
+            height: 100%;
+            overflow-y: auto;
+            padding: 30px 40px;
+            border-right: 1px solid var(--border-color);
+            background: rgba(15, 23, 42, 0.3);
+        }
+
+        .preview-container {
+            width: 50%;
+            height: 100%;
+            overflow-y: auto;
+            padding: 30px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Glass Cards */
+        .glass-card {
+            background: var(--panel-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            transition: border-color 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .card-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 10px;
+        }
+
+        /* Form Controls */
+        .form-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="text"], select, textarea {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            outline: none;
+            width: 100%;
+        }
+
+        input[type="text"]:focus, select:focus, textarea:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+            background: rgba(30, 41, 59, 0.8);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+            line-height: 1.5;
+        }
+
+        /* Buttons */
+        .btn {
+            font-family: 'Inter', sans-serif;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Tabs */
+        .editor-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tab-btn.active {
+            color: white;
+            background: rgba(59, 130, 246, 0.2);
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Mock Phone Device Frame */
+        .device-selector {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid var(--border-color);
+            padding: 4px;
+            border-radius: 10px;
+        }
+
+        .device-tab {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 13px;
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .device-tab.active {
+            background: var(--accent-color);
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        .phone-frame {
+            width: 360px;
+            height: 740px;
+            border: 12px solid #1e293b;
+            border-radius: 40px;
+            background: #ffffff;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 40px rgba(59, 130, 246, 0.1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Notch & Dynamic Island Mock */
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px;
+            height: 25px;
+            background: #1e293b;
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .phone-camera {
+            width: 8px;
+            height: 8px;
+            background: #0f172a;
+            border-radius: 50%;
+        }
+
+        .phone-status-bar {
+            height: 25px;
+            background: transparent;
+            z-index: 999;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #000000;
+            user-select: none;
+        }
+
+        .phone-status-bar.dark-mode {
+            color: #ffffff;
+        }
+
+        .phone-content {
+            flex: 1;
+            position: relative;
+            background: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        iframe.mock-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Mock Telegram Chat View */
+        .tg-chat-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: #eef2f3;
+            background-image: radial-gradient(#d5dde0 1px, transparent 0);
+            background-size: 16px 16px;
+            color: #000000;
+            font-size: 13px;
+        }
+
+        .tg-chat-header {
+            background: #ffffff;
+            padding: 25px 16px 10px 16px; /* Space for notch */
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .tg-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .tg-chat-title {
+            flex: 1;
+        }
+
+        .tg-chat-name {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .tg-chat-status {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        .tg-chat-body {
+            flex: 1;
+            padding: 12px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .tg-message {
+            max-width: 85%;
+            padding: 10px 12px;
+            border-radius: 12px;
+            line-height: 1.4;
+            position: relative;
+            word-wrap: break-word;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .tg-message.in {
+            background: #ffffff;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .tg-message.out {
+            background: #effdde;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .tg-meta {
+            font-size: 9px;
+            color: #a0aec0;
+            text-align: right;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .tg-voice-bubble {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 0;
+        }
+
+        .tg-play-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            cursor: pointer;
+        }
+
+        .tg-waveform {
+            flex: 1;
+            height: 16px;
+            background: repeating-linear-gradient(90deg, #93c5fd, #93c5fd 2px, transparent 2px, transparent 4px);
+        }
+
+        /* Reply Keyboard Mock */
+        .tg-reply-keyboard {
+            background: #e2e8f0;
+            padding: 8px;
+            display: grid;
+            gap: 6px;
+            border-top: 1px solid #cbd5e1;
+        }
+
+        .tg-reply-row {
+            display: grid;
+            grid-auto-flow: column;
+            gap: 6px;
+        }
+
+        .tg-keyboard-btn {
+            background: #ffffff;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #1e293b;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .tg-keyboard-btn:active {
+            background: #e2e8f0;
+        }
+
+        /* Input field mock */
+        .tg-input-bar {
+            background: #ffffff;
+            padding: 8px 12px;
+            border-top: 1px solid #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tg-input-mock {
+            flex: 1;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            padding: 8px 12px;
+            border-radius: 20px;
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        .tg-send-voice {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: none;
+            border: none;
+            color: #64748b;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Curator Alert Card Mockup */
+        .curator-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 14px;
+            border: 1px solid #e2e8f0;
+            box-shadow: var(--card-shadow);
+            max-width: 290px;
+        }
+
+        .curator-header {
+            font-weight: bold;
+            color: #ef4444;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .curator-details {
+            font-size: 12px;
+            color: #475569;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .curator-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .curator-btn {
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+        }
+
+        .curator-approve {
+            background: #10b981;
+            color: white;
+        }
+
+        .curator-reject {
+            background: #ef4444;
+            color: white;
+        }
+
+        /* Code Export Area */
+        pre.code-preview {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            border-radius: 10px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 12px;
+            color: #60a5fa;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 400px;
+        }
+
+        /* Utility classes */
+        .badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .badge-success { background: var(--success-color); }
+        .badge-warning { background: var(--warning-color); }
+        .badge-error { background: var(--error-color); }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header top bar -->
+    <header class="top-bar">
+        <div class="logo-section">
+            <h1>Конструктор и Симулятор Курса</h1>
+            <p>Среда обучения 2.0 // Визуальный Playground</p>
+        </div>
+        <div class="top-actions">
+            <button class="btn btn-secondary" onclick="resetDefaults()">Сбросить к исходным</button>
+            <button class="btn btn-primary" onclick="copyPythonCode()">📋 Скопировать код Python</button>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <div class="workspace">
+
+        <!-- Left Column: Editor controls -->
+        <div class="editor-container">
+
+            <div class="editor-tabs">
+                <button class="tab-btn active" onclick="switchEditorTab('lesson', this)">📚 Контент урока</button>
+                <button class="tab-btn" onclick="switchEditorTab('homework', this)">📝 Настройки ДЗ</button>
+                <button class="tab-btn" onclick="switchEditorTab('state', this)">👤 Симуляция ученика</button>
+                <button class="tab-btn" onclick="switchEditorTab('export', this)">💻 Экспорт Python-кода</button>
+            </div>
+
+            <!-- Tab 1: Lesson Editor -->
+            <div id="editor-tab-lesson" class="tab-content active">
+                <div class="glass-card">
+                    <h3 class="card-title">📖 Выбор и Метаданные урока</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="block-select">Блок обучения</label>
+                            <select id="block-select" onchange="loadLessonData()">
+                                <option value="1">Блок 1: Перезагрузка и Точка А</option>
+                                <option value="2">Блок 2: Золотое правило и JTBD</option>
+                                <option value="3">Блок 3: Продукт и Аудит ЖК</option>
+                                <option value="4">Блок 4: Финансовый инжиниринг</option>
+                                <option value="5">Блок 5: Стандарт сделки и Регламенты</option>
+                                <option value="6">Блок 6: Трафик и Возражения</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="lesson-select">Номер урока</label>
+                            <select id="lesson-select" onchange="loadLessonData()">
+                                <option value="1">Урок X.1 (Теория)</option>
+                                <option value="2">Урок X.2 (Практика + ДЗ)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lesson-title-input">Название урока</label>
+                        <input type="text" id="lesson-title-input" value="Загрузка..." oninput="updateLivePreview()">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="video-url-input">Ссылка на видео (YouTube / Kinescope)</label>
+                            <input type="text" id="video-url-input" value="" placeholder="https://www.youtube.com/embed/..." oninput="updateLivePreview()">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <h3 class="card-title">📝 Текстовое содержание урока (Markdown)</h3>
+                    <div class="form-group">
+                        <label for="lesson-content-input">Текст урока</label>
+                        <textarea id="lesson-content-input" placeholder="Введите контент в Markdown формате..." oninput="updateLivePreview()"></textarea>
+                    </div>
+                    <p style="font-size: 11px; color: var(--text-secondary); line-height: 1.4;">
+                        💡 <b>Поддерживается разметка:</b><br>
+                        <code>**жирный текст**</code> &rarr; <b>жирный</b><br>
+                        <code>*курсив*</code> &rarr; <i>курсив</i><br>
+                        <code>`код`</code> &rarr; <code>код</code><br>
+                        <code>&gt; Цитата</code> &rarr; блок цитаты
+                    </p>
+                </div>
+            </div>
+
+            <!-- Tab 2: Homework Editor -->
+            <div id="editor-tab-homework" class="tab-content">
+                <div class="glass-card">
+                    <h3 class="card-title">🎖️ Настройки Домашнего Задания</h3>
+                    <div class="form-group">
+                        <label for="hw-type-select">Тип домашнего задания</label>
+                        <select id="hw-type-select" onchange="toggleHWTypeFields(); updateLivePreview();">
+                            <option value="none">Без домашнего задания</option>
+                            <option value="text">Текстовый ответ в Web App</option>
+                            <option value="voice">Голосовое сообщение в чат боту</option>
+                        </select>
+                    </div>
+                    <div id="hw-fields">
+                        <div class="form-group">
+                            <label for="hw-content-input">Описание задания</label>
+                            <textarea id="hw-content-input" placeholder="Условия выполнения домашнего задания..." oninput="updateLivePreview()"></textarea>
+                        </div>
+                        <div class="form-group" id="hw-script-group">
+                            <label for="hw-script-input">Памятка / Скрипт-подсказка (для блоков с голосовым ДЗ)</label>
+                            <textarea id="hw-script-input" placeholder="Подсказка по речевым модулям..." oninput="updateLivePreview()"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Student State simulation -->
+            <div id="editor-tab-state" class="tab-content">
+                <div class="glass-card">
+                    <h3 class="card-title">👤 Симуляция профиля ученика</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="student-name">Имя Фамилия</label>
+                            <input type="text" id="student-name" value="Антон Цой" oninput="updateStudentData()">
+                        </div>
+                        <div class="form-group">
+                            <label for="student-username">Username</label>
+                            <input type="text" id="student-username" value="anton_tsoy" oninput="updateStudentData()">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="student-block">Текущий Блок в БД</label>
+                            <select id="student-block" onchange="updateStudentData()">
+                                <option value="1">Блок 1 (Перезагрузка)</option>
+                                <option value="2">Блок 2 (Золотое правило)</option>
+                                <option value="3">Блок 3 (Продукт)</option>
+                                <option value="4">Блок 4 (Финансовый инжиниринг)</option>
+                                <option value="5">Блок 5 (Стандарт сделки)</option>
+                                <option value="6">Блок 6 (Трафик)</option>
+                                <option value="7">Завершил обучение</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="student-status">Статус ученика в БД</label>
+                            <select id="student-status" onchange="updateStudentData()">
+                                <option value="active">Активен (обучается / пересдает)</option>
+                                <option value="awaiting_review">На проверке у куратора (отправил ДЗ)</option>
+                                <option value="completed">Курс пройден полностью</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Быстрые действия с пользователем</label>
+                        <div style="display: flex; gap: 10px; margin-top: 5px;">
+                            <button class="btn btn-secondary" onclick="simulateSubmitHW()">📤 Имитировать сдачу ДЗ</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 4: Python Code Export -->
+            <div id="editor-tab-export" class="tab-content">
+                <div class="glass-card">
+                    <h3 class="card-title">💻 Сгенерированный код Python</h3>
+                    <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">
+                        Скопируйте сгенерированный блок кода и замените соответствующий раздел в файле <b>telegram-bot-obucheniya/lessons.py</b>:
+                    </p>
+                    <pre class="code-preview" id="python-code-box">Загрузка...</pre>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Column: Interactive smartphone simulator -->
+        <div class="preview-container">
+
+            <div class="device-selector">
+                <button class="device-tab active" id="btn-tab-twa" onclick="switchDeviceTab('twa')">📱 Web App (TWA)</button>
+                <button class="device-tab" id="btn-tab-bot" onclick="switchDeviceTab('bot')">💬 Чат с ботом</button>
+                <button class="device-tab" id="btn-tab-curator" onclick="switchDeviceTab('curator')">👥 Чат кураторов</button>
+            </div>
+
+            <!-- Smartphone Frame Mockup -->
+            <div class="phone-frame">
+                <div class="phone-notch">
+                    <div class="phone-camera"></div>
+                </div>
+
+                <!-- Screen 1: TWA Mockup (Loaded inside iframe) -->
+                <div id="phone-screen-twa" class="phone-content">
+                    <div class="phone-status-bar" id="phone-status-twa">
+                        <span>09:41</span>
+                        <span style="font-size: 12px;">📶 🛜 🔋 100%</span>
+                    </div>
+                    <iframe id="twa-iframe" class="mock-iframe"></iframe>
+                </div>
+
+                <!-- Screen 2: Bot Chat Mockup -->
+                <div id="phone-screen-bot" class="phone-content hidden">
+                    <div class="tg-chat-container">
+                        <div class="tg-chat-header">
+                            <div class="tg-avatar">С</div>
+                            <div class="tg-chat-title">
+                                <div class="tg-chat-name">Среда Обучения</div>
+                                <div class="tg-chat-status">бот</div>
+                            </div>
+                        </div>
+                        <div class="tg-chat-body" id="bot-chat-body">
+                            <!-- Populated dynamically -->
+                        </div>
+                        <div class="tg-reply-keyboard" id="bot-chat-keyboard">
+                            <div class="tg-reply-row">
+                                <button class="tg-keyboard-btn" onclick="openTWAFromMockChat()">🎓 Открыть обучение ↗️</button>
+                            </div>
+                            <div class="tg-reply-row">
+                                <button class="tg-keyboard-btn" onclick="sendMockTextMessage('🏠 Бронирование')">🏠 Бронирование</button>
+                                <button class="tg-keyboard-btn" onclick="sendMockTextMessage('❓ Поддержка')">❓ Поддержка</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Screen 3: Curator Chat Mockup -->
+                <div id="phone-screen-curator" class="phone-content hidden">
+                    <div class="tg-chat-container">
+                        <div class="tg-chat-header" style="border-bottom: 2px solid #ef4444;">
+                            <div class="tg-avatar" style="background: #ef4444;">К</div>
+                            <div class="tg-chat-title">
+                                <div class="tg-chat-name">СУ-10 // КУРАТОРЫ</div>
+                                <div class="tg-chat-status">группа проверки ДЗ</div>
+                            </div>
+                        </div>
+                        <div class="tg-chat-body" id="curator-chat-body">
+                            <!-- Populated dynamically -->
+                        </div>
+                        <div class="tg-input-bar">
+                            <div class="tg-input-mock">Написать ответ...</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Data Preloading & Simulator Logic -->
+    <script>
+        // Core Course Database
+        let courseDB = {
+            1: {
+                "title": "Перезагрузка и Точка А",
+                "lessons": {
+                    1: {
+                        "title": "Слом иллюзий и оцифровка Точки А",
+                        "video_url": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+                        "content": `**Привет.** На связи Антон Цой.
+
+Мы запустили этот бот не для того, чтобы вы читали лекции и копили «знания». Наша задача — настроить ваши сделки на рынке новостроек 2026 года. 
+
+Рынок изменился. Старые методы («скинуть планировку в мессенджер» или продавать «богатый опыт») больше не приносят результатов. Сейчас выигрывают те, кто умеет считать и аргументировать финансовые программы.
+
+**Главное правило курса:**
+📌 *Примени в течение 48 часов или удали.*
+Любой инструмент, который мы разберем, вы должны протестировать на клиенте в течение двух суток. Иначе это пустая трата времени.
+
+Обучение идет по блокам. Чтобы пройти дальше, нужно сдавать домашние задания. На слово бот не верит — каждое ДЗ проверяется куратором.
+
+Начнем с оцифровки вашей реальности. Нажмите кнопку ниже и заполните входную диагностическую карту. Пишите честно — от этих цифр зависит ваш результат.`,
+                        "homework": {
+                            "type": "none",
+                            "content": ""
+                        }
+                    },
+                    2: {
+                        "title": "Роль Навигатора vs Агент-Рыбак",
+                        "video_url": "",
+                        "content": `**Кто вы на рынке: Пассивный Рыбак или Управляющий Стратег?**
+
+**Агент-Рыбак** живет надеждой: выложил объявление на Авито и ждет, когда рынок наладится. Когда сделок нет, он говорит: «Ставки заградительные, никто ничего не покупает».
+
+**Агент-Стратег** понимает: рынок первички сейчас держится не на спросе, а на финансовых продуктах (транши, субсидии, рассрочки). Он не ждет — он идет к клиенту с математическим расчетом платежа. У новичков без опыта сейчас есть сделки только потому, что они не знают, как было раньше, и спокойно продают платеж в 35 000 ₽ вместо цены квартиры.
+
+**3 принципа Экологичного Навигатора:**
+1. **«Я не продаю — я объясняю».** Ваша задача — выложить на стол все финансовые сценарии застройщика и банка. Решение о покупке принимает только клиент. Вы не давите на него.
+2. **«Право на Нет».** Если объект не подходит под задачу клиента или несет риски задержки сдачи — скажите об этом прямо. Честность продает лучше, чем рекламные обещания.
+3. **Прозрачность рисков.** Мы не скрываем минусы ЖК. Мы раскладываем их на компромиссы.
+
+Ниже — шаблон того, как вы должны презентовать свою роль клиенту при первом контакте. Изучите его.
+
+**📖 Пример скрипта презентации Навигатора:**
+> *«Моя задача как независимого финансового навигатора по новостройкам Уфы — помочь вам выбрать оптимальный вариант без переплат. Мы не привязаны к конкретному застройщику. Я разложу перед вами все доступные программы: субсидированные ставки, траншевую ипотеку или рассрочку. Моя цель — рассчитать под вас комфортный ежемесячный платеж. Если у какого-то ЖК есть риски по срокам сдачи или качеству, я скажу об этом прямо. Для вас моя работа бесплатна — комиссию платит девелопер. Давайте начнем с короткой диагностики, чтобы понять рамки бюджета. Удобно сейчас ответить на пару вопросов?»*`,
+                        "homework": {
+                            "type": "voice",
+                            "content": `**Практическое ДЗ Блока 1:**
+
+Запишите в этот чат **голосовое сообщение** (до 90 секунд) с презентацией своей роли в качестве Навигатора. 
+Представьте, что вы общаетесь с клиентом, который сомневается, нужен ли ему брокер, или боится заходить в новостройки из-за высоких ставок.
+
+**Что должно быть в вашем аудио:**
+1. Позиционирование (почему вы независимый эксперт, а не представитель одного ЖК).
+2. Принцип «Я объясняю, а не продаю» (показ всех финансовых программ).
+3. Разрешение сказать «нет» (снятие давления).
+4. Ясный следующий шаг (предложение сделать расчеты).
+
+Отправьте аудио прямо в этот чат. Куратор прослушает его и подтвердит переход к Блоку 2.`,
+                            "script_help": `**Памятка по Тону Голоса (Tone of Voice):**
+- Говорите уверенно, но спокойно. Без давления и восклицательных знаков.
+- В центре внимания — выгода клиента и экономия его времени.
+- Снимите с него обязательство покупать: «Если ничего не понравится — мы просто закроем подбор. Вы ничего не теряете».`
+                        }
+                    }
+                }
+            },
+            2: {
+                "title": "Золотое правило подбора и JTBD-диагностика",
+                "lessons": {
+                    1: {
+                        "title": "Золотое правило очередности подбора",
+                        "video_url": "",
+                        "content": `**Не начинайте подбор с картинок планировок.**
+
+Если вы сначала показываете клиенту красивые рендеры и планировки ЖК, а потом выясняете, что банк не одобряет ему нужную сумму или ежемесячный платеж выходит неподъемным — сделка сорвана. Вы потратили время и влюбили клиента в объект, который он физически не может купить.
+
+**Золотое правило очередности Навигатора:**
+1. **Финансы:** Сначала одобряем лимиты и определяем точный размер ПВ и комфортный ежемесячный платеж.
+2. **Локация:** Выбираем 2-3 района, привязанных к сценарию жизни (работа, школа, родственники).
+3. **ЖК:** Выбираем конкретные проекты по критериям надежности застройщика и инфраструктуры.
+4. **Планировка и лот:** Только в самом конце выбираем конкретную квартиру на этаже из доступных в шахматке.
+
+**Почему сначала Финансы? (Скрипт объяснения клиенту):**
+> *«[Имя], смотрите, как мы с вами поступим, чтобы вы не переплатили лишнего. Сейчас рынок новостроек сильно изменился. Выбрать просто район и планировку — это путь к переплате. Сейчас на рынке решает не цена квартиры, а финансовый инструмент: где-то рассрочка, где-то траншевая ипотека (по 1 рублю в месяц до сдачи дома), где-то субсидированные ставки. Поэтому моя задача на первом этапе — сделать для вас полный финансовый аудит всего рынка. Мы берем ваши возможности (первоначальный взнос и комфортный платёж) и смотрим широким веером по всей Уфе. И только когда мы поймём, какая финансовая схема выгодна именно вашей семье, мы начнём точечно сужаться до конкретных улиц и планировок. Согласны с таким подходом?»*`,
+                        "homework": {
+                            "type": "none",
+                            "content": ""
+                        }
+                    },
+                    2: {
+                        "title": "JTBD-диагностика и 10 вопросов для квалификации",
+                        "video_url": "",
+                        "content": `**Клиенты не покупают квадратные метры. Они покупают решение жизненной задачи.**
+
+JTBD (Jobs to be Done) — это подход, при котором мы выясняем, на какую «работу» клиент нанимает квартиру. 
+
+**Модель «4 силы прогресса», управляющая решением клиента:**
+1. **Push (Толкающие силы):** Что не устраивает в текущем жилье (тесно, шумно, далеко до работы, аренда дорожает).
+2. **Pull (Притягивающие силы):** Что манит в новом ЖК (закрытый двор без машин, своя детская комната, рассрочка 0%).
+3. **Anxiety (Тревоги и страхи):** Что пугает (не потяну платеж, застройщик задержит сдачу, переплачу лишнее).
+4. **Habit (Привычки/Инерция):** Что держит в старой жизни (привык к району, лень заниматься ремонтом, «подожду пока ставки упадут»).`,
+                        "homework": {
+                            "type": "text",
+                            "content": `**Практическое ДЗ Блока 2 (Аудит базы клиентов):**
+
+Выберите **двух реальных клиентов** из вашей базы, свяжитесь с ними по новым скриптам и заполните под них **Карту критериев**.
+
+**Шаблон для сдачи ДЗ (заполните на двух клиентов):**
+👤 КАРТА КРИТЕРИЕВ КЛИЕНТА
+Имя клиента: ______
+Реальный жизненный сценарий (зачем берет): ______
+Финансовый коридор (ПВ, комфортный ежемесячный платеж): ______
+Push-фактор (почему уходит от текущего): ______
+Главный страх (Anxiety): ______
+Наш компромисс (чем готовы пожертвовать): ______
+Кто ЛПР в сделке: ______`,
+                            "script_help": ""
+                        }
+                    }
+                }
+            },
+            3: {
+                "title": "Продукт и Аудит ЖК",
+                "lessons": {
+                    1: {
+                        "title": "Анализ застройщиков Уфы 2026",
+                        "video_url": "",
+                        "content": `**Продуктовая экспертиза навигатора.**
+
+Вы не можете продавать новостройки, если ориентируетесь в них только по рекламным щитам. Клиент 2026 года технически подкован. Если вы не знаете отличий в конструктиве домов, вы проиграете менеджеру ОП застройщика.
+
+**Ключевые девелоперы Уфы и их специфика:**
+1. **ГК Садовое Кольцо.** Продукты бизнес- и комфорт-класса. Сильные планировочные решения, но важно жестко контролировать сроки сдачи по проектной декларации.
+2. **ГК Третий Трест.** Крупнейший локальный игрок. Строит много, использует разные технологии (от панелей до кирпича). Плюс — всегда большой выбор готовых лотов в шахматке и гибкие рассрочки. Минус — высокий уровень стандартизации, нужно честно объяснять клиенту разницу классов.
+3. **ГК Жилстройинвест.** Фокус на премиальный сегмент. Высокое качество инженерии, кирпичные межквартирные стены, качественное остекление. Высокий чек, но понятная аргументация цены.`,
+                        "homework": {
+                            "type": "none",
+                            "content": ""
+                        }
+                    },
+                    2: {
+                        "title": "Технический аудит ЖК «ногами»",
+                        "video_url": "",
+                        "content": `**Хватит смотреть на красивые холлы. Смотрите на инженерию.**
+
+Когда вы едете на экскурсию на объект (один или с клиентом), вы делаете технический аудит. Вот 4 вопроса, которые вы обязаны задать менеджеру ОП на объекте:
+
+1. **Из чего сделаны межквартирные стены?** Кирпич или керамзитобетон — это хорошая звукоизоляция. Пазогребневые плиты (ПГП) или газобетон 100 мм без минваты — это гарантированные жалобы клиента на шум от соседей.
+2. **Какая звукоизоляция в стяжке пола?** Спросите марку подложки (Термозвукоизол, Пенотерм и т.д.). Без нее клиент будет слышать каждый шаг сверху.
+3. **Чьи лифты установлены?** Бренд лифтов (Kone, Otis vs отечественные/китайские аналоги). Это влияет на плавность хода, скорость и частоту поломок в первые годы.
+4. **Каков профиль остекления?** Двухкамерный стеклопакет с пятикамерным профилем (REHAU, VEKA) держит тепло. Дешевый застройщик ставит тонкий трехкамерный профиль, который придется менять при ремонте.`,
+                        "homework": {
+                            "type": "text",
+                            "content": `**Практическое ДЗ Блока 3:**
+
+Проведите технический аудит любого строящегося ЖК в Уфе и пришлите в бот заполненную карточку.
+
+**Шаблон для отправки:**
+📋 КАРТОЧКА ЖК
+Название ЖК: ______
+Застройщик: ______
+Локация и транспорт: ______
+Материал стен и оконный профиль: ______
+3 честных плюса объекта: ______
+3 честных минуса / компромисса: ______
+Кому ЖК категорически НЕ подходит: ______
+Правила фиксации уникальности: (срок удержания брони, как фиксировать)`,
+                            "script_help": ""
+                        }
+                    }
+                }
+            },
+            4: {
+                "title": "Финансовый инжиниринг",
+                "lessons": {
+                    1: {
+                        "title": "Продукты-драйверы рынка 2026",
+                        "video_url": "",
+                        "content": `**Инструменты продаж на рынке высокой ключевой ставки.**
+
+Сегодня клиент не покупает цену объекта. Клиент покупает условия покупки. Вы обязаны знать три главных финансовых инструмента:
+
+1. **Траншевая ипотека (Ипотека за 1 рубль).** Банк выдает кредит частями. Первый транш — минимальный (например, 100 рублей). До ввода дома в эксплуатацию клиент платит банку 1 рубль в месяц.
+2. **Субсидированные ставки от застройщика.** Снижение ставки (например, до 6% вместо рыночных 18%) на весь срок за счет единовременной комиссии, которую застройщик платит банку.
+3. **Рассрочка с отложенным платежом.** Минимальный ПВ (например, 10-15%), далее ежемесячно небольшие платежи, а остаток (например, 70%) вносится перед вводом дома в эксплуатацию.`,
+                        "homework": {
+                            "type": "none",
+                            "content": ""
+                        }
+                    },
+                    2: {
+                        "title": "Сравнение «Вторичка vs Новостройка»",
+                        "video_url": "",
+                        "content": `**Как перевести клиента со вторичного рынка на новостройку.**
+
+Самое частое заблуждение клиента: «Вторичка дешевле, она уже готова». Разложите ему математику на простом примере.
+
+**Кейс: Покупка квартиры стоимостью 7 млн рублей.**
+
+🏢 **Вариант А. Вторичка (Готовая квартира)**
+* Стоимость: 7 000 000 ₽
+* Первоначальный взнос (20%): 1 400 000 ₽
+* Ежемесячный платеж: 84 600 ₽
+
+🏗️ **Вариант Б. Новостройка (Субсидированная ставка)**
+* Стоимость (с учетом удорожания 10%): 7 700 000 ₽
+* Первоначальный взнос (20%): 1 540 000 ₽
+* Ежемесячный платеж: 36 900 ₽
+
+**Разница:**
+Платеж по новостройке ниже **в 2.3 раза**. Разница в платеже экономит клиенту **47 700 ₽ в месяц** (572 400 ₽ в год). За 3 года ожидания стройки клиент сэкономит 1.7 млн рублей, что полностью перекрывает удорожание квартиры на старте. Показывайте цифры, не спорьте эмоциями.`,
+                        "homework": {
+                            "type": "voice",
+                            "content": `**Практическое ДЗ Блока 4:**
+
+Запишите **голосовое сообщение** (до 2 минут) с объяснением клиенту математики удорожания при субсидированной ставке. 
+Представьте, что клиент говорит: *«Я не хочу новостройку с субсидированной ставкой, там цена квартиры завышена на 700 тысяч. Я лучше возьму вторичку без переплаты за стоимость»*..`,
+                            "script_help": `**Подсказка по аргументации:**
+- Покажите, что переплата по ставке 18% на вторичке за первые несколько лет съест гораздо больше, чем 700 тыс. удорожания на новостройке.
+- Сравните ежемесячные платежи: 84 600 руб. против 36 900 руб.
+- Объясните, что кредит по 6% можно спокойно гасить в комфортном темпе, а 18% — это финансовая кабала.`
+                        }
+                    }
+                }
+            },
+            5: {
+                "title": "Стандарт сделки и Регламенты",
+                "lessons": {
+                    1: {
+                        "title": "18 шагов безопасного ведения сделки",
+                        "video_url": "",
+                        "content": `**Системный контроль сделки по шагам.**
+
+Сделка в новостройках не прощает хаоса. Нельзя бронировать лот до того, как одобрят окончательные условия в банке, или осматривать объект без проверки юридической репутации застройщика.
+
+**Ключевые этапы (из 18-шагового стандарта навигатора):**
+1. *Ипотека предварительная:* Лимит одобряется до фиксации конкретной квартиры.
+2. *Проверка застройщика:* Анализ проектной декларации, эскроу-счетов и переносов сроков.
+3. *Двухэтапная бронь:* Фиксация лота застройщиком.
+4. *Регистрация договора:* Перевод средств на эскроу строго после госрегистрации ДДУ.`,
+                        "homework": {
+                            "type": "none",
+                            "content": ""
+                        }
+                    },
+                    2: {
+                        "title": "Регламенты фиксации клиентов и уникальности",
+                        "video_url": "",
+                        "content": `**Как зафиксировать уникальность клиента у застройщиков Уфы.**
+
+Если клиент оставил хотя бы одну заявку на сайте застройщика или позвонил в их ОП — он теряет статус «уникального». Вы не получите за него партнерскую комиссию, даже если привели его за руку на показ.
+
+**Правила фиксации уникальности:**
+1. **Превентивная отправка данных:** Всегда отправляйте бланк фиксации ДО того, как назовете клиенту ЖК.
+2. **Фиксация через платформы (Trend Agent, Нмаркет.ПРО) или напрямую.**
+3. **Контроль статуса:** Ждите подтверждения уникальности.`,
+                        "homework": {
+                            "type": "text",
+                            "content": `**Практическое ДЗ Блока 5:**
+
+Подготовьте бланк фиксации уникальности на одного из ваших клиентов для отправки любому застройщику Уфы.
+
+**Шаблон для сдачи ДЗ:**
+📝 БЛАНК ФИКСАЦИИ УНИКАЛЬНОСТИ
+1. Выбранный ЖК для фиксации: ______
+2. ФИО Клиента: ______
+3. Телефон: ______
+4. ФИО Супруга/Созаемщика (если есть): ______
+5. Название платформы-агрегатора (или имя менеджера ОП): ______
+6. Чек-лист шагов: [ ] Уникальность проверена / [ ] Сделка зафиксирована`,
+                            "script_help": ""
+                        }
+                    }
+                }
+            },
+            6: {
+                "title": "Трафик и Возражения",
+                "lessons": {
+                    1: {
+                        "title": "10 стратегий поиска клиентов на новостройки",
+                        "video_url": "",
+                        "content": `**Где брать клиентов, когда нет входящих заявок.**
+
+Опытный агент не имеет права сидеть без лидов. Вот 4 рабочих канала привлечения клиентов «здесь и сейчас», которые вы должны запустить на этой неделе:
+
+1. **Прозвон отказников по вторичке.** Позвоните клиентам, которые смотрели ваши объекты на вторичке, но отказались из-за дорогой ипотеки. 
+2. **Заход через аренду.** Ищите тех, кто сдает квартиры, или тех, кто ищет аренду. 
+3. **Партнерство со смежниками.** Договоритесь с ипотечными брокерами, юристами, дизайнерами.
+4. **Районный контент в соцсетях.** Опубликуйте в своих соцсетях честный разбор строящихся ЖК вашего района.`,
+                        "homework": {
+                            "type": "none",
+                            "content": ""
+                        }
+                    },
+                    2: {
+                        "title": "Отработка возражений по принципу ЛПСД",
+                        "video_url": "",
+                        "content": `**Как работать с возражениями без спора и давления.**
+
+Когда клиент возражает («Дорого», «Я подожду, пока ставки упадут»), неопытный агент начинает доказывать обратное. Это вызывает сопротивление.
+
+**Используйте алгоритм ЛПСД (Лайт-отказ, Пауза, Согласие, Действие):**
+1. **Лайт-отказ (Снижение важности):** Покажите, что вы не пытаетесь продать прямо сейчас.
+2. **Пауза:** Выдержите 2-3 секунды.
+3. **Согласие:** Разделите его опасение.
+4. **Действие:** Предложите сделать расчет.`,
+                        "homework": {
+                            "type": "text",
+                            "content": `**Практическое ДЗ Блока 6 (Финальное):**
+
+Для завершения обучения заполните и пришлите в бот ваш личный план действий по генерации лидов на ближайший месяц.
+
+**Шаблон для сдачи ДЗ:**
+📊 ЛИЧНЫЙ ПЛАН ПРОДАЖ НА МЕСЯЦ
+Желаемый доход: ______ руб.
+Необходимое кол-во сделок (исходя из твоей средней комиссии): ______
+3 выбранных канала поиска клиентов на этот месяц:
+  1. ______
+  2. ______
+  3. ______
+Сколько касаний / звонков в день обязуюсь делать: ______`,
+                            "script_help": ""
+                        }
+                    }
+                }
+            }
+        };
+
+        // Pre-populated default values backup
+        const defaultCourseDB = JSON.parse(JSON.stringify(courseDB));
+
+        // Simulated Student State
+        let studentState = {
+            id: 99999,
+            full_name: "Антон Цой",
+            username: "anton_tsoy",
+            current_block: 1,
+            current_lesson: "1.1",
+            status: "active" // active, awaiting_review, completed
+        };
+
+        // Submitted Homework Submissions log (In-memory)
+        let mockSubmissions = [];
+
+        // Tab state
+        let activeEditorTab = 'lesson';
+        let activeDeviceTab = 'twa';
+
+        // Load page
+        window.onload = function() {
+            loadLessonData();
+            initIFrame();
+            updateLivePreview();
+            renderBotMessages();
+            renderCuratorMessages();
+        };
+
+        function switchEditorTab(tabId, element) {
+            activeEditorTab = tabId;
+            document.querySelectorAll('.editor-tabs .tab-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            
+            document.querySelectorAll('.editor-container .tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(`editor-tab-${tabId}`).classList.add('active');
+        }
+
+        function switchDeviceTab(tabId) {
+            activeDeviceTab = tabId;
+            document.querySelectorAll('.device-selector .device-tab').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`btn-tab-${tabId}`).classList.add('active');
+
+            document.getElementById('phone-screen-twa').classList.add('hidden');
+            document.getElementById('phone-screen-bot').classList.add('hidden');
+            document.getElementById('phone-screen-curator').classList.add('hidden');
+            
+            document.getElementById(`phone-screen-${tabId}`).classList.remove('hidden');
+
+            if (tabId === 'twa') {
+                reloadIFrame();
+            }
+        }
+
+        // Load content from Course DB into editor inputs
+        function loadLessonData() {
+            const blockId = parseInt(document.getElementById('block-select').value);
+            const lessonId = parseInt(document.getElementById('lesson-select').value);
+            const lesson = courseDB[blockId].lessons[lessonId];
+
+            document.getElementById('lesson-title-input').value = lesson.title;
+            document.getElementById('video-url-input').value = lesson.video_url || '';
+            document.getElementById('lesson-content-input').value = lesson.content;
+            
+            // Homework fields
+            const hw = lesson.homework || { type: 'none', content: '', script_help: '' };
+            document.getElementById('hw-type-select').value = hw.type || 'none';
+            document.getElementById('hw-content-input').value = hw.content || '';
+            document.getElementById('hw-script-input').value = hw.script_help || '';
+
+            toggleHWTypeFields();
+            updateLivePreview();
+        }
+
+        // Toggle visibility of homework input fields depending on type
+        function toggleHWTypeFields() {
+            const type = document.getElementById('hw-type-select').value;
+            const container = document.getElementById('hw-fields');
+            const scriptGroup = document.getElementById('hw-script-group');
+
+            if (type === 'none') {
+                container.classList.add('hidden');
+            } else {
+                container.classList.remove('hidden');
+                if (type === 'voice') {
+                    scriptGroup.classList.remove('hidden');
+                } else {
+                    scriptGroup.classList.add('hidden');
+                }
+            }
+        }
+
+        // Read values from inputs and update the in-memory Course DB
+        function syncInputsToDB() {
+            const blockId = parseInt(document.getElementById('block-select').value);
+            const lessonId = parseInt(document.getElementById('lesson-select').value);
+
+            courseDB[blockId].lessons[lessonId].title = document.getElementById('lesson-title-input').value;
+            courseDB[blockId].lessons[lessonId].video_url = document.getElementById('video-url-input').value;
+            courseDB[blockId].lessons[lessonId].content = document.getElementById('lesson-content-input').value;
+
+            // Homework
+            const type = document.getElementById('hw-type-select').value;
+            if (type === 'none') {
+                courseDB[blockId].lessons[lessonId].homework = { type: 'none', content: '' };
+            } else {
+                courseDB[blockId].lessons[lessonId].homework = {
+                    type: type,
+                    content: document.getElementById('hw-content-input').value,
+                    script_help: type === 'voice' ? document.getElementById('hw-script-input').value : ''
+                };
+            }
+        }
+
+        // Renders visual simulator when values change
+        function updateLivePreview() {
+            syncInputsToDB();
+            updatePythonCodeExport();
+            
+            // Reload the Web App iframe content
+            if (activeDeviceTab === 'twa') {
+                const iframe = document.getElementById('twa-iframe');
+                if (iframe && iframe.contentWindow && iframe.contentWindow.appInstance) {
+                    iframe.contentWindow.appInstance.init(); // Reinitialize with new data
+                }
+            }
+            renderBotMessages();
+            renderCuratorMessages();
+        }
+
+        // Reset to initial python lessons values
+        function resetDefaults() {
+            courseDB = JSON.parse(JSON.stringify(defaultCourseDB));
+            loadLessonData();
+        }
+
+        // Python code generator
+        function updatePythonCodeExport() {
+            const blockId = parseInt(document.getElementById('block-select').value);
+            const lessonId = parseInt(document.getElementById('lesson-select').value);
+            const lesson = courseDB[blockId].lessons[lessonId];
+
+            let hwCode = '';
+            if (lesson.homework && lesson.homework.type !== 'none') {
+                hwCode = `,
+                "homework": {
+                    "type": "${lesson.homework.type}",
+                    "content": """${lesson.homework.content}"""${lesson.homework.script_help ? `,\n                    "script_help": """${lesson.homework.script_help}"""` : ''}
+                }`;
+            }
+
+            const code = `BLOCKS[${blockId}] = {
+    "title": "${courseDB[blockId].title}",
+    "lessons": {
+        ${lessonId}: {
+            "title": "${lesson.title}",
+            "content": """${lesson.content}"""${hwCode}
+        }
+    }
+}`;
+            document.getElementById('python-code-box').textContent = code;
+        }
+
+        function copyPythonCode() {
+            const code = document.getElementById('python-code-box').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('Код успешно скопирован в буфер обмена!');
+            }).catch(err => {
+                console.error('Ошибка копирования:', err);
+            });
+        }
+
+        // Update student state inputs
+        function updateStudentData() {
+            studentState.full_name = document.getElementById('student-name').value;
+            studentState.username = document.getElementById('student-username').value;
+            studentState.current_block = parseInt(document.getElementById('student-block').value);
+            
+            const blockVal = studentState.current_block;
+            if (blockVal === 7) {
+                studentState.current_lesson = "6.2";
+                studentState.status = "completed";
+                document.getElementById('student-status').value = "completed";
+            } else {
+                studentState.current_lesson = `${blockVal}.1`;
+                studentState.status = document.getElementById('student-status').value;
+                if (studentState.status === 'completed') {
+                    studentState.status = 'active';
+                    document.getElementById('student-status').value = 'active';
+                }
+            }
+            updateLivePreview();
+        }
+
+        // Simulated API Endpoint Handler for the Web App iframe
+        window.handleMockAPIRequest = function(endpoint, data) {
+            console.log('Intercepted Web App API Call:', endpoint, data);
+
+            if (endpoint === '/user/data') {
+                // Calculate progress bar
+                let progress = {};
+                for (let b = 1; b <= 6; b++) {
+                    let lessonsCompleted = 0;
+                    let completedList = [];
+                    
+                    if (b < studentState.current_block || studentState.status === 'completed') {
+                        lessonsCompleted = 2;
+                        completedList = [`${b}.1`, `${b}.2`];
+                    } else if (b === studentState.current_block) {
+                        if (studentState.status === 'awaiting_review') {
+                            lessonsCompleted = 2;
+                            completedList = [`${b}.1`, `${b}.2`];
+                        } else {
+                            lessonsCompleted = 0;
+                            completedList = [];
+                        }
+                    }
+                    
+                    progress[b.toString()] = {
+                        "lessons_completed": lessonsCompleted,
+                        "total_lessons": 2,
+                        "completed_lessons": completedList,
+                        "study_time": lessonsCompleted * 15
+                    };
+                }
+                progress["status"] = studentState.status;
+                progress["current_block"] = studentState.current_block;
+                progress["current_lesson"] = studentState.current_lesson;
+
+                return {
+                    success: true,
+                    user_info: {
+                        id: studentState.id,
+                        full_name: studentState.full_name,
+                        username: studentState.username,
+                        status: studentState.status,
+                        current_block: studentState.current_block,
+                        current_lesson: studentState.current_lesson
+                    },
+                    progress: progress
+                };
+            }
+
+            if (endpoint === '/modules/list') {
+                let modules = [];
+                for (let b = 1; b <= 6; b++) {
+                    modules.push({
+                        id: b,
+                        title: courseDB[b].title,
+                        description: `Материалы и домашние задания блока ${b}.`,
+                        estimated_time: "40 мин"
+                    });
+                }
+                return { success: true, modules: modules };
+            }
+
+            if (endpoint === '/modules/lessons') {
+                const modId = data.module_id || 1;
+                let lessonsList = [];
+                const blockObj = courseDB[modId];
+                
+                for (let lId in blockObj.lessons) {
+                    const l = blockObj.lessons[lId];
+                    lessonsList.push({
+                        id: `${modId}.${lId}`,
+                        title: l.title,
+                        duration: "20 мин",
+                        has_video: !!l.video_url,
+                        has_files: false
+                    });
+                }
+                return { success: true, lessons: lessonsList };
+            }
+
+            if (endpoint === '/lessons/content') {
+                const lessonId = data.lesson_id || "1.1";
+                const parts = lessonId.split('.');
+                const bId = parseInt(parts[0]);
+                const lId = parseInt(parts[1]);
+                const lesson = courseDB[bId].lessons[lId];
+
+                // Convert markdown content to HTML mock
+                const htmlContent = markdownToHtml(lesson.content);
+
+                let files = [];
+                if (bId === 1) {
+                    files.push({
+                        name: "Диагностическая карта Навигатора.xlsx",
+                        type: "xls",
+                        url: "#"
+                    });
+                }
+
+                let assignment = null;
+                if (lesson.homework && lesson.homework.type !== 'none') {
+                    assignment = {
+                        id: `hw_${bId}`,
+                        description: markdownToHtml(lesson.homework.content),
+                        type: lesson.homework.type
+                    };
+                }
+
+                return {
+                    success: true,
+                    lesson: {
+                        id: lessonId,
+                        title: lesson.title,
+                        duration: "20 мин",
+                        video_url: lesson.video_url || "",
+                        text_content: htmlContent,
+                        files: files,
+                        assignment: assignment
+                    }
+                };
+            }
+
+            if (endpoint === '/assignments/submit') {
+                const user_id = data.user_id;
+                const block_number = parseInt(data.block_number || 1);
+                const text_content = data.text_content || '';
+
+                // Capture submission
+                mockSubmissions.push({
+                    id: mockSubmissions.length + 1,
+                    user_id: user_id,
+                    student_name: studentState.full_name,
+                    username: studentState.username,
+                    block: block_number,
+                    type: 'text',
+                    content: text_content,
+                    submitted_at: new Date().toLocaleTimeString()
+                });
+
+                // Update student status to awaiting_review
+                studentState.status = 'awaiting_review';
+                document.getElementById('student-status').value = 'awaiting_review';
+                
+                // Refresh UI
+                updateLivePreview();
+                
+                // Show notification and switch to Curator View
+                setTimeout(() => {
+                    alert('ДЗ успешно отправлено через Web App! Переключаем на чат куратора для проверки.');
+                    switchDeviceTab('curator');
+                }, 400);
+
+                return { success: true };
+            }
+
+            if (endpoint === '/user/stats') {
+                const modulesCompleted = studentState.status === 'completed' ? 6 : studentState.current_block - 1;
+                const lessonsCompleted = modulesCompleted * 2 + (studentState.status === 'awaiting_review' ? 2 : 0);
+                
+                return {
+                    success: true,
+                    stats: {
+                        modules_completed: modulesCompleted,
+                        lessons_completed: lessonsCompleted,
+                        study_hours: ((lessonsCompleted * 20) / 60).toFixed(1),
+                        assignments_completed: modulesCompleted
+                    },
+                    achievements: [
+                        { name: "Быстрый старт", icon: "🚀", unlocked: studentState.current_block > 1 || studentState.status === 'completed' },
+                        { name: "Финансовый гуру", icon: "📊", unlocked: studentState.current_block > 4 || studentState.status === 'completed' },
+                        { name: "Агент-Навигатор", icon: "🏆", unlocked: studentState.status === 'completed' }
+                    ]
+                };
+            }
+
+            return { success: false, error: 'Endpoint mock not found' };
+        };
+
+        // Simple JS Parser representing lessons.py:markdown_to_html
+        function markdownToHtml(text) {
+            if (!text) return '';
+            let html = text;
+            
+            // Format blockquotes
+            const lines = html.split('\n');
+            let processedLines = [];
+            let inQuote = false;
+            let quoteBlock = [];
+            
+            lines.forEach(line => {
+                const stripped = line.trim();
+                if (stripped.startsWith('>')) {
+                    if (!inQuote) inQuote = true;
+                    // strip the > character
+                    quoteBlock.push(stripped.substring(1).trim());
+                } else {
+                    if (inQuote) {
+                        inQuote = false;
+                        processedLines.push('<blockquote>' + quoteBlock.join('<br>') + '</blockquote>');
+                        quoteBlock = [];
+                    }
+                    processedLines.push(line);
+                }
+            });
+            if (inQuote) {
+                processedLines.push('<blockquote>' + quoteBlock.join('<br>') + '</blockquote>');
+            }
+            html = processedLines.join('\n');
+            
+            // Replace bold (**bold**)
+            html = html.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+            // Replace italic (*italic*)
+            html = html.replace(/\*(.*?)\*/g, '<i>$1</i>');
+            // Replace inline code (`code`)
+            html = html.replace(/`(.*?)`/g, '<code>$1</code>');
+            
+            // Simple replace of paragraphs
+            html = html.replace(/\n\n/g, '<br><br>');
+            html = html.replace(/\n/g, '<br>');
+            
+            return html;
+        }
+
+        // HTML/IFrame dynamic writer
+        async function initIFrame() {
+            try {
+                const response = await fetch('./index.html');
+                if (!response.ok) throw new Error('Cannot load index.html');
+                let html = await response.text();
+
+                // Mock Telegram Web App object & fetch calls inside the iframe
+                const mockScript = `
+                <script>
+                // Web App Emulator SDK
+                window.Telegram = {
+                    WebApp: {
+                        initDataUnsafe: {
+                            user: {
+                                id: ${studentState.id},
+                                username: "${studentState.username}",
+                                first_name: "${studentState.full_name.split(' ')[0]}"
+                            }
+                        },
+                        expand: function() { console.log('TWA: expand()'); },
+                        ready: function() { console.log('TWA: ready()'); },
+                        close: function() { 
+                            console.log('TWA: close()'); 
+                            alert('Команда закрытия Web App получена. Переключаем во вкладку чата бота.');
+                            window.parent.switchDeviceTab('bot');
+                        },
+                        BackButton: {
+                            show: function() { console.log('TWA BackBtn: show()'); },
+                            hide: function() { console.log('TWA BackBtn: hide()'); },
+                            onClick: function(cb) { window.iframeBackClick = cb; }
+                        },
+                        onEvent: function(name, cb) { console.log('TWA event listener added:', name); },
+                        offEvent: function(name, cb) { }
+                    }
+                };
+
+                // Intercept fetch requests and send them to parent window mockup router
+                window.fetch = async function(url, options) {
+                    const endpoint = url.substring(url.indexOf('/api') + 4);
+                    const data = JSON.parse((options && options.body) || '{}');
+                    const mockResponse = window.parent.handleMockAPIRequest(endpoint, data);
+                    return {
+                        ok: true,
+                        json: async () => mockResponse
+                    };
+                };
+
+                // Track and dispatch app loading
+                window.addEventListener('load', () => {
+                    if (window.appInstance) {
+                        console.log('TWA App instance connected.');
+                    }
+                });
+                </script>
+                `;
+
+                // Inject our mock script right after <head>
+                html = html.replace('<head>', '<head>\n' + mockScript);
+
+                const iframe = document.getElementById('twa-iframe');
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                iframeDoc.open();
+                iframeDoc.write(html);
+                iframeDoc.close();
+
+            } catch (err) {
+                console.error('Error preloading iframe:', err);
+                const iframe = document.getElementById('twa-iframe');
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                iframeDoc.open();
+                iframeDoc.write(`<div style="padding: 20px; font-family: sans-serif; text-align: center;"><h3>Ошибка загрузки симулятора</h3><p>Убедитесь, что запускаете симулятор через локальный веб-сервер или GitHub Pages.</p></div>`);
+                iframeDoc.close();
+            }
+        }
+
+        function reloadIFrame() {
+            initIFrame();
+        }
+
+        // Open TWA view
+        function openTWAFromMockChat() {
+            switchDeviceTab('twa');
+        }
+
+        // Mock chat message sender
+        function sendMockTextMessage(text) {
+            alert(`Имитация отправки команды: "${text}"`);
+            
+            // Show reply logic
+            if (text === '🏠 Бронирование') {
+                alert('Бот: Открываю меню бронирования объектов...');
+            } else if (text === '❓ Поддержка') {
+                alert('Бот: ❓ Поддержка и контакты\\n\\nПишите куратору @anton_tsoy...');
+            }
+        }
+
+        // Render mockup messages for user bot chat screen
+        function renderBotMessages() {
+            const chatBody = document.getElementById('bot-chat-body');
+            chatBody.innerHTML = '';
+
+            // 1. Welcome bot message
+            chatBody.innerHTML += `
+                <div class="tg-message in">
+                    👋 <b>Добро пожаловать в систему обучения агентов СРЕДА 2.0!</b><br><br>
+                    Бот поможет вам освоить методику «Агент-Навигатор» и автоматизировать вашу работу с новостройками.<br><br>
+                    Рекомендуем проходить обучение через интерактивный Web App!
+                    <span class="tg-meta">09:41</span>
+                </div>
+            `;
+
+            // 2. State-dependent messages
+            if (studentState.status === 'awaiting_review') {
+                // If homework requires voice, show a voice msg bubble
+                const currentHWBlock = studentState.current_block;
+                const hwType = courseDB[currentHWBlock].lessons[2].homework.type || 'text';
+                
+                if (hwType === 'voice') {
+                    chatBody.innerHTML += `
+                        <div class="tg-message out" style="width: 200px;">
+                            <div class="tg-voice-bubble">
+                                <div class="tg-play-icon">▶</div>
+                                <div class="tg-waveform"></div>
+                                <span style="font-size:11px; margin-left: 5px;">0:45</span>
+                            </div>
+                            <span class="tg-meta">10:02 ✓✓</span>
+                        </div>
+                        <div class="tg-message in">
+                            ✅ <b>Ваше голосовое домашнее задание принято на проверку куратором.</b><br><br>
+                            Вы можете следить за статусом проверки в Web App. Обычно проверка занимает не более 4 часов.
+                            <span class="tg-meta">10:02</span>
+                        </div>
+                    `;
+                } else {
+                    chatBody.innerHTML += `
+                        <div class="tg-message out">
+                            [Текстовое ДЗ отправлено в TWA]
+                            <span class="tg-meta">10:02 ✓✓</span>
+                        </div>
+                        <div class="tg-message in">
+                            ⏳ <b>Ваше текстовое ДЗ получено и отправлено куратору.</b><br><br>
+                            Ожидайте ответа куратора перед переходом к следующему блоку.
+                            <span class="tg-meta">10:02</span>
+                        </div>
+                    `;
+                }
+            } else if (studentState.status === 'completed') {
+                chatBody.innerHTML += `
+                    <div class="tg-message in">
+                        🎉 <b>Поздравляем! Ваше финальное домашнее задание одобрено куратором!</b><br><br>
+                        Вы успешно завершили программу обучения «Агент-Навигатор 2.0» и прошли весь курс! 🎓<br><br>
+                        Теперь вы являетесь сертифицированным навигатором. Успешных вам сделок!
+                        <span class="tg-meta">Вчера</span>
+                    </div>
+                `;
+            } else {
+                // Active, showing current status prompt
+                chatBody.innerHTML += `
+                    <div class="tg-message in">
+                        📚 Вы обучаетесь на <b>Блоке ${studentState.current_block}</b>.<br><br>
+                        Нажмите кнопку <b>🎓 Открыть обучение</b> ниже, чтобы продолжить.
+                        <span class="tg-meta">10:00</span>
+                    </div>
+                `;
+            }
+            
+            // Scroll to bottom
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // Render curator alerts chat messages
+        function renderCuratorMessages() {
+            const chatBody = document.getElementById('curator-chat-body');
+            chatBody.innerHTML = '';
+
+            if (studentState.status === 'awaiting_review') {
+                const currentHWBlock = studentState.current_block;
+                const hwObj = courseDB[currentHWBlock].lessons[2].homework;
+                const hwType = hwObj.type || 'text';
+                
+                // Fetch the content submitted (latest submission or default dummy)
+                let submittedText = 'Тестовая аудиозапись / голосовое ДЗ Блока.';
+                if (hwType === 'text') {
+                    const lastSub = mockSubmissions.filter(s => s.block === currentHWBlock).pop();
+                    submittedText = lastSub ? lastSub.content : 'Это заполненный отчет по шаблону ДЗ.';
+                }
+
+                chatBody.innerHTML += `
+                    <div class="tg-message in" style="background: none; box-shadow: none; padding: 0; max-width: 100%;">
+                        <div class="curator-card">
+                            <div class="curator-header">
+                                🔔 Новое ДЗ по Блоку ${currentHWBlock} (${hwType === 'voice' ? 'голосовое' : 'текст'})!
+                            </div>
+                            <div class="curator-details">
+                                👤 <b>Студент:</b> ${studentState.full_name} (@${studentState.username})<br>
+                                📄 <b>Формат:</b> ${hwType === 'voice' ? 'Голосовое сообщение' : 'Текстовый ответ'}<br><br>
+                                📝 <b>Ответ:</b><br>
+                                <blockquote>${submittedText}</blockquote>
+                            </div>
+                            <div class="curator-actions">
+                                <button class="curator-btn curator-approve" onclick="curatorApproveHW(${currentHWBlock})">✅ Одобрить</button>
+                                <button class="curator-btn curator-reject" onclick="curatorRejectHW(${currentHWBlock})">❌ Отклонить</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                chatBody.innerHTML += `
+                    <div style="text-align: center; color: #64748b; font-size: 12px; margin-top: 50px; padding: 20px;">
+                        нет новых домашних заданий на проверку.<br><br>
+                        Имитируйте сдачу ДЗ во вкладке <i>«Симуляция ученика»</i>.
+                    </div>
+                `;
+            }
+
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // Curator Approval trigger
+        function curatorApproveHW(blockNumber) {
+            alert(`Куратор одобрил домашнее задание по Блоку ${blockNumber}!`);
+            
+            // Advance block
+            const nextBlock = blockNumber + 1;
+            if (nextBlock > 6) {
+                studentState.status = 'completed';
+                studentState.current_block = 7;
+                document.getElementById('student-block').value = "7";
+                document.getElementById('student-status').value = "completed";
+            } else {
+                studentState.status = 'active';
+                studentState.current_block = nextBlock;
+                studentState.current_lesson = `${nextBlock}.1`;
+                document.getElementById('student-block').value = nextBlock.toString();
+                document.getElementById('student-status').value = 'active';
+            }
+
+            // Sync with editor selects
+            document.getElementById('block-select').value = studentState.current_block <= 6 ? studentState.current_block.toString() : "6";
+            document.getElementById('lesson-select').value = "1";
+            loadLessonData();
+
+            updateLivePreview();
+            switchDeviceTab('twa');
+        }
+
+        // Curator Rejection trigger
+        function curatorRejectHW(blockNumber) {
+            const comment = prompt('Укажите причину отклонения ДЗ для отправки студенту:', 'Не заполнен шаблон отчета. Переделайте.');
+            if (comment === null) return; // Cancel
+
+            alert(`Домашнее задание Блока ${blockNumber} отклонено. Причина отправлена студенту.`);
+            
+            studentState.status = 'active';
+            document.getElementById('student-status').value = 'active';
+
+            updateLivePreview();
+            switchDeviceTab('bot');
+            
+            // Append curator feedback to chat
+            const chatBody = document.getElementById('bot-chat-body');
+            chatBody.innerHTML += `
+                <div class="tg-message in" style="border-left: 4px solid #ef4444;">
+                    ⚠️ <b>Ваше домашнее задание по Блоку ${blockNumber} было отклонено куратором.</b><br><br>
+                    💬 <b>Комментарий куратора:</b><br>
+                    <blockquote>${comment}</blockquote><br>
+                    Пожалуйста, выполните требования куратора и отправьте домашнее задание заново.
+                    <span class="tg-meta">Только что</span>
+                </div>
+            `;
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // Emulate user submitting HW
+        function simulateSubmitHW() {
+            const currentBlock = studentState.current_block;
+            if (currentBlock > 6) {
+                alert('Обучение завершено. Сдача ДЗ невозможна.');
+                return;
+            }
+
+            const hwObj = courseDB[currentBlock].lessons[2].homework;
+            const hwType = hwObj.type || 'text';
+
+            if (hwType === 'none') {
+                alert('У этого блока нет домашнего задания для проверки.');
+                return;
+            }
+
+            if (hwType === 'voice') {
+                studentState.status = 'awaiting_review';
+                document.getElementById('student-status').value = 'awaiting_review';
+                updateLivePreview();
+                alert('Голосовое ДЗ отправлено боту! Переходим в чат куратора.');
+                switchDeviceTab('curator');
+            } else {
+                // Text
+                const textAns = prompt('Введите ответ на текстовое задание:', '📋 КАРТА КРИТЕРИЕВ КЛИЕНТА\nИмя клиента: Иван\nСценарий: Покупка квартиры\nФинансы: ПВ 1.5млн, платеж 30т.');
+                if (!textAns) return;
+
+                window.handleMockAPIRequest('/assignments/submit', {
+                    user_id: studentState.id,
+                    block_number: currentBlock,
+                    text_content: textAns
+                });
+            }
+        }
+    </script>
+</body>
+</html>
