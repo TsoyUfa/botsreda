@@ -1,0 +1,15 @@
+# Cron-задачи для автоматизации Obsidian и Hermes
+# Ежедневное сохранение важных сессий и обновление дашборда
+
+# Ежедневные задачи в 9:00 и 20:00
+0 9 * * * cd "/Users/anton_tsoy/Desktop/Обсидиан" && ./scripts/save-sessions.sh daily
+0 20 * * * cd "/Users/anton_tsoy/Desktop/Обсидиан" && ./scripts/save-sessions.sh daily
+
+# Ежечасная проверка новых заметок
+0 * * * * cd "/Users/anton_tsoy/Desktop/Обсидиан" && python3 scripts/structure-notes.py "Проверка новых заметок" --title "Ежечасная проверка" >> /tmp/notes-check.log 2>&1
+
+# Обновление индекса vault каждый понедельник в 9:00
+0 9 * * 1 cd "/Users/anton_tsoy/Desktop/Обсидиан" && echo "# Обновление индекса\n\n## Последнее обновление\n$(date)" > 00_VAULT_INDEX.tmp && mv 00_VAULT_INDEX.tmp 00_VAULT_INDEX.md
+
+# Резервное копирование важных файлов каждые 6 часов
+0 */6 * * * cd "/Users/anton_tsoy/Desktop/Обсидиан" && tar -czf backup_$(date +\%Y\%m\%d_\%H\%M).tar.gz 1.Бизнес/ 2.План/ 3.Мой\ клон/ 4.Мастерство/ --exclude='*.git' --exclude='node_modules' 2>/dev/null || echo "Backup failed" >> /tmp/backup.log

@@ -134,7 +134,7 @@ async def start_cmd(message: types.Message):
         [InlineKeyboardButton(
             text="🎓 Открыть курс в Web App",
             web_app=types.WebAppInfo(
-                url="https://your-web-app-url.com"  # Замените на ваш URL
+                url="https://github.com/TsoyUfa/botsreda"  # Временный URL - GitHub Pages
             )
         )],
         [InlineKeyboardButton(
@@ -214,7 +214,7 @@ async def show_user_progress(callback: types.CallbackQuery):
         [InlineKeyboardButton(
             text="🎓 Открыть Web App",
             web_app=types.WebAppInfo(
-                url="https://your-web-app-url.com"  # ← ЗАМЕНИТЬ НА ВАШ URL ПОСЛЕ ДЕПЛОЯ
+                url="https://github.com/TsoyUfa/botsreda"  # Временный URL - GitHub Pages
             )
         )],
         [InlineKeyboardButton(
@@ -320,7 +320,7 @@ async def progress_cmd(message: types.Message):
         [InlineKeyboardButton(
             text="🎓 Открыть курс в Web App",
             web_app=types.WebAppInfo(
-                url="https://your-web-app-url.com"  # ← ЗАМЕНИТЬ НА ВАШ URL ПОСЛЕ ДЕПЛОЯ
+                url="https://github.com/TsoyUfa/botsreda"  # Временный URL - GitHub Pages
             )
         )]
     ])

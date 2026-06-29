@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Антон Цой | Перестань быть риэлтором-таксистом</title>
+    <meta name="description" content="Школа «Недвижимость для людей». Системное обучение для агентов: от первого звонка до чека 500к+ ₽. Финансовый инжиниринг, скрипты, воронка. Антон Цой.">
+
+    <!-- OG-теги для красивого превью в WhatsApp / Telegram при шеринге -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Антон Цой — Перестань быть риэлтором-таксистом">
+    <meta property="og:description" content="7 недель — и ты брокер-стратег с чеком 500к+. Финансовый инжиниринг, скрипты и системная работа с клиентами. Школа «Недвижимость для людей».">
+    <meta property="og:image" content="img/anton-portrait.png">
+    <meta property="og:url" content="">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="style.css?v=1.0.2">
+</head>
+<body>
+    <!-- Background Canvas for Matrix Rain -->
+    <canvas id="matrix-canvas"></canvas>
+
+    <!-- Header (Apple style) -->
+    <header class="header">
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <span class="logo-accent">АНТОН</span>ЦОЙ
+            </a>
+            <div class="header-right">
+                <a href="https://t.me/anton_tsoy" target="_blank" class="btn-telegram-icon" aria-label="Telegram">
+                    <i class="fa-brands fa-telegram"></i>
+                </a>
+                <a href="https://max.ru/u/f9LHodD0cOIBRfpt-YLG8TAVjW3Av2j5JN9DwiAQecF9rFBoqnCobs3z0To" target="_blank" class="btn-max-icon" aria-label="Макс">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 20V4l9 7 9-7v16" />
+                    </svg>
+                </a>
+                <button class="mobile-nav-toggle" aria-label="Открыть меню">
+                    <div class="burger-bar"></div>
+                    <div class="burger-bar"></div>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Fullscreen Blur Menu -->
+    <nav class="mobile-menu" id="mobile-menu">
+        <div class="menu-links">
+            <a href="#about" class="menu-link">Обо мне</a>
+            <a href="#quiz" class="menu-link">Тест</a>
+            <a href="#calculator" class="menu-link">Калькулятор</a>
+            <a href="#services" class="menu-link">Программы</a>
+            <a href="#materials" class="menu-link">База знаний</a>
+            <a href="#contact" class="menu-link btn btn-primary">Записаться</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <div class="badge"><i class="fa-solid fa-bolt animate-spin-slow"></i> Недвижимость для людей</div>
+                <h1 class="hero-title">
+                    Перестань быть<br>
+                    <span class="text-gradient">риэлтором-таксистом</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Ты отправляешь планировки в WhatsApp и ждёшь ответа?<br>Это и есть проблема. Мы её решаем.
+                </p>
+                <div class="hero-actions">
+                    <a href="#quiz" class="btn btn-primary">Пройти тест <i class="fa-solid fa-chevron-right btn-arrow"></i></a>
+                    <a href="#calculator" class="btn btn-secondary">Посчитать потери</a>
+                </div>
+            </div>
+
+            <!-- Floating Competency Widget -->
+            <div class="hero-sla-widget glass-card">
+                <div class="widget-header">
+                    <div class="pulsing-dot"></div>
+                    <span>Карта компетенций системного брокера</span>
+                </div>
+                <div class="widget-metric-list">
+                    <div class="competency-row">
+                        <span>Финансовый инжиниринг</span>
+                        <strong>98%</strong>
+                    </div>
+                    <div class="competency-row">
+                        <span>Работа с входящим потоком</span>
+                        <strong>95%</strong>
+                    </div>
+                    <div class="competency-row">
+                        <span>Защита расчетов на встречах</span>
+                        <strong>92%</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container stats-grid">
+            <div class="stat-item glass-card">
+                <div class="stat-num">7+ млрд</div>
+                <div class="stat-text">Объем сделок команды и учеников</div>
+            </div>
+            <div class="stat-item glass-card">
+                <div class="stat-num">190</div>
+                <div class="stat-text">Сделок в пике за месяц</div>
+            </div>
+            <div class="stat-item glass-card">
+                <div class="stat-num">110+</div>
+                <div class="stat-text">Проведенных обучений</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section with Photo -->
+    <section id="about" class="about-section section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Создаем брокеров нового поколения</h2>
+                <p class="section-subtitle">Избавить рынок от риэлторов-«таксистов» и вырастить брокеров-стратегов</p>
+            </div>
+
+            <div class="about-content">
+                <!-- Photo Block -->
+                <div class="about-photo-block">
+                    <div class="about-photo-card">
+                        <img src="img/anton-portrait.png" alt="Антон Цой — эксперт по системным продажам недвижимости" class="about-photo-full">
+                        <div class="about-photo-overlay">
+                            <strong>Антон Цой</strong>
+                            <span>Эксперт по системным продажам недвижимости</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="lead-text">
+                    Я - Антон Цой, руководитель образовательного проекта «Недвижимость для людей».
+                </p>
+                <p class="about-descr">
+                    Моя цель — чтобы вы перестали быть риэлтором-таксистом и агентом-прокладкой, и пришли на уровень агента-стратега. Мы учим выстраивать системную работу с клиентами — от первого касания и на всю жизнь, грамотно закрывать сделки без «впаривания» и проектировать умные финансовые расчёты.
+                </p>
+
+                <div class="principles-grid">
+                    <div class="principle-card glass-card">
+                        <div class="p-icon"><i class="fa-solid fa-calculator"></i></div>
+                        <div>
+                            <h3>Финансовый инжиниринг</h3>
+                            <p>Обучаем расчётам и комбинированию траншевых ипотек, субсидий и рассрочек от застройщиков.</p>
+                        </div>
+                    </div>
+                    <div class="principle-card glass-card">
+                        <div class="p-icon"><i class="fa-solid fa-route"></i></div>
+                        <div>
+                            <h3>Никакого хаоса</h3>
+                            <p>Внедряем правильные алгоритмы действий, настраиваем чёткие шаги и переводим брокера в систему.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof / Cases Section -->
+    <section id="cases" class="cases-section section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Результаты учеников</h2>
+                <p class="section-subtitle">Реальные кейсы до и после обучения</p>
+            </div>
+            <div class="cases-grid">
+                <!-- Case 1: Финансовые встречи -->
+                <div class="case-card glass-card">
+                    <div class="case-header">
+                        <div class="case-avatar">🤝</div>
+                        <div>
+                            <strong>Финансовые встречи</strong>
+                            <span class="case-experience">Инструмент квалификации</span>
+                        </div>
+                    </div>
+                    <div class="case-results">
+                        <div class="case-before">
+                            <span class="case-label">До</span>
+                            <span class="case-value bad">«Справочное бюро»</span>
+                        </div>
+                        <div class="case-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                        <div class="case-after">
+                            <span class="case-label">После</span>
+                            <span class="case-value good">3 сделки в месяц</span>
+                        </div>
+                    </div>
+                    <p class="case-quote">«Отказ от отправки планировок в мессенджерах в пользу проведения финансовых встреч. Это отсеивает нецелевых клиентов и оставляет тех, кто готов покупать. Результат — стабильный выход на сделки по новостройкам.»</p>
+                </div>
+
+                <!-- Case 2: Финансовый инжиниринг -->
+                <div class="case-card glass-card">
+                    <div class="case-header">
+                        <div class="case-avatar case-avatar-2">📈</div>
+                        <div>
+                            <strong>Финансовый инжиниринг</strong>
+                            <span class="case-experience">Инструмент продаж</span>
+                        </div>
+                    </div>
+                    <div class="case-results">
+                        <div class="case-before">
+                            <span class="case-label">Без расчетов</span>
+                            <span class="case-value bad">Отказы клиентов</span>
+                        </div>
+                        <div class="case-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                        <div class="case-after">
+                            <span class="case-label">С расчетами</span>
+                            <span class="case-value good">2+ сделки с 10 лидов</span>
+                        </div>
+                    </div>
+                    <p class="case-quote">«Траншевая ипотека закрыла за месяц 3 клиентов, которые раньше уходили "думать". Грамотный расчет позволяет стабильно закрывать от 2 клиентов в месяц со скромного потока в 10 человек.»</p>
+                </div>
+
+                <!-- Case 3: Система регламентов -->
+                <div class="case-card glass-card">
+                    <div class="case-header">
+                        <div class="case-avatar case-avatar-3">⚙️</div>
+                        <div>
+                            <strong>Регламенты и скрипты</strong>
+                            <span class="case-experience">Быстрый старт новичков</span>
+                        </div>
+                    </div>
+                    <div class="case-results">
+                        <div class="case-before">
+                            <span class="case-label">Без системы</span>
+                            <span class="case-value bad">Хаотичные действия</span>
+                        </div>
+                        <div class="case-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                        <div class="case-after">
+                            <span class="case-label">Результат</span>
+                            <span class="case-value good">Стабильные сделки</span>
+                        </div>
+                    </div>
+                    <p class="case-quote">«Внедрение четких регламентов и базовых скриптов позволяет новому агенту без опыта выйти на стабильный результат уже на третий месяц. Новичок с первого дня понимает свои шаги и то, на какие метрики влиять для роста дохода.»</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- QUIZ Section (Viral Element) -->
+    <section id="quiz" class="quiz-section section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Ты таксист или стратег?</h2>
+                <p class="section-subtitle">7 вопросов — узнай свой тип брокера прямо сейчас</p>
+            </div>
+
+            <div class="quiz-wrapper glass-card" id="quiz-wrapper">
+                <!-- Quiz Progress -->
+                <div class="quiz-progress-bar">
+                    <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+                </div>
+                <div class="quiz-progress-text"><span id="quiz-q-num">1</span> / 7</div>
+
+                <!-- Questions -->
+                <div class="quiz-questions" id="quiz-questions">
+
+                    <div class="quiz-q active" data-q="0">
+                        <p class="quiz-question-text">Клиент звонит и говорит: «Скиньте планировки в WhatsApp». Что делаешь?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-opt" data-score="0">Скидываю сразу — клиент же попросил</button>
+                            <button class="quiz-opt" data-score="1">Сначала задаю 2–3 вопроса, потом решаю</button>
+                            <button class="quiz-opt" data-score="2">Перевожу на встречу, не отправляю планировки без брифинга</button>
+                        </div>
+                    </div>
+
+                    <div class="quiz-q" data-q="1">
+                        <p class="quiz-question-text">Клиент говорит: «Ипотека дорогая, подождём». Твой ответ?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-opt" data-score="0">«Да, понимаю, звоните когда надумаете»</button>
+                            <button class="quiz-opt" data-score="1">Объясняю, что ставки могут вырасти ещё</button>
+                            <button class="quiz-opt" data-score="2">Считаю траншевую ипотеку: первый год — 5к/мес, показываю цифры</button>
+                        </div>
+                    </div>
+
+                    <div class="quiz-q" data-q="2">
+                        <p class="quiz-question-text">Сколько вариантов жилья ты обычно присылаешь клиенту?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-opt" data-score="0">Все, что нашёл — пусть сам выбирает</button>
+                            <button class="quiz-opt" data-score="1">5–7 самых подходящих</button>
+                            <button class="quiz-opt" data-score="2">Ровно 3 — и каждый с обоснованием</button>
+                        </div>
+                    </div>
+
+                    <div class="quiz-q" data-q="3">
+                        <p class="quiz-question-text">Что происходит с клиентом после сделки?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-opt" data-score="0">Я его больше не слышу</button>
+                            <button class="quiz-opt" data-score="1">Иногда поздравляю с праздниками</button>
+                            <button class="quiz-opt" data-score="2">Веду в CRM, прошу рекомендации, поддерживаю LTV</button>
+                        </div>
+                    </div>
+
+                    <div class="quiz-q" data-q="4">
+                        <p class="quiz-question-text">Как ты объясняешь разницу между траншевой и субсидированной ипотекой?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-opt" data-score="0">Я не очень в этом разбираюсь</button>
+                            <button class="quiz-opt" data-score="1">Объясняю в общих чертах</button>
+                            <button class="quiz-opt" data-score="2">Считаю сравнительную таблицу прямо на встрече</button>
+                        </div>
+                    </div>
+
+                    <div class="quiz-q" data-q="5">
+                        <p class="quiz-question-text">Клиент говорит: «Я ещё посмотрю у других агентов». Что делаешь?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-opt" data-score="0">«Окей, звоните если что»</button>
+                            <button class="quiz-opt" data-score="1">Говорю, что у нас лучшие условия</button>
+                            <button class="quiz-opt" data-score="2">Фиксирую бронь прямо сейчас и объясняю риски промедления</button>
+                        </div>
+                    </div>
+
+                    <div class="quiz-q" data-q="6">
+                        <p class="quiz-question-text">Каков твой текущий средний чек за сделку?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-opt" data-score="0">До 80 000 ₽</button>
+                            <button class="quiz-opt" data-score="1">80 000 — 200 000 ₽</button>
+                            <button class="quiz-opt" data-score="2">Выше 200 000 ₽</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Quiz Result (hidden by default) -->
+                <div class="quiz-result hidden" id="quiz-result">
+                    <div class="quiz-result-emoji" id="quiz-result-emoji">🚕</div>
+                    <h3 class="quiz-result-title" id="quiz-result-title">Риэлтор-таксист</h3>
+                    <p class="quiz-result-text" id="quiz-result-text">Ты возишь клиентов и ждёшь когда они сами решат. Это нормально — это точка А. Мы знаем, как перейти в точку Б.</p>
+                    <div class="quiz-result-score-line">Твой результат: <strong id="quiz-result-score">0</strong> из 14 баллов</div>
+                    <a href="#contact" class="btn btn-primary btn-full m-top-md">Перейти на уровень выше <i class="fa-solid fa-arrow-up"></i></a>
+                    <button class="btn btn-secondary btn-full m-top-sm" id="quiz-restart">Пройти снова</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Calculator Section (Viral: shows money lost) -->
+    <section id="calculator" class="calculator-section section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Сколько ты теряешь?</h2>
+                <p class="section-subtitle">Посчитай свои скрытые потери за месяц</p>
+            </div>
+
+            <div class="calculator-wrapper">
+                <div class="calc-steps-indicator">
+                    <div class="step-dot active"></div>
+                    <div class="step-dot"></div>
+                </div>
+
+                <div class="glass-card calc-card">
+                    <!-- Step 1: Inputs -->
+                    <div class="calc-step active" id="calc-step-1">
+                        <h3 class="calc-step-title">Твоя воронка</h3>
+
+                        <div class="input-group">
+                            <label>Лидов в месяц <span class="input-highlight" id="leads-display">20</span></label>
+                            <input type="range" id="leads-input" min="5" max="200" value="20">
+                            <span class="input-hint">Входящих заявок / звонков</span>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Конверсия в встречу <span class="input-highlight" id="conv-meet-val">30%</span></label>
+                            <input type="range" id="conv-meet-input" min="5" max="100" value="30">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Конверсия в сделку <span class="input-highlight" id="conv-deal-val">20%</span></label>
+                            <input type="range" id="conv-deal-input" min="5" max="100" value="20">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Средняя комиссия (₽) <span class="input-highlight" id="commission-display">120 000 ₽</span></label>
+                            <input type="range" id="commission-input" min="30000" max="500000" step="5000" value="120000">
+                        </div>
+
+                        <button class="btn btn-primary btn-full m-top-md" id="btn-calc-next">Посчитать потери <i class="fa-solid fa-chevron-right btn-arrow"></i></button>
+                    </div>
+
+                    <!-- Step 2: Results -->
+                    <div class="calc-step" id="calc-step-2">
+                        <div class="calc-results-header">
+                            <button class="btn-back" id="btn-calc-back"><i class="fa-solid fa-chevron-left"></i> Изменить данные</button>
+                            <h3 class="calc-step-title">Твой результат</h3>
+                        </div>
+
+                        <div class="calc-results-list">
+                            <div class="calc-result-row">
+                                <span>Сделок в месяц (сейчас)</span>
+                                <strong class="res-bold" id="res-deals-current">—</strong>
+                            </div>
+                            <div class="calc-result-row">
+                                <span>Выручка (сейчас)</span>
+                                <strong class="res-bold" id="res-revenue-current">—</strong>
+                            </div>
+                            <div class="calc-result-row loss-row">
+                                <span>💸 Теряешь из-за слабой конверсии</span>
+                                <strong class="res-bold" id="res-revenue-lost">—</strong>
+                            </div>
+                            <div class="calc-result-row potential-row">
+                                <span>🚀 Потенциал при системной работе</span>
+                                <strong class="res-bold" id="res-revenue-potential">—</strong>
+                            </div>
+                        </div>
+
+                        <div class="calc-cta-block m-top-md">
+                            <p class="calc-cta-text">Хочешь забрать эти деньги?</p>
+                            <a href="#contact" class="btn btn-primary btn-full">Записаться на разбор воронки</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services-section section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Программы обучения</h2>
+                <p class="section-subtitle">Нажмите на интересующее вас направление, чтобы раскрыть подробности программы</p>
+            </div>
+
+            <div class="services-accordion-list">
+                <!-- Блок 1 -->
+                <div class="accordion-item glass-card">
+                    <div class="accordion-header">
+                        <div class="acc-icon-box"><i class="fa-solid fa-phone-volume"></i></div>
+                        <div class="acc-title-box">
+                            <h3>Блок 1: От первой заявки до встречи</h3>
+                            <span class="acc-badge">Первый контакт</span>
+                        </div>
+                        <div class="acc-arrow"><i class="fa-solid fa-chevron-down"></i></div>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Освойте систему квалификации и перевода любого звонка в закрытую встречу на объекте:</p>
+                        <ul class="acc-details">
+                            <li><i class="fa-solid fa-check"></i> Аудит бюджета и потребностей на первой минуте разговора</li>
+                            <li><i class="fa-solid fa-check"></i> Регламент первого звонка: как не стать «справочным бюро»</li>
+                            <li><i class="fa-solid fa-check"></i> Сценарии работы с тёплой и холодной базой клиентов</li>
+                            <li><i class="fa-solid fa-check"></i> Алгоритм назначения встреч без давления и манипуляций</li>
+                        </ul>
+                        <a href="#contact" class="btn btn-primary btn-sm btn-full m-top-md">Записаться на обучение</a>
+                    </div>
+                </div>
+
+                <!-- Блок 2 -->
+                <div class="accordion-item glass-card">
+                    <div class="accordion-header">
+                        <div class="acc-icon-box"><i class="fa-solid fa-percent"></i></div>
+                        <div class="acc-title-box">
+                            <h3>Блок 2: Финансовый инжиниринг в продажах</h3>
+                            <span class="acc-badge">Способы покупки</span>
+                        </div>
+                        <div class="acc-arrow"><i class="fa-solid fa-chevron-down"></i></div>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Перестаньте продавать планировки — проектируйте выгодные финансовые решения для клиентов:</p>
+                        <ul class="acc-details">
+                            <li><i class="fa-solid fa-check"></i> Расчёт и комбинация траншевой ипотеки, рассрочек и субсидий</li>
+                            <li><i class="fa-solid fa-check"></i> Техника «Защита расчётов на громкой связи»</li>
+                            <li><i class="fa-solid fa-check"></i> Ролевые игры финансового инструмента и аргументация удорожания</li>
+                            <li><i class="fa-solid fa-check"></i> Анализ скрытых условий и ипотечных программ застройщиков</li>
+                        </ul>
+                        <a href="#contact" class="btn btn-primary btn-sm btn-full m-top-md">Записаться на обучение</a>
+                    </div>
+                </div>
+
+                <!-- Блок 3 -->
+                <div class="accordion-item glass-card">
+                    <div class="accordion-header">
+                        <div class="acc-icon-box"><i class="fa-solid fa-list-check"></i></div>
+                        <div class="acc-title-box">
+                            <h3>Блок 3: Золотой стандарт подбора</h3>
+                            <span class="acc-badge">Защита шорт-листа</span>
+                        </div>
+                        <div class="acc-arrow"><i class="fa-solid fa-chevron-down"></i></div>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Научитесь сужать выбор клиента и защищать шорт-лист за секунды:</p>
+                        <ul class="acc-details">
+                            <li><i class="fa-solid fa-check"></i> Как не пересылать «простыни» планировок в мессенджер</li>
+                            <li><i class="fa-solid fa-check"></i> Золотые правила отбора ровно 3 целевых вариантов под бюджет</li>
+                            <li><i class="fa-solid fa-check"></i> Экспертная аргументация каждой позиции в подборке</li>
+                        </ul>
+                        <a href="#contact" class="btn btn-primary btn-sm btn-full m-top-md">Записаться на обучение</a>
+                    </div>
+                </div>
+
+                <!-- Блок 4 -->
+                <div class="accordion-item glass-card">
+                    <div class="accordion-header">
+                        <div class="acc-icon-box"><i class="fa-solid fa-car"></i></div>
+                        <div class="acc-title-box">
+                            <h3>Блок 4: Тест-драйв новостроек</h3>
+                            <span class="acc-badge">Управление показом</span>
+                        </div>
+                        <div class="acc-arrow"><i class="fa-solid fa-chevron-down"></i></div>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Управляйте экскурсией и ведите клиента к бронированию на объекте:</p>
+                        <ul class="acc-details">
+                            <li><i class="fa-solid fa-check"></i> Сценарий проведения показа и расстановка акцентов на стройплощадке</li>
+                            <li><i class="fa-solid fa-check"></i> Управление вниманием клиента: перевод эмоций в цифры</li>
+                            <li><i class="fa-solid fa-check"></i> Плавный дожим и фиксация брони в день экскурсии</li>
+                        </ul>
+                        <a href="#contact" class="btn btn-primary btn-sm btn-full m-top-md">Записаться на обучение</a>
+                    </div>
+                </div>
+
+                <!-- Блок 5 -->
+                <div class="accordion-item glass-card">
+                    <div class="accordion-header">
+                        <div class="acc-icon-box"><i class="fa-solid fa-shield-halved"></i></div>
+                        <div class="acc-title-box">
+                            <h3>Блок 5: Технологический стандарт сделки</h3>
+                            <span class="acc-badge">Безопасность комиссии</span>
+                        </div>
+                        <div class="acc-arrow"><i class="fa-solid fa-chevron-down"></i></div>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Защитите свои интересы и комиссионные при согласовании сделки:</p>
+                        <ul class="acc-details">
+                            <li><i class="fa-solid fa-check"></i> Безопасность фиксации клиента за вашим агентством</li>
+                            <li><i class="fa-solid fa-check"></i> Юридические тонкости согласования условий с застройщиками</li>
+                            <li><i class="fa-solid fa-check"></i> Контроль сделки на всех технологических этапах</li>
+                        </ul>
+                        <a href="#contact" class="btn btn-primary btn-sm btn-full m-top-md">Записаться на обучение</a>
+                    </div>
+                </div>
+
+                <!-- Блок 6 -->
+                <div class="accordion-item glass-card">
+                    <div class="accordion-header">
+                        <div class="acc-icon-box"><i class="fa-solid fa-message"></i></div>
+                        <div class="acc-title-box">
+                            <h3>Блок 6: Переписки в мессенджерах</h3>
+                            <span class="acc-badge">Прогрев текстом</span>
+                        </div>
+                        <div class="acc-arrow"><i class="fa-solid fa-chevron-down"></i></div>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Управляйте вниманием клиентов в мессенджерах без навязчивого спама:</p>
+                        <ul class="acc-details">
+                            <li><i class="fa-solid fa-check"></i> Правила оформления экспертных подборок в WhatsApp и Telegram</li>
+                            <li><i class="fa-solid fa-check"></i> Сценарии реактивации «заснувших» клиентов</li>
+                            <li><i class="fa-solid fa-check"></i> Тон голоса и этика переписки с премиум-сегментом</li>
+                        </ul>
+                        <a href="#contact" class="btn btn-primary btn-sm btn-full m-top-md">Записаться на обучение</a>
+                    </div>
+                </div>
+
+                <!-- Блок 7 -->
+                <div class="accordion-item glass-card">
+                    <div class="accordion-header">
+                        <div class="acc-icon-box"><i class="fa-solid fa-briefcase"></i></div>
+                        <div class="acc-title-box">
+                            <h3>Блок 7: Системный бизнес агента</h3>
+                            <span class="acc-badge">Повторные продажи</span>
+                        </div>
+                        <div class="acc-arrow"><i class="fa-solid fa-chevron-down"></i></div>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Превратите свою профессию в предсказуемый бизнес с доходом от 500к+ ₽:</p>
+                        <ul class="acc-details">
+                            <li><i class="fa-solid fa-check"></i> Выстраивание базы повторных продаж и сбор рекомендаций</li>
+                            <li><i class="fa-solid fa-check"></i> Lifetime Value (LTV): клиенты на всю жизнь</li>
+                            <li><i class="fa-solid fa-check"></i> Финансовое планирование и масштабирование бизнеса брокера</li>
+                        </ul>
+                        <a href="#contact" class="btn btn-primary btn-sm btn-full m-top-md">Записаться на обучение</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section (moved before contact) -->
+    <section id="gallery" class="gallery-section section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Жизнь проекта в лицах</h2>
+                <p class="section-subtitle">Атмосфера наших мастер-классов, обучений и партнёрских встреч</p>
+            </div>
+
+            <div class="gallery-grid" id="gallery-grid">
+                <!-- JS will populate image cards dynamically here -->
+            </div>
+
+
+
+        </div>
+    </section>
+
+    <!-- Materials / Library Section -->
+    <section id="materials" class="materials-section section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">База знаний брокера</h2>
+                <p class="section-subtitle">Пошаговые руководства и инструменты для системной работы — бесплатно</p>
+            </div>
+
+            <div class="materials-grid">
+                <div class="glass-card material-mobile-card">
+                    <span class="m-card-badge">Чек-лист</span>
+                    <h3>5 навыков брокера</h3>
+                    <p>5 ключевых навыков системного брокера для выхода на чек 500к+ в месяц.</p>
+                    <a href="downloads/1_checklist_skills.pdf" target="_blank" class="btn btn-secondary btn-sm btn-full">Скачать PDF <i class="fa-solid fa-download m-left-xs"></i></a>
+                </div>
+
+                <div class="glass-card material-mobile-card">
+                    <span class="m-card-badge">Гайд</span>
+                    <h3>Управление LTV</h3>
+                    <p>Как сделать каждого покупателя долгосрочным активом и рекомендательным каналом.</p>
+                    <a href="downloads/2_guide_ltv.pdf" target="_blank" class="btn btn-secondary btn-sm btn-full">Скачать PDF <i class="fa-solid fa-download m-left-xs"></i></a>
+                </div>
+
+                <div class="glass-card material-mobile-card">
+                    <span class="m-card-badge">Скрипт</span>
+                    <h3>Скрипт по планировкам</h3>
+                    <p>Что отвечать клиенту на просьбу «скинуть планировки в WhatsApp» на первом звонке.</p>
+                    <a href="downloads/3_script_layouts.pdf" target="_blank" class="btn btn-secondary btn-sm btn-full">Скачать PDF <i class="fa-solid fa-download m-left-xs"></i></a>
+                </div>
+
+                <div class="glass-card material-mobile-card">
+                    <span class="m-card-badge">Гайд</span>
+                    <h3>Сценарий встречи</h3>
+                    <p>Как переводить телефонные звонки в показы без навязывания услуг.</p>
+                    <a href="downloads/4_guide_first_meeting.pdf" target="_blank" class="btn btn-secondary btn-sm btn-full">Скачать PDF <i class="fa-solid fa-download m-left-xs"></i></a>
+                </div>
+
+                <div class="glass-card material-mobile-card">
+                    <span class="m-card-badge">Мануал</span>
+                    <h3>Правда о субсидиях</h3>
+                    <p>Вся правда о субсидированных ставках застройщиков: риски и выгода покупателя.</p>
+                    <a href="downloads/5_manual_no_subsidies.pdf" target="_blank" class="btn btn-secondary btn-sm btn-full">Скачать PDF <i class="fa-solid fa-download m-left-xs"></i></a>
+                </div>
+
+                <div class="glass-card material-mobile-card">
+                    <span class="m-card-badge">Шаблон</span>
+                    <h3>Презентация расчётов</h3>
+                    <p>Шаблоны для сравнения рассрочек, субсидированных программ и траншевой ипотеки.</p>
+                    <a href="downloads/6_template_calc_presentation.pdf" target="_blank" class="btn btn-secondary btn-sm btn-full">Скачать PDF <i class="fa-solid fa-download m-left-xs"></i></a>
+                </div>
+
+                <div class="glass-card material-mobile-card">
+                    <span class="m-card-badge">Чек-лист</span>
+                    <h3>Слабая позиция</h3>
+                    <p>5 признаков слабого позиционирования брокера, из-за которого вы теряете сделки.</p>
+                    <a href="downloads/7_checklist_weak_position.pdf" target="_blank" class="btn btn-secondary btn-sm btn-full">Скачать PDF <i class="fa-solid fa-download m-left-xs"></i></a>
+                </div>
+
+                <div class="glass-card material-mobile-card">
+                    <span class="m-card-badge">Мастер-Мануал</span>
+                    <h3>От касания до встречи</h3>
+                    <p>Основное руководство брокера школы «Недвижимость для людей» по ведению лида.</p>
+                    <a href="downloads/8_main_manual_touch_to_meeting.pdf" target="_blank" class="btn btn-secondary btn-sm btn-full">Скачать PDF <i class="fa-solid fa-download m-left-xs"></i></a>
+                </div>
+
+                <div class="glass-card material-mobile-card">
+                    <span class="m-card-badge">Методичка</span>
+                    <h3>Мануал для клиента</h3>
+                    <p>Инструкция для покупателя, облегчающая принятие решения по покупке новостройки.</p>
+                    <a href="downloads/client_manual.pdf" target="_blank" class="btn btn-secondary btn-sm btn-full">Скачать PDF <i class="fa-solid fa-download m-left-xs"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact & Lead Form Section -->
+    <section id="contact" class="contact-section section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Начать прокачку</h2>
+                <p class="section-subtitle">Оставьте заявку на аудит ваших навыков или запишитесь на программу</p>
+            </div>
+
+            <div class="contact-methods-grid">
+                <!-- Telegram Method -->
+                <a href="https://t.me/anton_tsoy" target="_blank" class="glass-card contact-method-card telegram">
+                    <i class="fa-brands fa-telegram method-icon"></i>
+                    <div class="method-details">
+                        <strong>Написать в Telegram</strong>
+                        <span>Быстрый диалог и ответы на вопросы</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right method-arrow"></i>
+                </a>
+
+                <!-- Max Method -->
+                <a href="https://max.ru/u/f9LHodD0cOIBRfpt-YLG8TAVjW3Av2j5JN9DwiAQecF9rFBoqnCobs3z0To" target="_blank" class="glass-card contact-method-card max-chat">
+                    <img src="max-logo.png" alt="Max" class="method-icon-img">
+                    <div class="method-details">
+                        <strong>Связаться через Макс</strong>
+                        <span>Запись на аудит навыков и программы обучения</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right method-arrow"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <p>&copy; 2026 Антон Цой. Недвижимость для людей.</p>
+            <div class="footer-links">
+                <a href="#about">Обо мне</a>
+                <a href="#services">Программы</a>
+                <a href="#materials">База знаний</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lightbox Modal -->
+    <div class="lightbox-modal" id="lightbox-modal" aria-hidden="true">
+        <button class="lightbox-close" id="lightbox-close" aria-label="Закрыть"><i class="fa-solid fa-xmark"></i></button>
+        <button class="lightbox-nav prev" id="lightbox-prev" aria-label="Предыдущее фото"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="lightbox-content">
+            <img src="" alt="Просмотр фото" id="lightbox-img">
+        </div>
+        <button class="lightbox-nav next" id="lightbox-next" aria-label="Следующее фото"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button id="btn-scroll-top" class="btn-scroll-top" aria-label="Наверх">
+        <i class="fa-solid fa-chevron-up"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="app.js?v=1.0.2"></script>
+</body>
+</html>

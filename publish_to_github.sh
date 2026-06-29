@@ -1,50 +1,42 @@
 #!/bin/bash
+# Скрипт публикации Obsidian vault + Dashboard на GitHub
+# Использование: ./publish_to_github.sh [сообщение коммита]
 
-# Скрипт для публикации заметок о недвижимости на GitHub
-# Purpose: Publish real estate insights to GitHub repository
+set -e
 
-echo "🚀 Запуск скрипта публикации заметок недвижимости..."
-
-# Переходим в директорию с Obsidian vault
 cd "/Users/anton_tsoy/Desktop/Обсидиан" || {
-    echo "❌ Не удалось перейти в директорию Obsidian"
-    exit 1
+  echo "❌ Не удалось перейти в директорию Obsidian"
+  exit 1
 }
 
-echo "📁 Текущая директория: $(pwd)"
+echo "🎯 Обновление дашборда из Obsidian vault..."
 
-# Добавляем наши новые файлы
-echo "📝 Добавляем файлы в git:"
-git add "недвижимость_психология_агент.md" "video_reels_info.md"
+# Генерируем свежие данные для дашборда
+if command -v python3 &>/dev/null; then
+  python3 dashboard/generate_data.py && echo "✅ data.json обновлён"
+else
+  echo "⚠️  Python3 не найден — data.json не обновлён"
+fi
 
-# Проверяем статус
-echo "📊 Стат git:"
-git status
+echo ""
+echo "📝 Добавляем файлы в git..."
+git add -A
 
-# Создаем коммит с описанием
-echo "✍️ Создаем коммит..."
-git commit -m "$(cat <<'EOF'
-🏠 Добавлен контент по психологии недвижимости
+echo "📊 Статус:"
+git status --short
 
-- Создана заметка "Психология недвижимости: Почему нужен агента"
-- Включена ключевая мысль о важности агента при выборе недвижимости  
-- Добавлены практические рекомендации для обучения агентов
-- Сохранена информация о видео Reels по теории перспективы
+# Сообщение коммита
+COMMIT_MSG="${1:-🔄 Vault sync $(date '+%d.%m.%Y %H:%M')}"
 
-Категория: Обучение агентов, Психология продаж, Стратегия недвижимости
-Теги: #недвижимость #психология #обучение #агенты #клиенты
+echo ""
+echo "✍️  Коммит: $COMMIT_MSG"
+git commit -m "$COMMIT_MSG" || echo "⚠️  Нет изменений для коммита"
 
-📅 Дата: 13 июня 2026 г.
-👤 Автор: Антон Цой
-🎯 Цель: Обучение учеников агентства по продажам недвижимости
-EOF
-)" || {
-    echo "⚠️ Коммит не требуется - изменений нет"
-}
-
-# Пушим на GitHub
-echo "🚀 Публикуем на GitHub..."
+echo ""
+echo "🚀 Публикация на GitHub..."
 git push origin main
 
-echo "✅ Публикация завершена успешно!"
-echo "🔗 Ссылка на репозиторий: https://github.com/TsoyUfa/obsidian-vault"
+echo ""
+echo "✅ Готово!"
+echo "🔗 Vault:      https://github.com/TsoyUfa/obsidian-vault"
+echo "🎯 Dashboard:  https://TsoyUfa.github.io/obsidian-vault/dashboard/"

@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Перезагрузка 2026: Агент-Навигатор</title>
+    <meta name="description" content="Презентация первой вводной встречи для опытных агентов">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a2e;
+            --bg-card-hover: #222240;
+            --text-primary: #f0f0f5;
+            --text-secondary: #a0a0b8;
+            --text-muted: #6b6b80;
+            --accent-1: #6c5ce7;
+            --accent-2: #a29bfe;
+            --accent-3: #00cec9;
+            --accent-4: #fd79a8;
+            --accent-5: #fdcb6e;
+            --accent-6: #55efc4;
+            --gradient-1: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            --gradient-2: linear-gradient(135deg, #00cec9 0%, #55efc4 100%);
+            --gradient-3: linear-gradient(135deg, #fd79a8 0%, #fdcb6e 100%);
+            --gradient-4: linear-gradient(135deg, #6c5ce7 0%, #00cec9 100%);
+            --gradient-hero: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 25%, #0a1a2e 50%, #0a0a1a 100%);
+            --border-subtle: rgba(255,255,255,0.06);
+            --shadow-card: 0 8px 32px rgba(0,0,0,0.4);
+            --shadow-glow: 0 0 40px rgba(108,92,231,0.15);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .presentation {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 80px;
+            opacity: 0;
+            transform: translateX(60px);
+            pointer-events: none;
+            transition: opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1),
+                        transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: all;
+        }
+
+        .slide.prev {
+            opacity: 0;
+            transform: translateX(-60px);
+        }
+
+        .slide-inner {
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        .slide-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent-2);
+            margin-bottom: 16px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: var(--transition);
+            transition-delay: 0.15s;
+        }
+
+        .slide.active .slide-label {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1 {
+            font-size: clamp(2.2rem, 4vw, 3.5rem);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+            margin-bottom: 24px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+            transition-delay: 0.2s;
+        }
+
+        .slide.active h1 {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1 .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h1 .gradient-text-2 {
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h1 .gradient-text-3 {
+            background: var(--gradient-3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h1 .gradient-text-4 {
+            background: var(--gradient-4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 1.6vw, 1.25rem);
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 800px;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: var(--transition);
+            transition-delay: 0.3s;
+        }
+
+        .slide.active .subtitle {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── Hero slide ── */
+        .slide-hero {
+            background: var(--gradient-hero);
+            text-align: center;
+            position: relative;
+        }
+
+        .slide-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 50%, rgba(108,92,231,0.08) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 50%, rgba(0,206,201,0.06) 0%, transparent 50%);
+            animation: heroGlow 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes heroGlow {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-2%, 2%) scale(1.05); }
+        }
+
+        .slide-hero .slide-inner {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+            margin-top: 40px;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: var(--transition);
+            transition-delay: 0.4s;
+        }
+
+        .slide.active .hero-meta {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .meta-item svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--accent-2);
+        }
+
+        /* ── Cards grid ── */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 32px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+            transition-delay: 0.35s;
+        }
+
+        .slide.active .cards-grid {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius);
+            padding: 28px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            border-radius: var(--radius) var(--radius) 0 0;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .card:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-card);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card:nth-child(1)::before { background: var(--gradient-1); }
+        .card:nth-child(2)::before { background: var(--gradient-2); }
+        .card:nth-child(3)::before { background: var(--gradient-3); }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            font-size: 1.5rem;
+        }
+
+        .card-icon.purple { background: rgba(108,92,231,0.15); }
+        .card-icon.teal { background: rgba(0,206,201,0.15); }
+        .card-icon.pink { background: rgba(253,121,168,0.15); }
+
+        .card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* ── Quote block ── */
+        .quote-block {
+            background: linear-gradient(135deg, rgba(108,92,231,0.08), rgba(0,206,201,0.05));
+            border-left: 3px solid var(--accent-1);
+            border-radius: 0 var(--radius) var(--radius) 0;
+            padding: 28px 32px;
+            margin: 24px 0;
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            opacity: 0;
+            transform: translateY(15px);
+            transition: var(--transition);
+            transition-delay: 0.35s;
+        }
+
+        .slide.active .quote-block {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .quote-block strong {
+            color: var(--text-primary);
+        }
+
+        /* ── Two-column layout ── */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 32px;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: var(--transition);
+            transition-delay: 0.35s;
+        }
+
+        .slide.active .two-col {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .col-left, .col-right {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* ── Styled list ── */
+        .styled-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .styled-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border-subtle);
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .styled-list li:last-child {
+            border-bottom: none;
+        }
+
+        .styled-list .bullet {
+            flex-shrink: 0;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-top: 8px;
+        }
+
+        .styled-list .bullet.purple { background: var(--accent-1); }
+        .styled-list .bullet.teal { background: var(--accent-3); }
+        .styled-list .bullet.pink { background: var(--accent-4); }
+
+        .styled-list li strong {
+            color: var(--text-primary);
+        }
+
+        /* ── Pipeline ── */
+        .pipeline {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 32px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+            transition-delay: 0.35s;
+        }
+
+        .slide.active .pipeline {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pipeline-step {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius);
+            padding: 32px 28px;
+            position: relative;
+            transition: var(--transition);
+            overflow: hidden;
+        }
+
+        .pipeline-step:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-card);
+            border-color: rgba(108,92,231,0.25);
+        }
+
+        .step-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.2rem;
+            font-weight: 800;
+            opacity: 0.1;
+            position: absolute;
+            top: 12px;
+            right: 16px;
+        }
+
+        .step-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent-2);
+            margin-bottom: 12px;
+        }
+
+        .pipeline-step h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .pipeline-step p {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* ── Big statement ── */
+        .big-statement {
+            text-align: center;
+            max-width: 900px;
+            margin: 40px auto;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: var(--transition);
+            transition-delay: 0.3s;
+        }
+
+        .slide.active .big-statement {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .big-statement h2 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -0.04em;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ── Navigation ── */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(10,10,15,0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            z-index: 100;
+        }
+
+        .nav-progress {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .progress-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.12);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .progress-dot.active {
+            background: var(--accent-1);
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        .nav-info {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 1px solid var(--border-subtle);
+            background: transparent;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.05);
+            color: var(--text-primary);
+        }
+
+        .nav-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* ── Fragment / Stepper animations ── */
+        .fragment {
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.5s cubic-bezier(0.23, 1, 0.32, 1), transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .fragment.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .final-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 36px;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 100px;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 36px;
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .slide.active .final-cta {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.5s;
+        }
+
+        .final-cta:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 8px 30px rgba(108,92,231,0.35);
+        }
+    </style>
+</head>
+<body>
+
+<div class="presentation">
+
+    <!-- SLIDE 1: СТАРТОВЫЙ -->
+    <div class="slide slide-hero active" data-index="0">
+        <div class="slide-inner">
+            <span class="slide-label">Вводная встреча</span>
+            <h1>Перезагрузка роли:<br><span class="gradient-text">Агент-Навигатор</span> на рынке 2026</h1>
+            <p class="subtitle" style="margin: 0 auto;">Как перестать зависеть от новостей и начать управлять сделками.</p>
+            
+            <div class="hero-meta">
+                <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                    <span>Методичка 2.0</span>
+                </div>
+                <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                    <span>Оцифровка Точки А</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 2: ЗАЧЕМ МЫ ЗДЕСЬ СЕГОДНЯ -->
+    <div class="slide" data-index="1">
+        <div class="slide-inner">
+            <span class="slide-label">Нулевая встреча</span>
+            <h1>Точка А: <span class="gradient-text-2">Оцифровка реальности</span></h1>
+            
+            <div class="two-col">
+                <div class="col-left">
+                    <p class="subtitle" style="font-size: 1.1rem; line-height: 1.8;">
+                        Сегодня мне важно понять, как вы мыслите, какие сделки вы закрывали, где буксует ваша воронка и какие страхи мешают работать со ставками и удорожаниями.
+                    </p>
+                    <div class="quote-block" style="margin-top: 24px;">
+                        <strong>Входной опрос</strong> — это не экзамен. Это детальная оцифровка ваших реальных болей и барьеров на старте.
+                    </div>
+                </div>
+                <div class="col-right" style="align-items: center; justify-content: center;">
+                    <div class="card" style="width: 100%; max-width: 420px; text-align: center; border-color: rgba(0, 206, 201, 0.25);">
+                        <div class="card-icon teal" style="margin: 0 auto 16px;">🎯</div>
+                        <h3 style="font-size: 1.4rem; margin-bottom: 12px; color: var(--accent-3);">Маршрут результата</h3>
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; color: var(--text-primary); margin: 20px 0;">
+                            Точка А <span style="color: var(--accent-3);">➔</span> Точка Б
+                        </div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">
+                            Честный разбор убеждений и показателей гарантирует кратный рост за 3 месяца обучения.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 3: ПРАВИЛА ИГРЫ -->
+    <div class="slide" data-index="2">
+        <div class="slide-inner">
+            <span class="slide-label">Формат обучения</span>
+            <h1>Правила игры: <span class="gradient-text-3">Как мы работаем</span></h1>
+            
+            <div class="cards-grid">
+                <div class="card fragment">
+                    <div class="card-icon purple">🎙️</div>
+                    <h3>Теория и Разборы</h3>
+                    <p>Живые лекции, детальный разбор финансовых моделей и продуктов-драйверов, регулярные ролевые переговорные практики в классе.</p>
+                </div>
+                <div class="card fragment">
+                    <div class="card-icon teal">💻</div>
+                    <h3>Онлайн-тестирование</h3>
+                    <p>Быстрое закрепление каждого блока в Google Формах (позже перенесем в Telegram-бот). Не сдали тест — нет перехода на следующий блок.</p>
+                </div>
+                <div class="card fragment">
+                    <div class="card-icon pink">🚗</div>
+                    <h3>Полевые экскурсии</h3>
+                    <p>Практический выезд на объекты Уфы. Никакой теории из буклетов: жесткий аудит строительной готовности и коммерческих условий.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: ГЛАВНЫЙ ЗАКОН -->
+    <div class="slide" data-index="3">
+        <div class="slide-inner" style="text-align: center;">
+            <span class="slide-label">Главный закон</span>
+            <h1>Знания без применения = <span class="gradient-text" style="background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">потеря времени</span></h1>
+            
+            <div class="big-statement">
+                <h2>Примени в течение 48 часов или удали</h2>
+            </div>
+            
+            <p class="subtitle" style="margin: 0 auto; max-width: 750px; font-size: 1.1rem;">
+                Мы здесь не для того, чтобы стать «эрудитами». Наша задача — конвертировать информацию в сделки. Любая разобранная схема должна быть протестирована на реальном клиенте в течение двух суток.
+            </p>
+        </div>
+    </div>
+
+    <!-- SLIDE 5: ТЕСТ-ДРАЙВ НОВОСТРОЕК -->
+    <div class="slide" data-index="4">
+        <div class="slide-inner">
+            <span class="slide-label">Выходим в поле</span>
+            <h1>Экскурсии: <span class="gradient-text-4">аудит рынка ногами</span></h1>
+            
+            <div class="two-col">
+                <div class="col-left">
+                    <p class="subtitle" style="font-size: 1.1rem; line-height: 1.8;">
+                        Продавать по рендерам и красивым буклетам больше нельзя. Важно ножкой прийти в отдел продаж застройщика, увидеть реальное положение дел и научиться защищать клиента от манипуляций.
+                    </p>
+                    <div class="quote-block" style="margin-top: 24px;">
+                        <strong>Ключевые источники Уфы:</strong><br>
+                        ГК Садовое Кольцо, ГК Третий Трест, ГК Жилстройинвест и др. Изучаем не фасады, а цифры и инженерию.
+                    </div>
+                </div>
+                <div class="col-right">
+                    <ul class="styled-list">
+                        <li class="fragment">
+                            <span class="bullet purple"></span>
+                            <span><strong>Зачем идти:</strong> Понять реальные остатки лотов и схемы продаж (транши, субсидии, рассрочки).</span>
+                        </li>
+                        <li class="fragment">
+                            <span class="bullet teal"></span>
+                            <span><strong>Как вести себя:</strong> Действовать как профессиональный независимый эксперт, отстаивающий интересы клиента.</span>
+                        </li>
+                        <li class="fragment">
+                            <span class="bullet pink"></span>
+                            <span><strong>Что фиксировать:</strong> Технические детали и реальные коммерческие правила фиксации уникальности.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 6: ЧЕК-ЛИСТ АУДИТА НА ОБЪЕКТЕ -->
+    <div class="slide" data-index="5">
+        <div class="slide-inner">
+            <span class="slide-label">Чек-лист навигатора</span>
+            <h1>Что мы ищем <span class="gradient-text-2">на объекте?</span></h1>
+            
+            <div class="cards-grid">
+                <div class="card fragment">
+                    <span class="year-tag">01. ИНЖЕНЕРИЯ</span>
+                    <h3>Технические характеристики</h3>
+                    <p>Межквартирные стены (кирпич/керамзитобетон vs газобетон), звукоизоляция в стяжке, бренд лифтов (Kone/Otis vs Китай/Россия) и марка остекления.</p>
+                </div>
+                <div class="card fragment">
+                    <span class="year-tag">02. КОММЕРЦИЯ</span>
+                    <h3>Остатки и дефицит лотов</h3>
+                    <p>Анализ шахматки в CRM. Понимание, какие квартиры реально остались у застройщика или инвесторов, какие планировки самые ликвидные.</p>
+                </div>
+                <div class="card fragment">
+                    <span class="year-tag">03. БЕЗОПАСНОСТЬ</span>
+                    <h3>Условия фиксации</h3>
+                    <p>Жесткие регламенты кросс-проверки баз, сроки удержания брони, партнерские комиссии, скрытые дисконты и правила продления уникальности.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 7: БЛИЖАЙШИЕ ШАГИ -->
+    <div class="slide slide-final" data-index="6">
+        <div class="slide-inner" style="position: relative; z-index: 1;">
+            <span class="slide-label">Next Step</span>
+            <h1>Ближайшие шаги <span class="gradient-text">на сегодня</span></h1>
+            
+            <div class="pipeline" style="text-align: left; max-width: 900px; margin: 40px auto;">
+                <div class="pipeline-step fragment">
+                    <div class="step-number">01</div>
+                    <div class="step-title">Шаг 1</div>
+                    <h3>Заполнить Точку А</h3>
+                    <p>Заполнить входной диагностический опрос в Google Форме. Срок — сегодня до 20:00.</p>
+                </div>
+                <div class="pipeline-step fragment">
+                    <div class="step-number">02</div>
+                    <div class="step-title">Шаг 2</div>
+                    <h3>Изучить Блок 1</h3>
+                    <p>Прочитать первый блок Методички 2.0 (Агент-Навигатор vs Агент-Рыбак).</p>
+                </div>
+                <div class="pipeline-step fragment">
+                    <div class="step-number">03</div>
+                    <div class="step-title">Шаг 3</div>
+                    <h3>Сдать ДЗ</h3>
+                    <p>Записать аудиосообщение с отработкой возражения по четырехшаговой схеме.</p>
+                </div>
+            </div>
+
+            <button class="final-cta" onclick="goToSlide(0)">
+                ← В начало презентации
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<!-- Navigation Bar -->
+<nav class="nav-bar" id="navBar">
+    <div class="nav-progress" id="navProgress"></div>
+    <div class="nav-info" id="navInfo">01 / 07</div>
+    <div class="nav-buttons">
+        <button class="nav-btn" id="prevBtn" onclick="prevSlide()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+        </button>
+        <button class="nav-btn" id="nextBtn" onclick="nextSlide()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+        </button>
+    </div>
+</nav>
+
+<script>
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentSlide = 0;
+    let isAnimating = false;
+
+    // Build progress dots
+    const navProgress = document.getElementById('navProgress');
+    for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'progress-dot' + (i === 0 ? ' active' : '');
+        dot.addEventListener('click', () => goToSlide(i));
+        navProgress.appendChild(dot);
+    }
+
+    function updateNav() {
+        const dots = document.querySelectorAll('.progress-dot');
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === currentSlide);
+        });
+        document.getElementById('navInfo').textContent =
+            String(currentSlide + 1).padStart(2, '0') + ' / ' + String(totalSlides).padStart(2, '0');
+    }
+
+    function goToSlide(index) {
+        if (isAnimating || index === currentSlide || index < 0 || index >= totalSlides) return;
+        isAnimating = true;
+
+        const prevIndex = currentSlide;
+        const direction = index > prevIndex ? 1 : -1;
+
+        // Reset transitions
+        slides[prevIndex].style.transition = 'none';
+        slides[index].style.transition = 'none';
+
+        // Prepare position for next slide
+        slides[index].style.transform = direction > 0 ? 'translateX(100%)' : 'translateX(-100%)';
+        slides[index].style.opacity = '0';
+        slides[index].classList.add('active');
+
+        // Reset fragments on the target slide
+        const targetFragments = slides[index].querySelectorAll('.fragment');
+        if (direction > 0) {
+            targetFragments.forEach(f => f.classList.remove('visible'));
+        } else {
+            targetFragments.forEach(f => f.classList.add('visible'));
+        }
+
+        // Force reflow
+        slides[index].offsetHeight;
+
+        // Apply transition styles
+        slides[prevIndex].style.transition = 'opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1), transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
+        slides[index].style.transition = 'opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1), transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
+
+        // Animate
+        slides[prevIndex].style.transform = direction > 0 ? 'translateX(-100%)' : 'translateX(100%)';
+        slides[prevIndex].style.opacity = '0';
+
+        slides[index].style.transform = 'translateX(0)';
+        slides[index].style.opacity = '1';
+        slides[index].scrollTop = 0;
+
+        currentSlide = index;
+        updateNav();
+
+        setTimeout(() => {
+            slides[prevIndex].classList.remove('active');
+            slides[prevIndex].style.transform = '';
+            slides[prevIndex].style.opacity = '';
+            isAnimating = false;
+        }, 600);
+    }
+
+    function nextSlide() {
+        const activeSlide = slides[currentSlide];
+        const invisibleFragments = activeSlide.querySelectorAll('.fragment:not(.visible)');
+        
+        if (invisibleFragments.length > 0) {
+            invisibleFragments[0].classList.add('visible');
+        } else {
+            if (currentSlide < totalSlides - 1) goToSlide(currentSlide + 1);
+        }
+    }
+
+    function prevSlide() {
+        const activeSlide = slides[currentSlide];
+        const visibleFragments = activeSlide.querySelectorAll('.fragment.visible');
+        
+        if (visibleFragments.length > 0) {
+            visibleFragments[visibleFragments.length - 1].classList.remove('remove');
+            visibleFragments[visibleFragments.length - 1].classList.remove('visible');
+        } else {
+            if (currentSlide > 0) goToSlide(currentSlide - 1);
+        }
+    }
+
+    // Keyboard & clicker navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') {
+            e.preventDefault();
+            nextSlide();
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') {
+            e.preventDefault();
+            prevSlide();
+        } else if (e.key === 'Home') {
+            e.preventDefault();
+            goToSlide(0);
+        } else if (e.key === 'End') {
+            e.preventDefault();
+            goToSlide(totalSlides - 1);
+        }
+    });
+
+    // Touch support
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    document.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+        const deltaX = e.changedTouches[0].clientX - touchStartX;
+        const deltaY = e.changedTouches[0].clientY - touchStartY;
+
+        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+            if (deltaX < 0) nextSlide();
+            else prevSlide();
+        }
+    }, { passive: true });
+
+    updateNav();
+</script>
+</body>
+</html>

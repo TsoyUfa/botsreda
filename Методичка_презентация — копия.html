@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Методика продаж новостроек — Интерактивная презентация</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (for structure) + Custom CSS for premium glassmorphism & transitions -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        outfit: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f3ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            900: '#1e3a8a',
+                            dark: '#0B0F19',
+                            card: '#161F30',
+                            glow: '#3b82f6'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            background: radial-gradient(circle at 50% 0%, #151e33 0%, #080b11 70%);
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism custom styles */
+        .glass-card {
+            background: rgba(22, 31, 48, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 12px 40px 0 rgba(59, 130, 246, 0.15);
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Active Glow effect */
+        .glow-dot::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            border-radius: inherit;
+            animation: glow-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+
+        @keyframes glow-ping {
+            75%, 100% {
+                transform: scale(2.5);
+                opacity: 0;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(59, 130, 246, 0.3);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(59, 130, 246, 0.5);
+        }
+
+        /* Animations */
+        .slide-in {
+            animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body class="font-sans min-h-screen">
+
+    <!-- Header Section -->
+    <header class="relative pt-12 pb-8 px-6 text-center z-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold uppercase tracking-wider mb-4 font-outfit">
+            <i data-lucide="shield-check" class="w-4 h-4"></i> Методология «Смыслокодинг»
+        </div>
+        <h1 class="text-4xl md:text-5xl font-extrabold font-outfit text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-blue-400 tracking-tight">
+            ОТ ЗАЯВКИ ДО ВСТРЕЧИ
+        </h1>
+        <p class="mt-3 text-base text-gray-400 max-w-2xl mx-auto">
+            Интерактивная карта ведения клиента по новостройкам. Пошаговый алгоритм без «слива» заявок.
+        </p>
+    </header>
+
+    <!-- Main Pipeline Container -->
+    <main class="max-w-7xl mx-auto px-4 md:px-8 py-8 relative z-10">
+        
+        <!-- Interactive Steps Timeline -->
+        <div class="relative grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-4 my-10">
+            
+            <!-- Connector Line for Desktop -->
+            <div class="hidden lg:block absolute top-1/2 left-4 right-4 h-0.5 bg-gradient-to-r from-blue-500/20 via-blue-500/40 to-blue-500/20 -translate-y-1/2 z-0"></div>
+
+            <!-- STEP 1 -->
+            <div class="glass-card rounded-2xl p-6 flex flex-col justify-between relative z-10 cursor-pointer group" onclick="openStep(1)">
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="font-outfit text-5xl font-black text-blue-500/20 group-hover:text-blue-500/40 transition-colors">01</span>
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 border border-blue-500/20 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
+                            <i data-lucide="message-square-code"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-bold font-outfit text-white group-hover:text-blue-400 transition-colors">Первое касание</h3>
+                    <p class="mt-2 text-sm text-gray-400 leading-relaxed">
+                        Установка профессиональной рамки, снятие барьера риелтора и перевод в мессенджер.
+                    </p>
+                </div>
+                <div class="mt-6 flex items-center text-xs font-semibold text-blue-400 group-hover:text-blue-300 gap-1">
+                    Подробнее <i data-lucide="chevron-right" class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform"></i>
+                </div>
+            </div>
+
+            <!-- STEP 2 -->
+            <div class="glass-card rounded-2xl p-6 flex flex-col justify-between relative z-10 cursor-pointer group" onclick="openStep(2)">
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="font-outfit text-5xl font-black text-blue-500/20 group-hover:text-blue-500/40 transition-colors">02</span>
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 border border-blue-500/20 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
+                            <i data-lucide="wallet"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-bold font-outfit text-white group-hover:text-blue-400 transition-colors">Финансовый аудит</h3>
+                    <p class="mt-2 text-sm text-gray-400 leading-relaxed">
+                        Определение финансового коридора (ПВ, ставки, рассрочки) вместо бессмысленного выбора стен.
+                    </p>
+                </div>
+                <div class="mt-6 flex items-center text-xs font-semibold text-blue-400 group-hover:text-blue-300 gap-1">
+                    Подробнее <i data-lucide="chevron-right" class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform"></i>
+                </div>
+            </div>
+
+            <!-- STEP 3 -->
+            <div class="glass-card rounded-2xl p-6 flex flex-col justify-between relative z-10 cursor-pointer group" onclick="openStep(3)">
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="font-outfit text-5xl font-black text-blue-500/20 group-hover:text-blue-500/40 transition-colors">03</span>
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 border border-blue-500/20 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
+                            <i data-lucide="target"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-bold font-outfit text-white group-hover:text-blue-400 transition-colors">JTBD-Диагностика</h3>
+                    <p class="mt-2 text-sm text-gray-400 leading-relaxed">
+                        Поиск истинной жизненной задачи клиента (разъезд, безопасность, сохранение капитала).
+                    </p>
+                </div>
+                <div class="mt-6 flex items-center text-xs font-semibold text-blue-400 group-hover:text-blue-300 gap-1">
+                    Подробнее <i data-lucide="chevron-right" class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform"></i>
+                </div>
+            </div>
+
+            <!-- STEP 4 -->
+            <div class="glass-card rounded-2xl p-6 flex flex-col justify-between relative z-10 cursor-pointer group" onclick="openStep(4)">
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="font-outfit text-5xl font-black text-blue-500/20 group-hover:text-blue-500/40 transition-colors">04</span>
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 border border-blue-500/20 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
+                            <i data-lucide="bar-chart-3"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-bold font-outfit text-white group-hover:text-blue-400 transition-colors">Переход через Финмодель</h3>
+                    <p class="mt-2 text-sm text-gray-400 leading-relaxed">
+                        Назначение первой встречи на основе ручной аналитики и Маршрутной карты поездок.
+                    </p>
+                </div>
+                <div class="mt-6 flex items-center text-xs font-semibold text-blue-400 group-hover:text-blue-300 gap-1">
+                    Подробнее <i data-lucide="chevron-right" class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform"></i>
+                </div>
+            </div>
+
+            <!-- STEP 5 -->
+            <div class="glass-card rounded-2xl p-6 flex flex-col justify-between relative z-10 cursor-pointer group" onclick="openStep(5)">
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="font-outfit text-5xl font-black text-blue-500/20 group-hover:text-blue-500/40 transition-colors">05</span>
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 border border-blue-500/20 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
+                            <i data-lucide="users"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-bold font-outfit text-white group-hover:text-blue-400 transition-colors">Встреча и презентация</h3>
+                    <p class="mt-2 text-sm text-gray-400 leading-relaxed">
+                        Финальная стадия первого контакта. Защита финмодели и выезд для оценки стройки и локации.
+                    </p>
+                </div>
+                <div class="mt-6 flex items-center text-xs font-semibold text-blue-400 group-hover:text-blue-300 gap-1">
+                    Подробнее <i data-lucide="chevron-right" class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform"></i>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Info/Disclaimer Box -->
+        <div class="mt-12 max-w-3xl mx-auto rounded-xl p-5 border border-dashed border-blue-500/25 bg-blue-500/5 text-center">
+            <p class="text-sm text-gray-300">
+                <i data-lucide="alert-circle" class="inline w-4 h-4 text-blue-400 mr-1.5 -mt-0.5"></i>
+                Нажмите на любой шаг, чтобы открыть полное пошаговое описание, скрипты и таблицы из методички.
+            </p>
+        </div>
+    </main>
+
+    <!-- Slide-out Detail Panel -->
+    <div id="detail-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300" onclick="closePanel()"></div>
+    
+    <div id="detail-panel" class="fixed top-0 right-0 h-full w-full md:w-[680px] xl:w-[780px] glass-panel z-50 shadow-2xl translate-x-full transition-transform duration-300 flex flex-col">
+        <!-- Panel Header -->
+        <div class="px-6 py-5 border-b border-white/5 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div id="panel-icon-container" class="w-10 h-10 rounded-lg bg-blue-500/15 text-blue-400 flex items-center justify-center">
+                    <i id="panel-icon" data-lucide="message-square-code"></i>
+                </div>
+                <div>
+                    <span id="panel-number" class="text-xs font-semibold text-blue-500 tracking-wider uppercase font-outfit">ШАГ 01</span>
+                    <h2 id="panel-title" class="text-xl font-bold font-outfit text-white">Название шага</h2>
+                </div>
+            </div>
+            <button onclick="closePanel()" class="w-9 h-9 rounded-lg hover:bg-white/5 flex items-center justify-center text-gray-400 hover:text-white transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <!-- Panel Content Area (Scrollable) -->
+        <div id="panel-body" class="p-6 overflow-y-auto flex-1 space-y-6 text-gray-300 leading-relaxed text-sm">
+            <!-- Content will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <!-- Data Store for dynamic injection -->
+    <script>
+        const stepsData = {
+            1: {
+                number: "ШАГ 01",
+                title: "Первое касание",
+                icon: "message-square-code",
+                content: `
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-xl bg-blue-500/10 border border-blue-500/25">
+                            <strong class="text-white block mb-1">Главная цель шага:</strong>
+                            Установить профессиональную рамку, снять барьер недоверия и договориться о детальной диагностике с переводом в мессенджер.
+                        </div>
+                        
+                        <h4 class="text-white font-bold text-base mt-6">1. Открытие и снятие барьера риелтора</h4>
+                        <p class="text-gray-400">Клиенты привыкли, что им будут навязывать услуги. Мы ломаем этот шаблон честностью и прозрачностью.</p>
+                        
+                        <div class="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
+                            <span class="text-xs font-semibold text-yellow-500 uppercase">Сценарий: Реакция на Reels / Пост / Сторис</span>
+                            <blockquote class="italic text-gray-300 border-l-2 border-blue-500 pl-3">
+                                «[Имя], приветствую! Спасибо за интерес к видео/посту. Расскажу все подробности. Сразу проясню один момент, чтобы вам было комфортно: я работаю как независимый эксперт по новостройкам. Моя работа по подбору, расчётам и сопровождению для вас <strong>полностью бесплатна</strong> — её оплачивает застройщик. При этом все цены, скидки и акции для вас остаются точно такими же, как напрямую в отделе продаж. Мой принцип — я не продаю конкретный ЖК, а помогаю выбрать то, что выгодно именно вам. Чтобы я не скидывал вам общие бесполезные буклеты, расскажите буквально в двух словах: квартиру подбираете для себя (жить) или как инвестицию?»
+                            </blockquote>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
+                            <span class="text-xs font-semibold text-yellow-500 uppercase">Сценарий: С холодного трафика</span>
+                            <blockquote class="italic text-gray-300 border-l-2 border-blue-500 pl-3">
+                                «Добрый день! Рад, что написали. Схема работы простая: я помогаю сориентироваться по всем новостройкам Уфы, одобрить ипотеку и провести сделку. Для вас это <strong>бесплатно</strong> (нам платит застройщик), цены и скидки один в один как у девелоперов. Я не топлю за конкретных застройщиков, моя задача — показать вам честную аналитику, плюсы и минусы каждого ЖК. Чтобы сэкономить ваше время и не слать гигабайты планировок, давайте определим рамки. Какой примерно бюджет планируете на покупку и сколько есть первоначального взноса на руках?»
+                            </blockquote>
+                        </div>
+
+                        <h4 class="text-white font-bold text-base mt-6">2. Речевой переход на диагностику</h4>
+                        <p class="text-gray-400">Вместо стандартных расспросов «какую квартиру вы хотите» (клиент сам часто не знает), переключаем фокус на его жизненный контекст:</p>
+                        <div class="p-4 rounded-xl bg-blue-500/5 border border-blue-500/10">
+                            <blockquote class="italic text-blue-300 pl-3 border-l border-blue-400">
+                                «Давайте, чтобы я не сбрасывал вам кучу бесполезных каталогов, мы поступим так: я задам буквально 3–4 вопроса, чтобы понять вашу ситуацию, и подготовлю для вас точечный расчёт. Хорошо?»
+                            </blockquote>
+                        </div>
+                    </div>
+                `
+            },
+            2: {
+                number: "ШАГ 02",
+                title: "Финансовый аудит",
+                icon: "wallet",
+                content: `
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-xl bg-blue-500/10 border border-blue-500/25">
+                            <strong class="text-white block mb-1">Железное правило новостроек:</strong>
+                            Сначала — финансовая схема (банки, лимиты, ПВ), и только в самом конце — подбор конкретных ЖК.
+                        </div>
+
+                        <h4 class="text-white font-bold text-base mt-4">Речевой скрипт финансового аудита:</h4>
+                        <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+                            <blockquote class="italic text-gray-300 space-y-2">
+                                <p>«[Имя], смотрите, как мы с вами поступим, чтобы вы не переплатили лишнего. Сейчас рынок новостроек сильно изменился. Выбрать просто район и планировку — это путь к переплате.</p>
+                                <p>Сейчас на рынке решает не цена квартиры, а <strong>финансовый инструмент</strong>: где-то работает беспроцентная рассрочка, где-то траншевая ипотека (когда вы платите по 1 рублю в месяц до сдачи дома), где-то субсидированные ставки. Причём у каждого застройщика эти условия свои.</p>
+                                <p>Поэтому моя задача на первом этапе — сделать для вас <strong>полный финансовый аудит всего рынка</strong>.</p>
+                                <p>Мы сначала вообще не привязываемся к конкретному району. Мы берём ваши возможности (первоначальный взнос и комфортный платёж) и смотрим широким веером по всей Уфе. И только когда мы поймём, какая схема выгодна именно вашей семье, мы начнём точечно сужаться до конкретных улиц. Согласны с таким подходом?»</p>
+                            </blockquote>
+                        </div>
+
+                        <h4 class="text-white font-bold text-base mt-6">Три ключевых аргумента для клиента:</h4>
+                        <ul class="space-y-3 text-gray-300">
+                            <li class="flex items-start gap-2">
+                                <i data-lucide="check-circle" class="w-4 h-4 text-blue-400 mt-1 shrink-0"></i>
+                                <span><strong>Защита бюджета:</strong> Если ограничимся одним районом, можем упустить рассрочку без первоначального взноса в соседнем, сэкономив 1.5 млн рублей.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i data-lucide="check-circle" class="w-4 h-4 text-blue-400 mt-1 shrink-0"></i>
+                                <span><strong>Сравнение платежной нагрузки:</strong> Квартира за 8 млн в одном ЖК может обходиться в 40к/мес, а в другом за 9 млн — всего в 20к/мес за счет спецпрограмм.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i data-lucide="check-circle" class="w-4 h-4 text-blue-400 mt-1 shrink-0"></i>
+                                <span><strong>Экономия времени:</strong> Сначала отсеем финансово невыгодные объекты на цифрах, чтобы ехать смотреть только 2-3 лучших.</span>
+                            </li>
+                        </ul>
+
+                        <div class="mt-6 p-4 rounded-xl bg-white/5 border border-white/10">
+                            <strong class="text-white block mb-2">Что выясняем на этом этапе:</strong>
+                            <ol class="list-decimal list-inside space-y-1 text-gray-400">
+                                <li><strong>Первоначальный взнос (ПВ)</strong>: наличные, маткапитал, сертификаты.</li>
+                                <li><strong>Ипотечный статус</strong>: одобрена ли, программы (семейная, IT), были ли отказы.</li>
+                                <li><strong>Комфортный платеж</strong>: критичный и комфортный ежемесячный бюджет.</li>
+                            </ol>
+                        </div>
+                    </div>
+                `
+            },
+            3: {
+                number: "ШАГ 03",
+                title: "JTBD-Диагностика",
+                icon: "target",
+                content: `
+                    <div class="space-y-6">
+                        <div class="p-4 rounded-xl bg-blue-500/10 border border-blue-500/25">
+                            <strong class="text-white block mb-1">Концепция JTBD (Jobs to be Done):</strong>
+                            Мы продаем не метры, а решение жизненной задачи. Выявляем функциональные, эмоциональные и социальные потребности.
+                        </div>
+
+                        <div>
+                            <h4 class="text-white font-bold text-base mb-3">Примеры и вариации проработки боли:</h4>
+                            
+                            <!-- Tabs / Accordions for JTBD Variations -->
+                            <div class="space-y-3">
+                                
+                                <!-- Variation 1 -->
+                                <div class="p-3 rounded-lg bg-white/5 border border-white/10">
+                                    <div class="font-semibold text-white mb-2 flex items-center gap-2">
+                                        <span class="w-2 h-2 rounded-full bg-blue-500"></span> Из аренды — в своё жилье
+                                    </div>
+                                    <p class="text-gray-400 text-xs mb-2"><strong>Истинная боль:</strong> Страх выселения, навязчивый контроль хозяина, риск потерять сад/школу.</p>
+                                    <p class="text-gray-300 text-xs italic">«Мы ищем такое место, откуда вас никто не попросит уйти, чтобы вы были сами хозяевами...»</p>
+                                </div>
+
+                                <!-- Variation 2 -->
+                                <div class="p-3 rounded-lg bg-white/5 border border-white/10">
+                                    <div class="font-semibold text-white mb-2 flex items-center gap-2">
+                                        <span class="w-2 h-2 rounded-full bg-blue-500"></span> Расширение (из 2к в 3к)
+                                    </div>
+                                    <p class="text-gray-400 text-xs mb-2"><strong>Истинная боль:</strong> Конфликты из-за отсутствия личных границ, угроза развода.</p>
+                                    <p class="text-gray-300 text-xs italic">«Вам важно, чтобы у каждого члена семьи появилось закрытое пространство, чтобы дома воцарился мир...»</p>
+                                </div>
+
+                                <!-- Variation 3 -->
+                                <div class="p-3 rounded-lg bg-white/5 border border-white/10">
+                                    <div class="font-semibold text-white mb-2 flex items-center gap-2">
+                                        <span class="w-2 h-2 rounded-full bg-blue-500"></span> Инвестиции / Сохранение
+                                    </div>
+                                    <p class="text-gray-400 text-xs mb-2"><strong>Истинная боль:</strong> Страх инфляции, недоверие банкам, таяние депозитов.</p>
+                                    <p class="text-gray-300 text-xs italic">«Задача — не заработать миллионы за полгода, а спрятать сбережения в надежный, ликвидный сейф...»</p>
+                                </div>
+
+                                <!-- Variation 4-7 Summary -->
+                                <div class="p-3 rounded-lg bg-white/5 border border-white/10 text-xs text-gray-400 space-y-1">
+                                    <div><strong>• Будущее детям:</strong> Покупка спокойствия за старт ребенка, избавление его от съёмных углов.</div>
+                                    <div><strong>• Разъезд из-за ссор:</strong> Покупка права быть взрослой и сохранение нормальных отношений с родителями.</div>
+                                    <div><strong>• Старость родителей:</strong> Переход к безопасной среде (лифты, поликлиника, чистые дворы).</div>
+                                    <div><strong>• Замена актива:</strong> Избавление от маргинальных арендаторов и постоянных ремонтов в пользу новостройки с IT-арендаторами.</div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            4: {
+                number: "ШАГ 04",
+                title: "Переход к встрече через «Финмодель»",
+                icon: "bar-chart-3",
+                content: `
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-xl bg-blue-500/10 border border-blue-500/25">
+                            <strong class="text-white block mb-1">Связка «Финмодель ➔ Маршрутная карта»:</strong>
+                            Мы продаем встречу не ради «поговорить», а чтобы показать сравнительную таблицу расчетов и составить точечный маршрут поездок по объектам-фаворитам.
+                        </div>
+
+                        <h4 class="text-white font-bold text-base mt-6">Алгоритм завершения первого контакта:</h4>
+                        <ol class="space-y-3 text-gray-300">
+                            <li class="flex items-start gap-2">
+                                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-blue-500/20 text-blue-400 text-xs font-bold mt-0.5 shrink-0">1</span>
+                                <span><strong>Фиксация данных:</strong> Подтверждаем, что услышали задачу и финансовые рамки.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-blue-500/20 text-blue-400 text-xs font-bold mt-0.5 shrink-0">2</span>
+                                <span><strong>Пауза на аналитику:</strong> Объясняем, что делаем ручную работу по сверке остатков и программ рассрочек у застройщиков.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-blue-500/20 text-blue-400 text-xs font-bold mt-0.5 shrink-0">3</span>
+                                <span><strong>Запрос под скрытые программы:</strong> Обещаем прозвонить девелоперов на предмет новых закрытых акций.</span>
+                            </li>
+                        </ol>
+
+                        <h4 class="text-white font-bold text-base mt-6">Скрипт закрытия диалога и назначения встречи:</h4>
+                        <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+                            <blockquote class="italic text-gray-300">
+                                «[Имя], отлично. Вводные данные я зафиксировал: у нас есть [сумма] первоначального взноса, и нам важно уложиться в платёж до [сумма] рублей по семейной программе, при этом в приоритете планировка с раздельными детскими.
+                                <br><br>
+                                Что я делаю дальше:
+                                <br>
+                                1. Сейчас я возьму паузу и сделаю полный аудит рынка под ваш запрос.
+                                <br>
+                                2. Лично свяжусь с застройщиками, чтобы актуализировать наличие и цены.
+                                <br>
+                                3. Сверю новые программы субсидирования, чтобы снизить ваш платеж еще сильнее.
+                                <br><br>
+                                На основе этого я соберу для вас варианты с расчётами. Давайте мы завтра созвонимся буквально на 10–15 минут, вместе пройдёмся по ним. И на основе того варианта, который вам откликнется, я составлю для нас чёткую <strong>Маршрутную карту</strong> — распишу, куда, в какой день, зачем и для чего мы едем смотреть объекты вживую. Вам завтра в какое время удобнее созвониться?»
+                            </blockquote>
+                        </div>
+                    </div>
+                `
+            },
+            5: {
+                number: "ШАГ 05",
+                title: "Встреча и презентация",
+                icon: "users",
+                content: `
+                    <div class="space-y-6">
+                        <div class="p-4 rounded-xl bg-blue-500/10 border border-blue-500/25">
+                            <strong class="text-white block mb-1">Финальная стадия первого контакта:</strong>
+                            Закрепить доверие, защитить финмодель и перевести клиента к тест-драйву объектов вживую.
+                        </div>
+
+                        <div>
+                            <h4 class="text-white font-bold text-base mb-2">1. Фундамент встречи (что сделано до нее):</h4>
+                            <p class="text-gray-400 text-sm mb-3">Мы провели JTBD-аудит, прислали схемы оплаты, отобрали лучшие лоты и сузили выбор до конкретного пула застройщиков.</p>
+                        </div>
+
+                        <div>
+                            <h4 class="text-white font-bold text-base mb-2">2. Позиционирование выезда: Зачем мы едем?</h4>
+                            <p class="text-gray-400 text-sm mb-3">Вся аналитическая работа по рынку уже сделана. Мы едем на финальную стадию — пощупать варианты вживую. Задачи на выезде:</p>
+                            <ul class="space-y-2 text-gray-300 text-xs">
+                                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-blue-400"></i> Прочувствовать атмосферу и качество отделки девелопера.</li>
+                                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-blue-400"></i> Оценить темпы строительства непосредственно на площадке.</li>
+                                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-blue-400"></i> Оценить локацию (развязки, парки, инфраструктура).</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4 class="text-white font-bold text-base mb-2">3. Сценарий презентации:</h4>
+                            <div class="space-y-3 text-xs">
+                                <div class="p-3 rounded bg-white/5 border border-white/10">
+                                    <strong>А. Установка рамки (5 мин):</strong>
+                                    <p class="text-gray-400 mt-1 italic">«Цель сегодня — посмотреть сравнение трех ЖК, убрать лишнее и согласовать точечный маршрут поездок по фаворитам. Договорились?»</p>
+                                </div>
+                                <div class="p-3 rounded bg-white/5 border border-white/10">
+                                    <strong>Б. Презентация и честные компромиссы (20 мин):</strong>
+                                    <p class="text-gray-400 mt-1">Показываем сравнение через JTBD-задачи и обязательно проговариваем минусы объектов (например, шумная дорога).</p>
+                                </div>
+                                <div class="p-3 rounded bg-white/5 border border-white/10">
+                                    <strong>В. Продажа показов (10 мин):</strong>
+                                    <p class="text-gray-400 mt-1 italic">«Мы утвердили лоты. Теперь едем на тест-драйв по Маршрутной карте, оцениваем качество и локацию. Нам удобнее в субботу в 11:00?»</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-3 rounded-lg bg-blue-500/5 border border-blue-500/15 text-xs text-gray-400">
+                            <strong>Важно: Фиксация уникальности.</strong> Сразу после встречи данные клиента направляются застройщикам для закрепления сделки за агентом в CRM.
+                        </div>
+                    </div>
+                `
+            }
+        };
+
+        function openStep(stepIndex) {
+            const data = stepsData[stepIndex];
+            if (!data) return;
+
+            // Update details
+            document.getElementById('panel-number').innerText = data.number;
+            document.getElementById('panel-title').innerText = data.title;
+            document.getElementById('panel-body').innerHTML = data.content;
+            
+            // Set correct icon
+            const iconElement = document.getElementById('panel-icon');
+            iconElement.setAttribute('data-lucide', data.icon);
+            
+            // Re-render lucide icons inside the panel
+            lucide.createIcons();
+
+            // Open panel with transition
+            const overlay = document.getElementById('detail-overlay');
+            const panel = document.getElementById('detail-panel');
+
+            overlay.classList.remove('opacity-0', 'pointer-events-none');
+            panel.classList.remove('translate-x-full');
+            
+            // Prevent body scroll
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePanel() {
+            const overlay = document.getElementById('detail-overlay');
+            const panel = document.getElementById('detail-panel');
+
+            overlay.classList.add('opacity-0', 'pointer-events-none');
+            panel.classList.add('translate-x-full');
+            
+            // Re-enable body scroll
+            document.body.style.overflow = '';
+        }
+
+        // Initialize Lucide icons on load
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>

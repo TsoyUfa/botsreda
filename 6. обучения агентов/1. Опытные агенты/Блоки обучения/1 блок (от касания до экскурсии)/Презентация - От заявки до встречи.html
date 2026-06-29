@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>От первой заявки до встречи — Эксперт Сити</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #050505;
+            --primary-color: #00ff41;
+            --primary-dim: #008f11;
+            --primary-glow: rgba(0, 255, 65, 0.4);
+            --text-main: #e0e0e0;
+            --text-muted: #888888;
+            --glass-bg: rgba(10, 10, 10, 0.75);
+            --glass-border: rgba(0, 255, 65, 0.2);
+            --card-hover: rgba(0, 255, 65, 0.05);
+            --font-mono: 'Share Tech Mono', monospace;
+            --font-sans: 'Inter', sans-serif;
+            --accent-red: #ff3333;
+            --accent-red-glow: rgba(255, 51, 51, 0.4);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* Matrix Background */
+        #matrix-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.15;
+            transition: opacity 1s ease;
+        }
+
+        /* Scanline Overlay for retro vibe */
+        .scanlines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.25) 50%
+            ), linear-gradient(
+                90deg,
+                rgba(255, 0, 0, 0.06),
+                rgba(0, 255, 0, 0.02),
+                rgba(0, 0, 255, 0.06)
+            );
+            background-size: 100% 4px, 6px 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Presentation Wrapper */
+        .presentation-container {
+            position: relative;
+            z-index: 3;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px;
+        }
+
+        /* Top Bar */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 15px;
+            backdrop-filter: blur(5px);
+        }
+
+        .logo {
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px var(--primary-glow);
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo::before {
+            content: '';
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background-color: var(--primary-color);
+            box-shadow: 0 0 8px var(--primary-color);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { opacity: 0.4; }
+            to { opacity: 1; }
+        }
+
+        .metadata {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            gap: 20px;
+        }
+
+        .metadata span {
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 4px 10px;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.02);
+        }
+
+        /* Main Slide Viewport */
+        .slide-viewport {
+            flex-grow: 1;
+            position: relative;
+            margin: 30px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            max-width: 1200px;
+            height: 100%;
+            max-height: 650px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 255, 65, 0.05);
+            border-radius: 12px;
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(30px) scale(0.98);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Typography */
+        h1, h2, h3 {
+            font-family: var(--font-mono);
+            color: var(--primary-color);
+            text-shadow: 0 0 8px var(--primary-glow);
+            font-weight: 500;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 15px;
+            letter-spacing: 1px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: var(--text-main);
+            margin-bottom: 15px;
+        }
+
+        .text-accent {
+            color: var(--primary-color);
+            font-family: var(--font-mono);
+        }
+
+        .text-danger {
+            color: var(--accent-red);
+            font-family: var(--font-mono);
+            text-shadow: 0 0 8px var(--accent-red-glow);
+        }
+
+        /* Title Slide Customization */
+        .slide-title-layout {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            text-align: center;
+        }
+
+        .title-huge {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            letter-spacing: 4px;
+            animation: text-glow 2s infinite alternate;
+        }
+
+        @keyframes text-glow {
+            from { text-shadow: 0 0 10px var(--primary-glow); }
+            to { text-shadow: 0 0 25px var(--primary-color), 0 0 5px #fff; }
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--text-main);
+            margin-bottom: 40px;
+            font-family: var(--font-mono);
+            opacity: 0.8;
+        }
+
+        .terminal-box {
+            background: rgba(0,0,0,0.6);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 6px;
+            width: 100%;
+            max-width: 600px;
+            font-family: var(--font-mono);
+            text-align: left;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: var(--primary-color);
+        }
+
+        .terminal-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 15px;
+            background: var(--primary-color);
+            animation: cursor-blink 0.8s infinite;
+            vertical-align: middle;
+            margin-left: 4px;
+        }
+
+        @keyframes cursor-blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+
+        /* Controls / Buttons */
+        .btn {
+            background: rgba(0, 255, 65, 0.1);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 12px 30px;
+            font-family: var(--font-mono);
+            font-size: 1.1rem;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(0,255,65,0.1);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn:hover {
+            background: var(--primary-color);
+            color: #000;
+            box-shadow: 0 0 20px var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        /* Timeline Gantt Slide Customization */
+        .timeline-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .timeline-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .timeline-card:hover, .timeline-card.active {
+            border-color: var(--primary-color);
+            background: var(--card-hover);
+            box-shadow: 0 0 15px rgba(0,255,65,0.1);
+            transform: translateY(-5px);
+        }
+
+        .timeline-card .time {
+            font-family: var(--font-mono);
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .timeline-card .step-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .timeline-card .step-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .timeline-detail-box {
+            margin-top: 30px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--glass-border);
+            padding: 25px;
+            border-radius: 8px;
+            min-height: 180px;
+        }
+
+        /* LTV Slide */
+        .ltv-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 40px;
+            align-items: center;
+            height: 100%;
+        }
+
+        .calculator-card {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 30px;
+            border-radius: 8px;
+        }
+
+        .calc-title {
+            font-family: var(--font-mono);
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            border-bottom: 1px dashed rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .checkbox-item:hover {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .checkbox-item input {
+            display: none;
+        }
+
+        .checkbox-custom {
+            width: 20px;
+            height: 20px;
+            border: 1px solid var(--primary-color);
+            border-radius: 3px;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .checkbox-item input:checked + .checkbox-custom {
+            background: var(--primary-color);
+            box-shadow: 0 0 10px var(--primary-color);
+        }
+
+        .checkbox-item input:checked + .checkbox-custom::after {
+            content: '✓';
+            position: absolute;
+            color: #000;
+            font-weight: bold;
+            font-size: 14px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .checkbox-label {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            font-size: 0.95rem;
+        }
+
+        .checkbox-label span:last-child {
+            font-family: var(--font-mono);
+            color: var(--primary-color);
+        }
+
+        .ltv-result-card {
+            text-align: center;
+            padding: 40px;
+            border: 1px solid var(--primary-color);
+            background: var(--card-hover);
+            border-radius: 8px;
+            box-shadow: 0 0 25px rgba(0, 255, 65, 0.1);
+        }
+
+        .ltv-value {
+            font-family: var(--font-mono);
+            font-size: 3.5rem;
+            color: var(--primary-color);
+            text-shadow: 0 0 20px var(--primary-glow);
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        /* Two Column layout for comparison (Step 3/4) */
+        .compare-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .compare-card {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .compare-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .compare-card.danger {
+            border-color: rgba(255, 51, 51, 0.3);
+        }
+
+        .compare-card.danger:hover {
+            border-color: var(--accent-red);
+            box-shadow: 0 0 20px rgba(255, 51, 51, 0.15);
+            background: rgba(255, 51, 51, 0.02);
+        }
+
+        .compare-card.success {
+            border-color: rgba(0, 255, 65, 0.3);
+        }
+
+        .compare-card.success:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.15);
+            background: rgba(0, 255, 65, 0.02);
+        }
+
+        .compare-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .compare-card.danger h3 {
+            color: var(--accent-red);
+            text-shadow: 0 0 8px var(--accent-red-glow);
+        }
+
+        .compare-card.success h3 {
+            color: var(--primary-color);
+            text-shadow: 0 0 8px var(--primary-glow);
+        }
+
+        .compare-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .compare-list li {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .compare-card.danger .compare-list li::before {
+            content: '✕';
+            position: absolute;
+            left: 0;
+            color: var(--accent-red);
+        }
+
+        .compare-card.success .compare-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+        }
+
+        /* Financial Audit Calculator */
+        .fin-calc-layout {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .fin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .fin-table th, .fin-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .fin-table th {
+            font-family: var(--font-mono);
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .fin-table tr:hover td {
+            background: rgba(255,255,255,0.02);
+        }
+
+        .highlight-row {
+            background: rgba(0, 255, 65, 0.03);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .highlight-row td {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Tabs for JTBD */
+        .tabs-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .tabs-header {
+            display: flex;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-muted);
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            background: rgba(0, 255, 65, 0.05);
+            box-shadow: 0 0 10px rgba(0,255,65,0.1);
+        }
+
+        .tab-content {
+            display: none;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.02);
+            border-radius: 8px;
+            padding: 30px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .jtbd-card {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 30px;
+        }
+
+        .jtbd-sidebar h4 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .jtbd-badge {
+            display: inline-block;
+            background: rgba(0,255,65,0.1);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 4px 10px;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .dialogue-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .dialogue-table td {
+            padding: 10px;
+            vertical-align: top;
+        }
+
+        .dialogue-speaker {
+            font-family: var(--font-mono);
+            font-weight: bold;
+            color: var(--primary-color);
+            width: 100px;
+        }
+
+        .dialogue-speaker.client {
+            color: #00bcd4;
+        }
+
+        .dialogue-desc {
+            font-style: italic;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Reels Accordion */
+        .reels-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            overflow-y: auto;
+            max-height: 480px;
+            padding-right: 10px;
+        }
+
+        .reels-item {
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 6px;
+            overflow: hidden;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .reels-header-btn {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: #fff;
+            padding: 15px 20px;
+            text-align: left;
+            font-size: 1.1rem;
+            font-family: var(--font-mono);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s;
+        }
+
+        .reels-header-btn:hover {
+            background: rgba(255,255,255,0.02);
+        }
+
+        .reels-header-btn::after {
+            content: '▼';
+            font-size: 0.8rem;
+            color: var(--primary-color);
+            transition: transform 0.3s;
+        }
+
+        .reels-item.active .reels-header-btn::after {
+            transform: rotate(180deg);
+        }
+
+        .reels-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            background: rgba(0,0,0,0.5);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .reels-item.active .reels-body {
+            max-height: 500px; /* arbitrary height to slide down */
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .reels-content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .reels-field {
+            margin-bottom: 12px;
+        }
+
+        .reels-field-label {
+            font-family: var(--font-mono);
+            color: var(--primary-color);
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+
+        /* Bottom Controls Bar */
+        .footer-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 15px;
+            backdrop-filter: blur(5px);
+        }
+
+        .slide-indicator {
+            font-family: var(--font-mono);
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            text-shadow: 0 0 5px var(--primary-glow);
+        }
+
+        .nav-arrows {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background: rgba(0,0,0,0.6);
+            border: 1px solid var(--glass-border);
+            color: var(--primary-color);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            box-shadow: 0 0 10px rgba(0,255,65,0.1);
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-color);
+            color: #000;
+            box-shadow: 0 0 15px var(--primary-color);
+            transform: scale(1.08);
+        }
+
+        .system-controls {
+            display: flex;
+            gap: 15px;
+        }
+
+        .icon-btn {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-muted);
+            width: 38px;
+            height: 38px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .icon-btn:hover {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            background: rgba(0, 255, 65, 0.05);
+        }
+
+        .icon-btn.active {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            background: rgba(0, 255, 65, 0.1);
+        }
+
+        /* Grid layouts for lists */
+        .check-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .check-item {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 6px;
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .check-item:hover {
+            border-color: var(--primary-color);
+            background: var(--card-hover);
+        }
+
+        .check-number {
+            font-family: var(--font-mono);
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            background: rgba(0, 255, 65, 0.1);
+            border: 1px solid var(--primary-color);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .check-text h4 {
+            color: #fff;
+            margin-bottom: 6px;
+            font-size: 1.05rem;
+            font-family: var(--font-sans);
+        }
+
+        .check-text p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 0;
+            line-height: 1.4;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-dim);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Canvas Background for Matrix Rain -->
+    <canvas id="matrix-canvas"></canvas>
+    
+    <!-- Scanline overlays -->
+    <div class="scanlines"></div>
+
+    <!-- Main Container -->
+    <div class="presentation-container">
+        
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">EXPERT.CITY</div>
+            <div class="metadata">
+                <span>СПИКЕР: АНТОН ЦОЙ</span>
+                <span>МК: ОТ ЗАЯВКИ ДО ВСТРЕЧИ</span>
+            </div>
+        </header>
+
+        <!-- Viewport -->
+        <main class="slide-viewport">
+
+            <!-- Slide 1: Welcome/Title -->
+            <section class="slide active" id="slide-1">
+                <div class="slide-title-layout">
+                    <h1 class="title-huge">МАТРИЦА ПРОДАЖ</h1>
+                    <div class="subtitle">От первой заявки до встречи у застройщика</div>
+                    
+                    <div class="terminal-box" id="welcome-terminal">
+                        > Системные продажи недвижимости в Уфе...<br>
+                        > Загрузка обучающего модуля «Навигатор»...<br>
+                        > Уровень: Опытные агенты.<br>
+                        > Готов к инициализации.<span class="terminal-cursor"></span>
+                    </div>
+
+                    <button class="btn" id="btn-start" onclick="nextSlide()">Войти в систему</button>
+                </div>
+            </section>
+
+            <!-- Slide 2: Timing / Gantt -->
+            <section class="slide" id="slide-2">
+                <h2>Тайминг-план: Воронка встречи (90 минут)</h2>
+                <p>Мы разберем полный алгоритм перевода холодного лида в осознанную встречу. Нажмите на любой этап для подробностей:</p>
+                
+                <div class="timeline-grid">
+                    <div class="timeline-card active" onclick="showTimelineDetail(0)">
+                        <div class="time">0 - 15 м</div>
+                        <div class="step-title">Разнос</div>
+                        <div class="step-desc">Смерть старого рынка</div>
+                    </div>
+                    <div class="timeline-card" onclick="showTimelineDetail(1)">
+                        <div class="time">15 - 30 м</div>
+                        <div class="step-title">LTV</div>
+                        <div class="step-desc">Пожизненная ценность</div>
+                    </div>
+                    <div class="timeline-card" onclick="showTimelineDetail(2)">
+                        <div class="time">30 - 50 м</div>
+                        <div class="step-title">Границы</div>
+                        <div class="step-desc">Манифест гигиены</div>
+                    </div>
+                    <div class="timeline-card" onclick="showTimelineDetail(3)">
+                        <div class="time">50 - 65 м</div>
+                        <div class="step-title">Аудит</div>
+                        <div class="step-desc">Схемы перед стенами</div>
+                    </div>
+                    <div class="timeline-card" onclick="showTimelineDetail(4)">
+                        <div class="time">65 - 80 м</div>
+                        <div class="step-title">JTBD</div>
+                        <div class="step-desc">Истинные боли</div>
+                    </div>
+                    <div class="timeline-card" onclick="showTimelineDetail(5)">
+                        <div class="time">80 - 90 м</div>
+                        <div class="step-title">ДЗ</div>
+                        <div class="step-desc">Практика на сделках</div>
+                    </div>
+                </div>
+
+                <div class="timeline-detail-box" id="timeline-detail">
+                    <h3 id="timeline-detail-title">Шаг 1. Вводный разнос: «Рынок дешевых денег умер»</h3>
+                    <p style="margin-top: 15px; font-size: 1rem; color: var(--text-main);" id="timeline-detail-desc">
+                        Включаем осознанность. Лафа закончилась. Кто ждет, что клиенты будут соглашаться на покупку новостройки по первому сообщению — сольют весь трафик. Сейчас выживают навигаторы, создающие финансовые модели, а не справочные бюро.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Slide 3: Вводный разнос -->
+            <section class="slide" id="slide-3">
+                <h2>Рынок изменился. Старый формат — сдох</h2>
+                <div class="compare-layout">
+                    <div class="compare-card danger">
+                        <h3><span class="text-danger">◆</span> Старый подход (Рыбак)</h3>
+                        <p class="text-muted">Как сливают 90% лидов:</p>
+                        <ul class="compare-list">
+                            <li><strong>Справочное бюро:</strong> Клиент пишет «что за ЖК?» — брокер сразу шлет презентации в Telegram.</li>
+                            <li><strong>Продажа стен:</strong> Рассказы про толщину кирпича, высоту потолков и красивые фасады.</li>
+                            <li><strong>Разовый чек:</strong> Интересна только комиссия здесь и сейчас. Дальше клиент забыт.</li>
+                            <li><strong>Спешка:</strong> Попытка продать сразу, не выяснив лимиты банков и первоначальный взнос.</li>
+                        </ul>
+                    </div>
+                    <div class="compare-card success">
+                        <h3><span>◆</span> Новый подход (Навигатор)</h3>
+                        <p class="text-accent">Как закрывать сделки системно:</p>
+                        <ul class="compare-list">
+                            <li><strong>Выставление границ:</strong> Никаких подборок до созвона и диагностики.</li>
+                            <li><strong>Сначала схема, потом стены:</strong> Главное — комфортный платеж и лимиты банков.</li>
+                            <li><strong>Смена фокуса:</strong> Мы не продаем квартиры. Мы решаем жизненные проблемы через цифры.</li>
+                            <li><strong>Работа в LTV:</strong> Клиент — это долгосрочный актив, стоящий больше миллиона рублей.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 4: LTV Calculator -->
+            <section class="slide" id="slide-4">
+                <h2>LTV: Калькулятор пожизненной ценности клиента</h2>
+                <div class="ltv-layout">
+                    <div class="calculator-card">
+                        <div class="calc-title">Укажите сделки клиента за 5 лет:</div>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" checked id="ltv-s1" onchange="calculateLTV()">
+                                <div class="checkbox-custom"></div>
+                                <div class="checkbox-label">
+                                    <span>Год 1: Покупка первой новостройки</span>
+                                    <span>+ 200 000 руб.</span>
+                                </div>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="ltv-s2" onchange="calculateLTV()">
+                                <div class="checkbox-custom"></div>
+                                <div class="checkbox-label">
+                                    <span>Год 3: Расширение (продажа старой + покупка)</span>
+                                    <span>+ 300 000 руб.</span>
+                                </div>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="ltv-s3" onchange="calculateLTV()">
+                                <div class="checkbox-custom"></div>
+                                <div class="checkbox-label">
+                                    <span>Год 4: Рекомендация бизнес-партнеру</span>
+                                    <span>+ 400 000 руб.</span>
+                                </div>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="ltv-s4" onchange="calculateLTV()">
+                                <div class="checkbox-custom"></div>
+                                <div class="checkbox-label">
+                                    <span>Год 5: Студия повзрослевшему ребенку</span>
+                                    <span>+ 180 000 руб.</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="ltv-result-card">
+                        <h3>Итоговый LTV одного клиента:</h3>
+                        <div class="ltv-value" id="ltv-result">200 000 ₽</div>
+                        <p style="font-size: 0.95rem; color: var(--text-muted);">
+                            Если вы работаете честно, не впаривая неликвид ради быстрой выгоды, один лояльный клиент на рекомендациях и повторных сделках приносит вам миллион на дистанции.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 5: Не работать с мудаками -->
+            <section class="slide" id="slide-5">
+                <h2>Манифест: Не работать с мудаками</h2>
+                <div class="compare-layout" style="margin-top: 15px;">
+                    <div class="compare-card danger" style="cursor: default;">
+                        <h3><span class="text-danger">🛑</span> 1. Не работать с мудаками</h3>
+                        <p style="font-size: 0.95rem; line-height: 1.5; color: var(--text-main); margin-bottom: 12px;">
+                            Если клиент откровенно вас <strong>использует</strong>:
+                        </p>
+                        <ul class="compare-list" style="margin-bottom: 15px;">
+                            <li>Требует 15 бесплатных расчетов «просто так» без встреч.</li>
+                            <li>Хамит, обесценивает ваше время и опыт.</li>
+                            <li>Требует скидку с вашей комиссии или пытается обойти вас.</li>
+                        </ul>
+                        <p style="font-size: 0.9rem; color: var(--accent-red); line-height: 1.4;">
+                            <strong>Решение:</strong> Прощайтесь сразу. Токсичный клиент заберет 90% вашей энергии, а сделки всё равно не будет. Уважайте свое время.
+                        </p>
+                    </div>
+                    
+                    <div class="compare-card success" style="cursor: default;">
+                        <h3><span>🤝</span> 2. Сами мудаками не будьте</h3>
+                        <p style="font-size: 0.95rem; line-height: 1.5; color: var(--text-main); margin-bottom: 12px;">
+                            Мы строим цивилизованный системный бизнес:
+                        </p>
+                        <ul class="compare-list" style="margin-bottom: 15px;">
+                            <li><strong>Не врите клиентам:</strong> Всегда говорите правду о рисках и сроках сдачи.</li>
+                            <li><strong>Не впаривайте неликвид:</strong> Выбирайте объекты под боли клиента, а не туда, где выше комиссия.</li>
+                            <li><strong>Соблюдайте Правило 3П:</strong> Не врать, не приукрашивать, не подлизываться.</li>
+                        </ul>
+                        <p style="font-size: 0.9rem; color: var(--primary-color); line-height: 1.4;">
+                            <strong>Итог:</strong> Репутация в Уфе строится годами. Если вы держите планку, лояльные клиенты будут возвращаться к вам годами.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 6: Financial Audit -->
+            <section class="slide" id="slide-6">
+                <h2>Финансовый аудит: Сначала схема, потом стены</h2>
+                <div class="fin-calc-layout">
+                    <div>
+                        <p>Покажем клиенту, что номинальная стоимость бетона вторична. Решает платеж и инструмент.</p>
+                        <table class="fin-table">
+                            <thead>
+                                <tr>
+                                    <th>Параметр</th>
+                                    <th>Обычная схема (Дилетант)</th>
+                                    <th>Умная схема (Навигатор)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Цена квартиры</td>
+                                    <td>10 000 000 ₽</td>
+                                    <td class="text-accent">12 000 000 ₽</td>
+                                </tr>
+                                <tr>
+                                    <td>Финансовый инструмент</td>
+                                    <td>Стандартная семейная ипотека</td>
+                                    <td class="text-accent">Субсидия / Траншевая ипотека</td>
+                                </tr>
+                                <tr class="highlight-row">
+                                    <td>Комфортный платеж</td>
+                                    <td class="text-danger" style="font-weight: 500;">65 000 ₽ / мес</td>
+                                    <td>38 000 ₽ / мес</td>
+                                </tr>
+                                <tr>
+                                    <td>Срок ввода дома</td>
+                                    <td>Готов завтра</td>
+                                    <td>Через 1.5 года (пока платеж 1 руб.)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="ltv-result-card" style="border-color: var(--primary-color); padding: 30px;">
+                        <h3 style="font-size: 1.2rem;">Железное правило новостроек</h3>
+                        <p style="font-size: 0.95rem; margin-top: 15px; text-align: left; line-height: 1.5;">
+                            Если вы сначала влюбите клиента в планировку, а потом окажется, что у него нет нужного ПВ или банк не пропустит условия — сделка сорвана.
+                        </p>
+                        <p style="font-size: 0.95rem; text-align: left; line-height: 1.5;" class="text-accent">
+                            Сначала утверждаем схему покупки и лимиты банков ➔ Очерчиваем финансовый коридор ➔ Точечно выбираем ЖК.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 7: JTBD -->
+            <section class="slide" id="slide-7">
+                <h2>JTBD-Диагностика: «Что они покупают на самом деле?»</h2>
+                <div class="tabs-container">
+                    <div class="tabs-header">
+                        <button class="tab-btn active" onclick="switchTab(0)">Из аренды в свое</button>
+                        <button class="tab-btn" onclick="switchTab(1)">Расширение</button>
+                        <button class="tab-btn" onclick="switchTab(2)">Инвестиции</button>
+                    </div>
+                    
+                    <!-- Tab 1 -->
+                    <div class="tab-content active">
+                        <div class="jtbd-card">
+                            <div class="jtbd-sidebar">
+                                <div class="jtbd-badge">БЕЗОПАСНОСТЬ И СТАБИЛЬНОСТЬ</div>
+                                <h4>Истинная боль:</h4>
+                                <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.4;">
+                                    Устали платить хозяину. Страх выселения, постоянные проверки, привязка к садику. Клиент покупает не стены, а избавление от этого кошмара.
+                                </p>
+                            </div>
+                            <div class="jtbd-main">
+                                <table class="dialogue-table">
+                                    <tr>
+                                        <td class="dialogue-speaker">Агент</td>
+                                        <td>«Артур, вы упомянули, что снимаете однушку. А почему решили заняться покупкой именно сейчас? Что поменялось?»</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="dialogue-speaker client">Клиент</td>
+                                        <td>«Сыну два года, тесно. Да и хозяин намекает на повышение платы, или вообще решит продавать...»</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="dialogue-speaker">Агент</td>
+                                        <td style="color: var(--primary-color); font-weight: 500;">«То есть вам важно создать место, откуда вас никто не выселит, где вы хозяева и можете спокойно планировать жизнь ребенка на 5-10 лет вперед? Верно?» <div class="dialogue-desc">(Зеркалим JTBD-задачу)</div></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab 2 -->
+                    <div class="tab-content">
+                        <div class="jtbd-card">
+                            <div class="jtbd-sidebar">
+                                <div class="jtbd-badge">СЕМЕЙНЫЙ МИР И ЛИЧНЫЕ ГРАНИЦЫ</div>
+                                <h4>Истинная боль:</h4>
+                                <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.4;">
+                                    Дети разнополые дерутся в одной комнате, мужу негде отдохнуть после работы, жена на грани срыва. Квартира нанимается, чтобы спасти брак.
+                                </p>
+                            </div>
+                            <div class="jtbd-main">
+                                <table class="dialogue-table">
+                                    <tr>
+                                        <td class="dialogue-speaker">Агент</td>
+                                        <td>«Мария, хрущевки в вашем районе теплые. Почему решили съехать? Обычно люди отсюда неохотно уезжают».</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="dialogue-speaker client">Клиент</td>
+                                        <td>«Дети растут, разнополые, вечно ссорятся. Дома крики, муж на кухне прячется с телефоном, поговорить негде».</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="dialogue-speaker">Агент</td>
+                                        <td style="color: var(--primary-color); font-weight: 500;">«То есть вам нужна не просто площадь, а личные закрытые зоны для каждого члена семьи, чтобы дома наконец воцарились мир и спокойствие?» <div class="dialogue-desc">(Вскрываем истинный мотив)</div></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab 3 -->
+                    <div class="tab-content">
+                        <div class="jtbd-card">
+                            <div class="jtbd-sidebar">
+                                <div class="jtbd-badge">ЛИКВИДНЫЙ СЕЙФ ДЛЯ ДЕНЕГ</div>
+                                <h4>Истинная боль:</h4>
+                                <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.4;">
+                                    У инвестора 5 млн рублей. Страх девальвации рубля и инфляции. Хочет перелить тающий кэш в твердый кирпич с легким выходом в наличные.
+                                </p>
+                            </div>
+                            <div class="jtbd-main">
+                                <table class="dialogue-table">
+                                    <tr>
+                                        <td class="dialogue-speaker">Агент</td>
+                                        <td>«Игорь, банки сейчас дают хороший процент на депозитах. Зачем забирать деньги под недвижимость?»</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="dialogue-speaker client">Клиент</td>
+                                        <td>«Сегодня банки дают, а завтра ограничения или инфляция все сожрет. Деньги на счетах тают, хочу видеть кирпич».</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="dialogue-speaker">Aгент</td>
+                                        <td style="color: var(--primary-color); font-weight: 500;">«То есть ваша цель — не спекуляции на стройке, а спрятать деньги в надежный сейф, который не обесценится и при необходимости легко вернется обратно в кэш?» <div class="dialogue-desc">(Фиксируем фокус на ликвидность)</div></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 8: ДЗ -->
+            <section class="slide" id="slide-8">
+                <h2>Практикум: Домашнее задание</h2>
+                <p>Теория без практики мертва. Домашнее задание, которое оцифрует ваши навыки:</p>
+                
+                <div class="check-grid">
+                    <div class="check-item">
+                        <div class="check-number">1</div>
+                        <div class="check-text">
+                            <h4>Выбрать 3 последние сделки</h4>
+                            <p>Возьмите последние три закрытые (или сорвавшиеся) сделки с клиентами для глубокого разбора.</p>
+                        </div>
+                    </div>
+                    <div class="check-item">
+                        <div class="check-number">2</div>
+                        <div class="check-text">
+                            <h4>Ответить на 10 вопросов JTBD</h4>
+                            <p>Опишите эссе-портрет: какой триггер заставил их купить, каков LTV, как они сравнивали альтернативы.</p>
+                        </div>
+                    </div>
+                    <div class="check-item">
+                        <div class="check-number">3</div>
+                        <div class="check-text">
+                            <h4>Определить финансовый коридор</h4>
+                            <p>Распишите, почему сработал выбранный финансовый инструмент и какая схема была выгодна клиенту.</p>
+                        </div>
+                    </div>
+                    <div class="check-item">
+                        <div class="check-number">4</div>
+                        <div class="check-text">
+                            <h4>Сдать куратору к следующему МК</h4>
+                            <p>Пришлите готовое эссе. Без выполнения этого задания доступ ко второму блоку (Фин. Инжиниринг) закрыт.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 9: Reels Accordion -->
+            <section class="slide" id="slide-9">
+                <h2>Сценарии для Reels: Ломаем иллюзии рынка</h2>
+                <p>Запишите эти ролики сразу после МК, пока энергия на пике. В кадре будьте экспертом, говорящим правду.</p>
+                
+                <div class="reels-list">
+                    <!-- Item 1 -->
+                    <div class="reels-item active">
+                        <button class="reels-header-btn" onclick="toggleReelsItem(this)">
+                            Идея 1: Конец эпохи «справочного бюро»
+                        </button>
+                        <div class="reels-body">
+                            <div class="reels-content-grid">
+                                <div>
+                                    <div class="reels-field">
+                                        <div class="reels-field-label">Хук (0-3 с)</div>
+                                        <p style="font-size: 0.9rem; color: #fff;">«Почему 80% риелторов скоро пойдут работать в доставку еды?»</p>
+                                    </div>
+                                    <div class="reels-field">
+                                        <div class="reels-field-label">Визуал</div>
+                                        <p style="font-size: 0.9rem; color: var(--text-muted);">Антон стоит у флипчарта в офисе Expert City или уверенно идет по коридору.</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="reels-field">
+                                        <div class="reels-field-label">Тезисы озвучки</div>
+                                        <p style="font-size: 0.85rem; color: var(--text-main); line-height: 1.4;">
+                                            Раньше продавать новостройки было просто: клиент спросил варианты — ты скинул планировку и забрал комиссию. Этот рынок умер. Сейчас без финансового аудита подборки слать бессмысленно — вы просто работаете бесплатным поисковиком. Сначала проектируем финансовую схему, а под нее ищем стены.
+                                        </p>
+                                    </div>
+                                    <div class="reels-field">
+                                        <div class="reels-field-label">CTA</div>
+                                        <p style="font-size: 0.9rem; color: var(--primary-color);">«В шапке профиля ссылка на разбор финансовых схем»</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="reels-item">
+                        <button class="reels-header-btn" onclick="toggleReelsItem(this)">
+                            Идея 2: Магия ежемесячного платежа
+                        </button>
+                        <div class="reels-body">
+                            <div class="reels-content-grid">
+                                <div>
+                                    <div class="reels-field">
+                                        <div class="reels-field-label">Хук (0-3 с)</div>
+                                        <p style="font-size: 0.9rem; color: #fff;">«Квартира за 12 миллионов может быть выгоднее, чем за 10. Как?»</p>
+                                    </div>
+                                    <div class="reels-field">
+                                        <div class="reels-field-label">Визуал</div>
+                                        <p style="font-size: 0.9rem; color: var(--text-muted);">Антон пишет на маркерной доске две крупные цены: «10 млн» и «12 млн».</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="reels-field">
+                                        <div class="reels-field-label">Тезисы озвучки</div>
+                                        <p style="font-size: 0.85rem; color: var(--text-main); line-height: 1.4;">
+                                            Большинство смотрят на общую цену квартиры. Но вам жить не на цену, а на платеж. За счет субсидированной рассрочки или траншевой ипотеки платеж за квартиру 12 млн может быть 35 тысяч в месяц, а за 10 млн на обычных условиях — все 60 тысяч. Перестаньте искать метры, ищите схему покупки.
+                                        </p>
+                                    </div>
+                                    <div class="reels-field">
+                                        <div class="reels-field-label">CTA</div>
+                                        <p style="font-size: 0.9rem; color: var(--primary-color);">«Напишите в директ ваш комфортный платеж, пришлю расчеты»</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="reels-item">
+                        <button class="reels-header-btn" onclick="toggleReelsItem(this)">
+                            Идея 3: Вы покупаете не бетон
+                        </button>
+                        <div class="reels-body">
+                            <div class="reels-content-grid">
+                                <div>
+                                    <div class="reels-field">
+                                        <div class="reels-field-label">Хук (0-3 с)</div>
+                                        <p style="font-size: 0.9rem; color: #fff;">«Вы никогда не покупаете квадратные метры. Вы покупаете решение боли».</p>
+                                    </div>
+                                    <div class="reels-field">
+                                        <div class="reels-field-label">Визуал</div>
+                                        <p style="font-size: 0.9rem; color: var(--text-muted);">Крупный план, Антон говорит серьезно и спокойно прямо в камеру.</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="reels-field">
+                                        <div class="reels-field-label">Тезисы озвучки</div>
+                                        <p style="font-size: 0.85rem; color: var(--text-main); line-height: 1.4;">
+                                            Никто не берет ипотеку на 10 миллионов ради бетонных блоков. Молодая семья съезжает из аренды ради безопасности — чтобы хозяин не выставил их перед 1 сентября. Семья с детьми берет трешку ради мира дома — чтобы разнополые дети не дрались в одной комнате. Задача брокера — закрыть эту боль, а не фасады хвалить.
+                                        </p>
+                                    </div>
+                                    <div class="reels-field">
+                                        <div class="reels-field-label">CTA</div>
+                                        <p style="font-size: 0.9rem; color: var(--primary-color);">«Напишите в комментариях, какую задачу решает ваша квартира»</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 4 -->
+                    <div class="reels-item">
+                        <button class="reels-header-btn" onclick="toggleReelsItem(this)">
+                            Идея 4: Сколько стоит ваш риелтор
+                        </button>
+                        <div class="reels-body">
+                            <div class="reels-content-grid">
+                                <div>
+                                    <div class="reels-field">
+                                        <div class="reels-field-label">Хук (0-3 с)</div>
+                                        <p style="font-size: 0.9rem; color: #fff;">«Почему работа риелтора по новостройкам для вас бесплатна?»</p>
+                                    </div>
+                                    <div class="reels-field">
+                                        <div class="reels-field-label">Визуал</div>
+                                        <p style="font-size: 0.9rem; color: var(--text-muted);">Антон сидит за столом с ноутбуком, закрывает его и обращается к зрителю.</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="reels-field">
+                                        <div class="reels-field-label">Тезисы озвучки</div>
+                                        <p style="font-size: 0.85rem; color: var(--text-main); line-height: 1.4;">
+                                            Многие боятся переплатить агенту. Но мою работу полностью оплачивает девелопер из своего рекламного бюджета. Для вас цена, скидки и акции будут один в один. Разница лишь в том, что менеджер застройщика хвалит только свои дома, а я провожу независимый аудит всего рынка и защищаю ваши интересы.
+                                        </p>
+                                    </div>
+                                    <div class="reels-field">
+                                        <div class="reels-field-label">CTA</div>
+                                        <p style="font-size: 0.9rem; color: var(--primary-color);">«Запишитесь на бесплатный фин. аудит по ссылке в шапке»</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 5 -->
+                    <div class="reels-item">
+                        <button class="reels-header-btn" onclick="toggleReelsItem(this)">
+                            Идея 5: Правило «Не работать с мудаками»
+                        </button>
+                        <div class="reels-body">
+                            <div class="reels-content-grid">
+                                <div>
+                                    <div class="reels-field">
+                                        <div class="reels-field-label">Хук (0-3 с)</div>
+                                        <p style="font-size: 0.9rem; color: #fff;">«Главное правило успешного брокера, о котором молчат на курсах».</p>
+                                    </div>
+                                    <div class="reels-field">
+                                        <div class="reels-field-label">Визуал</div>
+                                        <p style="font-size: 0.9rem; color: var(--text-muted);">Антон уверенно идет по офису Expert City, выразительные жесты.</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="reels-field">
+                                        <div class="reels-field-label">Тезисы озвучки</div>
+                                        <p style="font-size: 0.85rem; color: var(--text-main); line-height: 1.4;">
+                                            Никогда не работайте с мудаками. Если вас используют, хамят, сбивают комиссию, требуют тонну расчетов просто так и не планируют работать честно — уходите сразу. Вы потеряете энергию и упустите нормальных людей. Но и сами мудаками не будьте: держите слово перед коллегами, застройщиками и не врите клиентам.
+                                        </p>
+                                    </div>
+                                    <div class="reels-field">
+                                        <div class="reels-field-label">CTA</div>
+                                        <p style="font-size: 0.9rem; color: var(--primary-color);">«Согласны? Обсудим в комментариях»</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer Navigation -->
+        <footer class="footer-controls">
+            <div class="system-controls">
+                <button class="icon-btn active" id="btn-matrix" onclick="toggleMatrixBg()" title="Вкл/Выкл Матрицу">MATRIX</button>
+                <button class="icon-btn" id="btn-sound" onclick="toggleSound()" title="Вкл/Выкл Звук">SOUND</button>
+            </div>
+            
+            <div class="slide-indicator" id="slide-num">SLIDE: 01 / 09</div>
+            
+            <div class="nav-arrows">
+                <button class="nav-btn" onclick="prevSlide()" title="Назад (Влево)">←</button>
+                <button class="nav-btn" onclick="nextSlide()" title="Вперед (Вправо / Пробел)">→</button>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Slides Logic
+        let currentSlide = 1;
+        const totalSlides = 9;
+        let soundEnabled = false;
+
+        function updateSlideDisplay() {
+            // Hide all slides
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active');
+            });
+            // Show current slide
+            const activeSlide = document.getElementById(`slide-${currentSlide}`);
+            if (activeSlide) {
+                activeSlide.classList.add('active');
+            }
+            // Update indicator
+            document.getElementById('slide-num').textContent = `SLIDE: ${String(currentSlide).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
+            
+            // Cyber click sound
+            playClickSound();
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                updateSlideDisplay();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                updateSlideDisplay();
+            }
+        }
+
+        // Keyboard Controls
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' || e.code === 'ArrowRight') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.code === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        // Sound System (Web Audio API)
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('btn-sound');
+            if (soundEnabled) {
+                btn.classList.add('active');
+                // Play test sound
+                playClickSound(1000, 'sine', 0.08);
+            } else {
+                btn.classList.remove('active');
+            }
+        }
+
+        function playClickSound(freq = 1200, type = 'sine', duration = 0.03) {
+            if (!soundEnabled) return;
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+
+                oscillator.type = type;
+                oscillator.frequency.value = freq;
+                
+                gainNode.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        // Timeline Step Info Detail Panel
+        const timelineDetails = [
+            {
+                title: "Шаг 1. Вводный разнос: «Рынок дешевых денег умер»",
+                desc: "Включаем осознанность. Лафа закончилась. Кто ждет, что клиенты будут соглашаться на покупку новостройки по первому сообщению — сольют весь трафик. Сейчас выживают навигаторы, создающие финансовые модели, а не справочные бюро."
+            },
+            {
+                title: "Шаг 2. LTV и Самоценность: «Клиент — долгосрочный актив»",
+                desc: "Один лояльный клиент за 5 лет на рекомендациях и повторных покупках приносит более 1 млн рублей чистой прибыли. Перестаньте «впаривать» ради быстрой прибыли. Доносите свою ценность: клиенты должны знать, сколько усилий вы приложили для одобрения лимитов и выбивания условий."
+            },
+            {
+                title: "Шаг 3. Выставление границ и Манифест: «Не работать с мудаками»",
+                desc: "Не отправляйте подборки на первом шаге. Вы не справочное бюро! Если клиент пользует вас ради бесплатных расчетов и хамит — сразу прощайтесь. Время — ваш главный ресурс. Но и сами мудаками не будьте: держите слово перед коллегами, застройщиками и никогда не врите клиентам (правило 3П)."
+            },
+            {
+                title: "Шаг 4. Финансовый аудит: «Сначала схема, потом стены»",
+                desc: "Выстройте финансовый коридор до выбора планировки. Для 80% людей критически важен ежемесячный платеж, а не общая цена. Рассчитайте транши, рассрочки и субсидии заранее, чтобы гарантировать прохождение сделки в банках."
+            },
+            {
+                title: "Шаг 5. JTBD-диагностика: «Что они покупают на самом деле»",
+                desc: "Квартиры покупают не ради бетона. Их «нанимают» для решения жизненных проблем. Арендаторы покупают безопасность от выселения, большие семьи — семейный мир и личные границы детей, инвесторы — стабильный сейф для сбережений от инфляции. Говорите о том, что болит."
+            },
+            {
+                title: "Шаг 6. Практикум и Домашнее задание",
+                desc: "Закрепление материала через эссе. Разберите 3 свои последние сделки по 10 вопросам JTBD и LTV. Пока ваш мозг не сломает сопротивление перед практикой — вы будете продолжать сливать сделки в Telegram."
+            }
+        ];
+
+        function showTimelineDetail(index) {
+            // Remove active class from all cards
+            document.querySelectorAll('.timeline-card').forEach((card, i) => {
+                if (i === index) card.classList.add('active');
+                else card.classList.remove('active');
+            });
+            
+            // Update detail box
+            document.getElementById('timeline-detail-title').textContent = timelineDetails[index].title;
+            document.getElementById('timeline-detail-desc').textContent = timelineDetails[index].desc;
+            
+            // Cyber beep sound
+            playClickSound(900, 'triangle', 0.05);
+        }
+
+        // LTV Calculator Logic
+        function calculateLTV() {
+            let total = 0;
+            if (document.getElementById('ltv-s1').checked) total += 200000;
+            if (document.getElementById('ltv-s2').checked) total += 300000;
+            if (document.getElementById('ltv-s3').checked) total += 400000;
+            if (document.getElementById('ltv-s4').checked) total += 180000;
+
+            const formatted = new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(total);
+            document.getElementById('ltv-result').textContent = formatted;
+            
+            playClickSound(1100, 'sine', 0.04);
+        }
+
+        // JTBD Tab Switcher
+        function switchTab(index) {
+            document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+                if (i === index) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach((content, i) => {
+                if (i === index) content.classList.add('active');
+                else content.classList.remove('active');
+            });
+            
+            playClickSound(800, 'triangle', 0.06);
+        }
+
+        // Reels Accordion Logic
+        function toggleReelsItem(btn) {
+            const item = btn.parentElement;
+            const isActive = item.classList.contains('active');
+            
+            // Collapse all items
+            document.querySelectorAll('.reels-item').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Toggle clicked item
+            if (!isActive) {
+                item.classList.add('active');
+            }
+            
+            playClickSound(1000, 'sine', 0.05);
+        }
+
+        // Matrix Background Control
+        let matrixInterval;
+        let isMatrixOn = true;
+
+        function toggleMatrixBg() {
+            isMatrixOn = !isMatrixOn;
+            const canvas = document.getElementById('matrix-canvas');
+            const btn = document.getElementById('btn-matrix');
+            
+            if (isMatrixOn) {
+                canvas.style.opacity = '0.15';
+                btn.classList.add('active');
+                initMatrixRain();
+            } else {
+                canvas.style.opacity = '0';
+                btn.classList.remove('active');
+                clearInterval(matrixInterval);
+            }
+            playClickSound();
+        }
+
+        // Matrix Rain Implementation
+        function initMatrixRain() {
+            const canvas = document.getElementById('matrix-canvas');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒмисиууксутсунуфумуююргузздубпуэекесеteneхемелеуэгезедебепеоокосотонохомойоровогозодобоповуун0123456789ABCDEF';
+            const alphabet = katakana.split('');
+
+            const fontSize = 15;
+            const columns = canvas.width / fontSize;
+
+            const rainDrops = [];
+
+            for( let x = 0; x < columns; x++ ) {
+                rainDrops[x] = Math.random() * -100; // stagger entry
+            }
+
+            const draw = () => {
+                ctx.fillStyle = 'rgba(5, 5, 5, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#0F0'; 
+                ctx.font = fontSize + 'px monospace';
+
+                for(let i = 0; i < rainDrops.length; i++) {
+                    const text = alphabet[Math.floor(Math.random() * alphabet.length)];
+                    ctx.fillText(text, i*fontSize, rainDrops[i]*fontSize);
+
+                    if(rainDrops[i]*fontSize > canvas.height && Math.random() > 0.975){
+                        rainDrops[i] = 0;
+                    }
+                    rainDrops[i]++;
+                }
+            };
+
+            if (matrixInterval) clearInterval(matrixInterval);
+            matrixInterval = setInterval(draw, 33);
+        }
+
+        // Handle resize for canvas
+        window.addEventListener('resize', () => {
+            if (isMatrixOn) {
+                initMatrixRain();
+            }
+        });
+
+        // Initialize matrix rain on load
+        window.onload = () => {
+            initMatrixRain();
+        };
+    </script>
+</body>
+</html>

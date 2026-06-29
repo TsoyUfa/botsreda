@@ -1,0 +1,1721 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новый рынок новостроек</title>
+    <meta name="description" content="Финмодель, инструменты и психология продаж на рынке новостроек Уфы 2026">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a2e;
+            --bg-card-hover: #222240;
+            --text-primary: #f0f0f5;
+            --text-secondary: #a0a0b8;
+            --text-muted: #6b6b80;
+            --accent-1: #6c5ce7;
+            --accent-2: #a29bfe;
+            --accent-3: #00cec9;
+            --accent-4: #fd79a8;
+            --accent-5: #fdcb6e;
+            --accent-6: #55efc4;
+            --gradient-1: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            --gradient-2: linear-gradient(135deg, #00cec9 0%, #55efc4 100%);
+            --gradient-3: linear-gradient(135deg, #fd79a8 0%, #fdcb6e 100%);
+            --gradient-4: linear-gradient(135deg, #6c5ce7 0%, #00cec9 100%);
+            --gradient-hero: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 25%, #0a1a2e 50%, #0a0a1a 100%);
+            --border-subtle: rgba(255,255,255,0.06);
+            --shadow-card: 0 8px 32px rgba(0,0,0,0.4);
+            --shadow-glow: 0 0 40px rgba(108,92,231,0.15);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ── Presentation container ── */
+        .presentation {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        /* ── Individual slide ── */
+        .slide {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 80px;
+            opacity: 0;
+            transform: translateX(60px);
+            pointer-events: none;
+            transition: opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1),
+                        transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: all;
+        }
+
+        .slide.prev {
+            opacity: 0;
+            transform: translateX(-60px);
+        }
+
+        .slide-inner {
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        /* ── Typography ── */
+        .slide-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent-2);
+            margin-bottom: 16px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: var(--transition);
+            transition-delay: 0.15s;
+        }
+
+        .slide.active .slide-label {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1 {
+            font-size: clamp(2.2rem, 4vw, 3.5rem);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+            margin-bottom: 24px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+            transition-delay: 0.2s;
+        }
+
+        .slide.active h1 {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1 .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h1 .gradient-text-2 {
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h1 .gradient-text-3 {
+            background: var(--gradient-3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h1 .gradient-text-4 {
+            background: var(--gradient-4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: clamp(1.4rem, 2.5vw, 2rem);
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 1.6vw, 1.25rem);
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 800px;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: var(--transition);
+            transition-delay: 0.3s;
+        }
+
+        .slide.active .subtitle {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── Hero slide ── */
+        .slide-hero {
+            background: var(--gradient-hero);
+            text-align: center;
+            position: relative;
+        }
+
+        .slide-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 50%, rgba(108,92,231,0.08) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 50%, rgba(0,206,201,0.06) 0%, transparent 50%);
+            animation: heroGlow 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes heroGlow {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-2%, 2%) scale(1.05); }
+        }
+
+        .slide-hero .slide-inner {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+            margin-top: 40px;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: var(--transition);
+            transition-delay: 0.4s;
+        }
+
+        .slide.active .hero-meta {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .meta-item svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--accent-2);
+        }
+
+        /* ── Cards grid ── */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 24px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+            transition-delay: 0.35s;
+        }
+
+        .slide.active .cards-grid {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius);
+            padding: 28px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fragment {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s cubic-bezier(0.23, 1, 0.32, 1), transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .fragment.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            border-radius: var(--radius) var(--radius) 0 0;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .card:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-card);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card:nth-child(1)::before { background: var(--gradient-1); }
+        .card:nth-child(2)::before { background: var(--gradient-2); }
+        .card:nth-child(3)::before { background: var(--gradient-3); }
+        .card:nth-child(4)::before { background: var(--gradient-4); }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            font-size: 1.5rem;
+        }
+
+        .card-icon.purple { background: rgba(108,92,231,0.15); }
+        .card-icon.teal { background: rgba(0,206,201,0.15); }
+        .card-icon.pink { background: rgba(253,121,168,0.15); }
+        .card-icon.yellow { background: rgba(253,203,110,0.15); }
+        .card-icon.green { background: rgba(85,239,196,0.15); }
+
+        .card h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .card .year-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent-2);
+            margin-bottom: 6px;
+        }
+
+        /* ── Stats row ── */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+            transition-delay: 0.3s;
+        }
+
+        .slide.active .stats-row {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius);
+            padding: 24px;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            border-color: rgba(108,92,231,0.3);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .stat-value.teal {
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-value.pink {
+            background: var(--gradient-3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* ── Blockquote ── */
+        .quote-block {
+            background: linear-gradient(135deg, rgba(108,92,231,0.08), rgba(0,206,201,0.05));
+            border-left: 3px solid var(--accent-1);
+            border-radius: 0 var(--radius) var(--radius) 0;
+            padding: 28px 32px;
+            margin: 24px 0;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            opacity: 0;
+            transform: translateY(15px);
+            transition: var(--transition);
+            transition-delay: 0.35s;
+        }
+
+        .slide.active .quote-block {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .quote-block strong {
+            color: var(--text-primary);
+        }
+
+        /* ── Lists ── */
+        .styled-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: var(--transition);
+            transition-delay: 0.35s;
+        }
+
+        .slide.active .styled-list {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .styled-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border-subtle);
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .styled-list li:last-child {
+            border-bottom: none;
+        }
+
+        .styled-list .bullet {
+            flex-shrink: 0;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-top: 8px;
+        }
+
+        .styled-list .bullet.purple { background: var(--accent-1); }
+        .styled-list .bullet.teal { background: var(--accent-3); }
+        .styled-list .bullet.pink { background: var(--accent-4); }
+        .styled-list .bullet.yellow { background: var(--accent-5); }
+        .styled-list .bullet.green { background: var(--accent-6); }
+
+        .styled-list li strong {
+            color: var(--text-primary);
+        }
+
+        /* ── Tables ── */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-subtle);
+            opacity: 0;
+            transform: translateY(15px);
+            transition: var(--transition);
+            transition-delay: 0.35s;
+        }
+
+        .slide.active .table-container {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        thead th {
+            background: rgba(108,92,231,0.12);
+            color: var(--accent-2);
+            font-weight: 600;
+            padding: 14px 16px;
+            text-align: left;
+            white-space: nowrap;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        tbody td {
+            padding: 12px 16px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: rgba(108,92,231,0.05);
+        }
+
+        tbody td:first-child {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* ── Ranking list ── */
+        .ranking-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 20px 0;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: var(--transition);
+            transition-delay: 0.35s;
+        }
+
+        .slide.active .ranking-list {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 16px 20px;
+            transition: var(--transition);
+        }
+
+        .ranking-item:hover {
+            transform: translateX(8px);
+            border-color: rgba(108,92,231,0.3);
+        }
+
+        .ranking-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 800;
+            min-width: 40px;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .ranking-name {
+            flex: 1;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .ranking-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: var(--accent-3);
+        }
+
+        /* ── Steps / Pipeline ── */
+        .pipeline {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+            transition-delay: 0.35s;
+        }
+
+        .slide.active .pipeline {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pipeline-step {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius);
+            padding: 24px;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .pipeline-step:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-card);
+        }
+
+        .step-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            font-weight: 800;
+            opacity: 0.15;
+            position: absolute;
+            top: 12px;
+            right: 16px;
+        }
+
+        .step-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent-2);
+            margin-bottom: 10px;
+        }
+
+        .pipeline-step h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .pipeline-step p {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* ── Comparison ── */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin: 24px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+            transition-delay: 0.35s;
+        }
+
+        .slide.active .comparison {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .compare-card {
+            border-radius: var(--radius);
+            padding: 32px;
+            border: 1px solid var(--border-subtle);
+            transition: var(--transition);
+        }
+
+        .compare-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-card);
+        }
+
+        .compare-card.negative {
+            background: linear-gradient(135deg, rgba(253,121,168,0.06), rgba(253,121,168,0.02));
+            border-color: rgba(253,121,168,0.15);
+        }
+
+        .compare-card.positive {
+            background: linear-gradient(135deg, rgba(85,239,196,0.06), rgba(85,239,196,0.02));
+            border-color: rgba(85,239,196,0.15);
+        }
+
+        .compare-card .compare-icon {
+            font-size: 2rem;
+            margin-bottom: 16px;
+        }
+
+        .compare-card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .compare-card.negative h3 { color: var(--accent-4); }
+        .compare-card.positive h3 { color: var(--accent-6); }
+
+        .compare-card p, .compare-card ul {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .compare-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .compare-card ul li {
+            padding: 6px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .compare-card ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 14px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .compare-card.negative ul li::before { background: var(--accent-4); }
+        .compare-card.positive ul li::before { background: var(--accent-6); }
+
+        /* ── Highlight box ── */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(253,203,110,0.08), rgba(253,121,168,0.05));
+            border: 1px solid rgba(253,203,110,0.2);
+            border-radius: var(--radius);
+            padding: 24px 28px;
+            margin: 20px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .highlight-box .icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .highlight-box p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .highlight-box strong {
+            color: var(--accent-5);
+        }
+
+        /* ── Final slide ── */
+        .slide-final {
+            text-align: center;
+            background: var(--gradient-hero);
+            position: relative;
+        }
+
+        .slide-final::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 50% 50%, rgba(108,92,231,0.1) 0%, transparent 50%),
+                        radial-gradient(ellipse at 20% 80%, rgba(0,206,201,0.06) 0%, transparent 40%),
+                        radial-gradient(ellipse at 80% 20%, rgba(253,121,168,0.05) 0%, transparent 40%);
+            animation: heroGlow 10s ease-in-out infinite alternate;
+        }
+
+        .final-tagline {
+            font-size: clamp(1rem, 1.5vw, 1.2rem);
+            color: var(--text-secondary);
+            line-height: 1.8;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: var(--transition);
+            transition-delay: 0.4s;
+        }
+
+        .slide.active .final-tagline {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .final-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 36px;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 100px;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 36px;
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .slide.active .final-cta {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.5s;
+        }
+
+        .final-cta:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 8px 30px rgba(108,92,231,0.35);
+        }
+
+        /* ── Two-column layout ── */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-top: 16px;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: var(--transition);
+            transition-delay: 0.35s;
+        }
+
+        .slide.active .two-col {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── Navigation ── */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(10,10,15,0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            z-index: 100;
+        }
+
+        .nav-progress {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .progress-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.12);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .progress-dot.active {
+            background: var(--accent-1);
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        .progress-dot:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        .progress-dot.active:hover {
+            background: var(--accent-2);
+        }
+
+        .nav-info {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 1px solid var(--border-subtle);
+            background: transparent;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .nav-btn:hover {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border-color: rgba(108,92,231,0.3);
+        }
+
+        .nav-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 40px 24px 80px;
+            }
+
+            .comparison, .two-col {
+                grid-template-columns: 1fr;
+            }
+
+            .pipeline {
+                grid-template-columns: 1fr;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero-meta {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+
+        /* ── Animated text emphasis ── */
+        .em-glow {
+            color: var(--accent-3);
+            font-weight: 600;
+        }
+
+        .em-warn {
+            color: var(--accent-4);
+            font-weight: 600;
+        }
+
+        .em-gold {
+            color: var(--accent-5);
+            font-weight: 600;
+        }
+
+        /* ── Section divider ── */
+        .section-divider {
+            width: 60px;
+            height: 3px;
+            background: var(--gradient-1);
+            border-radius: 2px;
+            margin: 20px 0;
+            opacity: 0;
+            transition: var(--transition);
+            transition-delay: 0.25s;
+        }
+
+        .slide.active .section-divider {
+            opacity: 1;
+        }
+
+        /* ── Bot features ── */
+        .bot-features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin: 24px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+            transition-delay: 0.35s;
+        }
+
+        .slide.active .bot-features {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .bot-feature {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius);
+            padding: 24px;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .bot-feature:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-card);
+            border-color: rgba(108,92,231,0.3);
+        }
+
+        .bot-feature .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+
+        .bot-feature h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .bot-feature p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .bot-features {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ── Scrollbar ── */
+        .slide::-webkit-scrollbar {
+            width: 4px;
+        }
+        .slide::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .slide::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+<div class="presentation" id="presentation">
+
+    <!-- SLIDE 0: Титульный -->
+    <div class="slide slide-hero active" data-index="0">
+        <div class="slide-inner">
+            <h1>
+                Новый рынок новостроек:<br>
+                <span class="gradient-text">Финмодель, инструменты</span><br>
+                и психология продаж
+            </h1>
+            <p class="subtitle">Без иллюзий, с конкретными цифрами и инструментами.</p>
+            <div class="hero-meta">
+                <span class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>
+                    Уфа
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 1: Задача спикера -->
+    <div class="slide" data-index="1">
+        <div class="slide-inner">
+            <span class="slide-label">Введение</span>
+            <h1><span class="gradient-text-4">Забудьте всё,</span> что было раньше</h1>
+            <div class="section-divider"></div>
+            <div class="quote-block">
+                <strong>Главная рекомендация:</strong> забудьте, каким рынок был 5, 3 или даже 1 год назад. Эти воспоминания не помогут вам заработать деньги прямо сейчас.<br><br>
+                Мир меняется стремительно: <strong>один год идёт за три-четыре</strong>. Если вы хотите оставаться в игре — придётся меняться вместе с ним.
+            </div>
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-value">4×</div>
+                    <div class="stat-label">Скорость изменений рынка</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value teal">2026</div>
+                    <div class="stat-label">Новая реальность рынка</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value pink">0</div>
+                    <div class="stat-label">Пользы от старых шаблонов</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 2: Эволюция рынка -->
+    <div class="slide" data-index="2">
+        <div class="slide-inner">
+            <span class="slide-label">Блок 1 · Аналитика рынка</span>
+            <h1>Эволюция рынка: <span class="gradient-text">6 лет</span></h1>
+            <div class="section-divider"></div>
+            <div class="cards-grid">
+                <div class="card fragment">
+                    <div class="card-icon purple">🏗️</div>
+                    <div class="year-tag">2020 – 2024</div>
+                    <h3>Рынок Продавца</h3>
+                    <p>Покупателей больше, чем предложений. Продавцы диктовали условия. Цены вторички были существенно ниже застройщиков.</p>
+                </div>
+                <div class="card fragment">
+                    <div class="card-icon teal">⚖️</div>
+                    <div class="year-tag">2024 – 2025</div>
+                    <h3>Рынок Покупателя</h3>
+                    <p>Ситуация развернулась: предложений стало колоссально много, а покупателей — мало. Покупатель начал диктовать условия.</p>
+                </div>
+                <div class="card fragment">
+                    <div class="card-icon pink">🎯</div>
+                    <div class="year-tag">С 2026</div>
+                    <h3>Агентский рынок</h3>
+                    <p>Правят профессиональные агенты-навигаторы. Выигрывает тот, кто умеет находить сложные финансовые решения и собирать цепочки сделок.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 3: Текущий ландшафт -->
+    <div class="slide" data-index="3">
+        <div class="slide-inner">
+            <span class="slide-label">Блок 1 · Аналитика</span>
+            <h1>Рынок Уфы в цифрах: <span class="gradient-text-2">2025–2026</span></h1>
+            <div class="section-divider"></div>
+            <p class="subtitle" style="margin-bottom: 24px;">Классическая продажа «просто квартир по прайсу» мертва. Рынок новостроек — это <strong>рынок финансовых условий</strong>.</p>
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-value">3 000</div>
+                    <div class="stat-label">Риелторов в Уфе</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value teal">12 500</div>
+                    <div class="stat-label">Сделок за 2025 год</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value pink">93,5₽</div>
+                    <div class="stat-label">Млрд — объём рынка</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">2,6₽</div>
+                    <div class="stat-label">Млрд — комиссии агентов</div>
+                </div>
+            </div>
+            <div class="highlight-box">
+                <span class="icon">⚡</span>
+                <p><strong>80% всех сделок</strong> прошло через агентов — это <strong>74,8 млрд ₽</strong> рынка. При средней комиссии <strong>3,5%</strong> пирог огромный, но достаётся тем, кто работает системно.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: Дисконты и инструменты -->
+    <div class="slide" data-index="4">
+        <div class="slide-inner">
+            <span class="slide-label">Блок 1 · Инструменты</span>
+            <h1>Инструменты <span class="gradient-text-3">нового рынка</span></h1>
+            <div class="section-divider"></div>
+            <div class="highlight-box">
+                <span class="icon">🔥</span>
+                <p>Дисконты на квартиры доходят <strong>до 20%</strong>, даже в <strong>сданных домах</strong>. Это огромная возможность для клиентов с наличными или альтернативными финансовыми сценариями.</p>
+            </div>
+            <div class="cards-grid">
+                <div class="card fragment">
+                    <div class="card-icon teal">📊</div>
+                    <h3>Траншевая ипотека</h3>
+                    <p>Ипотека выдаётся частями. Платёж <strong class="em-glow">1 ₽/мес</strong> до ввода дома. Идеально для тех, кто снимает жильё или копит на ремонт.</p>
+                </div>
+                <div class="card fragment">
+                    <div class="card-icon yellow">💰</div>
+                    <h3>Рассрочка от застройщика</h3>
+                    <p>Минимальный ПВ и отсрочка основных платежей. Для тех, кто ждёт продажи вторички или закрытия депозита.</p>
+                </div>
+                <div class="card fragment">
+                    <div class="card-icon purple">📉</div>
+                    <h3>Субсидированная ипотека</h3>
+                    <p>Снижение ставки за счёт комиссии застройщика банку. Минимально возможный платёж <strong>«в долгую»</strong>.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 5: ТОП ЖК -->
+    <div class="slide" data-index="5">
+        <div class="slide-inner">
+            <span class="slide-label">Блок 1 · Рейтинг</span>
+            <h1>ТОП жилых комплексов <span class="gradient-text">Уфы</span></h1>
+            <div class="section-divider"></div>
+            <div class="two-col">
+                <div class="fragment">
+                    <h2 style="font-size: 1rem; color: var(--accent-2); margin-bottom: 16px;">📊 Март 2026 — по сделкам</h2>
+                    <div class="ranking-list">
+                        <div class="ranking-item"><span class="ranking-number">01</span><span class="ranking-name">ЖК «Лесное Ожерелье»</span><span class="ranking-value">35</span></div>
+                        <div class="ranking-item"><span class="ranking-number">02</span><span class="ranking-name">ЖК «Новатор»</span><span class="ranking-value">28</span></div>
+                        <div class="ranking-item"><span class="ranking-number">03</span><span class="ranking-name">ЖК «Волна»</span><span class="ranking-value">23</span></div>
+                        <div class="ranking-item"><span class="ranking-number">04</span><span class="ranking-name">ЖК «LUNA»</span><span class="ranking-value">22</span></div>
+                        <div class="ranking-item"><span class="ranking-number">05</span><span class="ranking-name">ЖК «Акварель»</span><span class="ranking-value">22</span></div>
+                    </div>
+                </div>
+                <div class="fragment">
+                    <h2 style="font-size: 1rem; color: var(--accent-3); margin-bottom: 16px;">📊 Май 2026 — по продажам</h2>
+                    <div class="ranking-list">
+                        <div class="ranking-item"><span class="ranking-number">01</span><span class="ranking-name">ЖК «Акварель»</span><span class="ranking-value">40</span></div>
+                        <div class="ranking-item"><span class="ranking-number">02</span><span class="ranking-name">ЖК «Динамика»</span><span class="ranking-value">38</span></div>
+                        <div class="ranking-item"><span class="ranking-number">03</span><span class="ranking-name">ЖК «Мир»</span><span class="ranking-value">34</span></div>
+                        <div class="ranking-item"><span class="ranking-number">04</span><span class="ranking-name">ЖК «Волна»</span><span class="ranking-value">32</span></div>
+                        <div class="ranking-item"><span class="ranking-number">05</span><span class="ranking-name">ЖК «Заря»</span><span class="ranking-value">27</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="highlight-box fragment" style="margin-top: 16px;">
+                <span class="icon">💡</span>
+                <p>Если вы профессионально разберётесь хотя бы в этих ЖК, это уже сделает вас сильнее <strong>70% риелторского рынка</strong> Уфы.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 6: Горькая правда -->
+    <div class="slide" data-index="6">
+        <div class="slide-inner">
+            <span class="slide-label">Блок 1 · Психология</span>
+            <h1>Горькая правда: <span class="gradient-text-3">почему опытные разучились</span></h1>
+            <div class="section-divider"></div>
+            <ul class="styled-list">
+                <li>
+                    <span class="bullet pink"></span>
+                    <span><strong>Раньше клиенты были как «телята»:</strong> достаточно было показать объект — клиент шёл и покупал. Продаж не было — была функция демонстратора.</span>
+                </li>
+                <li>
+                    <span class="bullet teal"></span>
+                    <span><strong>Сегодня — информационное «ожирение»:</strong> клиенты часто знают о ставках, банках и акциях больше самого агента, который ленится обновлять знания.</span>
+                </li>
+                <li>
+                    <span class="bullet purple"></span>
+                    <span><strong>Потеря слуха:</strong> новички умеют <em>слушать и слышать</em> клиента. Опытные пытаются продать «авторитетное мнение» и «богатый опыт», которые клиенту в 2026 году не интересны.</span>
+                </li>
+                <li>
+                    <span class="bullet yellow"></span>
+                    <span><strong>Новая задача:</strong> не транслировать мнение, а понять <em>суть покупки</em> — для чего человек покупает новостройку? Какую ключевую задачу он решает?</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- SLIDE 7: Новички vs опытные -->
+    <div class="slide" data-index="7">
+        <div class="slide-inner">
+            <span class="slide-label">Блок 1 · Парадокс</span>
+            <h1>Почему новички <span class="gradient-text-2">обгоняют</span> опытных?</h1>
+            <div class="section-divider"></div>
+            <div class="comparison">
+                <div class="compare-card negative fragment">
+                    <div class="compare-icon">🧠</div>
+                    <h3>Синдром «старой памяти»</h3>
+                    <ul>
+                        <li>Помнят «золотые времена»: ставка 6–8% без удорожания</li>
+                        <li>Живут воспоминаниями</li>
+                        <li>Проецируют свой страх высоких цен и переплат на клиента</li>
+                        <li>Принимают решения за клиента: «это невыгодно», «тут переплата»</li>
+                    </ul>
+                </div>
+                <div class="compare-card positive fragment">
+                    <div class="compare-icon">🚀</div>
+                    <h3>Паттерн новичка</h3>
+                    <ul>
+                        <li>Не знает «как было раньше»</li>
+                        <li>Видит цену 10 млн под 3.5% — продаёт платёж 35 000 ₽</li>
+                        <li>Живёт сегодняшней реальностью</li>
+                        <li>Использует инструменты застройщиков без лишних рассуждений</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="quote-block fragment">
+                Агент — это <strong>навигатор</strong>. Задача: выложить на стол все финансовые продукты, рассчитать математику и разложить клиенту «по полочкам». <strong>Решение принимает только клиент.</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 8: Воронка продаж -->
+    <div class="slide" data-index="8">
+        <div class="slide-inner">
+            <span class="slide-label">Блок 2 · Воронка продаж</span>
+            <h1>Золотое правило <span class="gradient-text">очерёдности</span></h1>
+            <div class="section-divider"></div>
+            <div class="quote-block">
+                <strong>Главный закон:</strong> Не начинайте подбор с картинок на ЦИАН/Авито. Если вы не определили рамки бюджета, любая презентация планировок — пустая трата времени.
+            </div>
+            <div class="pipeline">
+                <div class="pipeline-step">
+                    <span class="step-number">01</span>
+                    <div class="step-title">Этап 1</div>
+                    <h3>Финансы и безопасность</h3>
+                    <p>Точная сумма ПВ, комфортный платёж, одобрение ипотеки, проверка застройщика. Результат: financial коридор.</p>
+                </div>
+                <div class="pipeline-step">
+                    <span class="step-number">02</span>
+                    <div class="step-title">Этап 2</div>
+                    <h3>Локация</h3>
+                    <p>Привязка к жизненному сценарию: работа, школы, транспорт. Результат: 2–3 района.</p>
+                </div>
+                <div class="pipeline-step">
+                    <span class="step-number">03</span>
+                    <div class="step-title">Этап 3</div>
+                    <h3>Жилой комплекс</h3>
+                    <p>Инфраструктура ЖК, благоустройство, паркинг, сроки сдачи, репутация. Результат: shortlist 2–3 ЖК.</p>
+                </div>
+                <div class="pipeline-step">
+                    <span class="step-number">04</span>
+                    <div class="step-title">Этап 4</div>
+                    <h3>Планировка и лот</h3>
+                    <p>Только здесь выбираем квартиру: этаж, вид, инсоляция, формат комнат.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 9: Правило фиксации -->
+    <div class="slide" data-index="9">
+        <div class="slide-inner">
+            <span class="slide-label">Блок 2 · Безопасность</span>
+            <h1>Правило <span class="gradient-text-3">фиксации уникальности</span></h1>
+            <div class="section-divider"></div>
+            <div class="highlight-box" style="border-color: rgba(253,121,168,0.3); background: linear-gradient(135deg, rgba(253,121,168,0.08), rgba(253,121,168,0.03));">
+                <span class="icon">🚨</span>
+                <p>Если клиент уже обращался к застройщику напрямую или через другого агента — <strong style="color: var(--accent-4);">вы теряете комиссию</strong>. Правила игры жёсткие.</p>
+            </div>
+            <div class="cards-grid" style="grid-template-columns: 1fr;">
+                <div class="card" style="border-left: 3px solid var(--accent-1);">
+                    <h3>⚡ Регламент</h3>
+                    <p style="font-size: 1.05rem; line-height: 1.8;">
+                        <strong>Перед первой презентацией конкретного ЖК</strong> отправляем шаблон уникальности застройщику:<br>
+                        <span class="em-glow">→ ФИО клиента</span> · <span class="em-glow">ФИО супругов</span> · <span class="em-glow">Телефоны</span><br><br>
+                        Работаем <strong>только после официального подтверждения</strong> статуса «Уникален».
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 10: Финмодель — статистика -->
+    <div class="slide" data-index="10">
+        <div class="slide-inner">
+            <span class="slide-label">Блок 3 · Финмодель</span>
+            <h1>Ипотека — это <span class="gradient-text">80% новостройки</span></h1>
+            <div class="section-divider"></div>
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-value">80%</div>
+                    <div class="stat-label">Сделок с ипотекой</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value teal">67,9%</div>
+                    <div class="stat-label">Доля Сбербанка</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value pink">3</div>
+                    <div class="stat-label">Банка лидера</div>
+                </div>
+            </div>
+            <div class="quote-block">
+                Если вы не умеете виртуозно считать ипотеку и объяснять программы — <strong>вы профнепригодны на рынке первички</strong>. Клиент уже сам изучил калькуляторы.
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 11: Банки -->
+    <div class="slide" data-index="11">
+        <div class="slide-inner">
+            <span class="slide-label">Блок 3 · Банки</span>
+            <h1>Банки-лидеры и <span class="gradient-text-2">их программы</span></h1>
+            <div class="section-divider"></div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Банк</th>
+                            <th>% от всех сделок</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>ПАО «Сбербанк России»</td><td style="color: var(--accent-2); font-weight: 600; font-family: 'JetBrains Mono', monospace;">67,94%</td></tr>
+                        <tr><td>АО «Альфа-Банк»</td><td style="font-family: 'JetBrains Mono', monospace;">9,68%</td></tr>
+                        <tr><td>ПАО «Банк ВТБ»</td><td style="font-family: 'JetBrains Mono', monospace;">7,66%</td></tr>
+                        <tr><td>АО «Банк ДОМ.РФ»</td><td style="font-family: 'JetBrains Mono', monospace;">6,45%</td></tr>
+                        <tr><td>ПАО «Совкомбанк»</td><td style="font-family: 'JetBrains Mono', monospace;">1,81%</td></tr>
+                        <tr><td>АО «ВБРР»</td><td style="font-family: 'JetBrains Mono', monospace;">1,81%</td></tr>
+                        <tr><td>АО «ТБанк»</td><td style="font-family: 'JetBrains Mono', monospace;">1,21%</td></tr>
+                        <tr><td>АКБ «Абсолют Банк»</td><td style="font-family: 'JetBrains Mono', monospace;">1,01%</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="cards-grid" style="margin-top: 20px;">
+                <div class="card">
+                    <h3 style="color: var(--accent-6);">🏦 Сбербанк</h3>
+                    <p>Программы дисконтирования ставки через витрину Домклик и субсидии девелоперов</p>
+                </div>
+                <div class="card">
+                    <h3 style="color: var(--accent-2);">🏦 ВТБ</h3>
+                    <p>Сильные программы для семейной ипотеки со снижением платежа на период строительства</p>
+                </div>
+                <div class="card">
+                    <h3 style="color: var(--accent-4);">🏦 Альфа-Банк</h3>
+                    <p>Гибкие условия по траншевым продуктам и рассрочкам</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 12: Тренд Агент -->
+    <div class="slide" data-index="12">
+        <div class="slide-inner">
+            <span class="slide-label">Блок 3 · Инструменты</span>
+            <h1>Интеграция с <span class="gradient-text-4">Тренд Агентом</span></h1>
+            <div class="section-divider"></div>
+            <p class="subtitle">Платформа, которая помогает не запутаться в сотнях меняющихся программ и лимитов.</p>
+            <div class="cards-grid" style="margin-top: 32px;">
+                <div class="card">
+                    <div class="card-icon teal">📋</div>
+                    <h3>Траншевые сетки</h3>
+                    <p>Актуальные траншевые сетки по ключевым застройщикам Уфы</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon yellow">💳</div>
+                    <h3>Страховки и комиссии</h3>
+                    <p>Где сейчас самые дешёвые страховки и низкие комиссии</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon purple">🧩</div>
+                    <h3>Сложные кейсы</h3>
+                    <p>Как одобрять без официального дохода, с минимальным ПВ</p>
+                </div>
+            </div>
+            <div class="highlight-box" style="margin-top: 20px;">
+                <span class="icon">🎓</span>
+                <p>Ипотечный брокер Тренд Агента проведёт <strong>закрытый воркшоп</strong> — разбор всех этих тем пошагово.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 13: Рыбак vs Стратег -->
+    <div class="slide" data-index="13">
+        <div class="slide-inner">
+            <span class="slide-label">Блок 4 · Стратегия</span>
+            <h1><span class="gradient-text-3">Агент-Рыбак</span> vs <span class="gradient-text-2">Агент-Стратег</span></h1>
+            <div class="section-divider"></div>
+            <div class="comparison">
+                <div class="compare-card negative fragment">
+                    <div class="compare-icon">🎣</div>
+                    <h3>Агент-Рыбак</h3>
+                    <ul>
+                        <li>Ждёт идеальных условий: снижения ставки, «нормальных» клиентов</li>
+                        <li>Полностью плывёт по течению</li>
+                        <li>1–2 сделки в год по старым контактам — лотерея, а не система</li>
+                        <li>Винит внешние факторы: «Заградительные ставки, рынок стоит»</li>
+                        <li>Защищает свои иллюзии, а не свой доход</li>
+                    </ul>
+                </div>
+                <div class="compare-card positive fragment">
+                    <div class="compare-icon">♟️</div>
+                    <h3>Агент-Стратег</h3>
+                    <ul>
+                        <li>«Если действия не приносят сделок — глупо продолжать»</li>
+                        <li>Немедленно меняет стратегию</li>
+                        <li>Изучает транши, рассрочки, скидки до 20%</li>
+                        <li>Учится слушать реальные боли людей</li>
+                        <li>«Если у новичков есть сделки — деньги на рынке есть»</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 14: Инструменты быстрого действия -->
+    <div class="slide" data-index="14">
+        <div class="slide-inner">
+            <span class="slide-label">Блок 4 · Тактика</span>
+            <h1>Инструменты <span class="gradient-text">быстрого действия</span></h1>
+            <div class="section-divider"></div>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon teal">🔄</div>
+                    <h3>Переориентация на показе вторички</h3>
+                    <p>Клиент смотрит вторичку за <span class="em-warn">7 млн под 18%</span> (платёж ~95 000 ₽).<br><br>Стратег предлагает новостройку за <span class="em-glow">8.5 млн под 6%</span> (платёж ~45 000 ₽).<br><br>Квартира новее, просторнее, платёж <strong>в 2 раза меньше</strong>.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon purple">📞</div>
+                    <h3>Касание «Топ-100»</h3>
+                    <p>Обзвон базы контактов с «информационной заботой» о <strong>закрытии лимитов</strong> по льготным программам. Создаёте ургентность через ценность.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon pink">✉️</div>
+                    <h3>Рассылка с оффером</h3>
+                    <p>Персонализированные сообщения с <strong>твёрдой выгодой в цифрах</strong> и низким порогом входа. Не «позвоните нам» — а конкретные цифры.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 15: Telegram-бот -->
+    <div class="slide" data-index="15">
+        <div class="slide-inner">
+            <span class="slide-label">Блок 4 · Технологии</span>
+            <h1>Telegram-бот: <span class="gradient-text-4">Помощник Брокера</span></h1>
+            <div class="section-divider"></div>
+            <p class="subtitle" style="margin-bottom: 24px;">Для закрепления знаний и оперативной поддержки — бот прямо в вашем Telegram.</p>
+            <div class="bot-features">
+                <div class="bot-feature">
+                    <div class="feature-icon">📝</div>
+                    <h3>Обучение и тесты</h3>
+                    <p>Экспресс-тесты на знание параметров ТОП ЖК Уфы — обновите УТП объектов за 5 минут</p>
+                </div>
+                <div class="bot-feature">
+                    <div class="feature-icon">🧮</div>
+                    <h3>Быстрый калькулятор</h3>
+                    <p>Ввод цены и взноса — моментальный расчёт платежа по субсидированной ставке прямо в чате с клиентом</p>
+                </div>
+                <div class="bot-feature">
+                    <div class="feature-icon">✅</div>
+                    <h3>База уникальности</h3>
+                    <p>Чек-лист правил фиксации по каждому застройщику в один клик</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 16: Финальный -->
+    <div class="slide slide-final" data-index="16">
+        <div class="slide-inner" style="position: relative; z-index: 1;">
+            <span class="slide-label">Резюме</span>
+            <h1><span class="gradient-text">Рынок никогда</span><br>не будет прежним</h1>
+            <div class="section-divider" style="margin: 20px auto;"></div>
+            <p class="final-tagline">
+                Работать по-старому — сложнее с каждым месяцем.<br>
+                Свой прошлый опыт нужно положить в архив и загрузить новые данные.<br><br>
+                Если у вас нет сделок — вы точно делаете что-то не так.<br>
+                У новичков сделки есть. У адаптировавшихся опытных — тоже.<br><br>
+                <strong style="color: var(--text-primary);">Наш инструмент: точный финансовый расчёт, знание банковских продуктов и позиция экологичного навигатора.</strong>
+            </p>
+            <button class="final-cta" onclick="goToSlide(0)">
+                ← К началу
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<!-- Navigation Bar -->
+<nav class="nav-bar" id="navBar">
+    <div class="nav-progress" id="navProgress"></div>
+    <div class="nav-info" id="navInfo">01 / 17</div>
+    <div class="nav-buttons">
+        <button class="nav-btn" id="prevBtn" onclick="prevSlide()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+        </button>
+        <button class="nav-btn" id="nextBtn" onclick="nextSlide()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+        </button>
+    </div>
+</nav>
+
+<script>
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentSlide = 0;
+    let isAnimating = false;
+
+    // Build progress dots
+    const navProgress = document.getElementById('navProgress');
+    for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'progress-dot' + (i === 0 ? ' active' : '');
+        dot.addEventListener('click', () => goToSlide(i));
+        navProgress.appendChild(dot);
+    }
+
+    function updateNav() {
+        const dots = document.querySelectorAll('.progress-dot');
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === currentSlide);
+        });
+        document.getElementById('navInfo').textContent =
+            String(currentSlide + 1).padStart(2, '0') + ' / ' + String(totalSlides).padStart(2, '0');
+    }
+
+    function goToSlide(index) {
+        if (isAnimating || index === currentSlide || index < 0 || index >= totalSlides) return;
+        isAnimating = true;
+
+        const prevIndex = currentSlide;
+        const direction = index > prevIndex ? 1 : -1;
+
+        // Reset transitions
+        slides[prevIndex].style.transition = 'none';
+        slides[index].style.transition = 'none';
+
+        // Prepare position for next slide
+        slides[index].style.transform = direction > 0 ? 'translateX(100%)' : 'translateX(-100%)';
+        slides[index].style.opacity = '0';
+        slides[index].classList.add('active');
+
+        // Reset fragments on the target slide
+        const targetFragments = slides[index].querySelectorAll('.fragment');
+        if (direction > 0) {
+            // If going forward, start with all fragments hidden
+            targetFragments.forEach(f => f.classList.remove('visible'));
+        } else {
+            // If going backward, show all fragments so they are fully displayed when returning
+            targetFragments.forEach(f => f.classList.add('visible'));
+        }
+
+        // Force reflow
+        slides[index].offsetHeight;
+
+        // Apply transition styles
+        slides[prevIndex].style.transition = 'opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1), transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
+        slides[index].style.transition = 'opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1), transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
+
+        // Animate
+        slides[prevIndex].style.transform = direction > 0 ? 'translateX(-100%)' : 'translateX(100%)';
+        slides[prevIndex].style.opacity = '0';
+
+        slides[index].style.transform = 'translateX(0)';
+        slides[index].style.opacity = '1';
+        slides[index].scrollTop = 0;
+
+        currentSlide = index;
+        updateNav();
+
+        setTimeout(() => {
+            slides[prevIndex].classList.remove('active');
+            slides[prevIndex].style.transform = '';
+            slides[prevIndex].style.opacity = '';
+            isAnimating = false;
+        }, 600);
+    }
+
+    function nextSlide() {
+        const activeSlide = slides[currentSlide];
+        const invisibleFragments = activeSlide.querySelectorAll('.fragment:not(.visible)');
+        
+        if (invisibleFragments.length > 0) {
+            // Show the next hidden fragment on this slide
+            invisibleFragments[0].classList.add('visible');
+        } else {
+            // No more hidden fragments, proceed to the next slide
+            if (currentSlide < totalSlides - 1) goToSlide(currentSlide + 1);
+        }
+    }
+
+    function prevSlide() {
+        const activeSlide = slides[currentSlide];
+        const visibleFragments = activeSlide.querySelectorAll('.fragment.visible');
+        
+        if (visibleFragments.length > 0) {
+            // Hide the last visible fragment on this slide
+            visibleFragments[visibleFragments.length - 1].classList.remove('visible');
+        } else {
+            // No visible fragments, go to the previous slide
+            if (currentSlide > 0) goToSlide(currentSlide - 1);
+        }
+    }
+
+    // Keyboard & clicker navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') {
+            e.preventDefault();
+            nextSlide();
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') {
+            e.preventDefault();
+            prevSlide();
+        } else if (e.key === 'Home') {
+            e.preventDefault();
+            goToSlide(0);
+        } else if (e.key === 'End') {
+            e.preventDefault();
+            goToSlide(totalSlides - 1);
+        }
+    });
+
+    // Touch support
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    document.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+        const deltaX = e.changedTouches[0].clientX - touchStartX;
+        const deltaY = e.changedTouches[0].clientY - touchStartY;
+
+        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+            if (deltaX < 0) nextSlide();
+            else prevSlide();
+        }
+    }, { passive: true });
+
+    updateNav();
+</script>
+</body>
+</html>

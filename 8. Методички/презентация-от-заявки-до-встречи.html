@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Презентация: От заявки до встречи (Система продаж Навигатора)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #070a13;
+      --card-bg: rgba(21, 28, 44, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent-violet: #a855f7;
+      --accent-violet-glow: rgba(168, 85, 247, 0.4);
+      --accent-emerald: #10b981;
+      --accent-emerald-glow: rgba(16, 185, 129, 0.4);
+      --accent-rose: #f43f5e;
+      --accent-rose-glow: rgba(244, 63, 94, 0.4);
+      --font-outfit: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: var(--font-inter);
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.08) 0%, transparent 40%);
+    }
+
+    /* Progress bar at the top */
+    .progress-bar-container {
+      width: 100%;
+      height: 5px;
+      background-color: rgba(255, 255, 255, 0.05);
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 100;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-violet) 0%, var(--accent-emerald) 100%);
+      transition: width 0.3s ease;
+      box-shadow: 0 0 10px var(--accent-violet-glow);
+    }
+
+    /* Main presentation container */
+    .presentation-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      flex-direction: column;
+      justify-content: center;
+      animation: fadeIn 0.5s forwards ease;
+    }
+
+    .slide.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Typography & Headers */
+    h1, h2, h3, h4 {
+      font-family: var(--font-outfit);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, #fff 30%, #a855f7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    h2 {
+      font-size: 2.2rem;
+      line-height: 1.2;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 15px;
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--accent-violet);
+    }
+
+    p {
+      line-height: 1.6;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Cards */
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 30px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+      margin-bottom: 20px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+    }
+
+    /* Lists */
+    ul {
+      list-style-type: none;
+    }
+
+    li {
+      margin-bottom: 12px;
+      position: relative;
+      padding-left: 24px;
+      font-size: 1.05rem;
+      line-height: 1.5;
+    }
+
+    li::before {
+      content: "•";
+      color: var(--accent-violet);
+      font-size: 1.5rem;
+      position: absolute;
+      left: 6px;
+      top: -2px;
+    }
+
+    /* Custom Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    th {
+      font-family: var(--font-outfit);
+      font-weight: 600;
+      color: var(--text-main);
+      background-color: rgba(255, 255, 255, 0.02);
+      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    tr:hover {
+      background-color: rgba(255, 255, 255, 0.01);
+    }
+
+    /* Highlights & Badges */
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 10px;
+    }
+
+    .badge-violet {
+      background-color: rgba(168, 85, 247, 0.15);
+      color: var(--accent-violet);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+    }
+
+    .badge-emerald {
+      background-color: rgba(16, 185, 129, 0.15);
+      color: var(--accent-emerald);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .badge-rose {
+      background-color: rgba(244, 63, 94, 0.15);
+      color: var(--accent-rose);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+    }
+
+    .highlight-box {
+      border-left: 4px solid var(--accent-violet);
+      background-color: rgba(168, 85, 247, 0.05);
+      padding: 20px;
+      border-radius: 0 12px 12px 0;
+      margin-top: 15px;
+    }
+
+    .highlight-box-emerald {
+      border-left: 4px solid var(--accent-emerald);
+      background-color: rgba(16, 185, 129, 0.05);
+      padding: 20px;
+      border-radius: 0 12px 12px 0;
+      margin-top: 15px;
+    }
+
+    .calc-value {
+      font-family: var(--font-outfit);
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--accent-emerald);
+      text-shadow: 0 0 15px var(--accent-emerald-glow);
+      margin: 10px 0;
+    }
+
+    /* Controls Panel */
+    .controls-panel {
+      padding: 20px 40px;
+      background-color: rgba(15, 23, 42, 0.9);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .btn {
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-family: var(--font-outfit);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.95rem;
+      border: none;
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text-main);
+    }
+
+    .btn-outline:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-primary {
+      background-color: var(--accent-violet);
+      color: white;
+      box-shadow: 0 0 15px var(--accent-violet-glow);
+    }
+
+    .btn-primary:hover {
+      background-color: #b55fe6;
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
+    }
+
+    .btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .slide-select {
+      background-color: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 8px 16px;
+      border-radius: 8px;
+      outline: none;
+      font-family: var(--font-inter);
+      cursor: pointer;
+    }
+
+    .slide-select:focus {
+      border-color: var(--accent-violet);
+    }
+
+    .slide-counter {
+      font-family: var(--font-outfit);
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    /* Dialogue Simulation Styles */
+    .dialogue-table td {
+      vertical-align: top;
+      line-height: 1.5;
+    }
+
+    .actor-name {
+      font-weight: 700;
+      font-family: var(--font-outfit);
+      white-space: nowrap;
+    }
+
+    .actor-client { color: var(--accent-rose); }
+    .actor-navigator { color: var(--accent-emerald); }
+    .actor-fisherman { color: var(--text-muted); text-decoration: line-through; opacity: 0.6; }
+
+    /* Script block styling */
+    .script-box {
+      background-color: rgba(0, 0, 0, 0.2);
+      border: 1px dashed rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 15px;
+      position: relative;
+    }
+
+    .script-box::before {
+      content: "SCRIPT";
+      font-family: var(--font-outfit);
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--accent-violet);
+      position: absolute;
+      top: -8px;
+      left: 15px;
+      background-color: #121824;
+      padding: 0 6px;
+      letter-spacing: 0.05em;
+    }
+
+    /* Layout specific tweaks */
+    .title-slide {
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .title-slide h1 {
+      font-size: 3.8rem;
+      margin-bottom: 2rem;
+    }
+
+    .title-slide .badge {
+      font-size: 1rem;
+      padding: 6px 16px;
+      margin-bottom: 20px;
+    }
+
+    .accent-violet-text { color: var(--accent-violet); }
+    .accent-emerald-text { color: var(--accent-emerald); }
+    .accent-rose-text { color: var(--accent-rose); }
+
+    /* Grid for Comparison Table */
+    .comp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .comp-col-red {
+      border: 1px solid rgba(244, 63, 94, 0.2);
+      background-color: rgba(244, 63, 94, 0.02);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .comp-col-green {
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      background-color: rgba(16, 185, 129, 0.02);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .comp-header {
+      font-family: var(--font-outfit);
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .comp-item {
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    /* Visual Flowchart CSS */
+    .flowchart-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 100%;
+      max-width: 850px;
+      margin: 15px auto;
+      padding: 10px;
+    }
+
+    .flow-step {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+
+    .flow-step-accent {
+      border-color: var(--accent-violet);
+      background: rgba(168, 85, 247, 0.05);
+    }
+
+    .flow-step-emerald {
+      border-color: var(--accent-emerald);
+      background: rgba(16, 185, 129, 0.05);
+    }
+
+    .flow-step-rose {
+      border-color: var(--accent-rose);
+      background: rgba(244, 63, 94, 0.05);
+    }
+
+    .flow-title {
+      font-family: var(--font-outfit);
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: var(--text-main);
+    }
+
+    .flow-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .flow-value {
+      font-family: var(--font-outfit);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--accent-emerald);
+    }
+
+    .flow-arrow {
+      text-align: center;
+      color: var(--accent-violet);
+      font-size: 1.5rem;
+      line-height: 1;
+      margin: -10px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top progress bar -->
+  <div class="progress-bar-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Slides Container -->
+  <div class="presentation-container">
+
+    <!-- SLIDE 1: Title -->
+    <div class="slide active" id="slide1">
+      <div class="title-slide">
+        <span class="badge badge-violet">Курс 2026</span>
+        <h1>От заявки до встречи</h1>
+        <p style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 2rem;">
+          Система продаж для риелторов-навигаторов
+        </p>
+        <div class="card" style="display: inline-block; padding: 15px 40px; margin-bottom: 2rem;">
+          <p style="margin: 0; font-weight: 500; font-size: 1.1rem;">
+            Как перестать работать справочным бюро и начать назначать встречи через ценность
+          </p>
+        </div>
+        <p style="font-size: 0.9rem; color: var(--text-muted);">
+          LTV клиента • Финансовый аудит • JTBD-Диагностика • Финмодель • Тест-драйв новостроек
+        </p>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: Mindset Shift & LTV -->
+    <div class="slide" id="slide2">
+      <h2>🧠 Смена парадигмы: LTV (Life Time Value)</h2>
+      <p>LTV — это вся чистая прибыль (комиссионные), которую один клиент приносит за всё время сотрудничества.</p>
+      <div class="comp-grid">
+        <div class="comp-col-red">
+          <div class="comp-header" style="color: var(--accent-rose);">
+            🎣 Риелтор-«Рыбак»
+          </div>
+          <div class="comp-item">
+            <strong>Разовая сделка:</strong> Видит в клиенте только одну комиссию здесь и сейчас (например, 150 000 руб.).
+          </div>
+          <div class="comp-item">
+            <strong>Короткий фокус:</strong> Готов «впарить» неликвидный ЖК ради быстрой комиссии. Теряет доверие навсегда.
+          </div>
+          <div class="comp-item">
+            <strong>Постоянные затраты:</strong> Каждый раз платит за рекламу (CAC) для поиска новых клиентов.
+          </div>
+          <div class="comp-item" style="color: var(--accent-rose); font-weight: 500;">
+            Итог: Работает много, зарабатывает мало на дистанции.
+          </div>
+        </div>
+
+        <div class="comp-col-green">
+          <div class="comp-header" style="color: var(--accent-emerald);">
+            🧭 Риелтор-«Навигатор»
+          </div>
+          <div class="comp-item">
+            <strong>Долгосрочный актив:</strong> Понимает математику LTV и развивает клиентские отношения на 5 лет вперед.
+          </div>
+          <div class="comp-item">
+            <strong>Репутация и честность:</strong> Работает по Правилу 3П (не врать, не приукрашивать, не подлизываться).
+          </div>
+          <div class="comp-item">
+            <strong>Рекомендации (бесплатно):</strong> Повторные сделки и сарафанное радио обходятся бесплатно.
+          </div>
+          <div class="comp-item" style="color: var(--accent-emerald); font-weight: 500;">
+            Итог LTV одного клиента за 5 лет: > 1 080 000 рублей.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: Process Flowchart -->
+    <div class="slide" id="slide3">
+      <h2>🧭 Логика процесса: Сначала диагностика, потом показ</h2>
+      <p>Главная ошибка агента — сразу скидывать планировки в Telegram. Это убивает сделку. Правильный процесс:</p>
+      
+      <div class="flowchart-container">
+        <div class="flow-step flow-step-accent">
+          <div>
+            <div class="flow-title">1. Первое касание</div>
+            <div class="flow-desc">Снимаем барьер недоверия, переходим к диалогу.</div>
+          </div>
+          <div class="flow-value">Цель: Вводные рамки</div>
+        </div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step">
+          <div>
+            <div class="flow-title">2. Финансовый аудит</div>
+            <div class="flow-desc">Определяем бюджет, ипотеку и комфортный ежемесячный платеж.</div>
+          </div>
+          <div class="flow-value">Цель: Фин. коридор</div>
+        </div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step flow-step-accent">
+          <div>
+            <div class="flow-title">3. JTBD-Диагностика</div>
+            <div class="flow-desc">Выявляем истинные мотивы покупки (безопасность, личные границы).</div>
+          </div>
+          <div class="flow-value">Цель: Задача клиента</div>
+        </div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step flow-step-emerald">
+          <div>
+            <div class="flow-title">4. Создание Финмодели & Назначение встречи</div>
+            <div class="flow-desc">Разрабатываем точный расчет и Маршрутную карту для выезда на объекты.</div>
+          </div>
+          <div class="flow-value">Цель: Согласовать выезд</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: Step 1 - First Touch -->
+    <div class="slide" id="slide4">
+      <h2>👋 ШАГ 1: Первое касание и снятие барьера</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Главная цель</h3>
+          <p>Установить профессиональные рамки, снять барьер «мне сейчас будут впаривать» и договориться о детальной диагностике.</p>
+          <ul>
+            <li><strong>Принцип честности:</strong> Открыто заявляем, что наша работа бесплатна для клиента, так как ее оплачивает застройщик.</li>
+            <li><strong>Независимость:</strong> Мы не продаем конкретный ЖК, мы помогаем выбрать выгодное именно для клиента.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Как переключать фокус на задачу</h3>
+          <p>Вместо стандартного «какую квартиру вы хотите» (клиент сам часто не знает), спрашиваем про жизненный контекст:</p>
+          <div class="highlight-box">
+            <strong>Переходная фраза:</strong> «Чтобы я не скидывал вам общие бесполезные буклеты, расскажите буквально в двух словах: квартиру подбираете для себя (жить) или как инвестицию?»
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: Step 1 - First Touch Scripts -->
+    <div class="slide" id="slide5">
+      <h2>💬 Скрипты первого контакта (Навигатор)</h2>
+      <div class="card">
+        <h3>В ответ на реакцию на контент (Reels / Пост)</h3>
+        <div class="script-box">
+          <strong>[Имя], приветствую!</strong> Спасибо за интерес к видео. Расскажу все подробности. Сразу проясню один момент, чтобы вам было комфортно: я работаю как независимый эксперт по новостройкам. Моя работа для вас <strong>полностью бесплатна</strong> — её оплачивает застройщик. При этом все цены остаются точно такими же, как напрямую в отделе продаж.<br><br>
+          Мой принцип — я не продаю конкретный ЖК, а помогаю выбрать то, что выгодно именно вам. Чтобы я не скидывал вам общие буклеты, расскажите: квартиру подбираете для себя или как инвестицию?
+        </div>
+      </div>
+      <div class="card">
+        <h3>Входящая заявка / звонок</h3>
+        <div class="script-box">
+          <strong>[Имя], добрый день!</strong> Схема работы простая: я помогаю сориентироваться по всем новостройкам Уфы, одобрить ипотеку и провести сделку. Для вас это <strong>бесплатно</strong>. Я не топлю за конкретных застройщиков, моя задача — показать вам честную аналитику.<br><br>
+          Чтобы сэкономить ваше время и не слать гигабайты планировок, давайте определим рамки. Какой примерно бюджет планируете на покупку и сколько есть первоначального взноса на руках?
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: Step 2 - Financial Audit -->
+    <div class="slide" id="slide6">
+      <h2>💳 ШАГ 2: Финансовый аудит — Схема важнее стен</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Почему сначала схема?</h3>
+          <p>Рынок изменился. Выбрать район и планировку — это верный путь к переплате. Сейчас решает финансовый инструмент: рассрочки, траншевые ипотеки, субсидии.</p>
+          <ul>
+            <li><strong>Первоначальный взнос (ПВ):</strong> Сколько наличных на руках прямо сейчас? Есть ли маткапитал?</li>
+            <li><strong>Ипотечный статус:</strong> Есть ли одобрение? Какая программа (семейная, IT)?</li>
+            <li><strong>Комфортный платёж:</strong> Какая сумма платежа в месяц комфортна, а какая — предел? (Для 80% это важнее общей стоимости).</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Аргументация для клиента</h3>
+          <ul>
+            <li><strong>Защита бюджета:</strong> «Если ограничимся одним районом, упустим рассрочку без ПВ в соседнем ЖК, которая сбережет нам 1,5 млн».</li>
+            <li><strong>Сравнение платежей:</strong> «Квартира за 8 млн может стоить 40 000 руб./мес., а за 9 млн — всего 20 000 руб./мес. из-за субсидии».</li>
+            <li><strong>Экономия времени:</strong> «Мы отсеем финансово невыгодное на бумаге и поедем смотреть только 2-3 объекта, проходящих под расчет».</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: Financial Audit Dialogue -->
+    <div class="slide" id="slide7">
+      <h2>💬 Продажа Финансового аудита</h2>
+      <div class="card">
+        <h3>Перевод фокуса с выбора объекта на финансовые возможности</h3>
+        <table class="dialogue-table">
+          <tr>
+            <td width="20%"><span class="actor-name actor-client">Клиент</span></td>
+            <td><em>«Я хочу посмотреть квартиры в Зелёной Роще, скиньте мне планировки и цены двушек до 8 миллионов рублей».</em></td>
+          </tr>
+          <tr>
+            <td><span class="actor-name actor-fisherman">Рыбак</span></td>
+            <td><span class="actor-fisherman">«Да, конечно! Вот держите 5 каталогов разных ЖК, посмотрите планировки, если что-то понравится — пишите!»</span> (Превращается в справочное бюро, теряет контроль).</td>
+          </tr>
+          <tr>
+            <td><span class="actor-name actor-navigator">Навигатор</span></td>
+            <td><strong>«[Имя], смотрите, как мы поступим. Выбрать просто район и планировку сейчас — это путь к переплате. Рынок изменился: у каждого застройщика свои программы рассрочек, траншей и субсидирования ставок. Поэтому сначала мы сделаем финансовый аудит: возьмем ваши возможности (ПВ и комфортный ежемесячный платеж) и посмотрим веером по всей Уфе, где схемы выгоднее. И только когда поймем схему, сузимся до конкретных планировок. Согласны?»</strong></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: Step 3 - JTBD Diagnostics -->
+    <div class="slide" id="slide8">
+      <h2>🎯 ШАГ 3: JTBD-Диагностика (Зачем покупается квартира?)</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Разделение потребностей</h3>
+          <p>Мы должны докопаться до истинной жизненной задачи клиента (Jobs to be Done):</p>
+          <ul>
+            <li><strong>Функциональная задача:</strong> Сменить аренду на свою, разъехаться с родителями, купить жилье ребенку-студенту на будущее.</li>
+            <li><strong>Эмоциональная/Социальная задача:</strong> Престиж, безопасность детей (двор без машин), обретение личных границ.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Вопросы для диагностики:</h3>
+          <ul>
+            <li>«Какую основную задачу должна решить эта покупка в вашей жизни?»</li>
+            <li>«Где вы сейчас живёте — снимаете или своё жильё? Сколько платите в месяц?»</li>
+            <li>«Кто физически будет жить в этой квартире?»</li>
+            <li>«Какие ожидания по срокам сдачи? Готовы подождать 1-2 года ради выгодной цены?»</li>
+          </ul>
+          <div class="highlight-box-emerald">
+            <strong>Инсайт:</strong> Клиент покупает безопасность семьи или личные границы, а не квадратные метры.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 9: JTBD Case 1 - From Rent to Own -->
+    <div class="slide" id="slide9">
+      <h2>🧩 Диалог: Из аренды — в своё жильё</h2>
+      <div class="card">
+        <h3>Кейс: Молодая семья с ребенком. Ищут «однушку до 6 млн».</h3>
+        <table class="dialogue-table">
+          <tr>
+            <td width="20%"><span class="actor-name actor-client">Клиент</span></td>
+            <td><em>«Сыну два года, места мало в съемной. Да и надоело платить чужому дяде».</em></td>
+          </tr>
+          <tr>
+            <td><span class="actor-name actor-fisherman">Рыбак</span></td>
+            <td><span class="actor-fisherman">«Отлично, у меня есть классная однушка 38 кв.м. Там большая кухня, вам понравится!»</span> (Продает бетонные стены).</td>
+          </tr>
+          <tr>
+            <td><span class="actor-name actor-navigator">Navigator</span></td>
+            <td><strong>«Понимаю вас. А расскажите, с какими сложностями сталкиваетесь в аренде, кроме переплаты? Хозяин квартиры специфический, приходит с проверками. Боимся, что осенью выселит, а у нас садик рядом привязан. То есть вам важно создать место, откуда вас никто не попросит уйти, чтобы вы спокойно планировали жизнь на 5-10 лет вперед? Именно так! Тогда при подборе мы сделаем так, чтобы платёж по ипотеке был равен вашей аренде, а садик был прямо во дворе. Логично?»</strong></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- SLIDE 10: JTBD Case 2 - Expansion -->
+    <div class="slide" id="slide10">
+      <h2>🧩 Диалог: Расширение площади (Мир в семье)</h2>
+      <div class="card">
+        <h3>Кейс: Семья с двумя детьми (8 и 14 лет). Продают хрущевку-двушку.</h3>
+        <table class="dialogue-table">
+          <tr>
+            <td width="20%"><span class="actor-name actor-client">Клиент</span></td>
+            <td><em>«Дети растут, им тесно в одной комнате. Постоянно ссорятся, нам с мужем хочется покоя».</em></td>
+          </tr>
+          <tr>
+            <td><span class="actor-name actor-fisherman">Рыбак</span></td>
+            <td><span class="actor-fisherman">«Вот отличная трехкомнатная в панельке, комнаты изолированные, район зеленый. Надо брать!»</span> (Продает изолированные комнаты).</td>
+          </tr>
+          <tr>
+            <td><span class="actor-name actor-navigator">Navigator</span></td>
+            <td><strong>«Согласен, разнополые дети в одной комнате — это конфликт. А как сейчас строится ваш обычный вечер? Старший учит уроки под крики младшего, муж на кухне в телефоне, все раздражены. То есть вам важно, чтобы у каждого члена семьи появилось личное закрытое пространство, чтобы в доме воцарились мир и спокойствие? Да, иначе мы с мужем разведемся. Отлично. Тогда мы смотрим планировки-распашонки с разнесенными детскими и мастер-спальней для вас с мужем. Идем по этому пути?»</strong></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- SLIDE 11: JTBD Case 3 - Investments -->
+    <div class="slide" id="slide11">
+      <h2>🧩 Диалог: Инвестиции (Надежный сейф)</h2>
+      <div class="card">
+        <h3>Кейс: Клиент с 5 млн рублей наличными. Хочет «куда-то вложить».</h3>
+        <table class="dialogue-table">
+          <tr>
+            <td width="20%"><span class="actor-name actor-client">Клиент</span></td>
+            <td><em>«Депозиты сейчас хорошие, но банкам доверия нет, инфляция все сожрет. Хочу реальный кирпич».</em></td>
+          </tr>
+          <tr>
+            <td><span class="actor-name actor-fisherman">Рыбак</span></td>
+            <td><span class="actor-fisherman">«Инвестиции в недвижимость — это супер! Вот ЖК на окраине, обещают 30% годовых к сдаче, давайте бронировать!»</span> (Предлагает риск ради гипотетической маржи).</td>
+          </tr>
+          <tr>
+            <td><span class="actor-name actor-navigator">Navigator</span></td>
+            <td><strong>«Игорь, то есть ваша цель сейчас — не столько спекулятивно заработать миллионы за полгода, сколько спрятать свои сбережения в надежный сейф, который защитит деньги от инфляции и при необходимости легко вернется обратно в наличные? Да, мне главное не потерять то, что заработано. В таком случае мы исключаем долгострои на окраинах. Смотрим только топ-застройщиков, готовые локации и ликвидные евро-однокомнатные лоты в дефиците. Логично?»</strong></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- SLIDE 12: Step 4 - Transition to Meeting -->
+    <div class="slide" id="slide12">
+      <h2>📊 ШАГ 4: Переход к встрече через «Финмодель»</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Алгоритм действий:</h3>
+          <ul>
+            <li><strong>Фиксация данных:</strong> Подтверждаем, что услышали финансовые рамки и JTBD-задачу клиента.</li>
+            <li><strong>Экспертная пауза:</strong> Объясняем, что берем время на ручную работу — связаться с застройщиками, проверить остатки квартир и условия спецпрограмм.</li>
+            <li><strong>Связка:</strong> Продаем созвон/встречу не ради «поговорить», а для презентации сравнительного анализа (Финмодели) и построения <strong>Маршрутной карты</strong>.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Скрипт назначения встречи:</h3>
+          <div class="highlight-box">
+            «[Имя], вводные зафиксировал. ПВ [сумма], платёж до [сумма], в приоритете распашонка. Что делаю дальше: <br>
+            1. Делаю полный аудит рынка под ваш запрос.<br>
+            2. Лично свяжусь с застройщиками по реальному наличию и ценам.<br>
+            3. Проверю новые спецпрограммы рассрочек и траншей для снижения платежа.<br><br>
+            Давайте завтра созвонимся на 15 минут, я покажу расчёты. И под вариант-фаворит я составлю для нас <strong>Маршрутную карту</strong>: куда, когда и зачем мы едем смотреть объекты вживую. Завтра в первой половине дня или ближе к вечеру удобнее?»
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 13: Step 5 - First Meeting & Showings -->
+    <div class="slide" id="slide13">
+      <h2>🤝 ШАГ 5: Первая встреча и выезд на тест-драйв</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Сценарий встречи (30-45 минут)</h3>
+          <ul>
+            <li><strong>Установка рамки:</strong> «Мы проделали подготовительную работу, оцифровали задачу и отсеяли 90% рынка Уфы. Осталось 3 идеальных варианта. Задача сегодня — сравнить их, убрать лишнее и утвердить маршрут».</li>
+            <li><strong>Презентация компромиссов:</strong> Честно озвучиваем плюсы и минусы каждого ЖК (шумная улица, сдача позже на полгода). Это укрепляет доверие к эксперту.</li>
+            <li><strong>Продажа Маршрутной карты:</strong> «На бумаге мы все разобрали. Теперь тест-драйв вживую. В субботу едем смотреть ЖК Б и ЖК В. Оценим качество стройки, зайдем в шоурум, пощупаем локацию. В 11:00 или в 14:00 удобнее?»</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Задачи выезда на стройку:</h3>
+          <ul>
+            <li><strong>Прочувствовать застройщика:</strong> Масштаб проекта, качество отделки холлов и отношение к деталям.</li>
+            <li><strong>Понять локацию:</strong> Увидеть реальное окружение, развязки и примерить будущий образ жизни ногами.</li>
+          </ul>
+          <div class="highlight-box-emerald" style="margin-top: 15px;">
+            <strong>Критический шаг:</strong> Сразу после встречи фиксируем уникальность клиента в CRM застройщиков. Это закрепляет его за вами и гарантирует сохранение партнерских условий.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 14: Homework Assignment -->
+    <div class="slide" id="slide14">
+      <h2>📝 Домашнее задание: Портрет клиента по методике JTBD & LTV</h2>
+      <p>Опишите 3 последние закрытые сделки в формате последовательного рассказа-кейса, ответив на 10 вопросов:</p>
+      
+      <div class="grid-3">
+        <div class="card" style="padding: 15px 20px;">
+          <h3 style="font-size: 1.1rem; margin-bottom: 8px;">1. Старт и JTBD</h3>
+          <ul style="font-size: 0.85rem;">
+            <li style="margin-bottom: 6px;">Какое событие произошло перед поиском? (Триггер)</li>
+            <li style="margin-bottom: 6px;">Как долго думали до этого и почему?</li>
+            <li style="margin-bottom: 6px;">На какую «работу» наняли квартиру? (Суть JTBD)</li>
+            <li style="margin-bottom: 6px;">Каков худший сценарий при отказе от покупки?</li>
+          </ul>
+        </div>
+        <div class="card" style="padding: 15px 20px;">
+          <h3 style="font-size: 1.1rem; margin-bottom: 8px;">2. Математика и Выбор</h3>
+          <ul style="font-size: 0.85rem;">
+            <li style="margin-bottom: 6px;">Какой фин. показатель был главным? (Платёж, ПВ, цена)</li>
+            <li style="margin-bottom: 6px;">Какая фин. схема сработала в итоге?</li>
+            <li style="margin-bottom: 6px;">С какими альтернативами сравнивал клиент?</li>
+            <li style="margin-bottom: 6px;">Какое сомнение мешало и как его сняли?</li>
+          </ul>
+        </div>
+        <div class="card" style="padding: 15px 20px;">
+          <h3 style="font-size: 1.1rem; margin-bottom: 8px;">3. Экспертность и LTV</h3>
+          <ul style="font-size: 0.85rem;">
+            <li style="margin-bottom: 6px;">В какой момент клиент доверился вам как независимому эксперту?</li>
+            <li style="margin-bottom: 6px;">Каков потенциальный LTV этого клиента на ближайшие 5 лет в деньгах?</li>
+          </ul>
+          <div class="highlight-box-emerald" style="padding: 10px; margin-top: 10px; font-size: 0.8rem;">
+            <strong>Результат:</strong> Осознание ценности фин. схем, болей клиентов и оцифровка LTV.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom controls panel -->
+  <div class="controls-panel">
+    <div class="slide-counter" id="slideCounter">Слайд 1 из 14</div>
+    <div style="display: flex; gap: 15px; align-items: center;">
+      <select class="slide-select" id="slideSelect" onchange="jumpToSlide(this.value)">
+        <option value="1">1. Титульный слайд</option>
+        <option value="2">2. Парадигма: LTV клиента</option>
+        <option value="3">3. Логика процесса</option>
+        <option value="4">4. Шаг 1: Снятие барьера</option>
+        <option value="5">5. Шаг 1: Речевые модули</option>
+        <option value="6">6. Шаг 2: Финансовый аудит</option>
+        <option value="7">7. Кейс: Продажа аудита</option>
+        <option value="8">8. Шаг 3: JTBD-Диагностика</option>
+        <option value="9">9. Кейс: Из аренды в своё</option>
+        <option value="10">10. Кейс: Расширение площади</option>
+        <option value="11">11. Кейс: Инвестиции как сейф</option>
+        <option value="12">12. Шаг 4: Переход к встрече</option>
+        <option value="13">13. Шаг 5: Встреча и тест-драйв</option>
+        <option value="14">14. Домашнее задание по JTBD & LTV</option>
+      </select>
+      <button class="btn btn-outline" id="prevBtn" onclick="prevSlide()" disabled>Назад</button>
+      <button class="btn btn-primary" id="nextBtn" onclick="nextSlide()">Вперед</button>
+    </div>
+  </div>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 14;
+
+    function updateProgressBar() {
+      const percentage = ((currentSlide - 1) / (totalSlides - 1)) * 100;
+      document.getElementById('progressBar').style.width = percentage + '%';
+    }
+
+    function updateCounter() {
+      document.getElementById('slideCounter').textContent = `Слайд ${currentSlide} из ${totalSlides}`;
+      document.getElementById('slideSelect').value = currentSlide;
+    }
+
+    function updateButtons() {
+      document.getElementById('prevBtn').disabled = currentSlide === 1;
+      document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+    }
+
+    function showSlide(slideNumber) {
+      document.querySelectorAll('.slide').forEach(slide => {
+        slide.classList.remove('active');
+      });
+      document.getElementById('slide' + slideNumber).classList.add('active');
+      
+      currentSlide = slideNumber;
+      updateProgressBar();
+      updateCounter();
+      updateButtons();
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        showSlide(currentSlide + 1);
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        showSlide(currentSlide - 1);
+      }
+    }
+
+    function jumpToSlide(slideNumber) {
+      showSlide(parseInt(slideNumber));
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(event) {
+      if (event.code === 'ArrowRight' || event.code === 'Space') {
+        event.preventDefault();
+        nextSlide();
+      } else if (event.code === 'ArrowLeft') {
+        event.preventDefault();
+        prevSlide();
+      }
+    });
+
+    // Initialize progress bar
+    updateProgressBar();
+  </script>
+</body>
+</html>

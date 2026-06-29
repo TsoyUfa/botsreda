@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карусель Instagram: Бензиновая паника и 6 эпизодов ажиотажа</title>
+    
+    <!-- Подключаем современные шрифты Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==========================================
+           1. ДИЗАЙН-СИСТЕМА И БАЗОВЫЕ НАСТРОЙКИ
+           ========================================== */
+        :root {
+            --bg-dark: #0F0F11;
+            --slide-bg: #121214;
+            --color-white: #FFFFFF;
+            --color-gray-light: #F3F4F6;
+            --color-gray-mid: #9CA3AF;
+            --color-gray-dark: #374151;
+            
+            /* Главный акцент (Яркая фуксия) */
+            --color-fuchsia: #FF007F;
+            --color-fuchsia-glow: rgba(255, 0, 127, 0.4);
+            
+            /* Вторичный акцент (Неоново-лаймовый) */
+            --color-lime: #D2FF00;
+            --color-lime-glow: rgba(210, 255, 0, 0.4);
+            
+            --font-header: 'Montserrat', -apple-system, sans-serif;
+            --font-body: 'Inter', -apple-system, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-dark);
+            color: var(--color-white);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 0, 127, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(210, 255, 0, 0.03) 0%, transparent 40%);
+        }
+
+        /* Контейнер рабочей зоны (Десктопный вид: Карусель + Пост рядом) */
+        .workspace {
+            display: flex;
+            gap: 40px;
+            max-width: 1050px;
+            width: 100%;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        /* ==========================================
+           2. СТИЛИЗАЦИЯ СМАРТФОНА / КАРУСЕЛИ
+           ========================================== */
+        .phone-mockup {
+            width: 420px;
+            background: #1C1C1E;
+            border-radius: 48px;
+            padding: 12px;
+            box-shadow: 
+                0px 25px 50px -12px rgba(0, 0, 0, 0.5),
+                0 0 0 4px #2C2C2E,
+                0 0 0 12px #1C1C1E,
+                0 0 0 13px #3A3A3C;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        /* Динамик / Камера сверху (Dynamic Island style) */
+        .phone-island {
+            width: 110px;
+            height: 28px;
+            background: #000;
+            border-radius: 20px;
+            position: absolute;
+            top: 22px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+
+        .phone-screen {
+            width: 100%;
+            background: #000;
+            border-radius: 38px;
+            overflow: hidden;
+            position: relative;
+            aspect-ratio: 4 / 5.5; /* Соотношение сторон под Instagram карусель 4:5 + элементы интерфейса */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Хедер поста (Аватар + Никнейм) */
+        .post-header {
+            display: flex;
+            align-items: center;
+            padding: 45px 20px 12px 20px; /* Увеличенный верхний паддинг под челку */
+            background: #000;
+            z-index: 10;
+        }
+
+        .post-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            padding: 2px;
+            margin-right: 10px;
+        }
+
+        .post-avatar-inner {
+            width: 100%;
+            height: 100%;
+            background: #222;
+            border-radius: 50%;
+            background-image: url('5. Контент создание/02 Instagram и Stories/carousel_assets/anton_presenting.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .post-user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .post-username {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--color-white);
+        }
+
+        .post-location {
+            font-size: 10px;
+            color: var(--color-gray-mid);
+        }
+
+        /* Область слайдов (Соотношение ровно 4:5) */
+        .carousel-view {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4 / 5; /* Строго 4:5 */
+            background: #050505;
+            overflow: hidden;
+        }
+
+        .carousel-slides {
+            display: flex;
+            width: 1000%; /* 10 слайдов */
+            height: 100%;
+            transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* Базовый класс слайда */
+        .slide {
+            width: 10%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px 30px;
+            z-index: 1;
+            user-select: none;
+        }
+
+        /* Размытые и затемненные фоны */
+        .slide-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            background-size: cover;
+            background-position: center;
+            /* Размытие для сокрытия старого текста согласно ТЗ */
+            filter: blur(16px) brightness(0.35) scale(1.15);
+            transition: filter 0.3s ease;
+        }
+
+        /* Отдельный стиль фонов для чистых новых фото (Слайды 1 и 10) без размытия */
+        .slide-bg.clear-photo {
+            filter: brightness(0.4) contrast(1.05);
+        }
+
+        /* Графический монохромный фон с точечной сеткой (Слайды 2 и 6) */
+        .slide.graphic-slide {
+            background-color: #0A0A0C;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+        }
+
+        /* ==========================================
+           3. ТИПОГРАФИКА И ЭЛЕМЕНТЫ ВНУТРИ СЛАЙДОВ
+           ========================================== */
+        
+        /* Никнейм автора в левом верхнем углу слайда */
+        .slide-author {
+            font-family: var(--font-body);
+            font-size: 11px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 0.05em;
+            position: absolute;
+            top: 24px;
+            left: 30px;
+            z-index: 5;
+        }
+
+        /* Номер слайда (Пагинация) в правом верхнем углу */
+        .slide-page-counter {
+            font-family: var(--font-body);
+            font-size: 11px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 0.05em;
+            position: absolute;
+            top: 24px;
+            right: 30px;
+            z-index: 5;
+        }
+
+        /* Заголовок слайда: Вытянутый, узкий, геометрический гротеск капсом */
+        .slide-header {
+            font-family: var(--font-header);
+            font-size: 27px;
+            font-weight: 300; /* Thin/Light начертание по ТЗ */
+            line-height: 1.25;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            margin-top: 20px;
+            color: var(--color-white);
+            text-align: left;
+            z-index: 2;
+        }
+
+        /* Выделение жирного в заголовках */
+        .slide-header strong {
+            font-weight: 700;
+        }
+
+        /* Контентная область слайда (посередине/снизу) */
+        .slide-body {
+            margin-top: auto;
+            margin-bottom: 20px;
+            z-index: 2;
+            text-align: left;
+        }
+
+        /* Текстовые блоки (Дескрипторы): обычный читаемый шрифт */
+        .slide-desc {
+            font-family: var(--font-body);
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .slide-desc p {
+            margin-bottom: 12px;
+        }
+
+        .slide-desc p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Выделение жирного текста */
+        .slide-desc strong {
+            font-weight: 700;
+            color: var(--color-white);
+        }
+
+        /* ==========================================
+           4. АКЦЕНТНЫЕ ПЛАШКИ-МАРКЕРЫ (ГВОЗДЬ СТИЛЯ)
+           ========================================== */
+        
+        /* Базовая плашка */
+        .plate {
+            display: inline-block;
+            padding: 2px 10px;
+            margin: 2px 0;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+
+        /* Плашка фуксии (розовая) -> белый текст */
+        .plate.fuchsia {
+            background-color: var(--color-fuchsia);
+            color: var(--color-white);
+            box-shadow: 0 4px 15px var(--color-fuchsia-glow);
+        }
+
+        /* Плашка неоново-лаймовая -> темный текст */
+        .plate.lime {
+            background-color: var(--color-lime);
+            color: #0A0A0C;
+            box-shadow: 0 4px 15px var(--color-lime-glow);
+        }
+
+        /* Текст-ссылка / важная фраза розовым цветом */
+        .text-pink {
+            color: #FF00A8;
+            font-weight: 600;
+        }
+
+        /* Призыв к действию внизу обложки (Слайд 1) */
+        .slide-footer-cta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: var(--font-body);
+            font-size: 12px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8);
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            padding-top: 15px;
+            width: 100%;
+            z-index: 2;
+        }
+
+        .cta-arrow {
+            font-size: 16px;
+            color: var(--color-fuchsia);
+            animation: bounceRight 1.5s infinite ease-in-out;
+        }
+
+        @keyframes bounceRight {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(4px); }
+        }
+
+        /* ==========================================
+           5. СПЕЦИФИЧЕСКИЙ ДИЗАЙН ОТДЕЛЬНЫХ СЛАЙДОВ
+           ========================================== */
+        
+        /* Слайд 4: Хроника ажиотажа (Таймлайн) */
+        .timeline-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: auto;
+            position: relative;
+            padding-left: 20px;
+            border-left: 2px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .timeline-node {
+            position: relative;
+            font-size: 13.5px;
+            line-height: 1.4;
+        }
+
+        .timeline-node::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background-color: var(--color-fuchsia);
+            border: 2px solid #FFF;
+            border-radius: 50%;
+            position: absolute;
+            left: -26px;
+            top: 4px;
+            box-shadow: 0 0 8px var(--color-fuchsia-glow);
+        }
+
+        .timeline-node:last-child::before {
+            background-color: var(--color-lime);
+            box-shadow: 0 0 8px var(--color-lime-glow);
+        }
+
+        .timeline-node strong {
+            color: var(--color-white);
+            font-family: var(--font-header);
+            font-size: 13.5px;
+            margin-right: 6px;
+        }
+
+        /* Слайд 8: 4 Инструмента расчета */
+        .tools-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: auto;
+        }
+
+        .tool-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 10px 14px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13.5px;
+            line-height: 1.4;
+            backdrop-filter: blur(5px);
+        }
+
+        .tool-item span {
+            font-size: 18px;
+        }
+
+        /* ==========================================
+           6. ИНТЕРФЕЙС УПРАВЛЕНИЯ КАРУСЕЛЬЮ (ФУТЕР ПОСТА)
+           ========================================== */
+        .post-actions {
+            background: #000;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 10;
+        }
+
+        .action-icons {
+            display: flex;
+            gap: 16px;
+        }
+
+        .action-icon {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            opacity: 0.95;
+            transition: transform 0.1s ease;
+        }
+
+        .action-icon:active {
+            transform: scale(0.9);
+        }
+
+        /* Индикаторы слайдов (Instagram dots) */
+        .post-pagination-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: var(--color-gray-dark);
+            transition: all 0.2s ease;
+        }
+
+        .dot.active {
+            background-color: #0095f6; /* Инстаграм-голубой для активной точки */
+            transform: scale(1.2);
+        }
+
+        .dot.sibling {
+            transform: scale(0.8);
+        }
+
+        /* Стрелки навигации поверх карусели */
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: #FFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 20;
+            font-size: 16px;
+            transition: background 0.2s, opacity 0.2s;
+            opacity: 0.8;
+            backdrop-filter: blur(4px);
+        }
+
+        .nav-arrow:hover {
+            background: rgba(0, 0, 0, 0.8);
+            opacity: 1;
+        }
+
+        .nav-arrow.prev {
+            left: 12px;
+        }
+
+        .nav-arrow.next {
+            right: 12px;
+        }
+
+        .nav-arrow.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* ==========================================
+           7. ОПИСАНИЕ ПОСТА (ИНСТАГРАМ-САЙДБАР)
+           ========================================== */
+        .caption-sidebar {
+            flex-grow: 1;
+            background: #1C1C1E;
+            border-radius: 28px;
+            padding: 30px;
+            border: 1px solid #2C2C2E;
+            max-height: 690px;
+            overflow-y: auto;
+            box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Стилизация скроллбара */
+        .caption-sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .caption-sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .caption-sidebar::-webkit-scrollbar-thumb {
+            background: #3A3A3C;
+            border-radius: 3px;
+        }
+        .caption-sidebar::-webkit-scrollbar-thumb:hover {
+            background: #48484A;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #2C2C2E;
+        }
+
+        .sidebar-title-block h2 {
+            font-family: var(--font-header);
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .sidebar-title-block p {
+            font-size: 12px;
+            color: var(--color-lime);
+            font-weight: 500;
+        }
+
+        .caption-content {
+            font-size: 14px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .caption-content p {
+            margin-bottom: 16px;
+        }
+
+        .caption-content blockquote {
+            border-left: 3px solid var(--color-fuchsia);
+            padding-left: 15px;
+            margin: 20px 0;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .caption-content strong {
+            color: var(--color-white);
+            font-weight: 600;
+        }
+
+        .caption-content ul {
+            list-style: none;
+            margin: 15px 0;
+            padding-left: 5px;
+        }
+
+        .caption-content li {
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .caption-content li::before {
+            content: '➔';
+            position: absolute;
+            left: 0;
+            color: var(--color-fuchsia);
+            font-size: 12px;
+        }
+
+        .caption-hashtags {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid #2C2C2E;
+            color: #0095f6;
+            font-weight: 500;
+        }
+
+        /* Адаптивность для мобильных */
+        @media (max-width: 900px) {
+            body {
+                padding: 20px 10px;
+            }
+            .workspace {
+                flex-direction: column;
+                align-items: center;
+                gap: 30px;
+            }
+            .phone-mockup {
+                width: 100%;
+                max-width: 400px;
+            }
+            .caption-sidebar {
+                width: 100%;
+                max-width: 400px;
+                max-height: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="workspace">
+        
+        <!-- 📱 МАКЕТ ТЕЛЕФОНА С ИНТЕРАКТИВНОЙ КАРУСЕЛЬЮ -->
+        <div class="phone-mockup">
+            <div class="phone-island"></div>
+            
+            <div class="phone-screen">
+                
+                <!-- Шапка Instagram поста -->
+                <div class="post-header">
+                    <div class="post-avatar">
+                        <div class="post-avatar-inner"></div>
+                    </div>
+                    <div class="post-user-info">
+                        <span class="post-username">anton_tsoy</span>
+                        <span class="post-location">Инвестиции in недвижимость</span>
+                    </div>
+                </div>
+                
+                <!-- Сама карусель слайдов -->
+                <div class="carousel-view">
+                    
+                    <!-- Стрелки переключения слайдов -->
+                    <button class="nav-arrow prev hidden" id="btnPrev">‹</button>
+                    <button class="nav-arrow next" id="btnNext">›</button>
+                    
+                    <div class="carousel-slides" id="slidesWrapper">
+                        
+                        <!-- 📌 Слайд 1: Обложка (Изображение 0.jpeg) -->
+                        <div class="slide">
+                            <div class="slide-bg clear-photo" style="background-image: url('5. Контент создание/02 Instagram и Stories/carousel_assets/anton_presenting.jpg');"></div>
+                            <span class="slide-author">@anton_tsoy</span>
+                            <span class="slide-page-counter">1/10</span>
+                            
+                            <h1 class="slide-header">
+                                <span class="plate fuchsia">БЕНЗИН В КАНИСТРАХ</span><br>И 6 ЭПИЗОДОВ АЖИОТАЖА В НЕДВИЖИМОСТИ
+                            </h1>
+                            
+                            <div class="slide-footer-cta">
+                                <span>Как FOMO обходится вам в миллионы переплаты</span>
+                                <span class="cta-arrow">→</span>
+                            </div>
+                        </div>
+                        
+                        <!-- 📌 Слайд 2: Психология очереди (Графический) -->
+                        <div class="slide graphic-slide">
+                            <span class="slide-author">@anton_tsoy</span>
+                            <span class="slide-page-counter">2/10</span>
+                            
+                            <h2 class="slide-header">Психология<br><span class="plate lime">очереди</span></h2>
+                            
+                            <div class="slide-body">
+                                <div class="slide-desc">
+                                    <p>Видите очереди на заправках? Люди заправляют бак и везут еще 50 литров в канистрах. <span class="text-pink">«Впрок»</span>.</p>
+                                    <p>Это классический страх опоздать (<strong>FOMO</strong>). Паника толпы сама создает дефицит и рост цен.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 📌 Слайд 3: Знакомый сценарий (Изображение 2.jpeg) -->
+                        <div class="slide">
+                            <div class="slide-bg" style="background-image: url('5. Контент создание/02 Instagram и Stories/carousel_assets/Изображение JPEG-4F94-9A54-F2-2.jpeg');"></div>
+                            <span class="slide-author">@anton_tsoy</span>
+                            <span class="slide-page-counter">3/10</span>
+                            
+                            <h2 class="slide-header">Знакомый<br><span class="plate fuchsia">сценарий?</span></h2>
+                            
+                            <div class="slide-body">
+                                <div class="slide-desc">
+                                    <p>В недвижимости работает та же схема.</p>
+                                    <p>За последние 6 лет мы прошли <strong>6 крупных эпизодов ажиотажа</strong>, когда люди скупали бетон «на всякий случай».</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 📌 Слайд 4: Хроника ажиотажа (Изображение 3.jpeg) -->
+                        <div class="slide">
+                            <div class="slide-bg" style="background-image: url('5. Контент создание/02 Instagram и Stories/carousel_assets/Изображение JPEG-4F94-9A54-F2-3.jpeg');"></div>
+                            <span class="slide-author">@anton_tsoy</span>
+                            <span class="slide-page-counter">4/10</span>
+                            
+                            <h2 class="slide-header">Хроника<br><span class="plate fuchsia">ажиотажа</span></h2>
+                            
+                            <div class="timeline-container">
+                                <div class="timeline-node"><strong>2020:</strong> Льготная ипотека под 6.5%</div>
+                                <div class="timeline-node"><strong>2022:</strong> Рост ставки до 20% / Спасение рублей</div>
+                                <div class="timeline-node"><strong>2022 (дек):</strong> Слухи о закрытии господдержки</div>
+                                <div class="timeline-node"><strong>2023:</strong> Повышение ПВ до 20%</div>
+                                <div class="timeline-node"><strong>2024:</strong> Отмена господдержки под 8%</div>
+                                <div class="timeline-node"><strong>2025/2026:</strong> Борьба за лимиты Семейной ипотеки</div>
+                            </div>
+                        </div>
+                        
+                        <!-- 📌 Слайд 5: Цена эмоций (Изображение 4.jpeg) -->
+                        <div class="slide">
+                            <div class="slide-bg" style="background-image: url('5. Контент создание/02 Instagram и Stories/carousel_assets/Изображение JPEG-4F94-9A54-F2-4.jpeg');"></div>
+                            <span class="slide-author">@anton_tsoy</span>
+                            <span class="slide-page-counter">5/10</span>
+                            
+                            <h2 class="slide-header"><span class="plate fuchsia">Цена эмоций</span></h2>
+                            
+                            <div class="slide-body">
+                                <div class="slide-desc">
+                                    <p>Видя панику, застройщики мгновенно поднимали цены на <strong>15–20%</strong>.</p>
+                                    <p>Бензин из канистры сгорит за пару недель.</p>
+                                    <p>А за переплаченный на панике бетон вы платите банку <span class="text-pink">следующие 30 лет</span>.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 📌 Слайд 6: Лавочка закрылась (Графический) -->
+                        <div class="slide graphic-slide">
+                            <span class="slide-author">@anton_tsoy</span>
+                            <span class="slide-page-counter">6/10</span>
+                            
+                            <h2 class="slide-header">Лавочка<br><span class="plate lime">закрылась</span></h2>
+                            
+                            <div class="slide-body">
+                                <div class="slide-desc">
+                                    <p>Осознайте факт: в России застройщиков <strong>больше поддерживать не будут</strong>.</p>
+                                    <p>Их поддерживали 6 долгих лет.</p>
+                                    <p>Теперь они <strong>сами по себе</strong> — со своим продуктом и своими партнерами.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 📌 Слайд 7: Стагнация и расчет (Изображение 6.jpeg) -->
+                        <div class="slide">
+                            <div class="slide-bg" style="background-image: url('5. Контент создание/02 Instagram и Stories/carousel_assets/Изображение JPEG-4F94-9A54-F2-6.jpeg');"></div>
+                            <span class="slide-author">@anton_tsoy</span>
+                            <span class="slide-page-counter">7/10</span>
+                            
+                            <h2 class="slide-header">Стагнация<br>и <span class="plate fuchsia">расчет</span></h2>
+                            
+                            <div class="slide-body">
+                                <div class="slide-desc">
+                                    <p>Рынок успокоился, ажиотаж ушел и начинается <strong>стагнация</strong>.</p>
+                                    <p>Теперь важно только одно — правильно уметь рассчитать <span class="text-pink">финансовую модель покупки</span>.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 📌 Слайд 8: 4 инструмента расчета (Изображение 7.jpeg) -->
+                        <div class="slide">
+                            <div class="slide-bg" style="background-image: url('5. Контент создание/02 Instagram и Stories/carousel_assets/Изображение JPEG-4F94-9A54-F2-7.jpeg');"></div>
+                            <span class="slide-author">@anton_tsoy</span>
+                            <span class="slide-page-counter">8/10</span>
+                            
+                            <h2 class="slide-header">4 ИНСТРУМЕНТА<br><span class="plate fuchsia">РАСЧЕТА</span></h2>
+                            
+                            <div class="tools-list">
+                                <div class="tool-item"><span>1️⃣</span> <div><strong>Траншевая ипотека</strong> (платеж 1800 ₽ до сдачи)</div></div>
+                                <div class="tool-item"><span>2️⃣</span> <div><strong>Субсидированные программы</strong> от девелоперов</div></div>
+                                <div class="tool-item"><span>3️⃣</span> <div><strong>Альтернативные рассрочки</strong></div></div>
+                                <div class="tool-item"><span>4️⃣</span> <div><strong>Лизинг недвижимости</strong> (уже на подходе)</div></div>
+                            </div>
+                        </div>
+                        
+                        <!-- 📌 Слайд 9: Рассрочка на 10 лет (Изображение 8.jpeg) -->
+                        <div class="slide">
+                            <div class="slide-bg" style="background-image: url('5. Контент создание/02 Instagram и Stories/carousel_assets/Изображение JPEG-4F94-9A54-F2-8.jpeg');"></div>
+                            <span class="slide-author">@anton_tsoy</span>
+                            <span class="slide-page-counter">9/10</span>
+                            
+                            <h2 class="slide-header">Рассрочка<br>на <span class="plate fuchsia">10 лет</span></h2>
+                            
+                            <div class="slide-body">
+                                <div class="slide-desc">
+                                    <p>Без господдержки застройщики кардинально видоизменят рассрочки.</p>
+                                    <p>Скоро нормой станут <strong>долгие рассрочки на 5</strong>, а возможно, и на <span class="text-pink">10 лет напрямую от девелопера</span>.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 📌 Слайд 10: Итог / CTA (Изображение 9.jpeg) -->
+                        <div class="slide">
+                            <div class="slide-bg clear-photo" style="background-image: url('5. Контент создание/02 Instagram и Stories/carousel_assets/anton_sitting.jpg');"></div>
+                            <span class="slide-author">@anton_tsoy</span>
+                            <span class="slide-page-counter">10/10</span>
+                            
+                            <h2 class="slide-header">ВЫКЛЮЧИТЕ<br><span class="plate fuchsia">ПАНИКУ</span></h2>
+                            
+                            <div class="slide-body">
+                                <div class="slide-desc">
+                                    <p>Включите калькулятор. Хватит покупать на эмоциях.</p>
+                                    <p>Напишите в директ кодовое слово <span class="text-pink">«РАСЧЕТ»</span>.</p>
+                                    <p>Бесплатно соберем финансовую модель вам, вашим клиентам или партнерам.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                <!-- Instagram Нижняя панель действий (Лайк, Коммент, Директ + Точки) -->
+                <div class="post-actions">
+                    <div class="action-icons">
+                        <!-- SVG Сердце (Лайк) -->
+                        <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="#FFF" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                        <!-- SVG Бабл (Коммент) -->
+                        <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="#FFF" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                        <!-- SVG Самолетик (Директ) -->
+                        <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="#FFF" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    </div>
+                    
+                    <!-- Индикаторы пагинации -->
+                    <div class="post-pagination-dots" id="dotsWrapper">
+                        <div class="dot active"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                    
+                    <!-- SVG Закладка -->
+                    <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="#FFF" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+                </div>
+                
+            </div>
+        </div>
+        
+        <!-- 📝 САЙДБАР С ОПИСАНИЕМ ПОСТА -->
+        <div class="caption-sidebar">
+            <div class="sidebar-header">
+                <div class="post-avatar" style="margin-right: 15px; width: 38px; height: 38px;">
+                    <div class="post-avatar-inner"></div>
+                </div>
+                <div class="sidebar-title-block">
+                    <h2>Антон Цой</h2>
+                    <p>Текст публикации под карусель</p>
+                </div>
+            </div>
+            
+            <div class="caption-content">
+                <p><strong>Когда все бегут в одну сторону - умные люди останавливаются и включают калькулятор.</strong></p>
+                
+                <p>На примере очередей за бензином отлично видно, как работает FOMO (страх упустить выгоду). Люди забивают багажники канистрами «впрок», создавая искусственный дефицит и разгоняя цены.</p>
+                
+                <blockquote>
+                    В недвижимости за 6 лет господдержки мы прошли ровно 6 таких «канистр» паники. Застройщики переписывали ценники вверх на 15-20%, а люди хватали квартиры на самом пике ажиотажа.
+                </blockquote>
+                
+                <p>Но бензин вы прокатаете за пару недель. А ипотеку за эмоционально купленный бетон будете платить следующие 30 лет.</p>
+                
+                <p>🔴 <strong>Что важно понять сейчас?</strong><br>
+                Господдержка закончилась. Застройщиков больше поддерживать не будут - их тянули 6 долгих лет. Теперь они предоставлены сами себе, своему продукту и своим партнерам. Рынок остывает и начинает стагнировать.</p>
+                
+                <p>В этих условиях значение имеет только одно - <strong>правильный расчет финансовой модели покупки.</strong></p>
+                
+                <p>Листайте карусель, там подробно расписал 4 ключевых инструмента, которые заменят классическую ипотеку, и почему рассрочки скоро изменятся до неузнаваемости.</p>
+                
+                <p>✉️ <strong>Напишите в директ кодовое слово «РАСЧЕТ».</strong> Мы бесплатно посчитаем финансовую модель вам (как покупателю), вашим клиентам (если вы агент) или партнерам. Спокойно, без паники и на цифрах.</p>
+                
+                <div class="caption-hashtags">
+                    #недвижимость #ипотека #новостройки #аналитикарынка #рассрочка
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- ==========================================
+       8. СКРИПТ УПРАВЛЕНИЯ СЛАЙДЕРОМ
+       ========================================== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const wrapper = document.getElementById('slidesWrapper');
+            const dots = document.querySelectorAll('.dot');
+            const btnPrev = document.getElementById('btnPrev');
+            const btnNext = document.getElementById('btnNext');
+            
+            let currentIndex = 0;
+            const totalSlides = 10;
+            
+            function updateSlider() {
+                // Сдвигаем ленту слайдов (каждый слайд занимает 10% ширины обертки)
+                wrapper.style.transform = `translateX(-${currentIndex * 10}%)`;
+                
+                // Обновляем индикаторы (активную точку)
+                dots.forEach((dot, index) => {
+                    dot.className = 'dot';
+                    if (index === currentIndex) {
+                        dot.classList.add('active');
+                    } else if (Math.abs(index - currentIndex) === 1) {
+                        dot.classList.add('sibling');
+                    }
+                });
+                
+                // Скрываем/показываем стрелки на крайних слайдах
+                if (currentIndex === 0) {
+                    btnPrev.classList.add('hidden');
+                } else {
+                    btnPrev.classList.remove('hidden');
+                }
+                
+                if (currentIndex === totalSlides - 1) {
+                    btnNext.classList.add('hidden');
+                } else {
+                    btnNext.classList.remove('hidden');
+                }
+            }
+            
+            // Клики по кнопкам навигации
+            btnPrev.addEventListener('click', () => {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    updateSlider();
+                }
+            });
+            
+            // Клики по кнопкам навигации
+            btnNext.addEventListener('click', () => {
+                if (currentIndex < totalSlides - 1) {
+                    currentIndex++;
+                    updateSlider();
+                }
+            });
+            
+            // Поддержка кликов по индикаторам (точкам)
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    currentIndex = index;
+                    updateSlider();
+                });
+            });
+            
+            // Поддержка перелистывания клавиатурными стрелками
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft' && currentIndex > 0) {
+                    currentIndex--;
+                    updateSlider();
+                } else if (e.key === 'ArrowRight' && currentIndex < totalSlides - 1) {
+                    currentIndex++;
+                    updateSlider();
+                }
+            });
+
+            // Поддержка свайпов для мобильных устройств (touch events)
+            let touchStartX = 0;
+            let touchEndX = 0;
+            const carouselView = document.querySelector('.carousel-view');
+            
+            carouselView.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+            
+            carouselView.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, { passive: true });
+            
+            function handleSwipe() {
+                const swipeThreshold = 50; // Минимальное расстояние свайпа
+                if (touchStartX - touchEndX > swipeThreshold) {
+                    // Свайп влево -> следующий слайд
+                    if (currentIndex < totalSlides - 1) {
+                        currentIndex++;
+                        updateSlider();
+                    }
+                } else if (touchEndX - touchStartX > swipeThreshold) {
+                    // Свайп вправо -> предыдущий слайд
+                    if (currentIndex > 0) {
+                        currentIndex--;
+                        updateSlider();
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

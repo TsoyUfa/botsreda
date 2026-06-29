@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Презентация: От заявки до встречи (Система продаж Навигатора)</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #050505;
+            --primary-color: #00ff41;
+            --primary-dim: #008f11;
+            --primary-glow: rgba(0, 255, 65, 0.4);
+            --text-main: #e0e0e0;
+            --text-muted: #888888;
+            --glass-bg: rgba(10, 10, 10, 0.8);
+            --glass-border: rgba(0, 255, 65, 0.2);
+            --card-hover: rgba(0, 255, 65, 0.05);
+            --font-mono: 'Share Tech Mono', monospace;
+            --font-sans: 'Inter', sans-serif;
+            --accent-red: #ff3333;
+            --accent-red-glow: rgba(255, 51, 51, 0.4);
+            --accent-cyan: #00e5ff;
+            --accent-cyan-glow: rgba(0, 229, 255, 0.4);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* Matrix Background */
+        #matrix-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.12;
+            transition: opacity 1s ease;
+        }
+
+        /* Scanline Overlay for retro vibe */
+        .scanlines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.25) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Presentation Wrapper */
+        .presentation-container {
+            position: relative;
+            z-index: 3;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 30px;
+        }
+
+        /* Top Bar */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 15px;
+            backdrop-filter: blur(5px);
+        }
+
+        .logo {
+            font-family: var(--font-mono);
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px var(--primary-glow);
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo::before {
+            content: '';
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary-color);
+            box-shadow: 0 0 8px var(--primary-color);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { opacity: 0.4; }
+            to { opacity: 1; }
+        }
+
+        .metadata {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            gap: 15px;
+        }
+
+        .metadata span {
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 4px 10px;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.02);
+        }
+
+        /* Main Slide Viewport */
+        .slide-viewport {
+            flex-grow: 1;
+            position: relative;
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            max-width: 1200px;
+            height: 100%;
+            max-height: 680px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 255, 65, 0.05);
+            border-radius: 12px;
+            backdrop-filter: blur(15px);
+            padding: 35px 40px;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(20px) scale(0.99);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-family: var(--font-mono);
+            color: var(--primary-color);
+            text-shadow: 0 0 8px var(--primary-glow);
+            font-weight: 500;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 15px;
+            letter-spacing: 1px;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+        }
+
+        p {
+            font-size: 1.05rem;
+            line-height: 1.55;
+            color: var(--text-main);
+            margin-bottom: 15px;
+        }
+
+        .text-accent {
+            color: var(--primary-color);
+            font-family: var(--font-mono);
+        }
+
+        .text-danger {
+            color: var(--accent-red);
+            font-family: var(--font-mono);
+            text-shadow: 0 0 8px var(--accent-red-glow);
+        }
+
+        .text-cyan {
+            color: var(--accent-cyan);
+            font-family: var(--font-mono);
+            text-shadow: 0 0 8px var(--accent-cyan-glow);
+        }
+
+        /* Grid layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* Cards & Lists */
+        .card {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 15px;
+        }
+
+        .compare-card {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 22px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .compare-card.danger {
+            border-color: rgba(255, 51, 51, 0.25);
+        }
+
+        .compare-card.danger:hover {
+            border-color: var(--accent-red);
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.15);
+            background: rgba(255, 51, 51, 0.02);
+        }
+
+        .compare-card.success {
+            border-color: rgba(0, 255, 65, 0.25);
+        }
+
+        .compare-card.success:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.15);
+            background: rgba(0, 255, 65, 0.02);
+        }
+
+        ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        li {
+            font-size: 0.95rem;
+            line-height: 1.45;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        li::before {
+            content: '◆';
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+            font-size: 0.8rem;
+        }
+
+        .compare-card.danger li::before {
+            content: '✕';
+            color: var(--accent-red);
+            font-size: 0.9rem;
+            top: -1px;
+        }
+
+        .compare-card.success li::before {
+            content: '✓';
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 0.95rem;
+            top: -1px;
+        }
+
+        /* Title Slide Layout */
+        .slide-title-layout {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            text-align: center;
+        }
+
+        .title-huge {
+            font-size: 3.2rem;
+            margin-bottom: 8px;
+            letter-spacing: 4px;
+            animation: text-glow 2s infinite alternate;
+        }
+
+        @keyframes text-glow {
+            from { text-shadow: 0 0 10px var(--primary-glow); }
+            to { text-shadow: 0 0 25px var(--primary-color), 0 0 5px #fff; }
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            color: var(--text-main);
+            margin-bottom: 35px;
+            font-family: var(--font-mono);
+            opacity: 0.85;
+        }
+
+        .terminal-box {
+            background: rgba(0,0,0,0.65);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 6px;
+            width: 100%;
+            max-width: 650px;
+            font-family: var(--font-mono);
+            text-align: left;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: var(--primary-color);
+        }
+
+        .terminal-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 15px;
+            background: var(--primary-color);
+            animation: cursor-blink 0.8s infinite;
+            vertical-align: middle;
+            margin-left: 4px;
+        }
+
+        @keyframes cursor-blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+
+        /* Buttons & Badges */
+        .btn {
+            background: rgba(0, 255, 65, 0.1);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 12px 30px;
+            font-family: var(--font-mono);
+            font-size: 1.05rem;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(0,255,65,0.1);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn:hover {
+            background: var(--primary-color);
+            color: #000;
+            box-shadow: 0 0 20px var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(0,255,65,0.1);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 4px 10px;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .badge-danger {
+            background: rgba(255,51,51,0.1);
+            color: var(--accent-red);
+            border: 1px solid var(--accent-red);
+        }
+
+        /* Interactive Process Flow */
+        .flowchart-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            max-width: 900px;
+            margin: 15px auto;
+        }
+
+        .flow-step {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 8px;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .flow-step:hover, .flow-step.active {
+            border-color: var(--primary-color);
+            background: var(--card-hover);
+            box-shadow: 0 0 12px rgba(0,255,65,0.1);
+            transform: scale(1.01);
+        }
+
+        .flow-step.active {
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .flow-step-num {
+            font-family: var(--font-mono);
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-right: 15px;
+        }
+
+        .flow-title {
+            font-weight: 600;
+            font-size: 1rem;
+            color: #fff;
+        }
+
+        .flow-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .flow-value {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+
+        .flow-detail-box {
+            margin-top: 15px;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            border-radius: 8px;
+            min-height: 110px;
+        }
+
+        /* LTV Calculator */
+        .ltv-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 35px;
+            align-items: center;
+            height: 100%;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .checkbox-item:hover {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .checkbox-item input {
+            display: none;
+        }
+
+        .checkbox-custom {
+            width: 18px;
+            height: 18px;
+            border: 1px solid var(--primary-color);
+            border-radius: 3px;
+            position: relative;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .checkbox-item input:checked + .checkbox-custom {
+            background: var(--primary-color);
+            box-shadow: 0 0 10px var(--primary-color);
+        }
+
+        .checkbox-item input:checked + .checkbox-custom::after {
+            content: '✓';
+            position: absolute;
+            color: #000;
+            font-weight: bold;
+            font-size: 13px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .checkbox-label {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            font-size: 0.95rem;
+        }
+
+        .checkbox-label span:last-child {
+            font-family: var(--font-mono);
+            color: var(--primary-color);
+        }
+
+        .ltv-result-card {
+            text-align: center;
+            padding: 30px;
+            border: 1px solid var(--primary-color);
+            background: var(--card-hover);
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
+        }
+
+        .ltv-value {
+            font-family: var(--font-mono);
+            font-size: 3rem;
+            color: var(--primary-color);
+            text-shadow: 0 0 15px var(--primary-glow);
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        /* Script terminal box */
+        .script-terminal {
+            background: rgba(0,0,0,0.5);
+            border: 1px dashed var(--glass-border);
+            padding: 20px;
+            border-radius: 6px;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--text-main);
+            position: relative;
+        }
+
+        .script-terminal::before {
+            content: 'TERMINAL SCRIPT';
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--primary-color);
+            position: absolute;
+            top: -8px;
+            left: 15px;
+            background: #0d0d0d;
+            padding: 0 8px;
+            border: 1px solid var(--glass-border);
+            border-radius: 3px;
+        }
+
+        /* Interactive Chats for Dialogues */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .chat-bubble {
+            max-width: 85%;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 0.92rem;
+            line-height: 1.45;
+            position: relative;
+        }
+
+        .chat-bubble.client {
+            background: rgba(0, 229, 255, 0.08);
+            border: 1px solid rgba(0, 229, 255, 0.25);
+            align-self: flex-start;
+        }
+
+        .chat-bubble.client::before {
+            content: 'КЛИЕНТ';
+            position: absolute;
+            top: -16px;
+            left: 5px;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--accent-cyan);
+        }
+
+        .chat-bubble.navigator {
+            background: rgba(0, 255, 65, 0.05);
+            border: 1px solid rgba(0, 255, 65, 0.25);
+            align-self: flex-end;
+            text-align: left;
+        }
+
+        .chat-bubble.navigator::before {
+            content: 'НАВИГАТОР';
+            position: absolute;
+            top: -16px;
+            right: 5px;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--primary-color);
+        }
+
+        .chat-bubble.fisherman {
+            background: rgba(255, 51, 51, 0.05);
+            border: 1px dashed rgba(255, 51, 51, 0.25);
+            align-self: flex-end;
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+
+        .chat-bubble.fisherman::before {
+            content: 'РЫБАК (ОШИБКА)';
+            position: absolute;
+            top: -16px;
+            right: 5px;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--accent-red);
+        }
+
+        .chat-bubble p {
+            margin-bottom: 0;
+            font-size: 0.92rem;
+        }
+
+        /* Financial table */
+        .fin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .fin-table th, .fin-table td {
+            padding: 12px 14px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .fin-table th {
+            font-family: var(--font-mono);
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .highlight-row {
+            background: rgba(0, 255, 65, 0.04);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .highlight-row td {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* JTBD Scenarios Tabs */
+        .tabs-header {
+            display: flex;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.08);
+            color: var(--text-muted);
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+            border-color: rgba(255,255,255,0.25);
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            background: rgba(0, 255, 65, 0.05);
+            box-shadow: 0 0 10px rgba(0,255,65,0.1);
+        }
+
+        .tab-content {
+            display: none;
+            background: rgba(0,0,0,0.25);
+            border: 1px solid rgba(255,255,255,0.03);
+            border-radius: 8px;
+            padding: 25px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Bottom Controls Bar */
+        .footer-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 15px;
+            backdrop-filter: blur(5px);
+        }
+
+        .slide-indicator {
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            color: var(--primary-color);
+            text-shadow: 0 0 5px var(--primary-glow);
+        }
+
+        .slide-select {
+            background-color: rgba(0, 0, 0, 0.6);
+            color: var(--text-main);
+            border: 1px solid var(--glass-border);
+            padding: 6px 12px;
+            border-radius: 4px;
+            outline: none;
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .slide-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .nav-arrows {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: rgba(0,0,0,0.6);
+            border: 1px solid var(--glass-border);
+            color: var(--primary-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            box-shadow: 0 0 8px rgba(0,255,65,0.05);
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-color);
+            color: #000;
+            box-shadow: 0 0 15px var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.25;
+            cursor: not-allowed;
+            border-color: rgba(255,255,255,0.08);
+            color: var(--text-muted);
+            box-shadow: none;
+            background: rgba(0,0,0,0.2);
+        }
+
+        .system-controls {
+            display: flex;
+            gap: 12px;
+        }
+
+        .icon-btn {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-muted);
+            padding: 5px 12px;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .icon-btn:hover {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            background: rgba(0, 255, 65, 0.04);
+        }
+
+        .icon-btn.active {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            background: rgba(0, 255, 65, 0.08);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-dim);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Canvas Background for Matrix Rain -->
+    <canvas id="matrix-canvas"></canvas>
+    
+    <!-- Scanline overlays -->
+    <div class="scanlines"></div>
+
+    <!-- Main Container -->
+    <div class="presentation-container">
+        
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">EXPERT.CITY</div>
+            <div class="metadata">
+                <span>АНТОН ЦОЙ: КУРС 2026</span>
+                <span>ОТ ЗАЯВКИ ДО ВСТРЕЧИ</span>
+            </div>
+        </header>
+
+        <!-- Viewport -->
+        <main class="slide-viewport">
+
+            <!-- SLIDE 1: Title -->
+            <section class="slide active" id="slide-1">
+                <div class="slide-title-layout">
+                    <span class="badge">Система продаж Навигатора</span>
+                    <h1 class="title-huge">ОТ ЗАЯВКИ ДО ВСТРЕЧИ</h1>
+                    <div class="subtitle">Практический курс для опытных агентов</div>
+                    
+                    <div class="terminal-box">
+                        > Инициализация модуля: От заявки до встречи...<br>
+                        > Задача: Перестать работать справочным бюро.<br>
+                        > Метод: Назначение встреч и выездов через ценность.<br>
+                        > Готов к запуску обучения.<span class="terminal-cursor"></span>
+                    </div>
+
+                    <button class="btn" onclick="nextSlide()">Запустить систему</button>
+                </div>
+            </section>
+
+            <!-- SLIDE 2: Shift to LTV & Calculator -->
+            <section class="slide" id="slide-2">
+                <h2>Смена парадигмы: LTV (Life Time Value)</h2>
+                <div class="ltv-layout">
+                    <div class="checkbox-group">
+                        <p style="font-size: 0.95rem; color: var(--text-muted);">
+                            Отмечайте повторные сделки и рекомендации лояльного клиента за 5 лет:
+                        </p>
+                        <label class="checkbox-item">
+                            <input type="checkbox" checked id="ltv-1" onchange="calcLTV()">
+                            <div class="checkbox-custom"></div>
+                            <div class="checkbox-label">
+                                <span>Год 1: Подбор новостройки</span>
+                                <span>+ 200 000 ₽</span>
+                            </div>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="ltv-2" onchange="calcLTV()">
+                            <div class="checkbox-custom"></div>
+                            <div class="checkbox-label">
+                                <span>Год 3: Продажа вторички + расширение</span>
+                                <span>+ 300 000 ₽</span>
+                            </div>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="ltv-3" onchange="calcLTV()">
+                            <div class="checkbox-custom"></div>
+                            <div class="checkbox-label">
+                                <span>Год 4: Рекомендация партнера по бизнесу</span>
+                                <span>+ 400 000 ₽</span>
+                            </div>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="ltv-4" onchange="calcLTV()">
+                            <div class="checkbox-custom"></div>
+                            <div class="checkbox-label">
+                                <span>Год 5: Студия повзрослевшему ребенку</span>
+                                <span>+ 180 000 ₽</span>
+                            </div>
+                        </label>
+                    </div>
+                    
+                    <div class="ltv-result-card">
+                        <h3>Итоговый LTV одного клиента:</h3>
+                        <div class="ltv-value" id="ltv-val">200 000 ₽</div>
+                        <div class="grid-2" style="text-align: left; gap: 15px; margin-top: 15px;">
+                            <div class="compare-card danger" style="padding: 10px;">
+                                <h4 style="font-size: 0.9rem;">Рыбак</h4>
+                                <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0;">
+                                    Видит 1 сделку (150к). Готов впарить неликвид ради быстрого чека.
+                                </p>
+                            </div>
+                            <div class="compare-card success" style="padding: 10px;">
+                                <h4 style="font-size: 0.9rem;">Навигатор</h4>
+                                <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0;">
+                                    Видит долгосрочный актив. Работает по правилу 3П и бережет доверие.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 3: Logics flowchart -->
+            <section class="slide" id="slide-3">
+                <h2>🧭 Логика процесса: Сначала диагностика, потом стены</h2>
+                <p>Главная ошибка — слать планировки ЖК в Telegram до проведения финансового аудита. Это превращает вас в бесплатный поисковик. Логика Навигатора:</p>
+                
+                <div class="flowchart-container">
+                    <div class="flow-step active" onclick="showFlowDetail(0)">
+                        <div>
+                            <span class="flow-step-num">01</span>
+                            <span class="flow-title">Первое касание и границы</span>
+                        </div>
+                        <div class="flow-value">Цель: Снять недоверие</div>
+                    </div>
+                    <div class="flow-step" onclick="showFlowDetail(1)">
+                        <div>
+                            <span class="flow-step-num">02</span>
+                            <span class="flow-title">Финансовый аудит</span>
+                        </div>
+                        <div class="flow-value">Цель: Схема и лимиты</div>
+                    </div>
+                    <div class="flow-step" onclick="showFlowDetail(2)">
+                        <div>
+                            <span class="flow-step-num">03</span>
+                            <span class="flow-title">JTBD-Диагностика</span>
+                        </div>
+                        <div class="flow-value">Цель: Выявить истинную боль</div>
+                    </div>
+                    <div class="flow-step" onclick="showFlowDetail(3)">
+                        <div>
+                            <span class="flow-step-num">04</span>
+                            <span class="flow-title">Переход к первой встрече</span>
+                        </div>
+                        <div class="flow-value">Цель: Составить финмодель</div>
+                    </div>
+                </div>
+
+                <div class="flow-detail-box" id="flow-detail">
+                    <h3 id="flow-detail-title">1. Первое касание и профессиональные границы</h3>
+                    <p style="margin-top: 10px; font-size: 0.95rem; color: var(--text-main);" id="flow-detail-desc">
+                        Главная задача — перевести клиента в диалог и расставить границы. Мы не справочное бюро. Никаких подборок на первом шаге. Проговариваем бесплатность услуг и независимость нашей аналитики.
+                    </p>
+                </div>
+            </section>
+
+            <!-- SLIDE 4: Step 1. First Touch -->
+            <section class="slide" id="slide-4">
+                <h2>👋 ШАГ 1: Первое касание и снятие барьера</h2>
+                <div class="grid-2" style="margin-top: 10px;">
+                    <div class="card">
+                        <h3>1. Профессиональная рамка</h3>
+                        <p style="font-size: 0.95rem; line-height: 1.5; color: var(--text-main); margin-bottom: 12px;">
+                            Клиенты боятся агрессивных продаж. Мы ломаем этот барьер прямой честностью:
+                        </p>
+                        <ul>
+                            <li><strong>Позиционируем бесплатность:</strong> Открыто говорим, что нашу работу по подбору и расчетам полностью оплачивает застройщик.</li>
+                            <li><strong>Независимость:</strong> Все цены и скидки один в один как у девелоперов, но наша цель — независимая аналитика всего рынка.</li>
+                            <li><strong>Установка границ:</strong> Мы не справочное бюро. Бесконтрольно высланные буклеты лишают нас ценности эксперта.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>2. Главный речевой переход</h3>
+                        <p style="font-size: 0.95rem; line-height: 1.5; color: var(--text-main); margin-bottom: 15px;">
+                            Мы переводим фокус клиента с абстрактных планировок на реальные жизненные задачи:
+                        </p>
+                        <div class="script-terminal">
+                            «Давайте, чтобы я не сбрасывал вам кучу бесполезных каталогов, мы поступим так: я задам буквально 3–4 вопроса, чтобы понять вашу ситуацию, и подготовлю для вас точечный расчёт. Хорошо?»
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 5: Step 1. Scripts -->
+            <section class="slide" id="slide-5">
+                <h2>💬 Скрипты первого контакта</h2>
+                <div class="grid-2">
+                    <div class="card">
+                        <span class="badge">В ответ на реакцию на контент (Reels)</span>
+                        <div class="script-terminal" style="font-size: 0.85rem; line-height: 1.45; margin-top: 10px;">
+                            <strong>[Имя], приветствую!</strong> Спасибо за интерес к видео. Расскажу все подробности. Сразу проясню один момент, чтобы вам было комфортно: я работаю как независимый эксперт по новостройкам. Моя работа по подбору, расчётам и сопровождению для вас <strong>полностью бесплатна</strong> — её оплачивает застройщик. При этом все цены, скидки и акции для вас остаются точно такими же, как напрямую в отделе продаж.<br><br>
+                            Мой принцип — я не продаю конкретный ЖК, а помогаю выбрать то, что выгодно именно вам. Чтобы я не скидывал вам общие буклеты, расскажите в двух словах: квартиру подбираете для себя (жить) или как инвестицию?
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <span class="badge">Входящая заявка / Звонок</span>
+                        <div class="script-terminal" style="font-size: 0.85rem; line-height: 1.45; margin-top: 10px;">
+                            <strong>[Имя], добрый день!</strong> Схема работы простая: я помогаю сориентироваться по всем новостройкам Уфы, одобрить ипотеку и провести сделку. Для вас это <strong>бесплатно</strong> (нам платит застройщик), цены и скидки один в один как у девелоперов.<br><br>
+                            Я не топлю за конкретных застройщиков, моя задача — показать вам честную аналитику, плюсы и минусы каждого ЖК.<br><br>
+                            Чтобы сэкономить ваше время и не слать гигабайты планировок, давайте определим рамки. Какой примерно бюджет планируете на покупку и сколько есть первоначального взноса на руках?
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 6: Step 2. Financial Audit -->
+            <section class="slide" id="slide-6">
+                <h2>💳 ШАГ 2: Финансовый аудит — Сначала схема, потом стены</h2>
+                <div class="grid-2" style="margin-top: 10px;">
+                    <div class="card">
+                        <h3>Схема покупки важнее объекта</h3>
+                        <p style="font-size: 0.95rem; line-height: 1.5; color: var(--text-main); margin-bottom: 15px;">
+                            Если влюбить клиента в планировку до одобрения лимитов банков и проверки первоначального взноса — сделка рухнет.
+                        </p>
+                        <ul>
+                            <li><strong>Первоначальный взнос (ПВ):</strong> Сколько наличных средств на руках прямо сейчас? Используется ли маткапитал?</li>
+                            <li><strong>Ипотечный статус:</strong> Одобрен ли кредит? Под какую программу (семейная 6%, IT-ипотека)?</li>
+                            <li><strong>Комфортный платеж:</strong> Какая сумма платежа комфортна ежемесячно? Для 80% это важнее общей стоимости квартир.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Аргументация Навигатора</h3>
+                        <p style="font-size: 0.95rem; line-height: 1.5; color: var(--text-main); margin-bottom: 12px;">
+                            Как объяснить клиенту необходимость аудита:
+                        </p>
+                        <ul style="gap: 12px;">
+                            <li><strong>Не упустить спецпрограммы:</strong> «Если ограничимся одним ЖК, не узнаем, что соседний дает рассрочку без ПВ, экономящую нам 1.5 миллиона рублей».</li>
+                            <li><strong>Сравнение платежей:</strong> «Квартира за 8 млн может обходиться в 40к в месяц, а за 9 млн — в 20к из-за субсидированной ставки».</li>
+                            <li><strong>Экономия времени:</strong> «Мы отсеем то, что финансово невыгодно, и поедем смотреть только те 2-3 объекта, которые идеально проходят по расчету».</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 7: Dialogue: Selling Audit -->
+            <section class="slide" id="slide-7">
+                <h2>💬 Кейс: Продажа Финансового аудита</h2>
+                <div class="chat-container">
+                    <div class="chat-bubble client">
+                        <p>«Я хочу посмотреть квартиры в Зелёной Роще, скиньте мне планировки и цены двушек до 8 миллионов рублей».</p>
+                    </div>
+                    <div class="chat-bubble fisherman">
+                        <p>«Да, конечно! Вот держите 5 каталогов разных ЖК, посмотрите планировки, если что-то понравится — пишите!» <br><small style="color: var(--accent-red); font-family: var(--font-mono);">(Ошибка: превратился в справочное бюро, потерял инициативу)</small></p>
+                    </div>
+                    <div class="chat-bubble navigator">
+                        <p><strong>«[Имя], смотрите, как мы поступим, чтобы вы не переплатили. Рынок новостроек сильно изменился. Выбрать просто район и планировку — это путь к переплате. Сейчас решает не цена, а финансовый инструмент: рассрочки, транши (по 1 рублю в месяц) или субсидии. Поэтому сначала мы сделаем финансовый аудит всего рынка: возьмем ваши возможности и посмотрим веером по всей Уфе, какие схемы выгоднее именно вашей семье. И только потом сузимся до планировок. Согласны с таким подходом?»</strong></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 8: Step 3. JTBD Diagnostics -->
+            <section class="slide" id="slide-8">
+                <h2>🎯 ШАГ 3: JTBD-Диагностика (Зачем покупают квартиры)</h2>
+                <div class="grid-2" style="margin-top: 10px;">
+                    <div class="card">
+                        <h3>Истинная жизненная задача (JTBD)</h3>
+                        <p style="font-size: 0.95rem; line-height: 1.5; color: var(--text-main); margin-bottom: 12px;">
+                            Квартиру «нанимают» на работу для решения жизненной проблемы:
+                        </p>
+                        <ul>
+                            <li><strong>Функциональная задача:</strong> Разъехаться с родителями, сменить аренду на свое, купить жилье ребенку-студенту на будущее.</li>
+                            <li><strong>Эмоциональная/Социальная:</strong> Переехать в престижный район, обеспечить безопасность детям (закрытый двор без машин), обрести личные границы.</li>
+                        </ul>
+                        <div class="highlight-box" style="margin-top: 15px; padding: 12px 20px;">
+                            <strong>Вопросы Навигатора:</strong> «Какую основную задачу должна решить эта покупка в вашей жизни?», «Кто физически будет жить в квартире?», «Где вы живете сейчас?»
+                        </div>
+                    </div>
+                    
+                    <div class="compare-card success" style="cursor: default; display: flex; flex-direction: column; justify-content: center;">
+                        <h3>Шпаргалка сценариев JTBD</h3>
+                        <ul style="font-size: 0.85rem; gap: 8px;">
+                            <li><strong>Из аренды в свое:</strong> Покупка безопасности и стабильности (избавление от контроля хозяина).</li>
+                            <li><strong>Расширение площади:</strong> Покупка семейного мира и личных границ (разнополые дети дерутся в одной комнате).</li>
+                            <li><strong>Инвестиции:</strong> Покупка ликвидного сейфа для сбережений (защита денег от инфляции).</li>
+                            <li><strong>Ребенку на будущее:</strong> Покупка родительского трамплина (избавление от общежитий, вклад в карьеру).</li>
+                            <li><strong>Разъезд при конфликтах:</strong> Покупка личной свободы.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 9: JTBD Interactive Dialogues -->
+            <section class="slide" id="slide-9">
+                <h2>🧩 Диалоги JTBD: Выявляем истинную боль</h2>
+                <div class="tabs-container">
+                    <div class="tabs-header">
+                        <button class="tab-btn active" onclick="switchTab(0)">1. Из аренды в свое</button>
+                        <button class="tab-btn" onclick="switchTab(1)">2. Расширение (Мир)</button>
+                        <button class="tab-btn" onclick="switchTab(2)">3. Инвестиции (Сейф)</button>
+                    </div>
+                    
+                    <!-- Tab 1 -->
+                    <div class="tab-content active">
+                        <div class="chat-container">
+                            <div class="chat-bubble client">
+                                <p>«Сыну два года, места мало в съемной. Да и надоело дяде платить, пора свое иметь».</p>
+                            </div>
+                            <div class="chat-bubble fisherman">
+                                <p>«Да, у меня есть отличная однушка 38 квадратов в сданном доме! Одобряем ипотеку?» <br><small style="color: var(--accent-red); font-family: var(--font-mono);">(Рыбак: продает коробку бетона)</small></p>
+                            </div>
+                            <div class="chat-bubble navigator">
+                                <p><strong>«Согласен. А расскажите, с какими сложностями в аренде чаще всего сталкиваетесь? Ну, хозяин квартиры специфический... Приходит раз в месяц, намекает, что поднимет плату или продаст жилье. А у нас тут садик рядом. То есть вам сейчас критически важно создать место, откуда вас никто не попросит уйти, чтобы вы спокойно планировали жизнь ребенка? Да, именно так! Тогда мы сделаем так, чтобы платеж по ипотеке был равен вашей аренде, а садик был во дворе».</strong> <br><small style="color: var(--primary-color); font-family: var(--font-mono);">(Навигатор: продает безопасность семьи)</small></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab 2 -->
+                    <div class="tab-content">
+                        <div class="chat-container">
+                            <div class="chat-bubble client">
+                                <p>«Дети растут, им тесно в одной комнате. Постоянно дерутся, нам с мужем тоже хочется покоя».</p>
+                            </div>
+                            <div class="chat-bubble fisherman">
+                                <p>«Понимаю! Вот отличная трехкомнатная панелька, 75 квадратов, комнаты изолированы, недорого!» <br><small style="color: var(--accent-red); font-family: var(--font-mono);">(Рыбак: продает квадратные метры)</small></p>
+                            </div>
+                            <div class="chat-bubble navigator">
+                                <p><strong>«Понимаю вас. А как сейчас строится ваш вечер дома? Ужасно. Старший учит уроки под крики младшего, муж прячется в телефоне на кухне, все раздражены. То есть вам важно не просто добавить площади, а дать каждому члену семьи личное закрытое пространство, чтобы дома наконец воцарились мир и спокойствие? Да, иначе мы разведемся. Отлично, тогда мы фокусируемся на планировках-распашонках с разнесенными детскими и мастер-спальней для вас с мужем».</strong> <br><small style="color: var(--primary-color); font-family: var(--font-mono);">(Навигатор: продает семейный мир и личные границы)</small></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab 3 -->
+                    <div class="tab-content">
+                        <div class="chat-container">
+                            <div class="chat-bubble client">
+                                <p>«У меня 5 миллионов на руках, хочу вложить в недвижимость. Депозитам в банках доверия нет, инфляция все сожрет».</p>
+                            </div>
+                            <div class="chat-bubble fisherman">
+                                <p>«Инвестиции — это супер! У меня есть строящийся ЖК на окраине, обещают 30% роста к сдаче, давайте бронировать!» <br><small style="color: var(--accent-red); font-family: var(--font-mono);">(Рыбак: впаривает риск ради комиссии)</small></p>
+                            </div>
+                            <div class="chat-bubble navigator">
+                                <p><strong>«Игорь, то есть ваша главная задача — не спекулятивно заработать миллионы за полгода, а спрятать сбережения в надежный сейф, который защитит деньги от инфляции и при необходимости легко вернется обратно в наличные? Да, мне главное не потерять то, что заработано. В таком случае мы исключаем рискованные стройки на окраинах. Смотрим топ-застройщиков, готовые обжитые локации с высокой скоростью перепродажи и только евро-однокомнатные лоты в дефиците».</strong> <br><small style="color: var(--primary-color); font-family: var(--font-mono);">(Навигатор: продает ликвидный сейф для сбережений)</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 10: Step 4. Transition to Meeting -->
+            <section class="slide" id="slide-10">
+                <h2>📊 ШАГ 4: Переход к встрече через «Финмодель»</h2>
+                <div class="grid-2" style="margin-top: 10px;">
+                    <div class="card">
+                        <h3>Алгоритм закрытия первого касания</h3>
+                        <ul>
+                            <li><strong>Фиксация данных:</strong> Подтверждаем, что услышали задачу и финансовые лимиты.</li>
+                            <li><strong>Экспертная пауза:</strong> Объясняем, что берем время на ручную работу (связаться с застройщиками, проверить остатки квартир, ставки спецпрограмм).</li>
+                            <li><strong>Связка:</strong> Продаем созвон/встречу не ради «поговорить», а для презентации готовой сравнительной таблицы расчетов (Финмодели) и построения <strong>Маршрутной карты</strong>.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Скрипт назначения встречи</h3>
+                        <div class="script-terminal" style="font-size: 0.85rem; line-height: 1.45; margin-top: 10px;">
+                            «[Имя], отлично. Вводные я зафиксировал: ПВ [сумма], платеж до [сумма] рублей, в приоритете планировка с раздельными детскими.<br><br>
+                            Что я делаю дальше:<br>
+                            1. Сделаю полный аудит рынка под ваш запрос.<br>
+                            2. Лично свяжусь с отделами продаж застройщиков по реальному наличию лотов.<br>
+                            3. Проверю новые программы рассрочек и субсидирования для снижения платежа.<br><br>
+                            Давайте завтра созвонимся буквально на 10–15 минут, вместе пройдемся по расчетам. И на основе варианта-фаворита я составлю для нас <strong>Маршрутную карту</strong> поездок по объектам вживую. Вам завтра в первой половине дня или ближе к вечеру удобнее?»
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 11: Step 5. Meeting & Showings -->
+            <section class="slide" id="slide-11">
+                <h2>🤝 ШАГ 5: Первая встреча и выезд на тест-драйв</h2>
+                <div class="grid-2" style="margin-top: 10px;">
+                    <div class="card">
+                        <h3>Сценарий встречи (30-45 минут)</h3>
+                        <ul>
+                            <li><strong>Установка рамки:</strong> «Мы проделали подготовительную работу, оцифровали задачу и отсеяли 90% рынка. Осталось 3 идеальных варианта. Задача сегодня — посмотреть расчеты, убрать лишнее и согласовать выезд».</li>
+                            <li><strong>Презентация компромиссов:</strong> Честно озвучиваем плюсы и минусы каждого ЖК (шумная улица, задержка сдачи на полгода). Это моментально укрепляет доверие к эксперту.</li>
+                            <li><strong>Продажа Маршрутной карты:</strong> «Бумажная аналитика закончена. Теперь тест-драйв вживую. В субботу едем в ЖК Б и ЖК В. Наша задача там — оценить качество стройки, зайти в шоурум и пощупать локацию ногами. В 11:00 или в 14:00 удобнее выехать?»</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Задачи выезда к застройщикам</h3>
+                        <ul>
+                            <li><strong>Прочувствовать застройщика:</strong> Оценить масштаб, атмосферу и качество отделки холлов.</li>
+                            <li><strong>Понять локацию:</strong> Увидеть реальное окружение, развязки и примерить будущий образ жизни.</li>
+                        </ul>
+                        <div class="highlight-box" style="margin-top: 15px; padding: 12px 18px;">
+                            <strong>Критический шаг:</strong> Сразу после согласования шорт-листа объектов отправляем уникальные данные клиента девелоперам для фиксации в CRM. Это гарантирует сохранение партнерских условий и скидок.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 12: Homework -->
+            <section class="slide" id="slide-12">
+                <h2>📝 Домашнее задание: Анализ сделок по JTBD и LTV</h2>
+                <p>Опишите 3 последние закрытые сделки (или сорвавшиеся сделки) в формате эссе-рассказа по вопросам:</p>
+                <div class="grid-3" style="margin-top: 10px;">
+                    <div class="card" style="padding: 15px 20px;">
+                        <h4 style="font-size: 1.05rem; margin-bottom: 8px;">1. Старт и JTBD</h4>
+                        <ul style="font-size: 0.8rem; gap: 6px;">
+                            <li>Какое событие произошло перед обращением (Триггер)?</li>
+                            <li>Как долго думали до этого и почему?</li>
+                            <li>На какую «работу» наняли квартиру (Истинный мотив)?</li>
+                            <li>Худший сценарий, если бы покупка НЕ состоялась?</li>
+                        </ul>
+                    </div>
+                    <div class="card" style="padding: 15px 20px;">
+                        <h4 style="font-size: 1.05rem; margin-bottom: 8px;">2. Математика и Выбор</h4>
+                        <ul style="font-size: 0.8rem; gap: 6px;">
+                            <li>Что было главным фин. показателем (Платёж, ПВ, общая цена)?</li>
+                            <li>Какая финансовая схема сработала в итоге?</li>
+                            <li>С какими альтернативами конкурировали?</li>
+                            <li>Какое сомнение мешало сделке и как его закрыли?</li>
+                        </ul>
+                    </div>
+                    <div class="card" style="padding: 15px 20px;">
+                        <h4 style="font-size: 1.05rem; margin-bottom: 8px;">3. Доверие и LTV</h4>
+                        <ul style="font-size: 0.8rem; gap: 6px;">
+                            <li>В какой момент клиент доверился вам как независимому эксперту?</li>
+                            <li>Каков потенциальный LTV этого клиента на ближайшие 5 лет в деньгах?</li>
+                        </ul>
+                        <div class="highlight-box-emerald" style="padding: 8px; margin-top: 10px; font-size: 0.75rem;">
+                            Сдача ДЗ — пропуск ко 2 блоку (Финансовый инжиниринг).
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer Navigation -->
+        <footer class="footer-controls">
+            <div class="system-controls">
+                <button class="icon-btn active" id="btn-matrix" onclick="toggleMatrixBg()" title="Вкл/Выкл Матрицу">MATRIX</button>
+                <button class="icon-btn" id="btn-sound" onclick="toggleSound()" title="Вкл/Выкл Звук">SOUND</button>
+            </div>
+            
+            <div class="slide-indicator" id="slide-num">SLIDE: 01 / 12</div>
+            
+            <div class="nav-arrows">
+                <select class="slide-select" id="slide-select" onchange="jumpToSlide(this.value)">
+                    <option value="1">1. Титульный слайд</option>
+                    <option value="2">2. Парадигма: LTV клиента</option>
+                    <option value="3">3. Логика процесса</option>
+                    <option value="4">4. Шаг 1: Первое касание</option>
+                    <option value="5">5. Шаг 1: Скрипты контактов</option>
+                    <option value="6">6. Шаг 2: Финансовый аудит</option>
+                    <option value="7">7. Кейс: Продажа аудита</option>
+                    <option value="8">8. Шаг 3: JTBD-Диагностика</option>
+                    <option value="9">9. Кейсы: Диалоги JTBD</option>
+                    <option value="10">10. Шаг 4: Переход к встрече</option>
+                    <option value="11">11. Шаг 5: Тест-драйв</option>
+                    <option value="12">12. Домашнее задание</option>
+                </select>
+                <button class="nav-btn" id="prev-btn" onclick="prevSlide()" disabled title="Назад (Влево)">←</button>
+                <button class="nav-btn" id="next-btn" onclick="nextSlide()" title="Вперед (Вправо / Пробел)">→</button>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Slides Logic
+        let currentSlide = 1;
+        const totalSlides = 12;
+        let soundEnabled = false;
+
+        function updateSlideDisplay() {
+            // Hide all slides
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active');
+            });
+            // Show current slide
+            const activeSlide = document.getElementById(`slide-${currentSlide}`);
+            if (activeSlide) {
+                activeSlide.classList.add('active');
+            }
+            // Update indicator & selector
+            document.getElementById('slide-num').textContent = `SLIDE: ${String(currentSlide).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
+            document.getElementById('slide-select').value = currentSlide;
+
+            // Enable/disable arrows
+            document.getElementById('prev-btn').disabled = (currentSlide === 1);
+            document.getElementById('next-btn').disabled = (currentSlide === totalSlides);
+            
+            // Cyber click sound
+            playClickSound();
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                updateSlideDisplay();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                updateSlideDisplay();
+            }
+        }
+
+        function jumpToSlide(val) {
+            currentSlide = parseInt(val);
+            updateSlideDisplay();
+        }
+
+        // Keyboard Controls
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' || e.code === 'ArrowRight') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.code === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        // Sound System (Web Audio API)
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('btn-sound');
+            if (soundEnabled) {
+                btn.classList.add('active');
+                playClickSound(1000, 'sine', 0.08);
+            } else {
+                btn.classList.remove('active');
+            }
+        }
+
+        function playClickSound(freq = 1200, type = 'sine', duration = 0.03) {
+            if (!soundEnabled) return;
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+
+                oscillator.type = type;
+                oscillator.frequency.value = freq;
+                
+                gainNode.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        // Interactive Process Flow Detail Box
+        const flowDetails = [
+            {
+                title: "1. Первое касание и профессиональные границы",
+                desc: "Главная задача — перевести клиента в диалог и расставить границы. Мы не справочное бюро. Никаких подборок на первом шаге. Проговариваем бесплатность услуг и независимость нашей аналитики."
+            },
+            {
+                title: "2. Финансовый аудит",
+                desc: "Рынок изменился: сначала схема покупки (лимиты банков, ПВ, субсидии), а только потом — выбор ЖК. Для 80% клиентов ежемесячный платеж важнее, чем номинальная общая стоимость бетона."
+            },
+            {
+                title: "3. JTBD-Диагностика",
+                desc: "Квартиры покупают под конкретную жизненную задачу (Jobs To Be Done). Семья в аренде ищет безопасность от хозяина. Семья с детьми — мир и личные границы. Инвестор — стабильный ликвидный сейф."
+            },
+            {
+                title: "4. Переход к первой встрече",
+                desc: "Делаем паузу на ручной анализ рынка и спецпрограмм рассрочек. Продаем созвон не просто ради разговора, а чтобы защитить расчеты (Финмодель) и построить Маршрутную карту показов."
+            }
+        ];
+
+        function showFlowDetail(index) {
+            document.querySelectorAll('.flow-step').forEach((step, i) => {
+                if (i === index) step.classList.add('active');
+                else step.classList.remove('active');
+            });
+            
+            document.getElementById('flow-detail-title').textContent = flowDetails[index].title;
+            document.getElementById('flow-detail-desc').textContent = flowDetails[index].desc;
+            
+            playClickSound(900, 'triangle', 0.05);
+        }
+
+        // LTV Calculator Logic
+        function calcLTV() {
+            let total = 0;
+            if (document.getElementById('ltv-1').checked) total += 200000;
+            if (document.getElementById('ltv-2').checked) total += 300000;
+            if (document.getElementById('ltv-3').checked) total += 400000;
+            if (document.getElementById('ltv-4').checked) total += 180000;
+
+            const formatted = new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(total);
+            document.getElementById('ltv-val').textContent = formatted;
+            
+            playClickSound(1100, 'sine', 0.04);
+        }
+
+        // JTBD Tab Switcher
+        function switchTab(index) {
+            document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+                if (i === index) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach((content, i) => {
+                if (i === index) content.classList.add('active');
+                else content.classList.remove('active');
+            });
+            
+            playClickSound(800, 'triangle', 0.06);
+        }
+
+        // Matrix Background Control
+        let matrixInterval;
+        let isMatrixOn = true;
+
+        function toggleMatrixBg() {
+            isMatrixOn = !isMatrixOn;
+            const canvas = document.getElementById('matrix-canvas');
+            const btn = document.getElementById('btn-matrix');
+            
+            if (isMatrixOn) {
+                canvas.style.opacity = '0.12';
+                btn.classList.add('active');
+                initMatrixRain();
+            } else {
+                canvas.style.opacity = '0';
+                btn.classList.remove('active');
+                clearInterval(matrixInterval);
+            }
+            playClickSound();
+        }
+
+        // Matrix Rain Implementation
+        function initMatrixRain() {
+            const canvas = document.getElementById('matrix-canvas');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const katakana = 'アァカサтанахмаяャラワガザダバパイィキシчинихимисиууксуцнуфумуююргуздубпуэекесеteneхемелеуэгезедебепеоокосотонохомойоровогозодобоповуун0123456789ABCDEF';
+            const alphabet = katakana.split('');
+
+            const fontSize = 15;
+            const columns = canvas.width / fontSize;
+
+            const rainDrops = [];
+
+            for( let x = 0; x < columns; x++ ) {
+                rainDrops[x] = Math.random() * -100;
+            }
+
+            const draw = () => {
+                ctx.fillStyle = 'rgba(5, 5, 5, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#0F0'; 
+                ctx.font = fontSize + 'px monospace';
+
+                for(let i = 0; i < rainDrops.length; i++) {
+                    const text = alphabet[Math.floor(Math.random() * alphabet.length)];
+                    ctx.fillText(text, i*fontSize, rainDrops[i]*fontSize);
+
+                    if(rainDrops[i]*fontSize > canvas.height && Math.random() > 0.975){
+                        rainDrops[i] = 0;
+                    }
+                    rainDrops[i]++;
+                }
+            };
+
+            if (matrixInterval) clearInterval(matrixInterval);
+            matrixInterval = setInterval(draw, 33);
+        }
+
+        window.addEventListener('resize', () => {
+            if (isMatrixOn) {
+                initMatrixRain();
+            }
+        });
+
+        window.onload = () => {
+            initMatrixRain();
+        };
+    </script>
+</body>
+</html>

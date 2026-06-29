@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карусель Instagram: Бензиновая паника и 6 эпизодов ажиотажа</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .instagram-container {
+            width: 100%;
+            max-width: 500px;
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .instagram-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .instagram-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #333;
+            margin-right: 12px;
+        }
+        
+        .instagram-user {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            background-color: #000;
+            overflow: hidden;
+        }
+        
+        .carousel-slides {
+            display: flex;
+            width: 1000%;
+            height: 100%;
+            transition: transform 0.3s ease;
+        }
+        
+        .carousel-slide {
+            width: 10%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+        
+        .slide-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .slide-content {
+            font-size: 18px;
+            line-height: 1.5;
+            max-width: 90%;
+        }
+        
+        .highlight {
+            color: #FFEB3B; /* Неоновый желтый для акцентов */
+            font-weight: 600;
+        }
+        
+        .slide-number {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .carousel-indicators {
+            display: flex;
+            justify-content: center;
+            padding: 15px;
+            background-color: white;
+        }
+        
+        .indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin: 0 4px;
+            cursor: pointer;
+        }
+        
+        .indicator.active {
+            background-color: #0095f6;
+        }
+        
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+        }
+        
+        .carousel-nav.prev {
+            left: 10px;
+        }
+        
+        .carousel-nav.next {
+            right: 10px;
+        }
+        
+        .instagram-caption {
+            padding: 15px;
+            color: #000;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .hashtag {
+            color: #00376b;
+            font-weight: 500;
+        }
+        
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            width: 100%;
+        }
+        
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            width: 100%;
+            text-align: left;
+        }
+        
+        .timeline-year {
+            font-weight: 700;
+            margin-right: 10px;
+            color: #FFEB3B;
+            min-width: 60px;
+        }
+        
+        .timeline-text {
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="instagram-container">
+        <div class="instagram-header">
+            <div class="instagram-avatar"></div>
+            <div class="instagram-user">anton_tsoy</div>
+        </div>
+        
+        <div class="carousel-container">
+            <div class="carousel-slides" id="carouselSlides">
+                <!-- Слайд 1 -->
+                <div class="carousel-slide">
+                    <h1 class="slide-title">Бензин в канистрах и 6 эпизодов ажиотажа в недвижимости</h1>
+                    <p class="slide-content">Как FOMO обходится вам в миллионы рублей переплаты</p>
+                    <div class="slide-number">1/10</div>
+                </div>
+                
+                <!-- Слайд 2 -->
+                <div class="carousel-slide">
+                    <h2 class="slide-title">Психология очереди</h2>
+                    <p class="slide-content">
+                        Видите очереди на заправках? Люди заправляют бак и везут еще 50 литров в канистрах. «Впрок».<br><br>
+                        Это классический страх опоздать (FOMO). Паника толпы сама создает дефицит и рост цен.
+                    </p>
+                    <div class="slide-number">2/10</div>
+                </div>
+                
+                <!-- Слайд 3 -->
+                <div class="carousel-slide">
+                    <h2 class="slide-title">Знакомый сценарий?</h2>
+                    <p class="slide-content">
+                        В недвижимости работает та же схема.<br><br>
+                        За последние 6 лет мы прошли ровно 6 крупных эпизодов ажиотажа, когда люди скупали бетон «на всякий случай».
+                    </p>
+                    <div class="slide-number">3/10</div>
+                </div>
+                
+                <!-- Слайд 4 -->
+                <div class="carousel-slide">
+                    <h2 class="slide-title">Хроника ажиотажа</h2>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <span class="timeline-year">2020:</span>
+                            <span class="timeline-text">Старт льготной ипотеки под 6.5%</span>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-year">2022:</span>
+                            <span class="timeline-text">Рост ставки до 20% и спасение рублей</span>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-year">2022 (дек):</span>
+                            <span class="timeline-text">Слухи о закрытии господдержки</span>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-year">2023:</span>
+                            <span class="timeline-text">Повышение ПВ до 20%</span>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-year">2024:</span>
+                            <span class="timeline-text">Отмена господдержки под 8%</span>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-year">2025/2026:</span>
+                            <span class="timeline-text">Борьба за лимиты Семейной ипотеки</span>
+                        </div>
+                    </div>
+                    <div class="slide-number">4/10</div>
+                </div>
+                
+                <!-- Слайд 5 -->
+                <div class="carousel-slide">
+                    <h2 class="slide-title">Цена эмоций</h2>
+                    <p class="slide-content">
+                        Видя панику, застройщики мгновенно поднимали цены на <span class="highlight">15–20%</span>.<br><br>
+                        Бензин из канистры сгорит за пару недель.<br><br>
+                        А за переплаченный на панике бетон вы платите банку следующие 30 лет.
+                    </p>
+                    <div class="slide-number">5/10</div>
+                </div>
+                
+                <!-- Слайд 6 -->
+                <div class="carousel-slide">
+                    <h2 class="slide-title">Лавочка закрылась</h2>
+                    <p class="slide-content">
+                        Осознайте факт: в России застройщиков больше поддерживать не будут.<br><br>
+                        Их поддерживали 6 долгих лет.<br><br>
+                        Теперь они сами по себе — со своим продуктом и своими партнерами.
+                    </p>
+                    <div class="slide-number">6/10</div>
+                </div>
+                
+                <!-- Слайд 7 -->
+                <div class="carousel-slide">
+                    <h2 class="slide-title">Стагнация и расчет</h2>
+                    <p class="slide-content">
+                        Рынок успокоился, ажиотаж ушел и начинается стагнация.<br><br>
+                        Теперь важно только одно — правильно уметь рассчитать финансовую модель покупки.
+                    </p>
+                    <div class="slide-number">7/10</div>
+                </div>
+                
+                <!-- Слайд 8 -->
+                <div class="carousel-slide">
+                    <h2 class="slide-title">4 инструмента расчета</h2>
+                    <p class="slide-content">
+                        <div style="text-align: left; width: 100%;">
+                            1️⃣ Траншевая ипотека (платеж 1800 ₽ до сдачи)<br>
+                            2️⃣ Субсидированные программы от девелоперов<br>
+                            3️⃣ Альтернативные рассрочки<br>
+                            4️⃣ Лизинг недвижимости (уже на подходе)
+                        </div>
+                    </p>
+                    <div class="slide-number">8/10</div>
+                </div>
+                
+                <!-- Слайд 9 -->
+                <div class="carousel-slide">
+                    <h2 class="slide-title">Рассрочка на 10 лет</h2>
+                    <p class="slide-content">
+                        Без господдержки застройщики кардинально видоизменят рассрочки.<br><br>
+                        Скоро нормой станут долгие рассрочки на 5, а возможно, и на <span class="highlight">10 лет</span> напрямую от девелопера.
+                    </p>
+                    <div class="slide-number">9/10</div>
+                </div>
+                
+                <!-- Слайд 10 -->
+                <div class="carousel-slide">
+                    <h2 class="slide-title">Выключите панику</h2>
+                    <p class="slide-content">
+                        Включите калькулятор. Хватит покупать на эмоциях.<br><br>
+                        Напишите в директ кодовое слово <span class="highlight">«РАСЧЕТ»</span>.<br><br>
+                        Бесплатно соберем финансовую модель вам, вашим клиентам или партнерам.
+                    </p>
+                    <div class="slide-number">10/10</div>
+                </div>
+            </div>
+            
+            <button class="carousel-nav prev" onclick="changeSlide(-1)">‹</button>
+            <button class="carousel-nav next" onclick="changeSlide(1)">›</button>
+        </div>
+        
+        <div class="carousel-indicators">
+            <div class="indicator active" onclick="goToSlide(0)"></div>
+            <div class="indicator" onclick="goToSlide(1)"></div>
+            <div class="indicator" onclick="goToSlide(2)"></div>
+            <div class="indicator" onclick="goToSlide(3)"></div>
+            <div class="indicator" onclick="goToSlide(4)"></div>
+            <div class="indicator" onclick="goToSlide(5)"></div>
+            <div class="indicator" onclick="goToSlide(6)"></div>
+            <div class="indicator" onclick="goToSlide(7)"></div>
+            <div class="indicator" onclick="goToSlide(8)"></div>
+            <div class="indicator" onclick="goToSlide(9)"></div>
+        </div>
+        
+        <div class="instagram-caption">
+            Когда все бегут в одну сторону - умные люди останавливаются и включают калькулятор.<br><br>
+            На примере очередей за бензином отлично видно, как работает FOMO (страх упустить выгоду). Люди забивают багажники канистрами «впрок», создавая искусственный дефицит и разгоняя цены. <br><br>
+            В недвижимости за 6 лет господдержки мы прошли ровно 6 таких «канистр» паники. Застройщики переписывали ценники вверх на 15-20%, а люди хватали квартиры на самом пике ажиотажа.<br><br>
+            Но бензин вы прокатаете за пару недель. А ипотеку за эмоционально купленный бетон будете платить следующие 30 лет.<br><br>
+            🔴 <strong>Что важно понять сейчас?</strong><br>
+            Господдержка закончилась. Застройщиков больше поддерживать не будут - их тянули 6 долгих лет. Теперь они предоставлены сами себе, своему продукту и своим партнерам. Рынок остывает и начинает стагнировать.<br><br>
+            В этих условиях значение имеет только одно - правильный расчет финансовой модели покупки.<br><br>
+            Листайте карусель, там подробно расписал 4 ключевых инструмента, которые заменят классическую ипотеку, и почему рассрочки скоро изменятся до неузнаваемости.<br><br>
+            ✉️ <strong>Напишите в директ кодовое слово «РАСЧЕТ».</strong> Мы бесплатно посчитаем финансовую модель вам (как покупателю), вашим клиентам (если вы агент) или партнерам. Спокойно, без паники и на цифрах.<br><br>
+            <span class="hashtag">#недвижимость</span> <span class="hashtag">#ипотека</span> <span class="hashtag">#новостройки</span> <span class="hashtag">#аналитикарынка</span> <span class="hashtag">#рассрочка</span>
+        </div>
+    </div>
+    
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.carousel-slide');
+        const indicators = document.querySelectorAll('.indicator');
+        const carouselSlides = document.getElementById('carouselSlides');
+        
+        function updateSlide() {
+            carouselSlides.style.transform = `translateX(-${currentSlide * 10}%)`;
+            
+            indicators.forEach((indicator, index) => {
+                if (index === currentSlide) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.remove('active');
+                }
+            });
+        }
+        
+        function changeSlide(direction) {
+            currentSlide += direction;
+            
+            if (currentSlide < 0) {
+                currentSlide = slides.length - 1;
+            } else if (currentSlide >= slides.length) {
+                currentSlide = 0;
+            }
+            
+            updateSlide();
+        }
+        
+        function goToSlide(slideIndex) {
+            currentSlide = slideIndex;
+            updateSlide();
+        }
+        
+        // Автоматическая смена слайдов (опционально)
+        // setInterval(() => {
+        //     changeSlide(1);
+        // }, 5000);
+    </script>
+</body>
+</html>

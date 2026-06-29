@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Антон Цой — Эксперт по системным продажам недвижимости</title>
+    
+    <!-- Meta tags for social share -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Антон Цой — Визитка">
+    <meta property="og:description" content="Ссылки на Telegram-канал, бота и основной сайт. Школа «Недвижимость для людей».">
+    <meta property="og:image" content="img/anton-portrait.png">
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css?v=1.0.2">
+    
+
+    
+    <style>
+        /* Custom styles for the Linktree-style landing page */
+        .linktree-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .profile-card {
+            text-align: center;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+        
+        .profile-photo-card {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid hsla(180, 100%, 45%, 0.3);
+            box-shadow: 0 0 30px hsla(180, 100%, 45%, 0.15);
+            margin: 0 auto 20px;
+        }
+        
+        .profile-photo-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+        }
+        
+        .profile-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        
+        .profile-title {
+            font-size: 0.9rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .profile-bio {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            max-width: 380px;
+            margin: 0 auto;
+        }
+        
+        .links-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+            max-width: 380px;
+            margin-bottom: 40px;
+        }
+        
+        .linktree-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-radius: var(--border-radius-md);
+            background: hsla(255, 100%, 100%, 0.03);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: var(--transition-apple);
+        }
+        
+        .linktree-btn:active {
+            transform: scale(0.97);
+            background: hsla(180, 100%, 45%, 0.08);
+            border-color: var(--primary);
+        }
+        
+        .linktree-btn i {
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+        
+        .linktree-btn.featured {
+            background: linear-gradient(135deg, hsla(180, 100%, 45%, 0.15), hsla(270, 95%, 60%, 0.15));
+            border-color: hsla(180, 100%, 45%, 0.4);
+            box-shadow: 0 4px 20px hsla(180, 100%, 45%, 0.1);
+        }
+        
+        .linktree-btn.featured i {
+            color: #fff;
+        }
+        
+        .social-connect {
+            text-align: center;
+            width: 100%;
+        }
+        
+        .social-connect-title {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .social-circle-btn {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: var(--transition-apple);
+            border: 1px solid var(--border-color);
+        }
+        
+        .social-circle-btn.tg {
+            background: hsla(200, 100%, 50%, 0.08);
+            border-color: hsla(200, 100%, 50%, 0.25);
+            color: hsl(200, 100%, 50%);
+            font-size: 1.5rem;
+        }
+        
+        .social-circle-btn.max {
+            background: hsla(30, 100%, 55%, 0.08);
+            border-color: hsla(30, 100%, 55%, 0.25);
+            color: hsl(30, 100%, 55%);
+        }
+        
+        .social-circle-btn.max svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .social-circle-btn:active {
+            transform: scale(0.9);
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Canvas for Matrix Rain -->
+    <canvas id="matrix-canvas"></canvas>
+
+    <div class="app-container">
+        <div class="linktree-container">
+            <!-- Profile Info -->
+            <div class="profile-card">
+                <div class="profile-photo-card">
+                    <img src="img/anton-portrait.png" alt="Антон Цой">
+                </div>
+                <h1 class="profile-name">Антон Цой</h1>
+                <div class="profile-title">Эксперт по системным продажам недвижимости</div>
+                <p class="profile-bio">
+                    Моя цель — помочь брокерам перейти от хаотичных показов к системному бизнесу с чеком от 500к+ рублей в месяц с помощью инструментов финансового инжиниринга.
+                </p>
+            </div>
+
+            <!-- Links list -->
+            <div class="links-grid">
+                <!-- 1. Основной сайт -->
+                <a href="main.html" class="linktree-btn featured">
+                    <span><i class="fa-solid fa-globe m-right-sm"></i> Перейти на основной сайт</span>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+                
+                <!-- 2. Телеграм-канал -->
+                <a href="https://t.me/tsoygovorit" target="_blank" class="linktree-btn">
+                    <span><i class="fa-brands fa-telegram m-right-sm"></i> Telegram-канал</span>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+
+                <!-- 3. Телеграм-бот -->
+                <a href="https://t.me/Tsoyanton_bot" target="_blank" class="linktree-btn">
+                    <span><i class="fa-solid fa-robot m-right-sm"></i> Telegram-бот помощник</span>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+            </div>
+
+            <!-- Direct Contact buttons -->
+            <div class="social-connect">
+                <div class="social-connect-title">Связаться со мной</div>
+                <div class="social-buttons">
+                    <a href="https://t.me/anton_tsoy" target="_blank" class="social-circle-btn tg" aria-label="Написать в Telegram">
+                        <i class="fa-brands fa-telegram"></i>
+                    </a>
+                    <a href="https://max.ru/u/f9LHodD0cOIBRfpt-YLG8TAVjW3Av2j5JN9DwiAQecF9rFBoqnCobs3z0To" target="_blank" class="social-circle-btn max" aria-label="Связаться на Макс">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 20V4l9 7 9-7v16" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js?v=1.0.2"></script>
+</body>
+</html>

@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Финансовый инжиниринг новостроек Уфы | Антон Цой</title>
+    <meta name="description" content="Рассчитайте ваш реальный платеж по траншевой, семейной и рассрочкам без переплаты по ставкам 21%.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(22, 28, 45, 0.4);
+            --card-border: rgba(255, 255, 255, 0.05);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-blue: #3b82f6;
+            --glow-green: rgba(16, 185, 129, 0.15);
+            --glow-red: rgba(239, 68, 68, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', 'Segoe UI', Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 16px;
+            max-width: 480px; /* Идеально под мобильные */
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            padding-bottom: 40px;
+        }
+
+        /* Декоративные фоновые сферы */
+        .bg-glow-1 {
+            position: fixed;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(0,0,0,0) 70%);
+            top: -50px;
+            right: -50px;
+            z-index: -1;
+        }
+        .bg-glow-2 {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, rgba(0,0,0,0) 70%);
+            bottom: 50px;
+            left: -100px;
+            z-index: -1;
+        }
+
+        header {
+            text-align: center;
+            padding: 16px 0 8px 0;
+        }
+
+        .badge {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            color: var(--accent-blue);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 700;
+            line-height: 1.25;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Секция: Метод */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 20px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Калькулятор */
+        .calc-group {
+            margin-bottom: 16px;
+        }
+
+        .calc-label-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .calc-val {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+            transition: transform 0.1s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:active {
+            transform: scale(1.2);
+        }
+
+        /* Выдача расчетов */
+        .results-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .res-card {
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid var(--card-border);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .res-card.market {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(22, 28, 45, 0.2) 100%);
+            border-color: rgba(239, 68, 68, 0.15);
+        }
+
+        .res-card.subsidized {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.07) 0%, rgba(22, 28, 45, 0.3) 100%);
+            border-color: rgba(16, 185, 129, 0.25);
+            box-shadow: 0 0 15px var(--glow-green);
+        }
+
+        .res-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 8px;
+            text-transform: uppercase;
+        }
+
+        .market .res-badge {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--accent-red);
+        }
+
+        .subsidized .res-badge {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+        }
+
+        .res-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text-muted);
+        }
+
+        .market .res-title {
+            color: rgba(239, 68, 68, 0.8);
+        }
+
+        .subsidized .res-title {
+            color: var(--accent-green);
+        }
+
+        .res-price {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .res-details {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.4;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 8px;
+        }
+
+        /* Разбор лота Гринвич */
+        .lot-preview {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .lot-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .lot-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .lot-info p {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* Выгода по страховке */
+        .insurance-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        .insurance-table th, .insurance-table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .insurance-table th {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .save-row {
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        /* Блок CTA */
+        .cta-card {
+            text-align: center;
+            background: linear-gradient(135deg, rgba(22, 28, 45, 0.6) 0%, rgba(16, 185, 129, 0.05) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .cta-card p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 12px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-tg {
+            background: #229ED9;
+            color: white;
+            box-shadow: 0 4px 15px rgba(34, 158, 217, 0.3);
+        }
+
+        .btn-wa {
+            background: #25D366;
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+            margin-bottom: 0;
+        }
+
+        .btn-icon {
+            font-size: 16px;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-muted);
+            padding: 12px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow-1"></div>
+    <div class="bg-glow-2"></div>
+
+    <header>
+        <div class="badge">Бюджет под контролем</div>
+        <h1>Финансовый инжиниринг квартир в Уфе</h1>
+        <p class="subtitle">Математический расчет доступности новостроек вместо рекламных картинок застройщиков</p>
+    </header>
+
+    <!-- Секция 1: Калькулятор -->
+    <main class="card">
+        <div class="section-title">
+            <span>📊</span> Схемы под ваш бюджет
+        </div>
+        
+        <div class="calc-group">
+            <div class="calc-label-row">
+                <span>Стоимость квартиры</span>
+                <span class="calc-val" id="price-label">10 000 000 ₽</span>
+            </div>
+            <input type="range" id="price-slider" min="4000000" max="15000000" step="500000" value="10000000">
+        </div>
+
+        <div class="calc-group">
+            <div class="calc-label-row">
+                <span>Первоначальный взнос (ПВ)</span>
+                <span class="calc-val" id="dp-label">2 000 000 ₽</span>
+            </div>
+            <input type="range" id="dp-slider" min="1000000" max="5000000" step="100000" value="2000000">
+        </div>
+
+        <div class="results-container">
+            <!-- Рыночная ипотека -->
+            <div class="res-card market">
+                <span class="res-badge">Безумие</span>
+                <div class="res-title">Рыночная ставка (21% годовых)</div>
+                <div class="res-price" id="market-payment">141 100 ₽ / мес</div>
+                <div class="res-details" id="market-details">
+                    Сумма кредита: 8.0 млн ₽. Переплата за 5 лет: 7.9 млн ₽.
+                </div>
+            </div>
+
+            <!-- Умный расчет (Совместная / Семейная) -->
+            <div class="res-card subsidized">
+                <span class="res-badge">Выгодно</span>
+                <div class="res-title">Семейная / Совместная схема (6%)</div>
+                <div class="res-price" id="subsidized-payment">47 900 ₽ / мес</div>
+                <div class="res-details" id="subsidized-details">
+                    Снижение платежа в 3 раза. Накопления остаются на вашем вкладе.
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Секция 2: Разбор конкретного лота -->
+    <section class="card">
+        <div class="section-title">
+            <span>🏢</span> Реальный пример: ЖК Гринвич
+        </div>
+        <div class="lot-preview">
+            <div class="lot-icon">🚪</div>
+            <div class="lot-info">
+                <h4>2-комнатная квартира, 54.2 кв. м</h4>
+                <p>Зеленая Роща, Уфа • Сдача: 2027 г.</p>
+            </div>
+        </div>
+        <p class="subtitle" style="font-size: 13px; line-height: 1.5; margin-bottom: 12px;">
+            Эту квартиру за 10.2 млн ₽ при первоначальном взносе 2.1 млн ₽ мы забираем клиентам со следующими условиями:
+        </p>
+        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; line-height: 1.4;">
+            <p><strong>🔹 Сценарий 1 (Транши):</strong> платёж до сдачи дома — <strong>150 ₽ в месяц</strong>. Свободные средства работают на вашем вкладе под 18-20% годовых.</p>
+            <p><strong>🔹 Сценарий 2 (Совместная ипотека):</strong> использование семейных лимитов без выделения долей. Ставка <strong>6%</strong>, платёж <strong>48 560 ₽/мес</strong> (вместо 136 200 ₽ по рынку).</p>
+            <p><strong>🔹 Сценарий 3 (Рассрочка):</strong> взнос 30% сейчас, платежи 0 ₽ в месяц до конца строительства.</p>
+        </div>
+    </section>
+
+    <!-- Секция 3: Экономия на страховках -->
+    <section class="card">
+        <div class="section-title">
+            <span>🛡️</span> Экономия на страховке банка
+        </div>
+        <p class="subtitle" style="font-size: 13px; line-height: 1.5; margin-bottom: 8px;">
+            Банки продают страховку по завышенным внутренним тарифам. Мы пересчитываем её в аккредитованных компаниях напрямую.
+        </p>
+        <table class="insurance-table">
+            <thead>
+                <tr>
+                    <th>Параметр</th>
+                    <th>В банке</th>
+                    <th>Через нас</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Тариф страхования</td>
+                    <td>42 000 ₽ / год</td>
+                    <td>19 500 ₽ / год</td>
+                </tr>
+                <tr class="save-row">
+                    <td>Чистая экономия</td>
+                    <td colspan="2">🔥 22 500 ₽ в год спасены</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Секция 4: СТА (Личные сообщения) -->
+    <section class="card cta-card">
+        <div class="section-title" style="justify-content: center;">
+            🤝 Рассчитаем ваш коридор?
+        </div>
+        <p>
+            Напишите мне в личные сообщения. Я задам 3 простых вопроса в чате и подготовлю расчеты по 3 финансовым схемам под ваш бюджет. Это бесплатно.
+        </p>
+        
+        <a href="https://t.me/antontsoyufa" target="_blank" class="btn btn-tg">
+            <span class="btn-icon">💬</span> Написать в Telegram
+        </a>
+        
+        <a href="https://wa.me/79177890000?text=%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82!%20%D0%A5%D0%BE%D1%87%D1%83%20%D1%80%D0%B0%D1%81%D1%87%D0%B5%D1%82%20%D0%BF%D0%BE%20%D0%B8%D0%BF%D0%BE%D1%82%D0%B5%D0%BA%D0%B5" target="_blank" class="btn btn-wa">
+            <span class="btn-icon">🟢</span> Написать в WhatsApp
+        </a>
+    </section>
+
+    <footer>
+        <p>© 2026 Антон Цой. Независимый аудит недвижимости в Уфе.</p>
+        <p style="font-size: 9px; margin-top: 4px; color: var(--text-muted);">Сайт носит информационный характер и не собирает персональные данные.</p>
+    </footer>
+
+    <!-- Логика калькулятора -->
+    <script>
+        const priceSlider = document.getElementById('price-slider');
+        const dpSlider = document.getElementById('dp-slider');
+        const priceLabel = document.getElementById('price-label');
+        const dpLabel = document.getElementById('dp-label');
+        
+        const marketPayment = document.getElementById('market-payment');
+        const marketDetails = document.getElementById('market-details');
+        const subsidizedPayment = document.getElementById('subsidized-payment');
+        const subsidizedDetails = document.getElementById('subsidized-details');
+
+        function formatMoney(amount) {
+            return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(amount);
+        }
+
+        function calculatePayments() {
+            let price = parseInt(priceSlider.value);
+            let dp = parseInt(dpSlider.value);
+            
+            // ПВ не может быть больше стоимости квартиры
+            if (dp >= price) {
+                dp = Math.floor(price * 0.5);
+                dpSlider.value = dp;
+            }
+            
+            // Динамический лимит ПВ
+            dpSlider.max = Math.floor(price * 0.9);
+            
+            priceLabel.textContent = formatMoney(price);
+            dpLabel.textContent = formatMoney(dp);
+            
+            const loanAmount = price - dp;
+            const termMonths = 30 * 12; // 30 лет
+
+            // Формула аннуитета: PMT = L * ( r * (1+r)^n ) / ( (1+r)^n - 1 )
+            function getAnnuityPayment(amount, annualRate) {
+                const monthlyRate = annualRate / 12 / 100;
+                return amount * (monthlyRate * Math.pow(1 + monthlyRate, termMonths)) / (Math.pow(1 + monthlyRate, termMonths) - 1);
+            }
+
+            const marketPayVal = getAnnuityPayment(loanAmount, 21);
+            const subPayVal = getAnnuityPayment(loanAmount, 6);
+            
+            const marketTotalInterest = (marketPayVal * termMonths) - loanAmount;
+
+            marketPayment.textContent = formatMoney(marketPayVal) + ' / мес';
+            marketDetails.textContent = `Кредит: ${formatMoney(loanAmount)}. Переплата банку за 30 лет: ${formatMoney(marketTotalInterest)}.`;
+
+            subsidizedPayment.textContent = formatMoney(subPayVal) + ' / мес';
+            subsidizedDetails.textContent = `Платёж снижен в ${Math.round(marketPayVal / subPayVal)} раз. Экономия на переплате: ${formatMoney(marketTotalInterest - ((subPayVal * termMonths) - loanAmount))}.`;
+        }
+
+        priceSlider.addEventListener('input', calculatePayments);
+        dpSlider.addEventListener('input', calculatePayments);
+        
+        // Первый запуск
+        calculatePayments();
+    </script>
+</body>
+</html>

@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Презентация: Финансовый инжиниринг в новостройках 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #070a13;
+      --card-bg: rgba(21, 28, 44, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent-violet: #a855f7;
+      --accent-violet-glow: rgba(168, 85, 247, 0.4);
+      --accent-emerald: #10b981;
+      --accent-emerald-glow: rgba(16, 185, 129, 0.4);
+      --accent-rose: #f43f5e;
+      --accent-rose-glow: rgba(244, 63, 94, 0.4);
+      --font-outfit: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: var(--font-inter);
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.08) 0%, transparent 40%);
+    }
+
+    /* Progress bar at the top */
+    .progress-bar-container {
+      width: 100%;
+      height: 5px;
+      background-color: rgba(255, 255, 255, 0.05);
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 100;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-violet) 0%, var(--accent-emerald) 100%);
+      transition: width 0.3s ease;
+      box-shadow: 0 0 10px var(--accent-violet-glow);
+    }
+
+    /* Main presentation container */
+    .presentation-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      flex-direction: column;
+      justify-content: center;
+      animation: fadeIn 0.5s forwards ease;
+    }
+
+    .slide.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Typography & Headers */
+    h1, h2, h3, h4 {
+      font-family: var(--font-outfit);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, #fff 30%, #a855f7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    h2 {
+      font-size: 2.2rem;
+      line-height: 1.2;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 15px;
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--accent-violet);
+    }
+
+    p {
+      line-height: 1.6;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Cards */
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 30px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+      margin-bottom: 20px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+    }
+
+    /* Lists */
+    ul {
+      list-style-type: none;
+    }
+
+    li {
+      margin-bottom: 12px;
+      position: relative;
+      padding-left: 24px;
+      font-size: 1.05rem;
+      line-height: 1.5;
+    }
+
+    li::before {
+      content: "•";
+      color: var(--accent-violet);
+      font-size: 1.5rem;
+      position: absolute;
+      left: 6px;
+      top: -2px;
+    }
+
+    /* Custom Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    th {
+      font-family: var(--font-outfit);
+      font-weight: 600;
+      color: var(--text-main);
+      background-color: rgba(255, 255, 255, 0.02);
+      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    tr:hover {
+      background-color: rgba(255, 255, 255, 0.01);
+    }
+
+    /* Highlights & Badges */
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 10px;
+    }
+
+    .badge-violet {
+      background-color: rgba(168, 85, 247, 0.15);
+      color: var(--accent-violet);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+    }
+
+    .badge-emerald {
+      background-color: rgba(16, 185, 129, 0.15);
+      color: var(--accent-emerald);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .highlight-box {
+      border-left: 4px solid var(--accent-violet);
+      background-color: rgba(168, 85, 247, 0.05);
+      padding: 20px;
+      border-radius: 0 12px 12px 0;
+      margin-top: 15px;
+    }
+
+    .highlight-box-emerald {
+      border-left: 4px solid var(--accent-emerald);
+      background-color: rgba(16, 185, 129, 0.05);
+      padding: 20px;
+      border-radius: 0 12px 12px 0;
+      margin-top: 15px;
+    }
+
+    .calc-value {
+      font-family: var(--font-outfit);
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--accent-emerald);
+      text-shadow: 0 0 15px var(--accent-emerald-glow);
+      margin: 10px 0;
+    }
+
+    /* Controls Panel */
+    .controls-panel {
+      padding: 20px 40px;
+      background-color: rgba(15, 23, 42, 0.9);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .btn {
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-family: var(--font-outfit);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.95rem;
+      border: none;
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text-main);
+    }
+
+    .btn-outline:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-primary {
+      background-color: var(--accent-violet);
+      color: white;
+      box-shadow: 0 0 15px var(--accent-violet-glow);
+    }
+
+    .btn-primary:hover {
+      background-color: #b55fe6;
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
+    }
+
+    .btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .slide-select {
+      background-color: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 8px 16px;
+      border-radius: 8px;
+      outline: none;
+      font-family: var(--font-inter);
+      cursor: pointer;
+    }
+
+    .slide-select:focus {
+      border-color: var(--accent-violet);
+    }
+
+    .slide-counter {
+      font-family: var(--font-outfit);
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    /* Dialogue Simulation Styles */
+    .dialogue-table td {
+      vertical-align: top;
+      line-height: 1.5;
+    }
+
+    .actor-name {
+      font-weight: 700;
+      font-family: var(--font-outfit);
+      white-space: nowrap;
+    }
+
+    .actor-client { color: var(--accent-rose); }
+    .actor-navigator { color: var(--accent-emerald); }
+    .actor-fisherman { color: var(--text-muted); text-decoration: line-through; opacity: 0.6; }
+
+    /* Script block styling */
+    .script-box {
+      background-color: rgba(0, 0, 0, 0.2);
+      border: 1px dashed rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 15px;
+      position: relative;
+    }
+
+    .script-box::before {
+      content: "SCRIPT";
+      font-family: var(--font-outfit);
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--accent-violet);
+      position: absolute;
+      top: -8px;
+      left: 15px;
+      background-color: #121824;
+      padding: 0 6px;
+      letter-spacing: 0.05em;
+    }
+
+    /* Layout specific tweaks */
+    .title-slide {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .title-slide h1 {
+      font-size: 4rem;
+      margin-bottom: 2rem;
+    }
+
+    .title-slide .badge {
+      font-size: 1rem;
+      padding: 6px 16px;
+      margin-bottom: 20px;
+    }
+
+    .accent-violet-text { color: var(--accent-violet); }
+    .accent-emerald-text { color: var(--accent-emerald); }
+    .accent-rose-text { color: var(--accent-rose); }
+
+    /* Grid for Comparison Table */
+    .comp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .comp-col-red {
+      border: 1px solid rgba(244, 63, 94, 0.2);
+      background-color: rgba(244, 63, 94, 0.02);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .comp-col-green {
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      background-color: rgba(16, 185, 129, 0.02);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .comp-header {
+      font-family: var(--font-outfit);
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .comp-item {
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    /* Mockup spreadsheet table on Slide 13 */
+    .spreadsheet-mock {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 15px;
+    }
+
+    .spreadsheet-mock table {
+      margin: 0;
+    }
+
+    .spreadsheet-mock th {
+      background-color: rgba(168, 85, 247, 0.1);
+      color: var(--accent-violet);
+    }
+
+    .spreadsheet-mock tr:nth-child(even) {
+      background-color: rgba(255, 255, 255, 0.02);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top progress bar -->
+  <div class="progress-bar-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Slides Container -->
+  <div class="presentation-container">
+
+    <!-- SLIDE 1: Title -->
+    <div class="slide active" id="slide1">
+      <div class="title-slide">
+        <span class="badge badge-violet">Практикум 2026</span>
+        <h1>Финансовый инжиниринг в новостройках</h1>
+        <p style="font-size: 1.4rem; color: var(--text-main); margin-bottom: 2rem;">
+          Обучающий практикум для агентов-навигаторов
+        </p>
+        <div class="card" style="display: inline-block; padding: 15px 40px; margin-bottom: 2rem;">
+          <p style="margin: 0; font-weight: 500; font-size: 1.1rem;">
+            Как продавать недвижимость в условиях заградительных рыночных ставок
+          </p>
+        </div>
+        <p style="font-size: 0.9rem; color: var(--text-muted);">
+          Управление ликвидностью • Субсидии • Транши • Рассрочки
+        </p>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: Mindset Shift -->
+    <div class="slide" id="slide2">
+      <h2>🧠 Смена парадигмы: Рыбак vs Навигатор</h2>
+      <p>В реальности ставок по ипотеке 18%+ классические методы продажи «бетона» и «планировок» ведут к отказам.</p>
+      <div class="comp-grid">
+        <div class="comp-col-red">
+          <div class="comp-header" style="color: var(--accent-rose);">
+            ❌ Агент-«Рыбак» (Старый подход)
+          </div>
+          <div class="comp-item">
+            <strong>Фокус на объекте:</strong> Рассказывает про кирпич, двор-парк и высоту потолков.
+          </div>
+          <div class="comp-item">
+            <strong>Давление:</strong> «Поднажмите», «займите у родственников», «завтра подорожает».
+          </div>
+          <div class="comp-item">
+            <strong>Игнорирование бюджета:</strong> Предлагает стандартные программы, не вникая в кассовый разрыв клиента.
+          </div>
+          <div class="comp-item" style="color: var(--accent-rose); font-weight: 500;">
+            Результат: Клиент уходит думать и замораживает сделку.
+          </div>
+        </div>
+
+        <div class="comp-col-green">
+          <div class="comp-header" style="color: var(--accent-emerald);">
+            ✨ Агент-«Навигатор» (Финансовый инжиниринг)
+          </div>
+          <div class="comp-item">
+            <strong>Фокус на экономике:</strong> Продает стоимость обслуживания долга, ежемесячный платеж и ликвидность капитала.
+          </div>
+          <div class="comp-item">
+            <strong>Адаптивность:</strong> Подбирает гибридные схемы (транши, субсидии, рассрочки) под реальный бюджет.
+          </div>
+          <div class="comp-item">
+            <strong>Управление активами:</strong> Показывает упущенную выгоду и помогает клиенту заработать на арбитраже депозитов.
+          </div>
+          <div class="comp-item" style="color: var(--accent-emerald); font-weight: 500;">
+            Результат: Сделка закрывается без дисконта на безопасных для бюджета условиях.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: Tranched Theory -->
+    <div class="slide" id="slide3">
+      <h2>🏗️ БЛОК 1: Траншевая ипотека (Ипотека частями)</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Архитектура инструмента</h3>
+          <p>Банк выдает ипотечный кредит на счета эскроу частями (траншами), за счет чего проценты на период стройки начисляются только на фактически выданную долю кредита.</p>
+          <ul>
+            <li><strong>Первый транш:</strong> Выдается в день сделки (от 100 рублей до 15-20% от кредита). Платежи минимальны (сотни рублей).</li>
+            <li><strong>Второй транш:</strong> Перечисляется банком перед сдачей дома. Стандартный платеж начинается после новоселья.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Регуляторные ограничения ЦБ РФ</h3>
+          <ul>
+            <li>Максимальное количество траншей — <strong>5</strong>.</li>
+            <li>Минимальный размер первого транша — <strong>100 000 рублей</strong>.</li>
+            <li>Срок перевода последнего транша — <strong>не более 36 месяцев</strong> с даты первой выдачи (независимо от ввода дома).</li>
+            <li>Схема защищает эскроу от зависания нулевых счетов.</li>
+          </ul>
+          <div class="highlight-box">
+            <strong>Главная ценность:</strong> Защита клиента от двойной финансовой нагрузки (аренда + ипотека) во время строительства.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: Tranched Case -->
+    <div class="slide" id="slide4">
+      <h2>🧩 Кейс 1: Параллельная аренда (Арендатор-ожидатель)</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Ситуация и Профиль клиента</h3>
+          <p>Семья арендует квартиру за <strong>50 000 руб./мес.</strong> Хочет купить квартиру в новостройке. Стандартный платеж по семейной ипотеке — 48 000 руб. Общая нагрузка в 98 000 руб. ведет к кассовому разрыву.</p>
+          <h3>Финансовое решение</h3>
+          <ul>
+            <li>Стоимость квартиры: <strong>10 000 000 руб.</strong></li>
+            <li>Первоначальный взнос (20%): <strong>2 000 000 руб.</strong></li>
+            <li>Кредит: <strong>8 000 000 руб.</strong> по Семейной ипотеке (6%).</li>
+            <li><strong>Траншевая схема:</strong>
+              <ul>
+                <li>1-й транш: 100 000 руб. Ежемесячный платеж — <strong>600 руб./мес.</strong></li>
+                <li>2-й транш (7,9 млн руб.) перечисляется перед сдачей дома через 24 мес.</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <h3>Экономический эффект</h3>
+            <p>До сдачи дома семья спокойно платит за аренду 50 000 руб. и всего 600 руб. за строящуюся квартиру. К моменту готовности дома семья съезжает из аренды и переходит на платеж 48 000 руб.</p>
+            <div class="badge badge-emerald">Чистая экономия бюджета</div>
+            <div class="calc-value">> 1 100 000 ₽</div>
+            <p style="font-size: 0.9rem; margin-top: 5px;">составляет экономия на платежах за 2 года стройки.</p>
+          </div>
+          <div class="highlight-box-emerald">
+            <strong>Резюме:</strong> Мы разделили во времени расходы на съемное жилье и кредит, сделав вход в новостройку бесшовным.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: Tranched Dialogue -->
+    <div class="slide" id="slide5">
+      <h2>💬 Отработка возражений по траншевой ипотеке</h2>
+      <div class="card">
+        <h3>Кейс: «Я не смогу платить одновременно за аренду и ипотеку»</h3>
+        <table class="dialogue-table">
+          <tr>
+            <td width="20%"><span class="actor-name actor-client">Клиент</span></td>
+            <td><em>«Мне очень нравится этот ЖК, но платить за съемную квартиру 50 тысяч рублей и еще за ипотеку 48 тысяч я физически не смогу. Придется отложить покупку на пару лет».</em></td>
+          </tr>
+          <tr>
+            <td><span class="actor-name actor-fisherman">Рыбак</span></td>
+            <td><span class="actor-fisherman">«Ну поднапрягитесь немного, займите у родственников. Квартира ведь крутая, потом будет дороже!»</span> (Давление)</td>
+          </tr>
+          <tr>
+            <td><span class="actor-name actor-navigator">Навигатор</span></td>
+            <td><strong>«Артур, абсолютно согласен. Платить по 100 тысяч в месяц — это огромный риск для бюджета. Но нам и не нужно этого делать. Мы применим траншевую схему. Банк выдаст первый транш всего 100 000 рублей, и ваш платеж до сдачи дома составит всего 600 рублей в месяц. Вы спокойно продолжите арендовать жилье. А когда дом сдадут, вы просто переедете в свою квартиру, перестанете снимать и начнете стандартный платеж 48 000 рублей. Давайте посчитаем график?»</strong></td>
+          </tr>
+        </table>
+        <div class="script-box">
+          <strong>Сообщение в мессенджер:</strong> Артур, приветствую! Чтобы вам не приходилось платить за съемное жилье и ипотеку одновременно, мы настроим траншевую схему. Первый год платеж составит всего 600 руб/мес. Основной платеж начнется только после сдачи дома, когда вы переедете. Завтра созвонимся на 10 минут, покажу точные цифры?
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: Subsidized Theory -->
+    <div class="slide" id="slide6">
+      <h2>📉 БЛОК 2: Субсидированная ставка (Купленная ставка)</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Механика удорожания</h3>
+          <p>Застройщик выплачивает банку единовременную комиссию за снижение процентной ставки для конкретного покупателя на весь срок. Эта комиссия закладывается в стоимость квартиры (удорожание на 10-15%).</p>
+          <ul>
+            <li><strong>Базовая цена:</strong> 10 млн руб. под 18% годовых.</li>
+            <li><strong>Субсидия (6%):</strong> Цена 11.5 млн руб. за счет удорожания.</li>
+            <li><strong>Для кого выгодно:</strong> Для тех, кто берет ипотеку на долгий срок (10+ лет) и ценит минимальный ежемесячный платеж.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Ипотечный стандарт ЦБ РФ</h3>
+          <ul>
+            <li><strong>Запрет завышения цен:</strong> Банкам запрещено принимать комиссии от девелоперов, если это ведет к искусственному завышению цены квартиры выше рыночной.</li>
+            <li><strong>Возврат комиссии:</strong> Если клиент гасит кредит досрочно, банк обязан вернуть часть неиспользованной комиссии, внесенной за снижение ставки.</li>
+            <li><strong>Правило «Одна семья — одна льготная ипотека» (с 01.02.2026):</strong> Допускается только один льготный кредит на семью. Повторно — только при рождении нового ребенка после полного закрытия старого долга.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: Subsidized Case -->
+    <div class="slide" id="slide7">
+      <h2>🧩 Кейс 1: Долгосрочное гнездо (Консервативный покупатель)</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Профиль клиента и условия</h3>
+          <p>Семья покупает трехкомнатную квартиру за 15 млн руб. Планируют жить здесь долго, быстро закрывать кредит не собираются. Ищут минимальный ежемесячный платеж.</p>
+          <h3>Сравнение моделей</h3>
+          <table style="font-size: 0.9rem;">
+            <thead>
+              <tr>
+                <th>Параметр</th>
+                <th>Вариант А (Рыночная)</th>
+                <th>Вариант Б (Субсидия)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Цена квартиры</td>
+                <td>15 000 000 руб.</td>
+                <td style="color: var(--accent-rose);">16 200 000 руб. (удорожание)</td>
+              </tr>
+              <tr>
+                <td>Кредит (ПВ 3 млн)</td>
+                <td>12 000 000 руб.</td>
+                <td>13 200 000 руб.</td>
+              </tr>
+              <tr>
+                <td>Ставка</td>
+                <td>18%</td>
+                <td style="color: var(--accent-emerald);">10% (выкупленная)</td>
+              </tr>
+              <tr>
+                <td>Платеж / мес</td>
+                <td>181 000 руб.</td>
+                <td style="color: var(--accent-emerald); font-weight: 600;">127 300 руб.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <h3>Финансовый эффект</h3>
+            <p>За счет снижения ставки мы уменьшаем платеж на **53 700 рублей в месяц**. Удорожание квартиры на 1.2 млн рублей окупается за 22 месяца.</p>
+            <div class="badge badge-emerald">Чистая экономия за 20 лет</div>
+            <div class="calc-value">> 11 000 000 ₽</div>
+            <p style="font-size: 0.9rem; margin-top: 5px;">сбереженных денег на процентах банку.</p>
+          </div>
+          <div class="highlight-box-emerald">
+            <strong>Резюме:</strong> Намного выгоднее купить «дешевые деньги» под низкий процент, даже если сам товар стоит дороже, при долгосрочном владении.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: Subsidized Dialogue -->
+    <div class="slide" id="slide8">
+      <h2>💬 Отработка возражений по субсидированной ставке</h2>
+      <div class="card">
+        <h3>Кейс: «Почему я должен переплачивать 1.2 млн из-за удорожания?»</h3>
+        <table class="dialogue-table">
+          <tr>
+            <td width="20%"><span class="actor-name actor-client">Клиент</span></td>
+            <td><em>«Из-за этой программы квартира становится дороже на 1.2 миллиона рублей! Застройщики просто наживаются на нас, я не буду переплачивать номинальную стоимость».</em></td>
+          </tr>
+          <tr>
+            <td><span class="actor-name actor-fisherman">Рыбак</span></td>
+            <td><span class="actor-fisherman">«Да ладно вам, сейчас у всех удорожание. Главное, что платеж комфортный».</span> (Оправдание системы без математики)</td>
+          </tr>
+          <tr>
+            <td><span class="actor-name actor-navigator">Навигатор</span></td>
+            <td><strong>«[Имя], согласен, на первый взгляд переплата выглядит неприятно. Но давайте посчитаем математику. Без удорожания по рыночной ставке 18% ваш платеж — 181 000 рублей. С удорожанием под 10% он снижается до 127 300 рублей. Разница — 54 000 рублей каждый месяц. За 10 лет вы сэкономите более 6.4 миллиона рублей на переплате банку. Номинальное удорожание в 1.2 миллиона окупается уже за первые 2 года. Что выгоднее для вашего кошелька?»</strong></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- SLIDE 9: Installment Theory -->
+    <div class="slide" id="slide9">
+      <h2>🤝 БЛОК 3: Рассрочка от застройщика (Внебанковские программы)</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Механика и закон № 283-ФЗ</h3>
+          <p>Рассрочка — это оплата недвижимости напрямую застройщику частями до момента ввода в эксплуатацию (без привлечения банка на первом этапе).</p>
+          <ul>
+            <li><strong> BNPL-рассрочка:</strong> Через операторов рассрочки (до 6 месяцев), без процентов, но с обязательной фиксацией данных в БКИ.</li>
+            <li><strong>Рассрочка застройщика:</strong> Долгосрочная (1-3 года). Застройщик вправе устанавливать наценку на лот. Данные в БКИ до момента оформления ипотеки не передаются.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Ограничения проектного финансирования</h3>
+          <p>Если на счетах эскроу нет стабильного наполнения из-за рассрочек покупателей, банк повышает ставку проектного кредита для застройщика до базовой.</p>
+          <div class="highlight-box" style="border-left-color: var(--accent-rose);">
+            <strong>Внимание:</strong> Из-за этого застройщики жестко лимитируют объем рассрочек в общем пуле продаж. Скидки по таким программам минимальны.
+          </div>
+          <div class="highlight-box-emerald" style="margin-top: 15px;">
+            <strong>Сейф-рассрочка:</strong> Застройщик разрешает положить ПВ на эскроу, а остаток внести перед вводом дома. Максимальная защита средств.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 10: Installment Case -->
+    <div class="slide" id="slide10">
+      <h2>🧩 Кейс 1: Мост-рассрочка (Продажа вторички на сложном рынке)</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Ситуация и Профиль клиента</h3>
+          <p>Клиент хочет купить новостройку стоимостью 12 млн рублей за счет продажи своей старой квартиры. Но рынок вторички стагнирует из-за ставок 20%+. Срок продажи вырос до 8 месяцев. Клиент не хочет демпинговать.</p>
+          <h3>Финансовое решение</h3>
+          <ul>
+            <li>Новостройка: <strong>12 000 000 руб.</strong></li>
+            <li>Программа рассрочки <strong>«10/90»</strong>:
+              <ul>
+                <li>Первый взнос 10% (1 200 000 руб.) из накоплений.</li>
+                <li>Оставшиеся 90% (10 800 000 руб.) вносятся одной суммой через 18 месяцев перед вводом дома в эксплуатацию.</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <h3>Экономический эффект</h3>
+            <p>Клиент замораживает цену новостройки прямо сейчас за 1.2 млн рублей. У него есть целых 1.5 года, чтобы спокойно продать свою старую квартиру по рыночной стоимости без спешных дисконтов.</p>
+            <div class="badge badge-emerald">Защита активов клиента</div>
+            <div class="calc-value">Цена заморожена</div>
+            <p style="font-size: 0.9rem; margin-top: 5px;">Нет ежемесячных платежей по рассрочке во время продажи.</p>
+          </div>
+          <div class="highlight-box-emerald">
+            <strong>Резюме:</strong> Рассрочка выступает финансовым «мостом», исключающим необходимость давать скидки покупателям старого жилья.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 11: Installment Dialogue -->
+    <div class="slide" id="slide11">
+      <h2>💬 Отработка возражений по рассрочке</h2>
+      <div class="card">
+        <h3>Кейс: «Моя квартира продается слишком долго»</h3>
+        <table class="dialogue-table">
+          <tr>
+            <td width="20%"><span class="actor-name actor-client">Клиент</span></td>
+            <td><em>«Я хочу купить новостройку, но моя текущая двушка продается уже 4 месяца. Риелтор предлагает скинуть миллион, чтобы продать быстрее. Я не готов терять миллион».</em></td>
+          </tr>
+          <tr>
+            <td><span class="actor-name actor-fisherman">Рыбак</span></td>
+            <td><span class="actor-fisherman">«Ну скиньте немного, зато новостройка подорожает и вы все равно выиграете».</span> (Совет терять деньги)</td>
+          </tr>
+          <tr>
+            <td><span class="actor-name actor-navigator">Навигатор</span></td>
+            <td><strong>«[Имя], продавать квартиру со скидкой в миллион рублей действительно не имеет смысла. Мы решим это по-другому: зафиксируем новостройку прямо сейчас, не продавая спешно ваше жилье. Мы берем рассрочку: вносим всего 10% взноса — это 1.2 миллиона рублей. Цену квартиры мы замораживаем. У нас есть 18 месяцев до ввода дома. Спокойно и без спешки продаем вашу вторичку по максимальной цене, а полученные деньги пойдут на закрытие рассрочки. Подберем подходящий ЖК?»</strong></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- SLIDE 12: Practice Workshop -->
+    <div class="slide" id="slide12">
+      <h2>🎯 Практикум: Сборка собственного портфеля кейсов</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Шаг 1. Изучение ролевых игр</h3>
+          <p>Для тренировки навыков уверенного закрытия сделок необходимо разобрать **18 сценариев практических игр**.</p>
+          <div class="highlight-box">
+            Все речевые стратегии отработки возражений и JTBD-кейсы собраны в интерактивной методичке: <br>
+            <a href="file:///Users/anton_tsoy/Desktop/Обсидиан/8.%20Методички/Дополнение%20к%20методичке%20Финансовый%20инжиниринг%20-%20ролевые%20игры%20финансового%20инструмента%202026.md" class="accent-violet-text" style="font-weight: 600; text-decoration: underline;">Дополнение к методичке Финансовый инжиниринг 2026</a>.
+          </div>
+        </div>
+        <div class="card">
+          <h3>Шаг 2. Анализ рынка и создание базы</h3>
+          <p>Каждый агент собирает свой актуальный портфель предложений от застройщиков Уфы.</p>
+          <div class="highlight-box-emerald">
+            <h4 style="color: var(--accent-emerald); margin-bottom: 5px;">Золотое правило 2026 года:</h4>
+            <strong>Способ покупки важнее самого объекта!</strong><br>
+            Сначала мы находим жизнеспособную финансовую схему (транш, субсидию, рассрочку) под бюджет клиента, а под нее уже можно адаптировать практически любой лот на рынке.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 13: spreadsheet tool -->
+    <div class="slide" id="slide13">
+      <h2>📊 Инструмент: Рабочая таблица инжиниринга</h2>
+      <p>Для применения инструментов на практике каждый агент заполняет и ведет следующую таблицу по объектам Уфы:</p>
+      <div class="spreadsheet-mock">
+        <table>
+          <thead>
+            <tr>
+              <th width="20%">Инструмент</th>
+              <th width="20%">Застройщик / ЖК</th>
+              <th width="30%">Параметры и условия</th>
+              <th width="30%">Кому подойдет (JTBD)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Траншевая ипотека</strong></td>
+              <td>ЖК «Квартал-А»</td>
+              <td>ПВ 20%, 1-й транш 100 тыс. руб., платеж 600 руб/мес до сдачи.</td>
+              <td>Семьям в аренде (разгрузка бюджета во время стройки)</td>
+            </tr>
+            <tr>
+              <td><strong>Субсидированная ставка</strong></td>
+              <td>ЖК «Гранд»</td>
+              <td>Ставка 10% вместо 18%, удорожание 12%, окупаемость 22 мес.</td>
+              <td>Консерваторам на долгий срок (минимизация платежа)</td>
+            </tr>
+            <tr>
+              <td><strong>Рассрочка</strong></td>
+              <td>ЖК «Парковый»</td>
+              <td>Программа 10/90 на 18 месяцев без промежуточных платежей.</td>
+              <td>Альтернативщикам (мост под продажу вторички)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="grid-2" style="margin-top: 15px;">
+        <div style="font-size: 0.9rem; color: var(--text-muted); align-self: center;">
+          *Агенты находят реальные лоты из шахматок застройщиков под эти параметры и собирают готовые презентационные кейсы для клиентов.*
+        </div>
+        <div style="text-align: right;">
+          <span style="font-weight: 700; font-family: var(--font-outfit); color: var(--accent-emerald);">Финансовый инжиниринг — ваш ключ к сделкам в 2026 году!</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom controls panel -->
+  <div class="controls-panel">
+    <div class="slide-counter" id="slideCounter">Слайд 1 из 13</div>
+    <div style="display: flex; gap: 15px; align-items: center;">
+      <select class="slide-select" id="slideSelect" onchange="jumpToSlide(this.value)">
+        <option value="1">1. Титульный слайд</option>
+        <option value="2">2. Парадигма: Рыбак vs Навигатор</option>
+        <option value="3">3. Блок 1: Траншевая ипотека</option>
+        <option value="4">4. Кейс 1: Параллельная аренда</option>
+        <option value="5">5. Отработка возражений по траншам</option>
+        <option value="6">6. Блок 2: Субсидированная ставка</option>
+        <option value="7">7. Кейс 1: Долгосрочное гнездо</option>
+        <option value="8">8. Отработка возражений по субсидиям</option>
+        <option value="9">9. Блок 3: Рассрочка от застройщика</option>
+        <option value="10">10. Кейс 1: Мост-рассрочка</option>
+        <option value="11">11. Отработка возражений по рассрочке</option>
+        <option value="12">12. Практикум: Сборка кейсов</option>
+        <option value="13">13. Инструмент: Рабочая таблица</option>
+      </select>
+      <button class="btn btn-outline" id="prevBtn" onclick="prevSlide()" disabled>Назад</button>
+      <button class="btn btn-primary" id="nextBtn" onclick="nextSlide()">Вперед</button>
+    </div>
+  </div>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 13;
+
+    function updateProgressBar() {
+      const percentage = ((currentSlide - 1) / (totalSlides - 1)) * 100;
+      document.getElementById('progressBar').style.width = percentage + '%';
+    }
+
+    function updateCounter() {
+      document.getElementById('slideCounter').textContent = `Слайд ${currentSlide} из ${totalSlides}`;
+      document.getElementById('slideSelect').value = currentSlide;
+    }
+
+    function updateButtons() {
+      document.getElementById('prevBtn').disabled = currentSlide === 1;
+      document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+    }
+
+    function showSlide(slideNumber) {
+      document.querySelectorAll('.slide').forEach(slide => {
+        slide.classList.remove('active');
+      });
+      document.getElementById('slide' + slideNumber).classList.add('active');
+      
+      currentSlide = slideNumber;
+      updateProgressBar();
+      updateCounter();
+      updateButtons();
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        showSlide(currentSlide + 1);
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        showSlide(currentSlide - 1);
+      }
+    }
+
+    function jumpToSlide(slideNumber) {
+      showSlide(parseInt(slideNumber));
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(event) {
+      if (event.code === 'ArrowRight' || event.code === 'Space') {
+        event.preventDefault();
+        nextSlide();
+      } else if (event.code === 'ArrowLeft') {
+        event.preventDefault();
+        prevSlide();
+      }
+    });
+
+    // Initialize progress bar
+    updateProgressBar();
+  </script>
+</body>
+</html>

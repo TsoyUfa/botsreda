@@ -1,0 +1,2573 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>От заявки до встречи — Мастер-класс Антона Цоя</title>
+    <meta name="description" content="Интерактивная презентация для Эксперт Сити о новой методологии работы с клиентами">
+    
+    <!-- Google Fonts: Inter and Outfit for a modern tech feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-primary: #0f0f14;
+            --bg-secondary: #161622;
+            --bg-card: rgba(30, 30, 45, 0.65);
+            --bg-card-hover: rgba(45, 45, 65, 0.85);
+            
+            --text-primary: #ffffff;
+            --text-secondary: #a2a2bd;
+            --text-muted: #62627a;
+            
+            /* Signature color scheme from methodology */
+            --color-cyan: #00d4ff;
+            --color-orange: #ff6b00;
+            --color-green: #00ff88;
+            --color-red: #ff3366;
+            
+            --shadow-cyan: 0 0 20px rgba(0, 212, 255, 0.45);
+            --shadow-orange: 0 0 20px rgba(255, 107, 0, 0.45);
+            --shadow-green: 0 0 20px rgba(0, 255, 136, 0.45);
+            --shadow-red: 0 0 20px rgba(255, 51, 102, 0.45);
+            
+            --border-glow: 1px solid rgba(0, 212, 255, 0.15);
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 8px;
+            
+            --font-display: 'Outfit', 'Inter', sans-serif;
+            --font-sans: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            
+            --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-bounce: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Ambient background particles canvas */
+        #bg-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        /* Presentation Container */
+        .presentation-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        /* Slide structure */
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 4% 6%;
+            opacity: 0;
+            transform: scale(0.96) translateY(20px);
+            pointer-events: none;
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: all;
+        }
+
+        .slide.prev-slide {
+            opacity: 0;
+            transform: scale(0.96) translateY(-20px);
+        }
+
+        /* Header elements */
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .slide-label {
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--color-cyan);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .slide-label::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--color-cyan);
+            box-shadow: var(--shadow-cyan);
+        }
+
+        .slide-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 3.5vw, 3.5rem);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+            margin-top: 15px;
+            max-width: 85%;
+        }
+
+        .gradient-cyan {
+            background: linear-gradient(135deg, #ffffff 30%, var(--color-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gradient-orange {
+            background: linear-gradient(135deg, #ffffff 30%, var(--color-orange) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gradient-green {
+            background: linear-gradient(135deg, #ffffff 30%, var(--color-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gradient-red {
+            background: linear-gradient(135deg, #ffffff 30%, var(--color-red) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Content layouts */
+        .slide-body {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 3vh 0;
+            position: relative;
+        }
+
+        /* Footer elements */
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 20px;
+        }
+
+        .footer-brand {
+            font-family: var(--font-display);
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+        }
+
+        /* Interactive controls UI */
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            right: 40px;
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .btn-ctrl {
+            background: rgba(30, 30, 45, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: var(--transition-smooth);
+        }
+
+        .btn-ctrl:hover {
+            background: var(--color-cyan);
+            color: var(--bg-primary);
+            border-color: var(--color-cyan);
+            box-shadow: var(--shadow-cyan);
+            transform: scale(1.1);
+        }
+
+        .slide-indicator {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 100;
+        }
+
+        .indicator-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .indicator-dot.active {
+            background: var(--color-cyan);
+            width: 24px;
+            border-radius: 4px;
+            box-shadow: var(--shadow-cyan);
+        }
+
+
+        /* ==========================================================
+           SLIDE-SPECIFIC CUSTOM COMPONENT STYLES
+           ========================================================== */
+
+        /* ── Slide 1: Intro (Рынок умер) ── */
+        .glass-btn-container {
+            perspective: 1000px;
+        }
+
+        .glass-shatter-btn {
+            background: rgba(0, 212, 255, 0.08);
+            border: 2px solid rgba(0, 212, 255, 0.35);
+            padding: 40px 100px;
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 6vw, 6rem);
+            font-weight: 800;
+            color: #ffffff;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            backdrop-filter: blur(25px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 0 30px rgba(0, 212, 255, 0.1);
+            letter-spacing: 8px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: var(--transition-bounce);
+        }
+
+        .glass-shatter-btn:hover {
+            transform: translateZ(20px) rotateX(10deg);
+            border-color: var(--color-cyan);
+            box-shadow: var(--shadow-cyan), 0 30px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        .glass-shatter-btn::after {
+            content: 'КОСНИСЬ ДЛЯ СЛИЯНИЯ';
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            letter-spacing: 5px;
+            color: var(--color-cyan);
+            opacity: 0.6;
+            animation: pulse-txt 2s infinite ease-in-out;
+            font-family: var(--font-sans);
+            white-space: nowrap;
+        }
+
+        @keyframes pulse-txt {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        .shatter-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .intro-followup {
+            opacity: 0;
+            pointer-events: none;
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .intro-followup.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .intro-followup h2 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 5rem);
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .intro-followup p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            letter-spacing: 2px;
+            max-width: 600px;
+        }
+
+
+        /* ── Slide 2: LTV Timeline ── */
+        .ltv-layout {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            width: 100%;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .ltv-left-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .ltv-card-fisherman {
+            background: rgba(255, 51, 102, 0.05);
+            border: 1px solid rgba(255, 51, 102, 0.2);
+            padding: 30px;
+            border-radius: var(--radius-md);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .ltv-card-fisherman::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: var(--color-red);
+        }
+
+        .ltv-counter-box {
+            background: rgba(30, 30, 45, 0.5);
+            border: var(--border-glow);
+            padding: 30px;
+            border-radius: var(--radius-md);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 10px;
+            position: relative;
+        }
+
+        .ltv-counter-num {
+            font-family: var(--font-mono);
+            font-size: clamp(3rem, 5vw, 5.5rem);
+            font-weight: 800;
+            color: var(--color-cyan);
+            text-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+            transition: color 0.5s ease, text-shadow 0.5s ease;
+        }
+
+        .ltv-counter-num.maxed {
+            color: var(--color-green);
+            text-shadow: var(--shadow-green);
+        }
+
+        .ltv-right-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .timeline-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .timeline-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 20px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: var(--transition-bounce);
+        }
+
+        .timeline-btn:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-5px);
+        }
+
+        .timeline-btn.active {
+            background: rgba(0, 212, 255, 0.08);
+            border-color: var(--color-cyan);
+            box-shadow: 0 10px 20px rgba(0, 212, 255, 0.1);
+        }
+
+        .timeline-btn-year {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        .timeline-btn.active .timeline-btn-year {
+            color: var(--color-cyan);
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+        }
+
+        .timeline-cards-display {
+            position: relative;
+            height: 180px;
+            width: 100%;
+        }
+
+        .timeline-info-card {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 30px;
+            border-radius: var(--radius-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+            transition: var(--transition-bounce);
+        }
+
+        .timeline-info-card.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+
+        .info-card-text h4 {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+
+        .info-card-text p {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .info-card-value {
+            font-family: var(--font-mono);
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--color-orange);
+            text-shadow: 0 0 10px rgba(255, 107, 0, 0.2);
+        }
+
+
+        /* ── Slide 3: Manifest (Границы брокера) ── */
+        .manifest-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            width: 100%;
+            gap: 50px;
+            height: 100%;
+            align-items: stretch;
+        }
+
+        .bureau-panel {
+            background: linear-gradient(135deg, rgba(255, 51, 102, 0.12) 0%, rgba(255, 51, 102, 0.03) 100%);
+            border: 1px dashed rgba(255, 51, 102, 0.35);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition-bounce);
+            overflow: hidden;
+        }
+
+        .bureau-panel:hover {
+            border-color: var(--color-red);
+            box-shadow: 0 15px 30px rgba(255, 51, 102, 0.15);
+        }
+
+        .bureau-panel.shattered {
+            animation: shatter-disappear 0.6s forwards cubic-bezier(0.55, 0.085, 0.68, 0.53);
+        }
+
+        @keyframes shatter-disappear {
+            0% {
+                transform: scale(1) rotate(0);
+                opacity: 1;
+            }
+            30% {
+                transform: scale(0.95) rotate(-2deg);
+                opacity: 0.9;
+            }
+            100% {
+                transform: scale(0.3) translateY(200px) rotate(15deg);
+                opacity: 0;
+            }
+        }
+
+        .bureau-chaos-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.35;
+            pointer-events: none;
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+            gap: 15px;
+            font-size: 0.8rem;
+            color: var(--color-red);
+            font-family: var(--font-mono);
+        }
+
+        .bureau-shattered-reveal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: var(--transition-bounce);
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.08) 0%, rgba(0, 255, 136, 0.02) 100%);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: var(--radius-lg);
+            pointer-events: none;
+        }
+
+        .bureau-shattered-reveal.show {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: all;
+        }
+
+        .rules-panel {
+            background: rgba(30, 30, 45, 0.35);
+            border: var(--border-glow);
+            border-radius: var(--radius-lg);
+            padding: 45px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 25px;
+        }
+
+        .rule-row {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            cursor: pointer;
+        }
+
+        .rule-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            transition: var(--transition-bounce);
+        }
+
+        .rule-row:hover .rule-circle {
+            border-color: var(--color-cyan);
+            color: var(--color-cyan);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.15);
+            transform: scale(1.1);
+        }
+
+        .rule-row.active .rule-circle {
+            background: var(--color-cyan);
+            border-color: var(--color-cyan);
+            color: var(--bg-primary);
+            box-shadow: var(--shadow-cyan);
+        }
+
+        .rule-text {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .rule-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            transition: var(--transition-smooth);
+        }
+
+        .rule-row.active .rule-title {
+            color: #ffffff;
+        }
+
+        .rule-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: var(--transition-bounce);
+        }
+
+        .rule-row.active .rule-desc {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+
+        /* ── Slide 4: Financial Audit ── */
+        .audit-layout {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            width: 100%;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .scheme-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .scheme-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 22px 30px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition-bounce);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scheme-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: transparent;
+            transition: var(--transition-smooth);
+        }
+
+        .scheme-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            transform: translateX(10px);
+        }
+
+        .scheme-card.active {
+            background: rgba(0, 212, 255, 0.05);
+            border-color: rgba(0, 212, 255, 0.3);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transform: translateX(15px);
+        }
+
+        .scheme-card.active::after {
+            background-color: var(--color-cyan);
+            box-shadow: var(--shadow-cyan);
+        }
+
+        .scheme-card-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .scheme-card-action {
+            font-size: 0.8rem;
+            color: var(--color-cyan);
+            letter-spacing: 2px;
+            font-weight: 700;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: var(--transition-smooth);
+        }
+
+        .scheme-card:hover .scheme-card-action,
+        .scheme-card.active .scheme-card-action {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .house-visual-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            height: 480px;
+        }
+
+        .house-svg-wrapper {
+            width: 250px;
+            height: 350px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .house-svg {
+            width: 100%;
+            height: 100%;
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.15);
+            stroke-width: 1.5;
+            transition: stroke 0.5s ease;
+        }
+
+        .house-svg.activated {
+            stroke: var(--color-cyan);
+            filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.4));
+        }
+
+        .house-glow-fill {
+            position: absolute;
+            bottom: 0;
+            left: 5%;
+            width: 90%;
+            height: 0%;
+            background: linear-gradient(to top, rgba(0, 212, 255, 0.3) 0%, rgba(0, 212, 255, 0.05) 100%);
+            border-radius: var(--radius-sm);
+            z-index: 1;
+            transition: height 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .house-display-box {
+            position: absolute;
+            background: rgba(15, 15, 20, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            width: 280px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition-bounce);
+            z-index: 10;
+        }
+
+        .house-display-box.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .house-display-title {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .house-display-value {
+            font-family: var(--font-mono);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--color-green);
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
+            margin-bottom: 8px;
+        }
+
+        .house-display-note {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+
+        /* ── Slide 5: JTBD Safes ── */
+        .jtbd-layout {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .safes-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            width: 100%;
+            max-width: 960px;
+        }
+
+        .safe-container {
+            perspective: 800px;
+            cursor: pointer;
+        }
+
+        .safe-card {
+            height: 280px;
+            background: linear-gradient(135deg, rgba(30, 30, 45, 0.85) 0%, rgba(20, 20, 30, 0.95) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-lg);
+            position: relative;
+            transform-style: preserve-3d;
+            transition: var(--transition-bounce);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        .safe-card:hover {
+            border-color: rgba(0, 212, 255, 0.25);
+            transform: translateZ(10px) rotateY(5deg);
+        }
+
+        .safe-card.open {
+            border-color: var(--color-cyan);
+            box-shadow: var(--shadow-cyan);
+        }
+
+        .safe-dial {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #2d2d3f 0%, #171724 100%);
+            border: 4px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 2px 5px rgba(255,255,255,0.05), 0 5px 15px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .safe-dial::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 15px;
+            background-color: var(--color-orange);
+            border-radius: 2px;
+            box-shadow: var(--shadow-orange);
+        }
+
+        .safe-card.open .safe-dial {
+            transform: rotate(270deg);
+            border-color: var(--color-cyan);
+        }
+
+        .safe-label-txt {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            letter-spacing: 2px;
+        }
+
+        .safe-card.open .safe-label-txt {
+            color: var(--color-cyan);
+        }
+
+        .safe-status {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .jtbd-card-reveal {
+            width: 100%;
+            max-width: 960px;
+            height: 180px;
+            position: relative;
+        }
+
+        .jtbd-card {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-secondary);
+            border: var(--border-glow);
+            border-radius: var(--radius-lg);
+            padding: 30px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+            pointer-events: none;
+            transition: var(--transition-bounce);
+        }
+
+        .jtbd-card.active {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: all;
+        }
+
+        .jtbd-card-details {
+            max-width: 70%;
+        }
+
+        .jtbd-card-meta {
+            font-size: 0.9rem;
+            color: var(--color-orange);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .jtbd-card-quote {
+            font-size: 1.25rem;
+            font-weight: 500;
+            line-height: 1.4;
+            color: #ffffff;
+            font-style: italic;
+        }
+
+        .jtbd-card-job {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            text-align: right;
+            gap: 5px;
+        }
+
+        .job-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .job-value {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-green);
+            text-shadow: var(--shadow-green);
+        }
+
+
+        /* ── Slide 6: Grid & Map ── */
+        .map-layout {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            width: 100%;
+            gap: 40px;
+            align-items: stretch;
+            height: 480px;
+        }
+
+        .table-panel {
+            background: rgba(30, 30, 45, 0.35);
+            border: var(--border-glow);
+            border-radius: var(--radius-lg);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .comparison-table th {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            padding: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .comparison-table td {
+            padding: 20px 15px;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            transition: var(--transition-smooth);
+        }
+
+        .comparison-table tr {
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .comparison-table tr:hover td {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .comparison-table tr.active td {
+            color: #ffffff;
+            background: rgba(0, 212, 255, 0.05);
+            border-bottom-color: rgba(0, 212, 255, 0.2);
+        }
+
+        .comparison-table tr.active td:first-child {
+            border-left: 3px solid var(--color-cyan);
+        }
+
+        .table-panel-tagline {
+            padding: 10px 15px 0 15px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .map-panel {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: var(--radius-lg);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* SVG Grid Mock Map */
+        .mock-map-svg {
+            width: 100%;
+            height: 100%;
+            opacity: 0.9;
+        }
+
+        .map-marker {
+            cursor: pointer;
+            transition: var(--transition-bounce);
+        }
+
+        .map-marker circle {
+            fill: var(--bg-primary);
+            stroke: var(--text-muted);
+            stroke-width: 3;
+            transition: var(--transition-smooth);
+        }
+
+        .map-marker text {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 11px;
+            fill: var(--text-muted);
+            text-anchor: middle;
+            dominant-baseline: middle;
+            transition: var(--transition-smooth);
+        }
+
+        .map-marker.active circle {
+            stroke: var(--color-cyan);
+            fill: rgba(0, 212, 255, 0.2);
+            filter: drop-shadow(0 0 5px var(--color-cyan));
+        }
+
+        .map-marker.active text {
+            fill: #ffffff;
+        }
+
+        .map-route-line {
+            stroke: var(--color-cyan);
+            stroke-width: 3;
+            stroke-dasharray: 8 4;
+            animation: dash 30s linear infinite;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .map-route-line.show {
+            opacity: 1;
+        }
+
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -1000;
+            }
+        }
+
+        .map-hud-overlay {
+            position: absolute;
+            bottom: 25px;
+            left: 25px;
+            right: 25px;
+            background: rgba(15, 15, 20, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            padding: 15px 20px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: var(--transition-bounce);
+            pointer-events: none;
+        }
+
+        .map-hud-overlay.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+
+        .hud-left h5 {
+            font-size: 0.8rem;
+            color: var(--color-cyan);
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+        }
+
+        .hud-left p {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .hud-right {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--color-orange);
+            font-weight: 700;
+            border: 1px solid rgba(255, 107, 0, 0.3);
+            background: rgba(255, 107, 0, 0.05);
+            padding: 5px 10px;
+            border-radius: var(--radius-sm);
+        }
+
+
+        /* ── Slide 7: Final QR & ROST Orbits ── */
+        .final-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            width: 100%;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .final-left {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .hw-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: var(--border-glow);
+            padding: 30px;
+            border-radius: var(--radius-lg);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .hw-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(to right, var(--color-cyan), var(--color-orange));
+        }
+
+        .hw-title {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-orange);
+        }
+
+        .hw-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .hw-list li {
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .hw-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--color-green);
+            font-weight: 700;
+        }
+
+        .final-right-orbits {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 420px;
+            position: relative;
+        }
+
+        .orbit-center-qr {
+            width: 180px;
+            height: 180px;
+            background: #ffffff;
+            border-radius: var(--radius-md);
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.25);
+            z-index: 10;
+            transition: var(--transition-bounce);
+            cursor: pointer;
+        }
+
+        .orbit-center-qr:hover {
+            transform: scale(1.08);
+            box-shadow: var(--shadow-cyan);
+        }
+
+        .qr-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Scientific Neon Orbit Circles */
+        .orbit-path {
+            position: absolute;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .orbit-1 {
+            width: 280px;
+            height: 280px;
+            animation: rotate-orbit 35s linear infinite;
+        }
+
+        .orbit-2 {
+            width: 380px;
+            height: 380px;
+            animation: rotate-orbit-reverse 45s linear infinite;
+        }
+
+        @keyframes rotate-orbit {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes rotate-orbit-reverse {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(-360deg); }
+        }
+
+        /* Orbiting Nodes */
+        .orbit-node {
+            position: absolute;
+            background: rgba(15, 15, 20, 0.95);
+            border: 1px solid rgba(0, 212, 255, 0.35);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--color-cyan);
+            box-shadow: 0 0 10px rgba(0,212,255,0.2);
+            pointer-events: all;
+            cursor: help;
+            transition: var(--transition-bounce);
+        }
+
+        .orbit-node:hover {
+            color: var(--bg-primary);
+            background: var(--color-cyan);
+            border-color: var(--color-cyan);
+            box-shadow: var(--shadow-cyan);
+            transform: scale(1.2);
+        }
+
+        .node-r { top: -22px; left: 50%; transform: translateX(-50%); }
+        .node-o { bottom: -22px; left: 50%; transform: translateX(-50%); }
+        .node-s { left: -22px; top: 50%; transform: translateY(-50%); }
+        .node-t { right: -22px; top: 50%; transform: translateY(-50%); }
+
+        .node-tooltip {
+            position: absolute;
+            background: rgba(15, 15, 20, 0.95);
+            border: var(--border-glow);
+            padding: 15px;
+            border-radius: var(--radius-md);
+            width: 240px;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: var(--transition-bounce);
+            z-index: 100;
+            text-align: left;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+        }
+
+        .node-tooltip h6 {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-cyan);
+            margin-bottom: 5px;
+        }
+
+        .node-tooltip p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient background canvas -->
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="presentation-container">
+
+        <!-- ──────────────────────────────────────────────────────── -->
+        <!-- SLIDE 1: INTRO (РЫНОК УМЕР)                              -->
+        <!-- ──────────────────────────────────────────────────────── -->
+        <div class="slide active" data-index="0" id="slide-0">
+            <div class="slide-header">
+                <div class="slide-label">Вступление</div>
+                <div class="footer-brand">ЦОЙ ВТОРОЙ МОЗГ</div>
+            </div>
+            
+            <div class="slide-body">
+                <!-- Interactive Button container -->
+                <div class="glass-btn-container" id="glass-btn-container">
+                    <button class="glass-shatter-btn" id="shatter-btn">РЫНОК</button>
+                    <canvas class="shatter-canvas" id="shatter-canvas"></canvas>
+                </div>
+
+                <!-- Followup content shown after destruction -->
+                <div class="intro-followup" id="intro-followup">
+                    <h2><span class="gradient-red">РЫНОК УМЕР.</span><br><span class="gradient-cyan">ВРЕМЯ НАВИГАТОРОВ.</span></h2>
+                    <p>Классические продажи квартир по прайсам застройщиков больше не работают. Мы начинаем с чистого листа.</p>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <span>[ Хореография: Антон касается слова «Рынок», взрыв и уход в Позицию 1 ]</span>
+                <span class="slide-nav-hint">Нажмите Кнопку или Стрелку Вправо для перехода ➔</span>
+            </div>
+        </div>
+
+
+        <!-- ──────────────────────────────────────────────────────── -->
+        <!-- SLIDE 2: LTV TIMELINE                                    -->
+        <!-- ──────────────────────────────────────────────────────── -->
+        <div class="slide" data-index="1" id="slide-1">
+            <div class="slide-header">
+                <div class="slide-label">LTV Философия</div>
+                <div class="slide-title">Цена одного клиента за <span class="gradient-cyan">5 лет</span></div>
+            </div>
+
+            <div class="slide-body">
+                <div class="ltv-layout">
+                    <!-- Left stats panel -->
+                    <div class="ltv-left-panel">
+                        <div class="ltv-card-fisherman">
+                            <span style="font-size: 0.75rem; color: var(--color-red); font-weight: 700; letter-spacing: 1px; text-transform: uppercase;">Риелтор-«Рыбак»</span>
+                            <span style="font-size: 0.9rem; color: var(--text-secondary);">Разовая сделка здесь и сейчас</span>
+                            <span style="font-family: var(--font-mono); font-size: 1.8rem; font-weight: 700; color: var(--color-red);">150 000 ₽</span>
+                        </div>
+                        
+                        <div class="ltv-counter-box">
+                            <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 700; letter-spacing: 1px; text-transform: uppercase;">Итоговый LTV Навигатора</span>
+                            <div class="ltv-counter-num" id="ltv-total-counter">0 ₽</div>
+                            <span style="font-size: 0.85rem; color: var(--text-muted);">Активируйте года на таймлайне справа</span>
+                        </div>
+                    </div>
+
+                    <!-- Right interactive timeline -->
+                    <div class="ltv-right-panel">
+                        <div class="timeline-steps">
+                            <div class="timeline-btn" data-step="0">
+                                <span class="timeline-btn-year">Год 1</span>
+                                <span style="font-size: 0.75rem; color: var(--text-muted);">Первый контакт</span>
+                            </div>
+                            <div class="timeline-btn" data-step="1">
+                                <span class="timeline-btn-year">Год 3</span>
+                                <span style="font-size: 0.75rem; color: var(--text-muted);">Расширение</span>
+                            </div>
+                            <div class="timeline-btn" data-step="2">
+                                <span class="timeline-btn-year">Год 4</span>
+                                <span style="font-size: 0.75rem; color: var(--text-muted);">Рекомендация</span>
+                            </div>
+                            <div class="timeline-btn" data-step="3">
+                                <span class="timeline-btn-year">Год 5</span>
+                                <span style="font-size: 0.75rem; color: var(--text-muted);">Инвестиция</span>
+                            </div>
+                        </div>
+
+                        <div class="timeline-cards-display">
+                            <div class="timeline-info-card" id="ltv-card-0">
+                                <div class="info-card-text">
+                                    <h4>Новостройка от застройщика</h4>
+                                    <p>Первичная покупка, расчет ипотеки и полное сопровождение</p>
+                                </div>
+                                <div class="info-card-value">+200 000 ₽</div>
+                            </div>
+                            <div class="timeline-info-card" id="ltv-card-1">
+                                <div class="info-card-text">
+                                    <h4>Альтернативная сделка</h4>
+                                    <p>Продажа старой квартиры клиента и покупка новой большей площади</p>
+                                </div>
+                                <div class="info-card-value">+300 000 ₽</div>
+                            </div>
+                            <div class="timeline-info-card" id="ltv-card-2">
+                                <div class="info-card-text">
+                                    <h4>Рекомендация партнеру</h4>
+                                    <p>Рекомендация деловому партнеру — покупка коммерческого офиса</p>
+                                </div>
+                                <div class="info-card-value">+400 000 ₽</div>
+                            </div>
+                            <div class="timeline-info-card" id="ltv-card-3">
+                                <div class="info-card-text">
+                                    <h4>Студия для ребенка-студента</h4>
+                                    <p>Дополнительная smart-квартира под аренду с последующей передачей ребенку</p>
+                                </div>
+                                <div class="info-card-value">+180 000 ₽</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <span>[ Хореография: Антон тапает по кнопкам лет, активируя шаги воронки ]</span>
+                <span class="footer-brand">LTV = 1 080 000 ₽</span>
+            </div>
+        </div>
+
+
+        <!-- ──────────────────────────────────────────────────────── -->
+        <!-- SLIDE 3: MANIFEST (ГРАНИЦЫ БРОКЕРА)                      -->
+        <!-- ──────────────────────────────────────────────────────── -->
+        <div class="slide" data-index="2" id="slide-2">
+            <div class="slide-header">
+                <div class="slide-label">Манифест Навигатора</div>
+                <div class="slide-title">Выход из <span class="gradient-red">ловушки «Справочного бюро»</span></div>
+            </div>
+
+            <div class="slide-body">
+                <div class="manifest-layout">
+                    <!-- Left: Chaos Bureau -->
+                    <div class="bureau-panel" id="bureau-panel">
+                        <div class="bureau-chaos-bg">
+                            <span>Скинь планировки!</span>
+                            <span>Где дешевле?</span>
+                            <span>А какая скидка?</span>
+                            <span>Вышли прайс!</span>
+                            <span>ЖК Салют?</span>
+                            <span>Позвони мне!</span>
+                            <span>Какие ставки?</span>
+                            <span>Срочно!</span>
+                        </div>
+                        <h3 style="font-family: var(--font-display); font-size: 2.2rem; font-weight: 800; color: #ffffff; z-index: 2; line-height: 1.2;">
+                            СПРАВОЧНОЕ<br>БЮРО РИЕЛТОРА
+                        </h3>
+                        <span style="font-size: 0.85rem; color: var(--color-red); font-weight: 700; letter-spacing: 2px; z-index: 2; text-transform: uppercase;">
+                            НАЖМИ ДЛЯ РАЗРУШЕНИЯ ➔
+                        </span>
+                    </div>
+
+                    <!-- Left: Shattered Reveal -->
+                    <div class="bureau-shattered-reveal" id="bureau-reveal">
+                        <span style="font-size: 0.75rem; color: var(--color-green); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;">Железное правило</span>
+                        <h3 style="font-family: var(--font-display); font-size: 2rem; font-weight: 800; color: #ffffff; line-height: 1.3;">
+                            НЕТ ФИНАНСОВОГО АНАЛИЗА —<br><span class="gradient-green">НЕТ ПОДБОРКИ.</span>
+                        </h3>
+                        <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 15px; max-width: 380px;">Мы не шлем бесполезные гигабайты буклетов. Мы сначала выстраиваем финансовую стратегию.</p>
+                    </div>
+
+                    <!-- Right: rules 3P -->
+                    <div class="rules-panel">
+                        <h4 style="font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; color: var(--color-cyan); margin-bottom: 5px;">Правило 3П на рынке:</h4>
+                        
+                        <div class="rule-row" data-rule="0">
+                            <div class="rule-circle">П1</div>
+                            <div class="rule-text">
+                                <span class="rule-title">Не врать</span>
+                                <span class="rule-desc">Озвучивать реальные риски, минусы ЖК и задержки застройщиков.</span>
+                            </div>
+                        </div>
+                        
+                        <div class="rule-row" data-rule="1">
+                            <div class="rule-circle">П2</div>
+                            <div class="rule-text">
+                                <span class="rule-title">Не приукрашивать</span>
+                                <span class="rule-desc">Показывать честную юнит-экономику без пустых обещаний сверхдоходов.</span>
+                            </div>
+                        </div>
+                        
+                        <div class="rule-row" data-rule="2">
+                            <div class="rule-circle">П3</div>
+                            <div class="rule-text">
+                                <span class="rule-title">Не подлизываться</span>
+                                <span class="rule-desc">Сохранять жесткую экспертную позицию. Мы на равных с клиентом.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <span>[ Хореография: Антон «разбивает» левую половину резким жестом, раскрывает 3П справа ]</span>
+                <span class="footer-brand">Правило 3П</span>
+            </div>
+        </div>
+
+
+        <!-- ──────────────────────────────────────────────────────── -->
+        <!-- SLIDE 4: FINANCIAL AUDIT (СХЕМА ПРОТИВ СТЕН)             -->
+        <!-- ──────────────────────────────────────────────────────── -->
+        <div class="slide" data-index="3" id="slide-3">
+            <div class="slide-header">
+                <div class="slide-label">Финансовый аудит</div>
+                <div class="slide-title">Сначала — <span class="gradient-orange">финансовая схема</span>, потом — стены</div>
+            </div>
+
+            <div class="slide-body">
+                <div class="audit-layout">
+                    <!-- Left: Schemes list -->
+                    <div class="scheme-selector">
+                        <div class="scheme-card" data-scheme="family">
+                            <span class="scheme-card-title">Семейная ипотека</span>
+                            <span class="scheme-card-action">ПРИМЕНИТЬ ➔</span>
+                        </div>
+                        <div class="scheme-card" data-scheme="trench">
+                            <span class="scheme-card-title">Траншевая ипотека</span>
+                            <span class="scheme-card-action">ПРИМЕНИТЬ ➔</span>
+                        </div>
+                        <div class="scheme-card" data-scheme="installments">
+                            <span class="scheme-card-title">Рассрочка без ПВ</span>
+                            <span class="scheme-card-action">ПРИМЕНИТЬ ➔</span>
+                        </div>
+                        <div class="scheme-card" data-scheme="subsidized">
+                            <span class="scheme-card-title">Субсидированная ставка</span>
+                            <span class="scheme-card-action">ПРИМЕНИТЬ ➔</span>
+                        </div>
+                    </div>
+
+                    <!-- Right: Wireframe House Visualizer -->
+                    <div class="house-visual-container">
+                        <div class="house-svg-wrapper">
+                            <!-- Glowing blueprint of a house -->
+                            <svg class="house-svg" id="house-blueprint" viewBox="0 0 100 150">
+                                <polygon points="50,10 90,40 10,40" />
+                                <rect x="15" y="40" width="70" height="100" />
+                                <rect x="25" y="55" width="20" height="25" />
+                                <rect x="55" y="55" width="20" height="25" />
+                                <rect x="25" y="95" width="20" height="25" />
+                                <rect x="55" y="95" width="20" height="25" />
+                                <line x1="10" y1="40" x2="90" y2="40" />
+                                <line x1="15" y1="90" x2="85" y2="90" />
+                            </svg>
+                            <div class="house-glow-fill" id="house-glow"></div>
+                        </div>
+
+                        <!-- Data HUD popup -->
+                        <div class="house-display-box" id="house-hud">
+                            <div class="house-display-title" id="hud-title">Расчет схемы</div>
+                            <div class="house-display-value" id="hud-value">0 ₽</div>
+                            <div class="house-display-note" id="hud-note">Выберите инструмент слева</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <span>[ Хореография: Выбор схемы на экране запускает цветной поток энергии в здание ]</span>
+                <span class="footer-brand">Финансовый инжиниринг</span>
+            </div>
+        </div>
+
+
+        <!-- ──────────────────────────────────────────────────────── -->
+        <!-- SLIDE 5: JTBD SAFES                                      -->
+        <!-- ──────────────────────────────────────────────────────── -->
+        <div class="slide" data-index="4" id="slide-4">
+            <div class="slide-header">
+                <div class="slide-label">JTBD Диагностика</div>
+                <div class="slide-title">Что на самом деле <span class="gradient-green">нанимают на работу?</span></div>
+            </div>
+
+            <div class="slide-body">
+                <div class="jtbd-layout">
+                    <!-- Row of 3 safes -->
+                    <div class="safes-row">
+                        <div class="safe-container" data-safe="0">
+                            <div class="safe-card" id="safe-card-0">
+                                <div class="safe-dial"></div>
+                                <span class="safe-label-txt">КЕЙС 1: АРЕНДА</span>
+                                <span class="safe-status" id="safe-status-0">ЗАБЛОКИРОВАН</span>
+                            </div>
+                        </div>
+
+                        <div class="safe-container" data-safe="1">
+                            <div class="safe-card" id="safe-card-1">
+                                <div class="safe-dial"></div>
+                                <span class="safe-label-txt">КЕЙС 2: ТЕСНОТА</span>
+                                <span class="safe-status" id="safe-status-1">ЗАБЛОКИРОВАН</span>
+                            </div>
+                        </div>
+
+                        <div class="safe-container" data-safe="2">
+                            <div class="safe-card" id="safe-card-2">
+                                <div class="safe-dial"></div>
+                                <span class="safe-label-txt">КЕЙС 3: ДЕПОЗИТ</span>
+                                <span class="safe-status" id="safe-status-2">ЗАБЛОКИРОВАН</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Information reveal box -->
+                    <div class="jtbd-card-reveal">
+                        <div class="jtbd-card" id="jtbd-card-0">
+                            <div class="jtbd-card-details">
+                                <div class="jtbd-card-meta">Артур, молодая семья, сын 2 года.</div>
+                                <div class="jtbd-card-quote">«Хозяин грозит выселением. У нас тут садик рядом, дёргаться не хочется. Страшно остаться без жилья».</div>
+                            </div>
+                            <div class="jtbd-card-job">
+                                <span class="job-label">Покупают</span>
+                                <span class="job-value">БЕЗОПАСНОСТЬ</span>
+                            </div>
+                        </div>
+
+                        <div class="jtbd-card" id="jtbd-card-1">
+                            <div class="jtbd-card-details">
+                                <div class="jtbd-card-meta">Мария, двое разнополых детей (8 и 14 лет) в двушке хрущевке.</div>
+                                <div class="jtbd-card-quote">«Дети постоянно ссорятся, муж уходит говорить на кухню, поговорить вообще негде. Все раздражены».</div>
+                            </div>
+                            <div class="jtbd-card-job">
+                                <span class="job-label">Покупают</span>
+                                <span class="job-value">МИР И ГРАНИЦЫ</span>
+                            </div>
+                        </div>
+
+                        <div class="jtbd-card" id="jtbd-card-2">
+                            <div class="jtbd-card-details">
+                                <div class="jtbd-card-meta">Игорь, 5 млн ₽ наличных на руках или депозите.</div>
+                                <div class="jtbd-card-quote">«Банки сегодня дают процент, а завтра инфляция всё сожрёт. Я хочу видеть реальный кирпич, который никуда не денется».</div>
+                            </div>
+                            <div class="jtbd-card-job">
+                                <span class="job-label">Покупают</span>
+                                <span class="job-value">ЛИКВИДНЫЙ СЕЙФ</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <span>[ Хореография: Имитируем поворот кодового замка сейфа рукой, открываем кейсы ]</span>
+                <span class="footer-brand">Jobs to be Done</span>
+            </div>
+        </div>
+
+
+        <!-- ──────────────────────────────────────────────────────── -->
+        <!-- SLIDE 6: COMPARISON TABLE & MAP                          -->
+        <!-- ──────────────────────────────────────────────────────── -->
+        <div class="slide" data-index="5" id="slide-5">
+            <div class="slide-header">
+                <div class="slide-label">Шорт-лист и маршрут</div>
+                <div class="slide-title">Сводная финмодель и <span class="gradient-cyan">направленный тест-драйв</span></div>
+            </div>
+
+            <div class="slide-body">
+                <div class="map-layout">
+                    <!-- Left: Table comparison -->
+                    <div class="table-panel">
+                        <table class="comparison-table" id="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Объект</th>
+                                    <th>Платёж</th>
+                                    <th>Первонач.</th>
+                                    <th>Честный Минус</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-row="0">
+                                    <td style="font-weight: 700;">ЖК 1 (Проспект)</td>
+                                    <td>30 000 ₽</td>
+                                    <td>1.5 млн ₽</td>
+                                    <td style="color: var(--color-red);">Шум от проспекта, задержка 6 мес</td>
+                                </tr>
+                                <tr data-row="1">
+                                    <td style="font-weight: 700;">ЖК 2 (Черниковка)</td>
+                                    <td>34 000 ₽</td>
+                                    <td>1.2 млн ₽</td>
+                                    <td style="color: var(--color-red);">Срок сдачи на год позже</td>
+                                </tr>
+                                <tr data-row="2" class="active">
+                                    <td style="font-weight: 700; color: var(--color-green);">ЖК 3 (Зеленка)</td>
+                                    <td style="color: var(--color-green);">28 000 ₽</td>
+                                    <td>1.5 млн ₽</td>
+                                    <td style="color: var(--color-green);">Идеально подходит под JTBD</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="table-panel-tagline">
+                            Мы не возим на 10 строек. Мы выявляем минусы, сужаем выбор до 2 лучших вариантов и едем только туда.
+                        </div>
+                    </div>
+
+                    <!-- Right: Map of Ufa HUD -->
+                    <div class="map-panel">
+                        <svg class="mock-map-svg" viewBox="0 0 300 400">
+                            <!-- Background Grid -->
+                            <defs>
+                                <pattern id="map-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                                    <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255, 255, 255, 0.03)" stroke-width="1"/>
+                                </pattern>
+                            </defs>
+                            <rect width="100%" height="100%" fill="url(#map-grid)" />
+                            
+                            <!-- Simplified road paths of Ufa -->
+                            <path d="M 50,380 L 150,220 L 250,50" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="5" />
+                            <path d="M 30,220 L 150,220 L 280,250" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="3" />
+                            <path d="M 150,220 L 160,110 L 200,20" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="4" />
+                            
+                            <!-- Office marker -->
+                            <g class="map-marker" transform="translate(150, 220)">
+                                <circle r="10" fill="none" stroke="var(--color-orange)" stroke-width="2" />
+                                <circle r="4" fill="var(--color-orange)" />
+                                <text y="-18" fill="var(--color-orange)">ОФИС</text>
+                            </g>
+
+                            <!-- ЖК 1 Marker -->
+                            <g class="map-marker" id="marker-0" transform="translate(80, 330)">
+                                <circle r="8" />
+                                <text y="16">ЖК 1</text>
+                            </g>
+
+                            <!-- ЖК 2 Marker -->
+                            <g class="map-marker" id="marker-1" transform="translate(220, 100)">
+                                <circle r="8" />
+                                <text y="16">ЖК 2</text>
+                            </g>
+
+                            <!-- ЖК 3 Marker (Active / Target) -->
+                            <g class="map-marker active" id="marker-2" transform="translate(170, 80)">
+                                <circle r="10" />
+                                <text y="18">ЖК 3</text>
+                            </g>
+
+                            <!-- Route Line -->
+                            <path class="map-route-line show" id="route-to-jkb" d="M 150,220 L 160,110 L 170,80" fill="none" />
+                        </svg>
+
+                        <!-- HUD overlay -->
+                        <div class="map-hud-overlay show" id="map-hud">
+                            <div class="hud-left">
+                                <h5 id="hud-map-title">ЖК 3 (Зеленая Роща)</h5>
+                                <p id="hud-map-desc">Проложен маршрут до объекта</p>
+                            </div>
+                            <div class="hud-right" id="hud-map-status">ТЕСТ-ДРАЙВ: СУББОТА 11:00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <span>[ Хореография: Выбор ЖК в таблице строит путь на карте и выводит детали о задержках/маршрутах ]</span>
+                <span class="footer-brand">Маршрутная Карта</span>
+            </div>
+        </div>
+
+
+        <!-- ──────────────────────────────────────────────────────── -->
+        <!-- SLIDE 7: FINAL QR & ORBITS                               -->
+        <!-- ──────────────────────────────────────────────────────── -->
+        <div class="slide" data-index="6" id="slide-6">
+            <div class="slide-header">
+                <div class="slide-label">Заключение</div>
+                <div class="slide-title">Становитесь <span class="gradient-green">Навигаторами</span> для клиентов</div>
+            </div>
+
+            <div class="slide-body">
+                <div class="final-layout">
+                    <!-- Left column -->
+                    <div class="final-left">
+                        <div class="hw-card">
+                            <div class="hw-title">Домашнее задание для агентов</div>
+                            <ul class="hw-list">
+                                <li>Разобрать свои 3 последние закрытые сделки</li>
+                                <li>Описать триггер и истинные боли (JTBD) клиентов</li>
+                                <li>Рассчитать упущенный LTV (пожизненную ценность)</li>
+                                <li>Оформить в виде последовательного рассказа-кейса</li>
+                            </ul>
+                        </div>
+
+                        <p style="font-size: 1.1rem; color: var(--text-secondary); line-height: 1.5;">
+                            Сканируйте QR-код для скачивания **шаблона финмодели** и **10 диагностических вопросов JTBD**.
+                        </p>
+                    </div>
+
+                    <!-- Right column (QR & orbits) -->
+                    <div class="final-right-orbits">
+                        <!-- Orbiting paths -->
+                        <div class="orbit-path orbit-1">
+                            <div class="orbit-node node-r" data-node="r">Р
+                                <div class="node-tooltip">
+                                    <h6>Регламенты</h6>
+                                    <p>Стандарты, правила и пошаговые инструкции ведения сделок.</p>
+                                </div>
+                            </div>
+                            <div class="orbit-node node-o" data-node="o">О
+                                <div class="node-tooltip">
+                                    <h6>Оцифровка</h6>
+                                    <p>Перенос всех бизнес-процессов в единую и удобную базу знаний.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="orbit-path orbit-2">
+                            <div class="orbit-node node-s" data-node="s">С
+                                <div class="node-tooltip">
+                                    <h6>Свобода</h6>
+                                    <p>Освобождение 15-20 часов личного времени в неделю от рутины.</p>
+                                </div>
+                            </div>
+                            <div class="orbit-node node-t" data-node="t">Т
+                                <div class="node-tooltip">
+                                    <h6>Технологии</h6>
+                                    <p>Использование ИИ-ассистентов и клонов для ускорения работы.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Center QR Code -->
+                        <div class="orbit-center-qr" id="qr-code-box">
+                            <!-- High quality generated SVG QR Code representing telegram channel / link -->
+                            <svg class="qr-svg" viewBox="0 0 29 29">
+                                <path fill="#1a1a1a" d="M0 0h9v9H0zm1 1h7v7H1zm1 1h5v5H2zm19-2h9v9h-9zm1 1h7v7h-7zm1 1h5v5h-5zM0 20h9v9H0zm1 1h7v7H1zm3 2v3h1v-3zm3 0v1h1v-1zm1 2v1h1v-1zm1-5v1h1v-1zm1 1v1h1v-1zm1 2v1h1v-1zm1-3v1h1v-1zm1 1v2h1v-2zm1 3v1h1v-1zm2-5v1h2v-1zm1 1v1h1v-1zm1 1v1h1v-1zm1 1v1h1v-1zm1-3v1h1v-1zm0 2v1h1v-1zm1-2v1h1v-1zm1 1v1h1v-1zm1 2v1h1v-1zm-9 6v3h1v-3zm2 0v1h1v-1zm1 2v1h1v-1zm1-3v1h1v-1zm1 1v1h1v-1zm1 2v1h1v-1zm1-3v1h1v-1zm1 1v2h1v-2zm1 3v1h1v-1zm2-5v1h2v-1zm1 1v1h1v-1zm1 1v1h1v-1zm1 1v1h1v-1zm1-3v1h1v-1zm0 2v1h1v-1zm1-2v1h1v-1zm1 1v1h1v-1zm1 2v1h1v-1z"/>
+                                <path fill="#00d4ff" d="M9 0h1v9H9zm0 11h1v2H9zm0 6h1v3H9zm0 4h1v2H9zm1-11h1v1h-1zm0 3h1v1h-1zm0 2h1v2h-1zm0 5h1v1h-1zm1-9h1v1h-1zm0 2h1v1h-1zm0 2h1v1h-1zm0 2h1v3h-1zm1-8h1v1h-1zm0 4h1v1h-1zm0 3h1v1h-1zm1-7h1v1h-1zm0 2h1v1h-1zm0 2h1v1h-1zm0 4h1v2h-1zm1-5h1v1h-1zm0 2h1v1h-1zm0 2h1v1h-1zm1-5h1v1h-1zm0 2h1v1h-1zm0 2h1v1h-1zm1-5h1v1h-1zm0 2h1v1h-1zm0 2h1v1h-1zm1-5h1v1h-1zm0 2h1v1h-1zm0 2h1v1h-1zm1-5h1v1h-1zm0 2h1v1h-1zm0 2h1v1h-1zm1-5h1v1h-1zm0 2h1v1h-1zm0 2h1v1h-1zm1-5h1v1h-1zm0 2h1v1h-1zm0 2h1v1h-1zm1-5h1v1h-1zm0 2h1v1h-1zm0 2h1v1h-1zm1-5h1v1h-1zm0 2h1v1h-1zm0 2h1v1h-1zm1-5h1v1h-1zm0 2h1v1h-1zm0 2h1v1h-1zm1-5h1v1h-1zm0 2h1v1h-1zm0 2h1v1h-1z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-footer">
+                <span>[ Хореография: Шаг вперед к QR-коду, разведение рук, призыв сканировать ]</span>
+                <span class="footer-brand">Методология РОСТ</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Interactive Navigation Arrows -->
+    <div class="controls">
+        <button class="btn-ctrl" id="btn-prev" title="Предыдущий слайд (Стрелка влево)">◀</button>
+        <button class="btn-ctrl" id="btn-next" title="Следующий слайд (Стрелка вправо / Пробел)">▶</button>
+    </div>
+
+    <!-- Dots Indicators -->
+    <div class="slide-indicator" id="slide-indicators"></div>
+
+    <!-- Presentation Code Logic -->
+    <script>
+        // ────────────────────────────────────────────────────────
+        // 1. SOUND INTERACTION SYNTHESIS (Web Audio API)
+        // ────────────────────────────────────────────────────────
+        class SoundFX {
+            constructor() {
+                this.ctx = null;
+            }
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            }
+            playBeep(freq = 440, type = 'sine', duration = 0.1, vol = 0.15) {
+                this.init();
+                if (this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                
+                gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+                
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                
+                osc.start();
+                osc.stop(this.ctx.currentTime + duration);
+            }
+            playShatter() {
+                this.playBeep(120, 'triangle', 0.4, 0.3);
+                setTimeout(() => this.playBeep(1200, 'sine', 0.15, 0.08), 50);
+                setTimeout(() => this.playBeep(850, 'sine', 0.25, 0.05), 120);
+                setTimeout(() => this.playBeep(1500, 'sine', 0.1, 0.03), 180);
+            }
+            playSuccess() {
+                this.playBeep(523.25, 'sine', 0.15, 0.1); // C5
+                setTimeout(() => this.playBeep(659.25, 'sine', 0.15, 0.1), 100); // E5
+                setTimeout(() => this.playBeep(783.99, 'sine', 0.3, 0.12), 200); // G5
+            }
+            playEnergy() {
+                this.playBeep(300, 'sawtooth', 0.5, 0.08);
+                setTimeout(() => this.playBeep(600, 'sine', 0.3, 0.1), 100);
+            }
+        }
+        const sfx = new SoundFX();
+
+
+        // ────────────────────────────────────────────────────────
+        // 2. AMBIENT BACKGROUND PARTICLES RENDER
+        // ────────────────────────────────────────────────────────
+        const bgCanvas = document.getElementById('bg-canvas');
+        const bgCtx = bgCanvas.getContext('2d');
+        let bgWidth = bgCanvas.width = window.innerWidth;
+        let bgHeight = bgCanvas.height = window.innerHeight;
+        const bgParticles = [];
+
+        window.addEventListener('resize', () => {
+            bgWidth = bgCanvas.width = window.innerWidth;
+            bgHeight = bgCanvas.height = window.innerHeight;
+        });
+
+        class BgParticle {
+            constructor() {
+                this.x = Math.random() * bgWidth;
+                this.y = Math.random() * bgHeight;
+                this.size = Math.random() * 2.5 + 0.5;
+                this.speedX = Math.random() * 0.4 - 0.2;
+                this.speedY = Math.random() * 0.3 - 0.15;
+                this.color = Math.random() > 0.5 ? 'rgba(0, 212, 255, 0.3)' : 'rgba(255, 107, 0, 0.2)';
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > bgWidth) this.speedX *= -1;
+                if (this.y < 0 || this.y > bgHeight) this.speedY *= -1;
+            }
+            draw() {
+                bgCtx.fillStyle = this.color;
+                bgCtx.beginPath();
+                bgCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                bgCtx.fill();
+            }
+        }
+
+        for (let i = 0; i < 65; i++) {
+            bgParticles.push(new BgParticle());
+        }
+
+        function animateBg() {
+            bgCtx.clearRect(0, 0, bgWidth, bgHeight);
+            bgParticles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateBg);
+        }
+        animateBg();
+
+
+        // ────────────────────────────────────────────────────────
+        // 3. PRESENTATION STATE MANAGEMENT
+        // ────────────────────────────────────────────────────────
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        let currentSlideIdx = 0;
+
+        // Render dots indicators
+        const indicatorsContainer = document.getElementById('slide-indicators');
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.className = `indicator-dot ${i === 0 ? 'active' : ''}`;
+            dot.addEventListener('click', () => goToSlide(i));
+            indicatorsContainer.appendChild(dot);
+        }
+        const dots = document.querySelectorAll('.indicator-dot');
+
+        function updateSlideClasses() {
+            slides.forEach((slide, idx) => {
+                slide.classList.remove('active', 'prev-slide');
+                if (idx === currentSlideIdx) {
+                    slide.classList.add('active');
+                } else if (idx < currentSlideIdx) {
+                    slide.classList.add('prev-slide');
+                }
+            });
+            
+            dots.forEach((dot, idx) => {
+                dot.classList.toggle('active', idx === currentSlideIdx);
+            });
+            sfx.playBeep(400, 'sine', 0.05, 0.05);
+        }
+
+        function nextSlide() {
+            if (currentSlideIdx < totalSlides - 1) {
+                currentSlideIdx++;
+                updateSlideClasses();
+            }
+        }
+
+        // Exposed globally for presentation clickers
+        window.nextSlide = nextSlide;
+        window.prevSlide = prevSlide;
+        window.goToSlide = goToSlide;
+
+        function prevSlide() {
+            if (currentSlideIdx > 0) {
+                currentSlideIdx--;
+                updateSlideClasses();
+            }
+        }
+
+        function goToSlide(idx) {
+            if (idx >= 0 && idx < totalSlides) {
+                currentSlideIdx = idx;
+                updateSlideClasses();
+            }
+        }
+
+        document.getElementById('btn-next').addEventListener('click', nextSlide);
+        document.getElementById('btn-prev').addEventListener('click', prevSlide);
+
+        // Keyboard Controls
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+
+
+        // ────────────────────────────────────────────────────────
+        // 4. INTERACTION LOGIC FOR SLIDE 1 (GLASS SHATTER)
+        // ────────────────────────────────────────────────────────
+        const shatterBtn = document.getElementById('shatter-btn');
+        const shatterCanvas = document.getElementById('shatter-canvas');
+        const shCtx = shatterCanvas.getContext('2d');
+        const introFollowup = document.getElementById('intro-followup');
+        let isShattered = false;
+
+        shatterBtn.addEventListener('click', (e) => {
+            if (isShattered) return;
+            isShattered = true;
+            sfx.playShatter();
+            
+            // Set canvas bounds
+            const rect = shatterBtn.getBoundingClientRect();
+            const containerRect = document.getElementById('glass-btn-container').getBoundingClientRect();
+            
+            shatterCanvas.width = containerRect.width;
+            shatterCanvas.height = containerRect.height;
+            
+            shatterBtn.style.opacity = '0';
+            shatterBtn.style.pointerEvents = 'none';
+            
+            const btnX = rect.left - containerRect.left;
+            const btnY = rect.top - containerRect.top;
+            
+            // Spawn particles
+            const particles = [];
+            const cols = 20;
+            const rows = 6;
+            const w = rect.width / cols;
+            const h = rect.height / rows;
+
+            for (let c = 0; c < cols; c++) {
+                for (let r = 0; r < rows; r++) {
+                    particles.push({
+                        x: btnX + c * w + w/2,
+                        y: btnY + r * h + h/2,
+                        vx: (Math.random() - 0.5) * 12,
+                        vy: (Math.random() - 0.5) * 12 + 2, // Gravitational pull down
+                        size: Math.random() * 4 + 2,
+                        alpha: 1,
+                        color: 'rgba(0, 212, 255, 0.8)'
+                    });
+                }
+            }
+
+            function animateShatter() {
+                let active = false;
+                shCtx.clearRect(0, 0, shatterCanvas.width, shatterCanvas.height);
+                
+                particles.forEach(p => {
+                    if (p.alpha > 0.01) {
+                        active = true;
+                        p.x += p.vx;
+                        p.y += p.vy;
+                        p.vy += 0.25; // gravity simulation
+                        p.alpha -= 0.02;
+                        
+                        shCtx.save();
+                        shCtx.globalAlpha = p.alpha;
+                        shCtx.fillStyle = p.color;
+                        shCtx.shadowBlur = 8;
+                        shCtx.shadowColor = 'rgba(0, 212, 255, 0.5)';
+                        shCtx.beginPath();
+                        shCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                        shCtx.fill();
+                        shCtx.restore();
+                    }
+                });
+
+                if (active) {
+                    requestAnimationFrame(animateShatter);
+                } else {
+                    shCtx.clearRect(0, 0, shatterCanvas.width, shatterCanvas.height);
+                }
+            }
+
+            animateShatter();
+            
+            setTimeout(() => {
+                introFollowup.classList.add('show');
+                sfx.playSuccess();
+            }, 700);
+        });
+
+
+        // ────────────────────────────────────────────────────────
+        // 5. INTERACTION LOGIC FOR SLIDE 2 (LTV CALCULATION)
+        // ────────────────────────────────────────────────────────
+        const timelineBtns = document.querySelectorAll('.timeline-btn');
+        const infoCards = document.querySelectorAll('.timeline-info-card');
+        const ltvCounter = document.getElementById('ltv-total-counter');
+        
+        let activatedSteps = new Set();
+        const stepValues = [200000, 300000, 400000, 180000];
+        
+        timelineBtns.forEach((btn, idx) => {
+            btn.addEventListener('click', () => {
+                // Deactivate all info cards
+                infoCards.forEach(card => card.classList.remove('active'));
+                timelineBtns.forEach(b => b.classList.remove('active'));
+                
+                // Activate clicked
+                btn.classList.add('active');
+                const card = document.getElementById(`ltv-card-${idx}`);
+                card.classList.add('active');
+                
+                if (!activatedSteps.has(idx)) {
+                    activatedSteps.add(idx);
+                    sfx.playEnergy();
+                    animateCounter();
+                } else {
+                    sfx.playBeep(600, 'sine', 0.08, 0.08);
+                }
+            });
+        });
+
+        function animateCounter() {
+            let targetSum = 0;
+            activatedSteps.forEach(idx => {
+                targetSum += stepValues[idx];
+            });
+            
+            let currentDisplay = parseInt(ltvCounter.textContent.replace(/[^0-9]/g, '')) || 0;
+            const diff = targetSum - currentDisplay;
+            
+            if (diff === 0) return;
+            
+            let start = null;
+            const duration = 800; // ms
+            
+            function step(timestamp) {
+                if (!start) start = timestamp;
+                const progress = timestamp - start;
+                const percent = Math.min(progress / duration, 1);
+                
+                const val = Math.floor(currentDisplay + diff * percent);
+                ltvCounter.textContent = val.toLocaleString('ru-RU') + ' ₽';
+                
+                if (progress < duration) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    ltvCounter.textContent = targetSum.toLocaleString('ru-RU') + ' ₽';
+                    if (targetSum === 1080000) {
+                        ltvCounter.classList.add('maxed');
+                        sfx.playSuccess();
+                    }
+                }
+            }
+            window.requestAnimationFrame(step);
+        }
+
+
+        // ────────────────────────────────────────────────────────
+        // 6. INTERACTION LOGIC FOR SLIDE 3 (SHATTER BUREAU)
+        // ────────────────────────────────────────────────────────
+        const bureauPanel = document.getElementById('bureau-panel');
+        const bureauReveal = document.getElementById('bureau-reveal');
+        
+        bureauPanel.addEventListener('click', () => {
+            if (bureauPanel.classList.contains('shattered')) return;
+            bureauPanel.classList.add('shattered');
+            sfx.playShatter();
+            
+            setTimeout(() => {
+                bureauPanel.style.display = 'none';
+                bureauReveal.classList.add('show');
+                sfx.playSuccess();
+            }, 600);
+        });
+
+        const ruleRows = document.querySelectorAll('.rule-row');
+        ruleRows.forEach((row, idx) => {
+            row.addEventListener('click', () => {
+                ruleRows.forEach(r => r.classList.remove('active'));
+                row.classList.add('active');
+                sfx.playBeep(450 + idx * 100, 'sine', 0.1, 0.1);
+            });
+        });
+
+
+        // ────────────────────────────────────────────────────────
+        // 7. INTERACTION LOGIC FOR SLIDE 4 (FINANCIAL AUDIT)
+        // ────────────────────────────────────────────────────────
+        const schemeCards = document.querySelectorAll('.scheme-card');
+        const houseBlueprint = document.getElementById('house-blueprint');
+        const houseGlow = document.getElementById('house-glow');
+        const houseHud = document.getElementById('house-hud');
+        
+        const hudTitle = document.getElementById('hud-title');
+        const hudValue = document.getElementById('hud-value');
+        const hudNote = document.getElementById('hud-note');
+
+        const schemeDetails = {
+            family: {
+                title: 'Семейная ипотека',
+                value: '28 000 ₽ / мес',
+                note: 'Льготная ставка 6%. Лимит 6 млн ₽. Безопасно для семейного бюджета.',
+                color: 'var(--color-cyan)',
+                height: '60%'
+            },
+            trench: {
+                title: 'Траншевая ипотека',
+                value: '1 ₽ / мес',
+                note: 'До ввода дома в эксплуатацию. Экономия на платежах во время ожидания.',
+                color: 'var(--color-orange)',
+                height: '40%'
+            },
+            installments: {
+                title: 'Рассрочка без ПВ',
+                value: '0 ₽ взнос',
+                note: 'Для тех, у кого сбережения лежат на депозитах под высокий процент.',
+                color: 'var(--color-green)',
+                height: '85%'
+            },
+            subsidized: {
+                title: 'Субсидия ставки',
+                value: '20 000 ₽ / мес',
+                note: 'Сниженный платеж за счет комиссии застройщика (вместо 40 000 ₽).',
+                color: '#9c27b0',
+                height: '75%'
+            }
+        };
+
+        schemeCards.forEach(card => {
+            card.addEventListener('click', () => {
+                schemeCards.forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+                
+                const schemeKey = card.getAttribute('data-scheme');
+                const data = schemeDetails[schemeKey];
+                
+                sfx.playEnergy();
+                
+                // Animate house
+                houseBlueprint.classList.add('activated');
+                houseGlow.style.height = data.height;
+                houseGlow.style.background = `linear-gradient(to top, ${data.color} 30%, rgba(255,255,255,0.05) 100%)`;
+                houseBlueprint.style.stroke = data.color;
+                
+                // Show HUD Data
+                houseHud.classList.remove('show');
+                setTimeout(() => {
+                    hudTitle.textContent = data.title;
+                    hudValue.textContent = data.value;
+                    hudValue.style.color = data.color;
+                    hudNote.textContent = data.note;
+                    houseHud.classList.add('show');
+                }, 200);
+            });
+        });
+
+
+        // ────────────────────────────────────────────────────────
+        // 8. INTERACTION LOGIC FOR SLIDE 5 (JTBD SAFES)
+        // ────────────────────────────────────────────────────────
+        const safeCards = document.querySelectorAll('.safe-container');
+        const jtbdCards = document.querySelectorAll('.jtbd-card');
+        const safeStatuses = [
+            document.getElementById('safe-status-0'),
+            document.getElementById('safe-status-1'),
+            document.getElementById('safe-status-2')
+        ];
+
+        safeCards.forEach((safe, idx) => {
+            safe.addEventListener('click', () => {
+                const card = document.getElementById(`safe-card-${idx}`);
+                
+                if (card.classList.contains('open')) {
+                    // Toggle close
+                    card.classList.remove('open');
+                    safeStatuses[idx].textContent = 'ЗАБЛОКИРОВАН';
+                    safeStatuses[idx].style.color = 'var(--text-muted)';
+                    document.getElementById(`jtbd-card-${idx}`).classList.remove('active');
+                    sfx.playBeep(300, 'sine', 0.1, 0.1);
+                } else {
+                    // Open safe
+                    // Close others
+                    document.querySelectorAll('.safe-card').forEach(c => c.classList.remove('open'));
+                    jtbdCards.forEach(j => j.classList.remove('active'));
+                    safeStatuses.forEach(s => {
+                        s.textContent = 'ЗАБЛОКИРОВАН';
+                        s.style.color = 'var(--text-muted)';
+                    });
+
+                    card.classList.add('open');
+                    safeStatuses[idx].textContent = 'РАСШИФРОВАНО';
+                    safeStatuses[idx].style.color = 'var(--color-green)';
+                    
+                    sfx.playShatter();
+                    
+                    setTimeout(() => {
+                        document.getElementById(`jtbd-card-${idx}`).classList.add('active');
+                        sfx.playSuccess();
+                    }, 500);
+                }
+            });
+        });
+
+
+        // ────────────────────────────────────────────────────────
+        // 9. INTERACTION LOGIC FOR SLIDE 6 (COMPARISON & MAP)
+        // ────────────────────────────────────────────────────────
+        const tableRows = document.querySelectorAll('.comparison-table tbody tr');
+        const mapMarkers = document.querySelectorAll('.map-marker');
+        const routeLine = document.getElementById('route-to-jkb');
+        const mapHud = document.getElementById('map-hud');
+        
+        const hudMapTitle = document.getElementById('hud-map-title');
+        const hudMapDesc = document.getElementById('hud-map-desc');
+        const hudMapStatus = document.getElementById('hud-map-status');
+
+        const markerDetails = [
+            {
+                title: 'ЖК 1 (Проспект)',
+                desc: 'Шум от проспекта Салавата Юлаева, задержка ввода 6 мес',
+                status: 'ОТБРАКОВАН',
+                color: 'var(--color-red)',
+                hasRoute: false
+            },
+            {
+                title: 'ЖК 2 (Черниковка)',
+                desc: 'Срок сдачи перенесен застройщиком на 1 год позже',
+                status: 'ОТБРАКОВАН',
+                color: 'var(--color-red)',
+                hasRoute: false
+            },
+            {
+                title: 'ЖК 3 (Зеленая Роща)',
+                desc: 'Комфортный платеж 28к ₽, школа и садик сдаются вместе с домом',
+                status: 'ТЕСТ-ДРАЙВ: СУББОТА 11:00',
+                color: 'var(--color-green)',
+                hasRoute: true
+            }
+        ];
+
+        tableRows.forEach((row, idx) => {
+            row.addEventListener('click', () => {
+                tableRows.forEach(r => r.classList.remove('active'));
+                row.classList.add('active');
+                activateMarker(idx);
+            });
+        });
+
+        mapMarkers.forEach((marker, idx) => {
+            const id = marker.getAttribute('id');
+            if (id && id.startsWith('marker-')) {
+                const markerIdx = parseInt(id.split('-')[1]);
+                marker.addEventListener('click', () => {
+                    tableRows.forEach(r => r.classList.remove('active'));
+                    tableRows[markerIdx].classList.add('active');
+                    activateMarker(markerIdx);
+                });
+            }
+        });
+
+        function activateMarker(idx) {
+            mapMarkers.forEach(m => m.classList.remove('active'));
+            const activeMarker = document.getElementById(`marker-${idx}`);
+            if (activeMarker) activeMarker.classList.add('active');
+            
+            const details = markerDetails[idx];
+            sfx.playEnergy();
+            
+            if (details.hasRoute) {
+                routeLine.classList.add('show');
+            } else {
+                routeLine.classList.remove('show');
+            }
+
+            mapHud.classList.remove('show');
+            setTimeout(() => {
+                hudMapTitle.textContent = details.title;
+                hudMapDesc.textContent = details.desc;
+                hudMapStatus.textContent = details.status;
+                hudMapStatus.style.borderColor = details.color === 'var(--color-red)' ? 'rgba(255, 51, 102, 0.3)' : 'rgba(0, 255, 136, 0.3)';
+                hudMapStatus.style.background = details.color === 'var(--color-red)' ? 'rgba(255, 51, 102, 0.05)' : 'rgba(0, 255, 136, 0.05)';
+                hudMapStatus.style.color = details.color;
+                mapHud.classList.add('show');
+                
+                if (details.hasRoute) {
+                    sfx.playSuccess();
+                }
+            }, 200);
+        }
+
+
+        // ────────────────────────────────────────────────────────
+        // 10. INTERACTION LOGIC FOR SLIDE 7 (ORBIT DETAILS)
+        // ────────────────────────────────────────────────────────
+        const orbitNodes = document.querySelectorAll('.orbit-node');
+        const qrCodeBox = document.getElementById('qr-code-box');
+
+        orbitNodes.forEach(node => {
+            node.addEventListener('mouseenter', () => {
+                const tooltip = node.querySelector('.node-tooltip');
+                tooltip.style.opacity = '1';
+                tooltip.style.transform = 'translateY(-10px)';
+                sfx.playBeep(800, 'sine', 0.03, 0.04);
+            });
+            node.addEventListener('mouseleave', () => {
+                const tooltip = node.querySelector('.node-tooltip');
+                tooltip.style.opacity = '0';
+                tooltip.style.transform = 'translateY(10px)';
+            });
+        });
+
+        qrCodeBox.addEventListener('click', () => {
+            sfx.playSuccess();
+            // Pulse animation
+            qrCodeBox.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                qrCodeBox.style.transform = 'scale(1)';
+            }, 300);
+        });
+
+    </script>
+</body>
+</html>
