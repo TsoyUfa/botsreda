@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Аналитика использования Antigravity — Антон Цой</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(22, 30, 49, 0.7);
+            --card-border: rgba(255, 255, 255, 0.06);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-primary: #8b5cf6;
+            --accent-secondary: #06b6d4;
+            --accent-glow: rgba(139, 92, 246, 0.15);
+            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            min-height: 100vh;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(6, 166, 212, 0.08) 0%, transparent 40%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 2.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 1.5rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        /* KPI Grid */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .kpi-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.3);
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.1);
+        }
+
+        .kpi-title {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .kpi-unit {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-left: 0.25rem;
+        }
+
+        .kpi-trend {
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            color: var(--accent-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* Tabs System */
+        .tabs-nav {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 0.75rem;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 0.6rem 1.2rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .tab-btn.active {
+            color: #ffffff;
+            background: var(--accent-primary);
+            box-shadow: 0 4px 14px var(--accent-glow);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Main Dashboard Grid */
+        .db-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .db-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chart-box {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            min-height: 380px;
+            backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            color: #ffffff;
+            border-left: 3px solid var(--accent-primary);
+            padding-left: 0.75rem;
+        }
+
+        .chart-container {
+            position: relative;
+            flex-grow: 1;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Projects List */
+        .projects-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 180px;
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover {
+            border-color: rgba(6, 182, 212, 0.3);
+            box-shadow: 0 4px 20px rgba(6, 182, 212, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .project-date {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .project-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
+            background: rgba(139, 92, 246, 0.1);
+            color: #c084fc;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .project-desc {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            flex-grow: 1;
+            font-style: italic;
+        }
+
+        .project-footer {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            padding-top: 0.75rem;
+        }
+
+        /* Recommendations Cards */
+        .rec-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .rec-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rec-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent-primary);
+        }
+
+        .rec-card.blue::before {
+            background: var(--accent-secondary);
+        }
+
+        .rec-card.green::before {
+            background: #10b981;
+        }
+
+        .rec-card.orange::before {
+            background: #f59e0b;
+        }
+
+        .rec-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #ffffff;
+        }
+
+        .rec-text {
+            font-size: 0.92rem;
+            line-height: 1.5;
+            color: var(--text-secondary);
+        }
+
+        .rec-action {
+            display: inline-block;
+            margin-top: 1.25rem;
+            font-size: 0.85rem;
+            color: var(--accent-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .rec-action:hover {
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Анализ эффективности: Antigravity × Антон Цой</h1>
+            <p class="subtitle">Интерактивный дашборд использования AI-ассистента за Май — Июнь 2026</p>
+        </header>
+
+        <!-- KPI Grid -->
+        <section class="kpi-grid">
+            <div class="kpi-card">
+                <p class="kpi-title">Общее время работы</p>
+                <p class="kpi-value">69.8<span class="kpi-unit">часов</span></p>
+                <div class="kpi-trend">⚡ 163 сессий общения</div>
+            </div>
+            <div class="kpi-card">
+                <p class="kpi-title">В день (активный)</p>
+                <p class="kpi-value">120<span class="kpi-unit">минут</span></p>
+                <div class="kpi-trend">🚀 Около 2.0 ч глубокой работы</div>
+            </div>
+            <div class="kpi-card">
+                <p class="kpi-title">В день (календарный)</p>
+                <p class="kpi-value">69<span class="kpi-unit">минут</span></p>
+                <div class="kpi-trend">📆 В среднем каждый день</div>
+            </div>
+            <div class="kpi-card">
+                <p class="kpi-title">Использование</p>
+                <p class="kpi-value">35<span class="kpi-unit">/ 61 дней</span></p>
+                <div class="kpi-trend">🔥 57% активных дней в периоде</div>
+            </div>
+        </section>
+
+        <!-- Navigation Tabs -->
+        <nav class="tabs-nav">
+            <button class="tab-btn active" onclick="openTab('tab-overview')">Обзор активности</button>
+            <button class="tab-btn" onclick="openTab('tab-categories')">Направления работы</button>
+            <button class="tab-btn" onclick="openTab('tab-tools')">Инструменты AI</button>
+            <button class="tab-btn" onclick="openTab('tab-projects')">Главные сессии</button>
+            <button class="tab-btn" onclick="openTab('tab-recommendations')">Рекомендации</button>
+        </nav>
+
+        <!-- Tab: Overview -->
+        <div id="tab-overview" class="tab-content active">
+            <div class="db-grid">
+                <div class="chart-box">
+                    <p class="chart-title">Динамика работы по неделям</p>
+                    <div class="chart-container">
+                        <canvas id="weeklyChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-box" style="justify-content: center; align-items: center; text-align: center; padding: 2rem;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">📈</div>
+                    <h3 style="margin-bottom: 0.5rem; font-size: 1.2rem;">Анализ тренда</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5;">
+                        Пик активности пришелся на неделю <b>22 июня (19.4ч)</b>. Твоя загрузка растет к концу месяца, отражая плотную подготовку к блокам обучения и сборку сайтов/ботов. В среднем ты работаешь со мной 4 дня в неделю.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Categories -->
+        <div id="tab-categories" class="tab-content">
+            <div class="db-grid">
+                <div class="chart-box">
+                    <p class="chart-title">Тематика твоих запросов</p>
+                    <div class="chart-container" style="max-height: 320px;">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-box" style="padding: 1.5rem; justify-content: flex-start;">
+                    <p class="chart-title">Распределение по темам</p>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.8rem; font-size: 0.92rem;">
+                        <li style="display:flex; justify-content:space-between; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 0.4rem;"><span>Real Estate & Finance (Ипотека/Сделки)</span><span style="font-weight:600; color:var(--accent-secondary);">51 сессий (31.3%)</span></li><li style="display:flex; justify-content:space-between; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 0.4rem;"><span>Other / General</span><span style="font-weight:600; color:var(--accent-secondary);">39 сессий (23.9%)</span></li><li style="display:flex; justify-content:space-between; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 0.4rem;"><span>Education & Training (Обучение/Тесты)</span><span style="font-weight:600; color:var(--accent-secondary);">26 сессий (16.0%)</span></li><li style="display:flex; justify-content:space-between; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 0.4rem;"><span>Social Media & Marketing (Reels/Посты)</span><span style="font-weight:600; color:var(--accent-secondary);">24 сессий (14.7%)</span></li><li style="display:flex; justify-content:space-between; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 0.4rem;"><span>Telegram Bots & Dev (Разработка/Автоматизация)</span><span style="font-weight:600; color:var(--accent-secondary);">16 сессий (9.8%)</span></li><li style="display:flex; justify-content:space-between; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 0.4rem;"><span>CRM & Business (Битрикс/CRM/Анализ)</span><span style="font-weight:600; color:var(--accent-secondary);">7 сессий (4.3%)</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Tools -->
+        <div id="tab-tools" class="tab-content">
+            <div class="db-grid">
+                <div class="chart-box">
+                    <p class="chart-title">Топ используемых инструментов AI</p>
+                    <div class="chart-container">
+                        <canvas id="toolsChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-box" style="padding: 1.5rem; font-size: 0.92rem; line-height: 1.5; color: var(--text-secondary);">
+                    <p class="chart-title">Что это значит?</p>
+                    <p style="margin-bottom: 1rem;">
+                        Ты используешь Antigravity не просто как чат-бота, а как <b>полноценный IDE/редактор своего хранилища Obsidian</b>. 
+                    </p>
+                    <p style="margin-bottom: 1rem;">
+                        Огромная доля вызовов <b>view_file</b> и <b>replace_file_content</b> подтверждает, что мы пишем, дорабатываем и структурируем твои лекции, методички, воронки продаж и посты.
+                    </p>
+                    <p>
+                        Вызовы <b>run_command</b> показывают, что ты доверяешь агенту технические действия: управление git, локальный запуск серверов и скриптов.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Projects -->
+        <div id="tab-projects" class="tab-content">
+            <h2 style="font-size: 1.3rem; margin-bottom: 1.2rem; font-weight:600;">Самые длительные и глубокие сессии работы</h2>
+            <div class="projects-list">
+                
+        <div class="project-card">
+            <div class="project-header">
+                <span class="project-date">2026-05-30</span>
+                <span class="project-badge">CRM & Business (Битрикс/CRM/Анализ)</span>
+            </div>
+            <p class="project-desc">"The USER performed the following action: Show the contents of file /Users/anton_tsoy/Desktop/Обсидиан/5. Контент создани..."</p>
+            <div class="project-footer">
+                <span>⏱️ 127 мин активной работы</span>
+                <span>💬 20 реплик</span>
+            </div>
+        </div>
+        
+        <div class="project-card">
+            <div class="project-header">
+                <span class="project-date">2026-06-26</span>
+                <span class="project-badge">Real Estate & Finance (Ипотека/Сделки)</span>
+            </div>
+            <p class="project-desc">"Давай создадим мне сайт, чтобы он был просто богоподобный сайт...."</p>
+            <div class="project-footer">
+                <span>⏱️ 126 мин активной работы</span>
+                <span>💬 15 реплик</span>
+            </div>
+        </div>
+        
+        <div class="project-card">
+            <div class="project-header">
+                <span class="project-date">2026-06-05</span>
+                <span class="project-badge">Social Media & Marketing (Reels/Посты)</span>
+            </div>
+            <p class="project-desc">"&lt;USER_REQUEST&gt; Я очень много учусь, и всегда обучение у меня прикладные. То есть, если мне нужно какую-то тему понять, я..."</p>
+            <div class="project-footer">
+                <span>⏱️ 122 мин активной работы</span>
+                <span>💬 22 реплик</span>
+            </div>
+        </div>
+        
+        <div class="project-card">
+            <div class="project-header">
+                <span class="project-date">2026-06-26</span>
+                <span class="project-badge">Real Estate & Finance (Ипотека/Сделки)</span>
+            </div>
+            <p class="project-desc">"Так, смотри, мой хороший. Мы с тобой уже до этого обсуждали моего бота, в котором, как эта будет логика должна была быть..."</p>
+            <div class="project-footer">
+                <span>⏱️ 110 мин активной работы</span>
+                <span>💬 18 реплик</span>
+            </div>
+        </div>
+        
+        <div class="project-card">
+            <div class="project-header">
+                <span class="project-date">2026-06-03</span>
+                <span class="project-badge">Real Estate & Finance (Ипотека/Сделки)</span>
+            </div>
+            <p class="project-desc">"ты тут?..."</p>
+            <div class="project-footer">
+                <span>⏱️ 104 мин активной работы</span>
+                <span>💬 7 реплик</span>
+            </div>
+        </div>
+        
+        <div class="project-card">
+            <div class="project-header">
+                <span class="project-date">2026-06-22</span>
+                <span class="project-badge">Real Estate & Finance (Ипотека/Сделки)</span>
+            </div>
+            <p class="project-desc">"давай соберем список способов покупки по траншевой  1 столбец Жилой комплекс, 2 столбец не нужен, 3 столбец какой банк, ..."</p>
+            <div class="project-footer">
+                <span>⏱️ 102 мин активной работы</span>
+                <span>💬 14 реплик</span>
+            </div>
+        </div>
+        
+        <div class="project-card">
+            <div class="project-header">
+                <span class="project-date">2026-06-27</span>
+                <span class="project-badge">Real Estate & Finance (Ипотека/Сделки)</span>
+            </div>
+            <p class="project-desc">"проанализируй сайт и предложи что можно улучшить на виральность, интерес, кликабельность, аудитория риэлторы..."</p>
+            <div class="project-footer">
+                <span>⏱️ 90 мин активной работы</span>
+                <span>💬 21 реплик</span>
+            </div>
+        </div>
+        
+        <div class="project-card">
+            <div class="project-header">
+                <span class="project-date">2026-06-13</span>
+                <span class="project-badge">Telegram Bots & Dev (Разработка/Автоматизация)</span>
+            </div>
+            <p class="project-desc">"Я хочу создать онлайн-канбан-доску, где будут все показатели, которые мне нужны: - какие задачи я выполняю - к чему эти ..."</p>
+            <div class="project-footer">
+                <span>⏱️ 88 мин активной работы</span>
+                <span>💬 12 реплик</span>
+            </div>
+        </div>
+        
+            </div>
+        </div>
+
+        <!-- Tab: Recommendations -->
+        <div id="tab-recommendations" class="tab-content">
+            <div class="rec-grid">
+                <div class="rec-card">
+                    <h3 class="rec-title">⚡ Авто-Triage Второго Мозга</h3>
+                    <p class="rec-text">
+                        Используй свой навык <code>second-brain-triage</code> для автоматического разбора папки "Inbox" или "raw" в твоем Obsidian. Мы можем написать скрипт на Python, запускающийся по крону каждое утро, который рассортирует входящие заметки, сформирует краткие выжимки и выделит Action Items.
+                    </p>
+                </div>
+                <div class="rec-card blue">
+                    <h3 class="rec-title">📊 Интерактивные Калькуляторы</h3>
+                    <p class="rec-text">
+                        Вместо статичных таблиц по траншевой ипотеке и субсидиям, мы можем создать красивое интерактивное HTML-приложение с полным расчетом платежей, которое ты сможешь открывать прямо на лекциях/обучениях с агентами с любого планшета или ноутбука.
+                    </p>
+                </div>
+                <div class="rec-card green">
+                    <h3 class="rec-title">🎙️ Автоматический Tone of Voice</h3>
+                    <p class="rec-text">
+                        Чтобы каждый раз не писать "примени навык anton-voice", пропиши правила генерации текстов в файле <code>.agents/AGENTS.md</code> в твоем корневом каталоге Obsidian. Я буду знать твой Tone of Voice по умолчанию для любых постов, сценариев Reels и писем.
+                    </p>
+                </div>
+                <div class="rec-card orange">
+                    <h3 class="rec-title">🤖 Сборка Бот-MVP</h3>
+                    <p class="rec-text">
+                        Мы полностью проработали архитектуру твоего бота для обучения агентов. Я готов написать чистый Python-код (на базе библиотеки Telegram Bot), настроить локальную базу данных SQLite и запустить проект на твоем Mac, чтобы ты протестировал его в реальном времени.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Tab switching logic
+        function openTab(tabId) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Show current tab content & button active
+            document.getElementById(tabId).classList.add('active');
+            
+            // Find the button that calls this function and make it active
+            const clickedBtn = Array.from(buttons).find(btn => btn.getAttribute('onclick').includes(tabId));
+            if (clickedBtn) clickedBtn.classList.add('active');
+        }
+
+        // --- Charts Implementation ---
+        
+        // 1. Weekly Activity Chart
+        const ctxWeekly = document.getElementById('weeklyChart').getContext('2d');
+        new Chart(ctxWeekly, {
+            type: 'line',
+            data: {
+                labels: ["\u041d\u0435\u0434\u0435\u043b\u044f 2026-05-25", "\u041d\u0435\u0434\u0435\u043b\u044f 2026-06-01", "\u041d\u0435\u0434\u0435\u043b\u044f 2026-06-08", "\u041d\u0435\u0434\u0435\u043b\u044f 2026-06-15", "\u041d\u0435\u0434\u0435\u043b\u044f 2026-06-22", "\u041d\u0435\u0434\u0435\u043b\u044f 2026-06-29"],
+                datasets: [
+                    {
+                        label: 'Активные часы работы (ч)',
+                        data: [10.8, 12.9, 9.6, 10.7, 19.4, 6.2],
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.3,
+                        fill: true,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'Кол-во диалогов',
+                        data: [26, 25, 26, 32, 43, 11],
+                        borderColor: '#06b6d4',
+                        backgroundColor: 'transparent',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        pointStyle: 'circle',
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: { color: '#94a3b8', font: { family: 'Inter' } }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(255,255,255,0.03)' },
+                        ticks: { color: '#94a3b8', font: { family: 'Inter' } }
+                    },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        grid: { color: 'rgba(255,255,255,0.03)' },
+                        ticks: { color: '#94a3b8', font: { family: 'Inter' } },
+                        title: { display: true, text: 'Активные часы', color: '#8b5cf6' }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        grid: { drawOnChartArea: false },
+                        ticks: { color: '#94a3b8', font: { family: 'Inter' } },
+                        title: { display: true, text: 'Диалоги', color: '#06b6d4' }
+                    }
+                }
+            }
+        });
+
+        // 2. Category Doughnut Chart
+        const ctxCategory = document.getElementById('categoryChart').getContext('2d');
+        new Chart(ctxCategory, {
+            type: 'doughnut',
+            data: {
+                labels: ["Real Estate & Finance", "Other / General", "Education & Training", "Social Media & Marketing", "Telegram Bots & Dev", "CRM & Business"],
+                datasets: [{
+                    data: [51, 39, 26, 24, 16, 7],
+                    backgroundColor: [
+                        '#8b5cf6', // Violet
+                        '#64748b', // Slate
+                        '#06b6d4', // Cyan
+                        '#10b981', // Green
+                        '#f59e0b', // Amber
+                        '#ef4444'  // Red
+                    ],
+                    borderWidth: 1,
+                    borderColor: '#0f172a'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { color: '#94a3b8', font: { family: 'Inter' } }
+                    }
+                }
+            }
+        });
+
+        // 3. Tools Bar Chart
+        const ctxTools = document.getElementById('toolsChart').getContext('2d');
+        new Chart(ctxTools, {
+            type: 'bar',
+            data: {
+                labels: ["view_file", "run_command", "replace_file_content", "list_dir", "write_to_file", "grep_search", "manage_task", "multi_replace_file_content", "schedule", "search_web"],
+                datasets: [{
+                    label: 'Кол-во вызовов',
+                    data: [1911, 1110, 795, 745, 691, 460, 168, 74, 74, 41],
+                    backgroundColor: 'rgba(6, 182, 212, 0.6)',
+                    borderColor: '#06b6d4',
+                    borderWidth: 1,
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(255,255,255,0.03)' },
+                        ticks: { color: '#94a3b8' }
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { color: '#94a3b8', font: { family: 'Inter' } }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

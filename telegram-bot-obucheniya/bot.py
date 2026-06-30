@@ -35,6 +35,7 @@ class HomeworkStates(StatesGroup):
 
 class CuratorStates(StatesGroup):
     entering_rejection_reason = State()
+    entering_test_rejection_reason = State()
 
 class BookingStates(StatesGroup):
     choosing_building = State()
@@ -201,7 +202,7 @@ async def handle_voice_homework(message: types.Message, state: FSMContext):
     # Голосовые домашние задания требуются только для блоков 1 и 4
     hw_type = lessons.get_homework_type(block)
     
-    if status == "active" and hw_type == "voice" and block <= 6:
+    if status == "active" and hw_type == "voice" and block <= 2:
         file_id = message.voice.file_id if message.voice else message.audio.file_id
         
         # 1. Сохраняем в БД
@@ -281,7 +282,7 @@ async def callback_curator_approve(callback: types.CallbackQuery):
     new_block = old_block + 1
     
     # 2. Обновляем статус ученика
-    if new_block > 6:
+    if new_block > 2:
         # Курс полностью завершен
         await db.update_user_status(student_id, "completed")
         await db.update_user_block(student_id, 7)
@@ -644,6 +645,63 @@ class QuizStates(StatesGroup):
     q1 = State()
     q2 = State()
     q3 = State()
+
+class Block1TestStates(StatesGroup):
+    answering = State()
+
+BLOCK_1_QUESTIONS = [
+    {
+        "id": 1,
+        "title": "LTV и ценность клиента вдолгую",
+        "question": "Как вы понимаете концепцию LTV (Life-Time Value) в работе современного брокера по недвижимости? Распишите на конкретном (желательно цифровом) примере, как один клиент может принести более 1 млн рублей прибыли в течение 5–10 лет, и почему понимание этого показателя должно в корне менять ваше отношение к быстрой комиссии?"
+    },
+    {
+        "id": 2,
+        "title": "Выставление границ и запрет на «справочное бюро»",
+        "question": "Почему в рамках нашей методологии категорически запрещено отправлять клиенту подборки вариантов или презентации ЖК сразу после первого сообщения в мессенджере? Каковы последствия нарушения этого правила, и как правильно выстроить диалог, если клиент жестко требует «просто скинуть варианты»?"
+    },
+    {
+        "id": 3,
+        "title": "Принцип «Сначала схема, потом стены»",
+        "question": "Объясните тезис: «Сейчас на рынке новостроек решает не цена квартиры, а финансовый инструмент». Почему финансовый аудит должен предшествовать подбору конкретных планировок и ЖК? Что может произойти, если вы нарушите эту последовательность?"
+    },
+    {
+        "id": 4,
+        "title": "Параметры финансового коридора",
+        "question": "Какие три ключевых финансовых параметра вам необходимо зафиксировать у клиента в ходе первого касания перед тем, как переходить к анализу рынка? Почему отсутствие любого из них делает дальнейший подбор бессмысленным?"
+    },
+    {
+        "id": 5,
+        "title": "Философия Jobs To Be Done (JTBD) в недвижимости",
+        "question": "Что такое JTBD (Jobs to be Done) применительно к покупке жилья? Приведите пример, как одна и та же квартира (например, евро-двушка 45 кв.м) может наниматься на совершенно разную «работу» в зависимости от жизненной ситуации клиента."
+    },
+    {
+        "id": 6,
+        "title": "Выявление истинных триггеров (Практический разбор)",
+        "question": "Клиент обращается с запросом: «Ищу двухкомнатную квартиру до 7 млн рублей в Уфе». С помощью каких вопросов вы начнете выявлять скрытый жизненный триггер (Push-фактор)? Напишите пример вашего диалога, в котором вы докапываетесь до истинной боли клиента."
+    },
+    {
+        "id": 7,
+        "title": "Продажа повторного созвона / встречи через «Финмодель»",
+        "question": "Как правильно закрыть первый контакт и назначить повторный созвон или встречу для разбора вариантов? Как аргументировать этот шаг, чтобы клиент не почувствовал давления и согласился сам?"
+    },
+    {
+        "id": 8,
+        "title": "Работа с ожиданиями клиента на встрече",
+        "question": "Как и с помощью каких инструментов вы будете приземлять ожидания клиента на первой встрече, если его запросы не соответствуют рыночной реальности (например, хочет квартиру в центре дешевле рынка)? Почему это нужно делать до детального обсуждения ЖК?"
+    },
+    {
+        "id": 9,
+        "title": "Укрепление доверия через демонстрацию компромиссов",
+        "question": "Почему при презентации шорт-листа вариантов вы обязаны честно озвучивать клиенту минусы каждого объекта? К чему может привести попытка идеализировать жилой комплекс?"
+    },
+    {
+        "id": 10,
+        "title": "Поездка по «Маршрутной карте» и фиксация в CRM",
+        "question": "В чем разница между классическим «показом квартир» и тест-драйвом объектов по «Маршрутной карте»? Какую процедуру вы должны провести в CRM девелоперов сразу после согласования шорт-листа с клиентом, и для чего она нужна?"
+    }
+]
+
 
 
 # --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ РАСЧЕТОВ И RAG ---
@@ -1063,6 +1121,307 @@ async def process_q3(message: types.Message, state: FSMContext):
         conclusion += "Вам требуется повторно пройти Блок 4. Ошибки в базовой математике сделки критичны для работы Навигатора."
         
     await message.answer(conclusion, reply_markup=get_main_keyboard())
+
+
+# 6. Открытое тестирование Блока 1 (/test1)
+
+@dp.message(Command("test1"))
+async def cmd_block1_test(message: types.Message, state: FSMContext):
+    await state.clear()
+    
+    # Проверка регистрации пользователя
+    user = await db.get_user(message.from_user.id)
+    if not user:
+        await message.answer("Пожалуйста, сначала зарегистрируйтесь, отправив /start")
+        return
+        
+    await message.answer(
+        "📝 <b>Запуск тестирования: Блок 1 «От первой заявки до встречи»</b>\n\n"
+        "Вам предстоит ответить на 10 открытых вопросов из методических материалов.\n"
+        "Отвечать можно обычным <b>текстом</b> или записать <b>голосовое сообщение</b>.\n\n"
+        "<i>Вы можете прервать тест в любой момент, написав /cancel или Отмена</i>"
+    )
+    
+    await state.update_data(current_question_idx=0, answers={})
+    await ask_next_question(message, state)
+
+
+async def ask_next_question(message: types.Message, state: FSMContext):
+    data = await state.get_data()
+    idx = data.get("current_question_idx", 0)
+    
+    if idx >= len(BLOCK_1_QUESTIONS):
+        # Все вопросы пройдены, завершаем
+        await submit_block1_test(message, state)
+        return
+        
+    question_data = BLOCK_1_QUESTIONS[idx]
+    
+    text = (
+        f"<b>Вопрос {idx + 1} из {len(BLOCK_1_QUESTIONS)}:</b> {question_data['title']}\n\n"
+        f"❓ <i>{question_data['question']}</i>\n\n"
+        f"✍️ Напишите текстовый ответ или запишите голосовое сообщение:"
+    )
+    
+    await message.answer(text)
+    await state.set_state(Block1TestStates.answering)
+
+
+@dp.message(Block1TestStates.answering)
+async def process_question_answer(message: types.Message, state: FSMContext):
+    # Проверяем команду отмены
+    if message.text in ["/cancel", "Отмена", "/cancel_test"]:
+        await state.clear()
+        await message.answer("Тестирование отменено.", reply_markup=get_main_keyboard())
+        return
+        
+    ans_type = "text"
+    ans_content = ""
+    
+    if message.voice:
+        ans_type = "voice"
+        ans_content = message.voice.file_id
+    elif message.audio:
+        ans_type = "voice"
+        ans_content = message.audio.file_id
+    elif message.text:
+        ans_type = "text"
+        ans_content = message.text.strip()
+    else:
+        await message.answer("Пожалуйста, пришлите текстовый ответ или запишите голосовое сообщение:")
+        return
+        
+    # Сохраняем ответ в состоянии
+    data = await state.get_data()
+    answers = data.get("answers", {})
+    idx = data.get("current_question_idx", 0)
+    
+    answers[str(idx + 1)] = {
+        "type": ans_type,
+        "content": ans_content
+    }
+    
+    # Переходим к следующему вопросу
+    new_idx = idx + 1
+    await state.update_data(current_question_idx=new_idx, answers=answers)
+    await ask_next_question(message, state)
+
+
+async def submit_block1_test(message: types.Message, state: FSMContext):
+    import json
+    data = await state.get_data()
+    answers = data.get("answers", {})
+    await state.clear()
+    
+    user_id = message.from_user.id
+    user = await db.get_user(user_id)
+    
+    # 1. Сохраняем в БД в результаты тестов
+    await db.save_test_result(
+        user_id=user_id,
+        module_id=1,  # Блок 1
+        test_id=2,  # test_id = 2 для открытых вопросов
+        score=1.0,  # Заглушка, пока не проверено куратором
+        is_passed=True,
+        answers=json.dumps(answers)
+    )
+    
+    # 2. Сообщаем студенту
+    await message.answer(
+        "🎉 <b>Поздравляем! Вы прошли тестирование по Блоку 1!</b>\n\n"
+        "Все ваши ответы отправлены куратору на проверку. Вы получите уведомление, когда куратор проверит тест.",
+        reply_markup=get_main_keyboard()
+    )
+    
+    # 3. Отправляем отчет куратору
+    summary_header = (
+        f"🔔 <b>Студент {user['full_name']} (@{user['username'] or 'нет'}) прошел тестирование по Блоку 1!</b>\n\n"
+        f"📋 <b>Результаты ответов:</b>\n"
+    )
+    
+    await bot.send_message(
+        chat_id=config.CURATOR_CHAT_ID,
+        text=summary_header,
+        parse_mode="HTML"
+    )
+    
+    # Отправляем каждый вопрос по отдельности для удобства чтения куратором
+    for idx_str, ans_data in answers.items():
+        q_idx = int(idx_str) - 1
+        q_info = BLOCK_1_QUESTIONS[q_idx]
+        
+        q_title = q_info["title"]
+        q_text = q_info["question"]
+        
+        # Небольшая пауза между отправкой сообщений для предотвращения лимитов Telegram
+        await asyncio.sleep(0.1)
+        
+        if ans_data["type"] == "text":
+            answer_text = (
+                f"❓ <b>Вопрос {idx_str}: {q_title}</b>\n"
+                f"<i>{q_text}</i>\n\n"
+                f"✍️ <b>Ответ студента:</b>\n{ans_data['content']}\n"
+                f"----------------------------------------"
+            )
+            await bot.send_message(
+                chat_id=config.CURATOR_CHAT_ID,
+                text=answer_text,
+                parse_mode="HTML"
+            )
+        else:
+            # Голосовой ответ
+            answer_text = (
+                f"❓ <b>Вопрос {idx_str}: {q_title}</b>\n"
+                f"<i>{q_text}</i>\n\n"
+                f"🎤 <b>Голосовой ответ студента:</b> (прислан ниже)\n"
+                f"----------------------------------------"
+            )
+            await bot.send_message(
+                chat_id=config.CURATOR_CHAT_ID,
+                text=answer_text,
+                parse_mode="HTML"
+            )
+            await bot.send_voice(
+                chat_id=config.CURATOR_CHAT_ID,
+                voice=ans_data["content"]
+            )
+            
+    # 4. Отправляем куратору финальную карту с решением
+    await asyncio.sleep(0.1)
+    curator_builder = InlineKeyboardBuilder()
+    curator_builder.button(text="✅ Зачесть тест", callback_data=f"approve_t1_{user_id}")
+    curator_builder.button(text="❌ Отклонить с замечаниями", callback_data=f"reject_t1_{user_id}")
+    curator_builder.adjust(1)
+    
+    final_message = (
+        f"🏁 <b>Все ответы по тестированию Блока 1 от студента {user['full_name']} присланы выше.</b>\n\n"
+        f"Проверьте ответы студента на соответствие эталонной шпаргалке [block1_test_answers.md] "
+        f"и примите решение:"
+    )
+    
+    await bot.send_message(
+        chat_id=config.CURATOR_CHAT_ID,
+        text=final_message,
+        reply_markup=curator_builder.as_markup(),
+        parse_mode="HTML"
+    )
+
+
+# --- ОБРАБОТЧИКИ ПРОВЕРКИ ТЕСТОВ КУРАТОРОМ ---
+
+# Callback-обработчик куратора: Одобрить тест Блока 1
+@dp.callback_query(F.data.regexp(r"^approve_t1_(\d+)$"))
+async def callback_curator_approve_test1(callback: types.CallbackQuery):
+    """Одобрение теста Блока 1 куратором"""
+    student_id = int(callback.data.split("_")[2])
+    user = await db.get_user(student_id)
+    
+    if not user:
+        await callback.answer("Студент не найден", show_alert=True)
+        return
+        
+    # Зачесть прохождение блока 1 в БД и открыть Блок 2 (урок 2.1)
+    await db.update_user_status(student_id, "active")
+    await db.update_user_block(student_id, 2)
+    await db.update_user_lesson(student_id, "2.1")
+    
+    # Уведомляем студента
+    try:
+        await bot.send_message(
+            chat_id=student_id,
+            text=(
+                "🎉 <b>Ваше тестирование по Блоку 1 успешно ЗАЧТЕНО куратором!</b>\n\n"
+                "Вы отлично усвоили методологию «Агент-Навигатор».\n"
+                "Вам открыт доступ к **Блоку 2: Финансовый инжиниринг**.\n\n"
+                "Вы можете продолжить обучение в Web App или запустить первый урок в боте."
+            )
+        )
+        
+        # Отправляем первый урок Блока 2 в чат для удобства
+        content = lessons.get_lesson_content(2, 1)
+        builder = InlineKeyboardBuilder()
+        builder.button(text="▶️ Перейти к уроку 2.2", callback_data="show_lesson_2_2")
+        await bot.send_message(chat_id=student_id, text=content, reply_markup=builder.as_markup())
+    except Exception as e:
+        logger.error(f"Не удалось отправить поздравление студенту: {e}")
+        
+    # Обновляем сообщение кураторов
+    curator_name = callback.from_user.full_name
+    await callback.message.edit_text(
+        text=f"✅ <b>Тестирование Блока 1 ЗАЧТЕНО куратором {curator_name}</b>\n\n"
+             f"Студент {user['full_name']} переведен на Блок 2.",
+        reply_markup=None
+    )
+    await callback.answer("Тестирование успешно зачтено!")
+
+
+# Callback-обработчик куратора: Отклонить тест Блока 1 (Запрос причины)
+@dp.callback_query(F.data.regexp(r"^reject_t1_(\d+)$"))
+async def callback_curator_reject_test1(callback: types.CallbackQuery, state: FSMContext):
+    """Отклонение теста Блока 1 - запрос комментариев"""
+    student_id = int(callback.data.split("_")[2])
+    user = await db.get_user(student_id)
+    
+    if not user:
+        await callback.answer("Студент не найден", show_alert=True)
+        return
+        
+    await state.update_data(student_id=student_id, curator_message_id=callback.message.message_id)
+    await callback.message.answer(
+        f"✍️ <b>Введите замечания по тесту для студента {user['full_name']}:</b>\n"
+        "(комментарий будет отправлен студенту в чат)"
+    )
+    await state.set_state(CuratorStates.entering_test_rejection_reason)
+    await callback.answer()
+
+
+# Ввод куратором причин отклонения теста Блока 1
+@dp.message(CuratorStates.entering_test_rejection_reason)
+async def process_test_rejection_reason(message: types.Message, state: FSMContext):
+    """Обработка комментария к отклоненному тесту от куратора"""
+    comment = message.text.strip()
+    data = await state.get_data()
+    student_id = data.get("student_id")
+    curator_message_id = data.get("curator_message_id")
+    
+    user = await db.get_user(student_id)
+    if not user:
+        await message.answer("Ошибка: студент не найден.")
+        await state.clear()
+        return
+        
+    # Студент остается в статусе active на блоке 1, чтобы он мог пересдать тест
+    await db.update_user_status(student_id, "active")
+    
+    # Отправляем сообщение студенту
+    try:
+        await bot.send_message(
+            chat_id=student_id,
+            text=f"⚠️ <b>Ваше тестирование по Блоку 1 было отклонено куратором.</b>\n\n"
+                 f"💬 <b>Замечания куратора:</b>\n<blockquote>{comment}</blockquote>\n\n"
+                 "Пожалуйста, изучите замечания, повторите материалы первого блока и "
+                 "пройдите тест заново с помощью команды /test1."
+        )
+    except Exception as e:
+        logger.error(f"Не удалось отправить замечания студенту: {e}")
+        
+    # Обновляем исходное сообщение в чате кураторов
+    curator_name = message.from_user.full_name
+    try:
+        await bot.edit_message_reply_markup(
+            chat_id=config.CURATOR_CHAT_ID,
+            message_id=curator_message_id,
+            reply_markup=None
+        )
+        await bot.send_message(
+            chat_id=config.CURATOR_CHAT_ID,
+            text=f"❌ Тест Блока 1 студента {user['full_name']} отклонен куратором {curator_name}.\nЗамечания: <i>{comment}</i>"
+        )
+    except Exception as e:
+        logger.error(f"Не удалось обновить сообщение кураторов: {e}")
+        
+    await message.answer("✅ Замечания сохранены и отправлены студенту.")
+    await state.clear()
 
 
 # Основная функция запуска

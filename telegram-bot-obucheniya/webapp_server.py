@@ -77,17 +77,21 @@ def get_user_data():
     current_lesson = user["current_lesson"]
     status = user["status"]
     
-    for block_id in range(1, 7):
-        total = 2  # В каждом блоке Среды 2.0 ровно 2 урока
+    for block_id in range(1, 3):
+        total = 4  # В каждом блоке ровно 4 урока
         completed_lessons = []
         
         if block_id < current_block or status == "completed":
-            completed_lessons = [f"{block_id}.1", f"{block_id}.2"]
+            completed_lessons = [f"{block_id}.1", f"{block_id}.2", f"{block_id}.3", f"{block_id}.4"]
         elif block_id == current_block:
             if status == "awaiting_review":
-                completed_lessons = [f"{block_id}.1", f"{block_id}.2"]
-            elif current_lesson == f"{block_id}.2":
-                completed_lessons = [f"{block_id}.1"]
+                completed_lessons = [f"{block_id}.1", f"{block_id}.2", f"{block_id}.3", f"{block_id}.4"]
+            else:
+                try:
+                    curr_idx = int(current_lesson.split('.')[1])
+                    completed_lessons = [f"{block_id}.{i}" for i in range(1, curr_idx)]
+                except Exception:
+                    completed_lessons = []
                 
         progress[str(block_id)] = {
             "lessons_completed": len(completed_lessons),
