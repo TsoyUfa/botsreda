@@ -22,7 +22,15 @@ logger = logging.getLogger("webapp_server")
 
 load_dotenv()
 
-app = Flask(__name__)
+app = Flask(__name__, 
+            static_folder='../life/telegram-bot/webapp',
+            static_url_path='')
+
+@app.route('/')
+def serve_index():
+    """Раздача главного файла фронтенда."""
+    return app.send_static_file('index.html')
+
 
 # Хелпер для запуска асинхронных корутин из синхронного Flask
 def run_async(coro):
@@ -314,6 +322,147 @@ def user_stats():
         "stats": stats,
         "achievements": achievements
     })
+
+def calculate_annuity(principal, rate_annual, term_months):
+    """Расчет платежа по аннуитетной ипотеке"""
+    if principal <= 0 or term_months <= 0:
+        return 0.0
+    if rate_annual <= 0:
+        return round(principal / term_months, 2)
+    r = rate_annual / 12 / 100
+    payment = principal * (r * (1 + r)**term_months) / ((1 + r)**term_months - 1)
+    return round(payment, 2)
+
+@app.route('/api/calculator/calculate', methods=['POST'])
+def api_calculate():
+    """Математические расчеты финансовых программ в реальном времени"""
+    data = request.json or {}
+    try:
+        price = float(data.get("price", 8000000))
+        down_payment = float(data.get("down_payment", 1500000))
+        term_years = int(data.get("term_years", 30))
+        
+        # Дополнительные процентные ставки
+        rate_std = float(data.get("rate_std", 18.0))
+        rate_sub = float(data.get("rate_sub", 6.0))
+        markup_percent = float(data.get("markup_percent", 15.0)) # Наценка удорожания %
+        
+        first_tranche_percent = float(data.get("first_tranche_percent", 15.0)) # % от кредита
+        tranche_delay_months = int(data.get("tranche_delay_months", 24))
+        deposit_rate = float(data.get("deposit_rate", 19.0))
+    except (ValueError, TypeError):
+        return jsonify({"success": False, "error": "Невалидные типы данных параметров"}), 400
+        
+    term_months = term_years * 12
+    loan_std = price - down_payment
+    
+    if loan_std <= 0:
+        return jsonify({"success": False, "error": "Первоначальный взнос больше или равен стоимости лота"}), 400
+        
+    # 1. Стандартная программа
+    payment_std = calculate_annuity(loan_std, rate_std, term_months)
+    total_payout_std = round(payment_std * term_months, 2)
+    total_interest_std = round(total_payout_std - loan_std, 2)
+    
+    # 2. Субсидированная программа с удорожанием
+    price_sub = price * (1 + markup_percent / 100)
+    loan_sub = price_sub - down_payment
+    payment_sub = calculate_annuity(loan_sub, rate_sub, term_months)
+    total_payout_sub = round(payment_sub * term_months, 2)
+    total_interest_sub = round(total_payout_sub - loan_sub, 2)
+    
+    # Сравнение выгоды
+    diff_payment = payment_std - payment_sub
+    markup_cost = price_sub - price
+    if diff_payment > 0:
+        break_even_years = round(markup_cost / (diff_payment * 12), 1)
+    else:
+        break_even_years = 999.0 # Никогда не окупается
+        
+    # 3. Траншевая ипотека (комбинируется с субсидированной ставкой)
+    loan_tranche_1 = loan_std * (first_tranche_percent / 100)
+    loan_tranche_2 = loan_std - loan_tranche_1
+    
+    # Фаза 1: Оплата по первому траншу
+    payment_tranche_p1 = calculate_annuity(loan_tranche_1, rate_sub, term_months)
+    # Фаза 2: Оплата по полной сумме кредита
+    payment_tranche_p2 = calculate_annuity(loan_std, rate_sub, term_months - tranche_delay_months)
+    
+    # Оценка доходности депозита (сложный процент по оставшимся на руках деньгам)
+    deposit_profit = round(loan_tranche_2 * ((1 + deposit_rate/100)**(tranche_delay_months/12) - 1), 2)
+    
+    # 4. Рассрочки
+    installments = [
+        {"name": "Первый взнос (при подписании ДДУ)", "percent": 30, "amount": round(price * 0.3, 2)},
+        {"name": "Второй транш рассрочки (через 12 мес.)", "percent": 30, "amount": round(price * 0.3, 2)},
+        {"name": "Финальный транш (перед вводом, 24 мес.)", "percent": 40, "amount": round(price * 0.4, 2)}
+    ]
+    
+    return jsonify({
+        "success": True,
+        "results": {
+            "standard": {
+                "price": price,
+                "loan_amount": loan_std,
+                "rate": rate_std,
+                "monthly_payment": payment_std,
+                "total_payout": total_payout_std,
+                "total_interest": total_interest_std
+            },
+            "subsidized": {
+                "price_base": price,
+                "price_subsidized": price_sub,
+                "markup_amount": markup_cost,
+                "loan_amount": loan_sub,
+                "rate": rate_sub,
+                "monthly_payment": payment_sub,
+                "total_payout": total_payout_sub,
+                "total_interest": total_interest_sub,
+                "break_even_years": break_even_years
+            },
+            "tranche": {
+                "loan_amount": loan_std,
+                "tranche_1_amount": loan_tranche_1,
+                "tranche_2_amount": loan_tranche_2,
+                "rate": rate_sub,
+                "payment_phase_1": payment_tranche_p1,
+                "payment_phase_2": payment_tranche_p2,
+                "delay_months": tranche_delay_months,
+                "deposit_rate": deposit_rate,
+                "deposit_profit_estimation": deposit_profit
+            },
+            "installments": installments
+        }
+    })
+
+@app.route('/api/ai/ask', methods=['POST'])
+def api_ai_ask():
+    """API-запрос к ИИ-помощнику Навигатору с локальным RAG-контекстом"""
+    data = request.json or {}
+    user_id = data.get("user_id", 0)
+    question = data.get("question", "").strip()
+    
+    if not question:
+        return jsonify({"success": False, "error": "Вопрос пуст"}), 400
+        
+    try:
+        # Импортируем синхронный метод ответа RAG
+        from bot import answer_question_rag_sync
+        response, sources = answer_question_rag_sync(user_id, question)
+        return jsonify({
+            "success": True,
+            "response": response,
+            "sources": sources
+        })
+    except Exception as e:
+        logger.error(f"Error in RAG API backend: {e}")
+        # Резервный ответ
+        return jsonify({
+            "success": True,
+            "response": f"ИИ-Навигатор: Извини, сейчас сервер БД временно не настроен или API-ключ Gemini не задан. Бот вернет результаты поиска локально после настройки.",
+            "sources": []
+        })
+
 
 if __name__ == '__main__':
     # Автоматическая инициализация БД перед стартом API

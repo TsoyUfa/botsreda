@@ -521,8 +521,24 @@ class WebApp {
     }
 
     async apiRequest(endpoint, data = {}) {
-        // Simulate API request (in real app, this would make actual HTTP request)
-        const baseUrl = 'https://your-api-url.com'; // Replace with your actual API URL
+        const baseUrl = window.location.origin;
+        try {
+            const response = await fetch(`${baseUrl}/api${endpoint}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    ...data,
+                    initData: window.Telegram?.WebApp?.initData || ""
+                })
+            });
+            if (response.ok) {
+                return await response.json();
+            }
+        } catch (e) {
+            console.warn("Live API request failed, using local mock data:", e);
+        }
         
         // For demo purposes, simulate response
         if (endpoint === '/modules/list') {

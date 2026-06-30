@@ -141,7 +141,78 @@ async def init_db():
             )
         """)
         
+        # Таблица уникальных лотов
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS lots (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT,
+                developer_name TEXT,
+                rooms TEXT,
+                area REAL,
+                base_price REAL,
+                layout_image_url TEXT,
+                is_unique BOOLEAN DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        
+        # Таблица вариаций финансовых программ для лотов
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS lot_variations (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                lot_id INTEGER,
+                program_name TEXT,
+                subsidized_rate REAL,
+                markup_percent REAL,
+                monthly_payment REAL,
+                calculation_details_json TEXT,
+                FOREIGN KEY (lot_id) REFERENCES lots (id)
+            )
+        """)
+        
+        # Таблица мероприятий
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS events (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT,
+                description TEXT,
+                event_type TEXT, -- 'online' или 'offline'
+                event_date TIMESTAMP,
+                location TEXT,
+                max_seats INTEGER DEFAULT 0,
+                registered_count INTEGER DEFAULT 0
+            )
+        """)
+        
+        # Таблица регистраций на мероприятия
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS event_registrations (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                event_id INTEGER,
+                user_id INTEGER,
+                status TEXT DEFAULT 'registered', -- 'registered', 'attended', 'cancelled'
+                registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (event_id) REFERENCES events (id),
+                FOREIGN KEY (user_id) REFERENCES users (user_id)
+            )
+        """)
+        
+        # Таблица логов чатов с ИИ
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS ai_chat_logs (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER,
+                user_message TEXT,
+                bot_response TEXT,
+                retrieved_chunks TEXT,
+                tokens_used REAL DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users (user_id)
+            )
+        """)
+        
         await db.commit()
+
 
 # Функции для работы с пользователями
 async def create_user(user_id: int, username: str, full_name: str = "", phone: str = "", invite_code: str = ""):
@@ -419,3 +490,125 @@ async def get_recent_bookings() -> List[Tuple]:
                LIMIT 50"""
         ) as cursor:
             return await cursor.fetchall()
+
+# --- Новые функции прототипа «Среда Обучения 2.0» ---
+
+async def create_lot(title: str, developer_name: str, rooms: str, area: float, base_price: float, layout_image_url: str = "", is_unique: bool = False) -> int:
+    """Создание лота и возврат его ID"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        async with db.execute(
+            """INSERT INTO lots (title, developer_name, rooms, area, base_price, layout_image_url, is_unique)
+               VALUES (?, ?, ?, ?, ?, ?, ?)""",
+            (title, developer_name, rooms, area, base_price, layout_image_url, int(is_unique))
+        ) as cursor:
+            lot_id = cursor.lastrowid
+            await db.commit()
+            return lot_id
+
+async def create_lot_variation(lot_id: int, program_name: str, subsidized_rate: float, markup_percent: float, monthly_payment: float, calculation_details_json: str) -> int:
+    """Создание финансовой вариации для лота"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        async with db.execute(
+            """INSERT INTO lot_variations (lot_id, program_name, subsidized_rate, markup_percent, monthly_payment, calculation_details_json)
+               VALUES (?, ?, ?, ?, ?, ?)""",
+            (lot_id, program_name, subsidized_rate, markup_percent, monthly_payment, calculation_details_json)
+        ) as cursor:
+            var_id = cursor.lastrowid
+            await db.commit()
+            return var_id
+
+async def get_all_lots() -> List[Dict]:
+    """Получение всех лотов с их вариациями"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        async with db.execute("SELECT * FROM lots ORDER BY is_unique DESC, created_at DESC") as cursor:
+            rows = await cursor.fetchall()
+            lots = []
+            for row in rows:
+                lot = dict(row)
+                # Получаем вариации для этого лота
+                async with db.execute("SELECT * FROM lot_variations WHERE lot_id = ?", (lot["id"],)) as v_cursor:
+                    v_rows = await v_cursor.fetchall()
+                    lot["variations"] = [dict(v) for v in v_rows]
+                lots.append(lot)
+            return lots
+
+async def create_event(title: str, description: str, event_type: str, event_date: str, location: str, max_seats: int = 0) -> int:
+    """Создание мероприятия"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        async with db.execute(
+            """INSERT INTO events (title, description, event_type, event_date, location, max_seats, registered_count)
+               VALUES (?, ?, ?, ?, ?, ?, 0)""",
+            (title, description, event_type, event_date, location, max_seats)
+        ) as cursor:
+            event_id = cursor.lastrowid
+            await db.commit()
+            return event_id
+
+async def get_all_events() -> List[Dict]:
+    """Получение всех мероприятий"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        async with db.execute("SELECT * FROM events ORDER BY event_date ASC") as cursor:
+            rows = await cursor.fetchall()
+            return [dict(r) for r in rows]
+
+async def register_for_event(event_id: int, user_id: int) -> bool:
+    """Регистрация пользователя на мероприятие"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        # Проверяем, зарегистрирован ли уже
+        async with db.execute(
+            "SELECT id FROM event_registrations WHERE event_id = ? AND user_id = ?",
+            (event_id, user_id)
+        ) as cursor:
+            if await cursor.fetchone():
+                return False  # Уже зарегистрирован
+        
+        # Проверяем места
+        async with db.execute(
+            "SELECT max_seats, registered_count FROM events WHERE id = ?",
+            (event_id,)
+        ) as cursor:
+            row = await cursor.fetchone()
+            if row:
+                max_seats, registered_count = row
+                if max_seats > 0 and registered_count >= max_seats:
+                    return False  # Нет мест
+            
+        # Регистрируем
+        await db.execute(
+            "INSERT INTO event_registrations (event_id, user_id, status) VALUES (?, ?, 'registered')",
+            (event_id, user_id)
+        )
+        # Увеличиваем счетчик
+        await db.execute(
+            "UPDATE events SET registered_count = registered_count + 1 WHERE id = ?",
+            (event_id,)
+        )
+        await db.commit()
+        return True
+
+async def get_user_event_registrations(user_id: int) -> List[Dict]:
+    """Получение регистраций пользователя на мероприятия"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        async with db.execute(
+            """SELECT e.*, er.status as reg_status, er.registered_at
+               FROM event_registrations er
+               JOIN events e ON er.event_id = e.id
+               WHERE er.user_id = ?
+               ORDER BY e.event_date ASC""",
+            (user_id,)
+        ) as cursor:
+            rows = await cursor.fetchall()
+            return [dict(r) for r in rows]
+
+async def log_ai_chat(user_id: int, user_message: str, bot_response: str, retrieved_chunks: str, tokens_used: float = 0):
+    """Логирование общения с ИИ"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        await db.execute(
+            """INSERT INTO ai_chat_logs (user_id, user_message, bot_response, retrieved_chunks, tokens_used)
+               VALUES (?, ?, ?, ?, ?)""",
+            (user_id, user_message, bot_response, retrieved_chunks, tokens_used)
+        )
+        await db.commit()

@@ -634,7 +634,439 @@ async def back_to_admin_panel(callback: types.CallbackQuery):
     await callback.message.edit_text(text, reply_markup=builder.as_markup())
     await callback.answer()
 
+# --- КЛАССЫ СОСТОЯНИЙ ДЛЯ НОВОГО ФУНКЦИОНАЛА ---
+
+class CalcStates(StatesGroup):
+    waiting_for_price = State()
+    waiting_for_down_payment = State()
+
+class QuizStates(StatesGroup):
+    q1 = State()
+    q2 = State()
+    q3 = State()
+
+
+# --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ РАСЧЕТОВ И RAG ---
+
+def calculate_annuity(principal, rate_annual, term_months):
+    """Метод аннуитетных расчетов"""
+    if principal <= 0 or term_months <= 0:
+        return 0.0
+    if rate_annual <= 0:
+        return round(principal / term_months, 2)
+    r = rate_annual / 12 / 100
+    payment = principal * (r * (1 + r)**term_months) / ((1 + r)**term_months - 1)
+    return round(payment, 2)
+
+def call_gemini_api(prompt, system_instruction=None):
+    """Прямой HTTP-запрос к Gemini API"""
+    import requests
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={config.GEMINI_API_KEY}"
+    headers = {"Content-Type": "application/json"}
+    payload = {
+        "contents": [
+            {
+                "parts": [
+                    {"text": prompt}
+                ]
+            }
+        ]
+    }
+    if system_instruction:
+        payload["systemInstruction"] = {
+            "parts": [
+                {"text": system_instruction}
+            ]
+        }
+    
+    response = requests.post(url, headers=headers, json=payload, timeout=10)
+    response.raise_for_status()
+    res_data = response.json()
+    return res_data["candidates"][0]["content"]["parts"][0]["text"]
+
+def search_local_obsidian(query: str, search_path: str = "/Users/anton_tsoy/Desktop/Обсидиан/6. обучения агентов") -> List[Dict]:
+    """Локальный поиск по файлам Obsidian в Уфе по ключевым словам"""
+    import glob
+    import re
+    if not os.path.exists(search_path):
+        # Если папка переименована, попробуем поискать относительно корня workspace
+        alt_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "6. обучения агентов")
+        if os.path.exists(alt_path):
+            search_path = alt_path
+        else:
+            return []
+        
+    words = [w.lower() for w in re.findall(r'[а-яА-Яa-zA-Z0-9]+', query) if len(w) > 2]
+    stop_words = {"как", "что", "это", "для", "или", "если", "при", "был", "всей", "всех", "под", "над"}
+    words = [w for w in words if w not in stop_words]
+    
+    if not words:
+        return []
+        
+    chunks = []
+    for filepath in glob.glob(os.path.join(search_path, "**/*.md"), recursive=True):
+        if ".obsidian" in filepath or ".git" in filepath:
+            continue
+        try:
+            with open(filepath, "r", encoding="utf-8") as f:
+                content = f.read()
+            paragraphs = content.split("\n\n")
+            filename = os.path.basename(filepath)
+            for p in paragraphs:
+                p_clean = p.strip()
+                if len(p_clean) < 40:
+                    continue
+                score = 0
+                for word in words:
+                    matches = len(re.findall(r'\b' + re.escape(word) + r'\b', p_clean.lower()))
+                    score += matches * 2
+                    if word in p_clean.lower():
+                        score += 1
+                if score > 0:
+                    chunks.append({
+                        "filename": filename,
+                        "text": p_clean,
+                        "score": score
+                    })
+        except Exception:
+            pass
+            
+    chunks.sort(key=lambda x: x["score"], reverse=True)
+    return chunks[:3]
+
+def generate_fallback_response(query: str, chunks: List[Dict]) -> str:
+    """Заглушка ответа ИИ в ToV"""
+    if not chunks:
+        return (
+            "🤖 **ИИ-Навигатор (Инфорежим):**\n\n"
+            "Привет, коллега! Я пока не нашел точного совпадения по этой теме в файлах Obsidian.\n"
+            "Напомню наше золотое правило: сначала **Финансы (бюджет и платеж)**, потом **Локация**, потом **ЖК**, и только в конце — **Квартира**.\n\n"
+            "💡 *Для включения полноценного ИИ-синтеза, укажите действующий GEMINI_API_KEY в файле .env.*"
+        )
+    top_chunk = chunks[0]
+    return (
+        f"🤖 **ИИ-Навигатор (Найдено в Obsidian — {top_chunk['filename']}):**\n\n"
+        f"{top_chunk['text']}\n\n"
+        f"💡 *Интеграция работает по локальному индексу базы знаний.*"
+    )
+
+def answer_question_rag_sync(user_id: int, query: str) -> Tuple[str, List[str]]:
+    """Логика RAG: поиск в Obsidian + генерация в Gemini"""
+    import json
+    from typing import Tuple
+    chunks = search_local_obsidian(query)
+    sources = [c["filename"] for c in chunks]
+    
+    context = ""
+    if chunks:
+        context = "\n\n".join([f"Файл: {c['filename']}\n{c['text']}" for c in chunks])
+        
+    system_instruction = (
+        "Ты — ИИ-коуч в роли Антона Цоя. Твой ToV: прямо, по делу, без пафоса и давления. "
+        "Помогай агентам решать задачи по недвижимости и объяснять клиентам сложные финансовые выгоды (рассрочки, транши, субсидии)."
+    )
+    
+    prompt = f"Вопрос агента: {query}\n\n"
+    if context:
+        prompt += f"Контекст из базы знаний Obsidian:\n{context}\n\nСформулируй ответ на русском языке."
+    else:
+        prompt += "Ответь кратко на вопрос на основе методологии Навигатора."
+        
+    response_text = ""
+    if config.GEMINI_API_KEY:
+        try:
+            response_text = call_gemini_api(prompt, system_instruction)
+        except Exception as e:
+            logger.error(f"Gemini API Call error: {e}")
+            response_text = generate_fallback_response(query, chunks)
+    else:
+        response_text = generate_fallback_response(query, chunks)
+        
+    # Запуск асинхронной записи лога в базу данных
+    try:
+        loop = asyncio.get_event_loop()
+        if loop.is_running():
+            loop.create_task(db.log_ai_chat(user_id, query, response_text, json.dumps(sources, ensure_ascii=False)))
+    except Exception:
+        pass
+        
+    return response_text, sources
+
+
+# --- ОБРАБОТЧИКИ НОВЫХ КОМАНД БОТА ---
+
+# 1. Интерактивный калькулятор (/calc)
+@dp.message(Command("calc"))
+async def cmd_calc(message: types.Message, state: FSMContext):
+    await state.clear()
+    await message.answer("🧮 <b>Финансовый Калькулятор Навигатора</b>\n\nВведите общую стоимость квартиры в рублях (например: 8000000):")
+    await state.set_state(CalcStates.waiting_for_price)
+
+@dp.message(CalcStates.waiting_for_price)
+async def process_calc_price(message: types.Message, state: FSMContext):
+    try:
+        price = float(message.text.replace(" ", "").strip())
+        if price <= 0:
+            raise ValueError
+    except ValueError:
+        await message.answer("Пожалуйста, введите положительное число стоимости:")
+        return
+        
+    await state.update_data(price=price)
+    await message.answer("Отлично. Теперь введите сумму первоначального взноса в рублях (например: 1500000):")
+    await state.set_state(CalcStates.waiting_for_down_payment)
+
+@dp.message(CalcStates.waiting_for_down_payment)
+async def process_calc_dp(message: types.Message, state: FSMContext):
+    try:
+        dp_val = float(message.text.replace(" ", "").strip())
+        if dp_val < 0:
+            raise ValueError
+    except ValueError:
+        await message.answer("Пожалуйста, введите положительное число первоначального взноса:")
+        return
+        
+    data = await state.get_data()
+    price = data["price"]
+    
+    if dp_val >= price:
+        await message.answer("Первоначальный взнос не может быть больше или равен стоимости лота! Введите взнос заново:")
+        return
+        
+    await state.clear()
+    
+    # Расчет параметров
+    loan = price - dp_val
+    term_months = 360 # 30 лет
+    
+    payment_std = calculate_annuity(loan, 18.0, term_months)
+    payment_sub = calculate_annuity(loan * 1.15, 6.0, term_months) # Субсидия: 15% удорожание, ставка 6%
+    payment_tr1 = calculate_annuity(loan * 0.15, 6.0, term_months) # Трашн 1: 15% от кредита до сдачи
+    payment_tr2 = calculate_annuity(loan, 6.0, term_months - 24) # Транш 2: через 24 мес.
+    
+    ans = (
+        f"📊 <b>Результаты расчета (Стоимость: {price:,.0f} ₽, Взнос: {dp_val:,.0f} ₽)</b>\n\n"
+        f"🔴 <b>1. Стандартная ипотека (18%):</b>\n"
+        f"   • Платеж: <b>{payment_std:,.2f} ₽/мес.</b>\n"
+        f"   • Сумма кредита: {loan:,.0f} ₽\n\n"
+        f"🟢 <b>2. Субсидия (6% + удорожание 15%):</b>\n"
+        f"   • Платеж: <b>{payment_sub:,.2f} ₽/мес.</b>\n"
+        f"   • Кредит с удорожанием: {loan*1.15:,.0f} ₽\n"
+        f"   • Экономия в месяц: <b>{(payment_std - payment_sub):,.2f} ₽</b>\n\n"
+        f"🔵 <b>3. Траншевая ипотека (6% до сдачи):</b>\n"
+        f"   • В первые 2 года: <b>{payment_tr1:,.2f} ₽/мес.</b> (кредит на транш {loan*0.15:,.0f} ₽)\n"
+        f"   • После сдачи: <b>{payment_tr2:,.2f} ₽/мес.</b> (кредит на полную сумму)\n"
+    )
+    await message.answer(ans, reply_markup=get_main_keyboard())
+
+
+# 2. ИИ-помощник (/ask)
+@dp.message(Command("ask"))
+async def cmd_ask(message: types.Message):
+    query = message.text[len("/ask "):].strip()
+    if not query:
+        await message.answer("Используйте команду в формате: `/ask [ваш вопрос]` (например: `/ask как отработать депозит` или `/ask правила очередности`)")
+        return
+        
+    waiting_msg = await message.answer("🤖 <i>ИИ-Навигатор анализирует базу знаний Obsidian...</i>")
+    
+    # Запуск RAG-поиска
+    response, sources = answer_question_rag_sync(message.from_user.id, query)
+    
+    source_text = ""
+    if sources:
+        source_text = f"\n\n📂 <b>Источники:</b> " + ", ".join(sources)
+        
+    await waiting_msg.edit_text(response + source_text)
+
+
+# 3. Витрина лотов (/lots)
+@dp.message(Command("lots"))
+async def cmd_lots(message: types.Message):
+    lots = await db.get_all_lots()
+    if not lots:
+        # Если лотов в базе нет, добавляем демо-лоты для прототипа
+        await db.create_lot("ЖК Центральный парк, 2-комн", "ГлавЗастройщик", "2-к", 60.5, 9500000, "", True)
+        await db.create_lot("ЖК Уфимский Кремль, Студия", "РегионДевелопмент", "Студия", 28.0, 5200000, "", False)
+        lots = await db.get_all_lots()
+        
+    text = "🏠 <b>Уникальные лоты и спецпредложения:</b>\n\n"
+    builder = InlineKeyboardBuilder()
+    
+    for lot in lots:
+        uniq = "💎 [ЭКСКЛЮЗИВ] " if lot["is_unique"] else "🏢 "
+        text += f"{uniq}<b>{lot['title']}</b>\n"
+        text += f"   • Застройщик: {lot['developer_name']}\n"
+        text += f"   • Площадь: {lot['area']} кв.м.\n"
+        text += f"   • Базовая цена: <b>{lot['base_price']:,.0f} ₽</b>\n\n"
+        builder.button(text=f"Забронировать {lot['title']}", callback_data=f"book_lot_{lot['id']}")
+        
+    builder.adjust(1)
+    await message.answer(text, reply_markup=builder.as_markup())
+
+@dp.callback_query(F.data.startswith("book_lot_"))
+async def process_book_lot(callback: types.CallbackQuery, state: FSMContext):
+    lot_id = int(callback.data.split("_")[2])
+    # Переводим в состояние бронирования
+    await state.clear()
+    await state.update_data(building_code=f"LOT_ID_{lot_id}")
+    await callback.message.answer("Запуск процесса бронирования. Введите ФИО клиента:")
+    await state.set_state(BookingStates.entering_apartment_info) # Используем существующие FSM-состояния
+    await callback.answer()
+
+
+# 4. Мероприятия (/events)
+@dp.message(Command("events"))
+async def cmd_events(message: types.Message):
+    events = await db.get_all_events()
+    if not events:
+        # Добавим демо-события
+        await db.create_event("Офлайн-практикум: Финансовый инжиниринг", "Разбираем траншевые схемы и рассрочки.", "offline", "2026-07-15 18:00:00", "Конференц-зал Азимут, Уфа", 25)
+        await db.create_event("Zoom-разбор: Отработка возражений 2026", "Антон Цой разбирает звонки агентов в прямом эфире.", "online", "2026-07-22 19:00:00", "https://zoom.us/j/sreda20", 100)
+        events = await db.get_all_events()
+        
+    text = "📅 <b>Расписание мероприятий:</b>\n\n"
+    builder = InlineKeyboardBuilder()
+    
+    for ev in events:
+        emoji = "👥" if ev["event_type"] == "offline" else "💻"
+        text += f"{emoji} <b>{ev['title']}</b>\n"
+        text += f"   • Дата: {ev['event_date']}\n"
+        text += f"   • Формат: {ev['event_type'].upper()} ({ev['location']})\n"
+        text += f"   • Мест: {ev['registered_count']} / {ev['max_seats']}\n\n"
+        builder.button(text=f"Записаться на {ev['title']}", callback_data=f"reg_event_{ev['id']}")
+        
+    builder.adjust(1)
+    await message.answer(text, reply_markup=builder.as_markup())
+
+@dp.callback_query(F.data.startswith("reg_event_"))
+async def process_reg_event(callback: types.CallbackQuery):
+    event_id = int(callback.data.split("_")[2])
+    success = await db.register_for_event(event_id, callback.from_user.id)
+    if success:
+        await callback.message.answer("🎉 Вы успешно записались на мероприятие! Бот пришлет напоминание за 1 час до начала.")
+    else:
+        await callback.message.answer("⚠️ Не удалось записаться: либо вы уже зарегистрированы, либо закончились свободные места.")
+    await callback.answer()
+
+
+# 5. Интерактивное тестирование (/test)
+@dp.message(Command("test"))
+async def cmd_test(message: types.Message, state: FSMContext):
+    await state.clear()
+    text = (
+        "✍️ <b>Диагностика знаний: Модуль Финансового Инжиниринга</b>\n\n"
+        "Пройдите тест из 3 вопросов, чтобы оценить ваши навыки составления схем.\n\n"
+        "<b>Вопрос 1:</b> Какое золотое правило очередности подбора лотов Навигатора?\n"
+        "1. Планировка -> ЖК -> Локация -> Бюджет\n"
+        "2. Бюджет (Финансы) -> Локация -> ЖК -> Планировка\n"
+        "3. Локация -> Бюджет -> ЖК -> Планировка\n\n"
+        "Отправьте цифру с вашим ответом (1, 2 или 3):"
+    )
+    await message.answer(text)
+    await state.set_state(QuizStates.q1)
+
+@dp.message(QuizStates.q1)
+async def process_q1(message: types.Message, state: FSMContext):
+    ans = message.text.strip()
+    if ans not in ["1", "2", "3"]:
+        await message.answer("Пожалуйста, введите только цифру 1, 2 или 3:")
+        return
+    await state.update_data(q1=ans)
+    
+    text = (
+        "<b>Вопрос 2:</b> Что является главным преимуществом траншевой ипотеки?\n"
+        "1. Полное отсутствие процентов до сдачи дома\n"
+        "2. Начисление процентов только на выданную часть (транш), что снижает платеж до сдачи дома\n"
+        "3. Возможность купить квартиру вообще без первоначального взноса\n\n"
+        "Отправьте цифру с вашим ответом (1, 2 или 3):"
+    )
+    await message.answer(text)
+    await state.set_state(QuizStates.q2)
+
+@dp.message(QuizStates.q2)
+async def process_q2(message: types.Message, state: FSMContext):
+    ans = message.text.strip()
+    if ans not in ["1", "2", "3"]:
+        await message.answer("Пожалуйста, введите только цифру 1, 2 или 3:")
+        return
+    await state.update_data(q2=ans)
+    
+    text = (
+        "<b>Вопрос 3:</b> В чем скрытая ловушка стратегии ожидания на депозите под 19%?\n"
+        "1. Налоги съедят большую часть прибыли со вклада\n"
+        "2. Рост цен на недвижимость при снижении ставок нивелирует доходность от процентов\n"
+        "3. Банки заморозят депозиты при снижении ключевой ставки\n\n"
+        "Отправьте цифру с вашим ответом (1, 2 или 3):"
+    )
+    await message.answer(text)
+    await state.set_state(QuizStates.q3)
+
+@dp.message(QuizStates.q3)
+async def process_q3(message: types.Message, state: FSMContext):
+    import json
+    ans = message.text.strip()
+    if ans not in ["1", "2", "3"]:
+        await message.answer("Пожалуйста, введите только цифру 1, 2 или 3:")
+        return
+        
+    data = await state.get_data()
+    q1 = data["q1"]
+    q2 = data["q2"]
+    q3 = ans
+    await state.clear()
+    
+    # Проверка ответов
+    score = 0
+    feedback = []
+    
+    if q1 == "2":
+        score += 1
+    else:
+        feedback.append("❌ Ошибка в очередности подбора. Помни: сперва утверждаем бюджет и лимиты, а не планировки!")
+        
+    if q2 == "2":
+        score += 1
+    else:
+        feedback.append("❌ Ошибка по траншевой ипотеке. Траншевая ипотека снижает платеж до сдачи за счет начисления процентов только на выданную сумму.")
+        
+    if q3 == "2":
+        score += 1
+    else:
+        feedback.append("❌ Ошибка по депозитам. Рост цен на новостройки при падении ключевой ставки съедает накопленное на депозите.")
+        
+    # Сохраняем результат
+    user_id = message.from_user.id
+    passed = (score == 3)
+    
+    await db.save_test_result(
+        user_id=user_id,
+        module_id=4, # Модуль 4: Финансовый инжиниринг
+        test_id=1,
+        score=score / 3.0,
+        is_passed=passed,
+        answers=json.dumps({"q1": q1, "q2": q2, "q3": q3})
+    )
+    
+    # Формируем ИИ-выводы
+    feedback_str = "\n".join(feedback) if feedback else "🎉 Отличная работа! Все ответы верны. Вы овладели базой финансового инжиниринга."
+    conclusion = (
+        f"🏁 <b>Тестирование завершено! Ваш результат: {score}/3</b>\n\n"
+        f"📝 <b>Анализ ошибок:</b>\n{feedback_str}\n\n"
+        f"🤖 <b>Рекомендация ИИ:</b> "
+    )
+    if score == 3:
+        conclusion += "Вы готовы применять субсидии и транши на встречах. Рекомендуем использовать команду `/calc` для расчетов с клиентами."
+    elif score >= 1:
+        conclusion += "Хороший результат, но есть пробелы в логике. Изучите урок 4.1 и карточки ролевых игр в Obsidian."
+    else:
+        conclusion += "Вам требуется повторно пройти Блок 4. Ошибки в базовой математике сделки критичны для работы Навигатора."
+        
+    await message.answer(conclusion, reply_markup=get_main_keyboard())
+
+
 # Основная функция запуска
+
 async def main():
     """Основная функция запуска бота"""
     if not config.is_configured():

@@ -1,0 +1,2922 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Финансовый инжиниринг 2026 — Интерактивная презентация</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-dark: #07090e;
+      --bg-card: rgba(15, 23, 42, 0.45);
+      --bg-card-hover: rgba(30, 41, 59, 0.6);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-active: rgba(6, 182, 212, 0.4);
+      
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      
+      --gradient-cyan-violet: linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%);
+      --gradient-emerald-blue: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+      --gradient-amber-rose: linear-gradient(135deg, #f59e0b 0%, #f43f5e 100%);
+      
+      --cyan: #06b6d4;
+      --violet: #8b5cf6;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      
+      --shadow-glow: 0 0 25px rgba(6, 182, 212, 0.15);
+      --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Background Animation */
+    .bg-animation {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      overflow: hidden;
+      background: radial-gradient(circle at 10% 20%, rgba(9, 13, 22, 1) 0%, rgba(5, 7, 12, 1) 90%);
+    }
+
+    .bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.12;
+      animation: pulse 12s infinite alternate;
+    }
+
+    .bg-circle-1 {
+      top: -10%;
+      right: -10%;
+      width: 50vw;
+      height: 50vw;
+      background: var(--cyan);
+    }
+
+    .bg-circle-2 {
+      bottom: -20%;
+      left: -10%;
+      width: 60vw;
+      height: 60vw;
+      background: var(--violet);
+      animation-delay: -4s;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1) translate(0, 0); opacity: 0.08; }
+      100% { transform: scale(1.15) translate(40px, 30px); opacity: 0.15; }
+    }
+
+    /* Matrix Canvas Background */
+    #matrixCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.12;
+      transition: opacity 0.5s ease;
+    }
+
+    /* Presentation Header */
+    header {
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+      border-bottom: 1px solid var(--border-color);
+      background: rgba(7, 9, 14, 0.8);
+      backdrop-filter: blur(8px);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-badge {
+      background: var(--gradient-cyan-violet);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-weight: 800;
+      font-family: 'Outfit', sans-serif;
+      letter-spacing: 0.5px;
+      font-size: 0.85rem;
+      box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+    }
+
+    .logo-text {
+      font-size: 1.1rem;
+      font-weight: 700;
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(to right, #ffffff, var(--text-muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .logo-text span {
+      color: var(--cyan);
+      -webkit-text-fill-color: var(--cyan);
+    }
+
+    .header-info {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .header-info span i {
+      margin-right: 6px;
+      color: var(--cyan);
+    }
+
+    /* Presentation Container & Slide Mechanics */
+    .slides-container {
+      flex: 1;
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 150px);
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px) scale(0.98);
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 40px 60px;
+      overflow-y: auto;
+      z-index: 1;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+      z-index: 2;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+    }
+
+    .slide-title-group {
+      margin-bottom: 30px;
+    }
+
+    .slide-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      background: rgba(6, 182, 212, 0.1);
+      border: 1px solid rgba(6, 182, 212, 0.2);
+      color: var(--cyan);
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .slide-title {
+      font-size: 2.2rem;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.2;
+    }
+
+    .slide-subtitle {
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      font-weight: 400;
+    }
+
+    /* Cards & Containers (Glassmorphism) */
+    .glass-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: var(--shadow-card);
+      transition: all 0.3s ease;
+    }
+
+    .glass-card:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      background: var(--bg-card-hover);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+
+    /* UI Inputs */
+    .input-group {
+      margin-bottom: 18px;
+    }
+
+    .input-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    .input-val {
+      color: var(--cyan);
+      font-weight: 700;
+    }
+
+    .range-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--cyan);
+      cursor: pointer;
+      box-shadow: 0 0 10px var(--cyan);
+      transition: all 0.1s ease;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+
+    input[type="number"] {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: white;
+      padding: 6px 10px;
+      font-family: inherit;
+      font-weight: 600;
+      width: 110px;
+      text-align: right;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    input[type="number"]:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 8px rgba(6, 182, 212, 0.3);
+    }
+
+    /* Buttons */
+    .btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: var(--gradient-cyan-violet);
+      border: none;
+      box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
+      background: linear-gradient(135deg, #08cbe9 0%, #996bf8 100%);
+    }
+
+    .btn-emerald {
+      background: var(--gradient-emerald-blue);
+      border: none;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-emerald:hover {
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    /* Interactive Elements styling */
+    .delta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .delta-badge.positive {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--emerald);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .delta-badge.negative {
+      background: rgba(244, 63, 94, 0.15);
+      color: var(--rose);
+      border: 1px solid rgba(244, 63, 94, 0.2);
+    }
+
+    /* Slide 1: Welcome */
+    #slide-1 {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0;
+    }
+
+    .welcome-container {
+      max-width: 800px;
+      padding: 40px;
+    }
+
+    .welcome-title {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      font-weight: 800;
+      line-height: 1.1;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: titleGlow 4s infinite alternate;
+    }
+
+    @keyframes titleGlow {
+      0% { text-shadow: 0 0 20px rgba(6, 182, 212, 0); }
+      100% { text-shadow: 0 0 30px rgba(6, 182, 212, 0.2); }
+    }
+
+    .welcome-meta {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 30px 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .welcome-meta span i {
+      color: var(--cyan);
+      margin-right: 8px;
+    }
+
+    /* Slide 2: Блок 1. Разогрев */
+    .survey-card {
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      height: 240px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .survey-card .reveal-btn {
+      align-self: flex-start;
+      margin-top: 15px;
+    }
+
+    .survey-card .reveal-content {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+      color: var(--emerald);
+      font-weight: 500;
+      font-size: 0.95rem;
+      margin-top: 15px;
+      border-top: 1px dashed var(--border-color);
+      padding-top: 15px;
+    }
+
+    .survey-card.revealed .reveal-content {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .survey-card.revealed .reveal-btn {
+      display: none;
+    }
+
+    .survey-card .card-index {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 4rem;
+      font-weight: 900;
+      opacity: 0.05;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    /* Slide 3: Блок 2. Смена картины мира */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    .compare-table th, .compare-table td {
+      padding: 16px 20px;
+      text-align: left;
+    }
+
+    .compare-table th {
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.9rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .compare-table td {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      font-size: 0.95rem;
+    }
+
+    .compare-table tr:hover td {
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    .nav-label {
+      color: var(--cyan);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .old-label {
+      color: var(--text-muted);
+      text-decoration: line-through;
+      opacity: 0.6;
+    }
+
+    .reveal-item {
+      opacity: 0;
+      transform: translateX(-15px);
+      transition: all 0.4s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding: 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid rgba(255, 255, 255, 0.02);
+    }
+
+    .reveal-item.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .reveal-item i {
+      font-size: 1.2rem;
+      color: var(--cyan);
+    }
+
+    /* Slide 4: 4 Профиля */
+    .profile-card {
+      perspective: 1000px;
+      cursor: pointer;
+      height: 250px;
+    }
+
+    .profile-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: left;
+      transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform-style: preserve-3d;
+    }
+
+    .profile-card.flipped .profile-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .profile-card-front, .profile-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .profile-card-front {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+    }
+
+    .profile-card-back {
+      background: rgba(139, 92, 246, 0.08);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      transform: rotateY(180deg);
+    }
+
+    .profile-card:hover .profile-card-front {
+      border-color: rgba(255,255,255,0.15);
+      background: rgba(30, 41, 59, 0.5);
+    }
+
+    .profile-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .profile-tag {
+      align-self: flex-start;
+      font-size: 0.75rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(6, 182, 212, 0.1);
+      color: var(--cyan);
+      border: 1px solid rgba(6, 182, 212, 0.2);
+      font-weight: 600;
+    }
+
+    .profile-back-title {
+      font-weight: 700;
+      color: var(--violet);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .rule-box {
+      margin-top: 25px;
+      background: rgba(245, 158, 11, 0.05);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      border-radius: 12px;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .rule-box i {
+      font-size: 1.8rem;
+      color: var(--amber);
+      animation: pulseGlow 2s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      0% { text-shadow: 0 0 5px rgba(245, 158, 11, 0.2); }
+      100% { text-shadow: 0 0 15px rgba(245, 158, 11, 0.6); }
+    }
+
+    /* Slide 5: Интерактивный Навигатор */
+    .navigator-layout {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 30px;
+      height: 100%;
+    }
+
+    .tree-step {
+      display: none;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .tree-step.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .step-indicator {
+      font-size: 0.8rem;
+      color: var(--cyan);
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .step-question {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+      color: #fff;
+    }
+
+    .step-options {
+      display: flex;
+      gap: 15px;
+    }
+
+    .option-btn {
+      flex: 1;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .option-btn:hover {
+      background: rgba(6, 182, 212, 0.08);
+      border-color: var(--cyan);
+      transform: translateY(-2px);
+    }
+
+    .option-btn.btn-no:hover {
+      background: rgba(244, 63, 94, 0.08);
+      border-color: var(--rose);
+    }
+
+    .navigator-result {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px dashed var(--border-color);
+      border-radius: 16px;
+      padding: 30px;
+      min-height: 250px;
+    }
+
+    .result-icon {
+      font-size: 3rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      transition: all 0.5s ease;
+    }
+
+    .result-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--text-muted);
+    }
+
+    .result-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .result-success {
+      border-color: rgba(16, 185, 129, 0.3);
+      background: rgba(16, 185, 129, 0.02);
+    }
+
+    .result-success .result-icon {
+      color: var(--emerald);
+      text-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+      transform: scale(1.1);
+    }
+
+    .result-success .result-title {
+      color: #fff;
+    }
+
+    .result-success .result-desc {
+      color: var(--text-muted);
+    }
+
+    .reset-tree-btn {
+      margin-top: 20px;
+    }
+
+    /* Calculators General Elements */
+    .calc-container {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 30px;
+    }
+
+    .calc-inputs {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .calc-outputs {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .calc-box {
+      background: rgba(255, 255, 255, 0.015);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .output-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .output-item:last-child {
+      border-bottom: none;
+    }
+
+    .output-label {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .output-value {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .output-value-large {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--cyan);
+      background: var(--gradient-cyan-violet);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Charts (Custom SVG) */
+    .chart-container {
+      margin-top: 15px;
+      height: 120px;
+      position: relative;
+    }
+
+    .chart-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Slide 9: Ролевые игры */
+    .roleplay-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 30px;
+      align-items: start;
+    }
+
+    .role-selectors {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .role-btn {
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      color: var(--text-muted);
+      cursor: pointer;
+      text-align: left;
+      font-family: inherit;
+      transition: all 0.2s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .role-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255,255,255,0.15);
+      color: white;
+    }
+
+    .role-btn.active {
+      background: rgba(6, 182, 212, 0.08);
+      border-color: var(--cyan);
+      color: white;
+      box-shadow: 0 0 15px rgba(6, 182, 212, 0.1);
+    }
+
+    .role-btn .role-icon {
+      font-size: 1.2rem;
+      opacity: 0.5;
+    }
+
+    .role-btn.active .role-icon {
+      color: var(--cyan);
+      opacity: 1;
+    }
+
+    .role-card-display {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 30px;
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      animation: cardUpdate 0.4s ease forwards;
+    }
+
+    @keyframes cardUpdate {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .role-header {
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+    }
+
+    .role-client-name {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .role-client-info {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .role-dialogue {
+      background: rgba(255, 255, 255, 0.02);
+      border-left: 3px solid var(--cyan);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      font-style: italic;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+    }
+
+    .role-tab-nav {
+      display: flex;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+    }
+
+    .role-tab-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .role-tab-btn.active {
+      color: var(--cyan);
+      background: rgba(6, 182, 212, 0.1);
+    }
+
+    .role-tab-content {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: #cbd5e1;
+      height: 180px;
+      overflow-y: auto;
+    }
+
+    /* Stopwatch Widget */
+    .timer-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px dashed var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .timer-circle-wrap {
+      position: relative;
+      width: 120px;
+      height: 120px;
+    }
+
+    .timer-svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .timer-bg {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.05);
+      stroke-width: 6;
+    }
+
+    .timer-progress {
+      fill: none;
+      stroke: var(--cyan);
+      stroke-width: 6;
+      stroke-linecap: round;
+      stroke-dasharray: 339;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 0.1s linear, stroke 0.3s;
+    }
+
+    .timer-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.8rem;
+      font-weight: 800;
+      font-family: 'Outfit', sans-serif;
+      color: #fff;
+    }
+
+    .timer-controls {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .timer-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .timer-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .timer-btn.active {
+      color: var(--cyan);
+      border-color: var(--cyan);
+    }
+
+    .timer-expired {
+      stroke: var(--rose);
+      animation: alertPulse 1s infinite alternate;
+    }
+    
+    .timer-text-expired {
+      color: var(--rose);
+      animation: textAlertPulse 1s infinite alternate;
+    }
+
+    @keyframes alertPulse {
+      0% { stroke: var(--rose); }
+      100% { stroke: #ff788f; }
+    }
+    
+    @keyframes textAlertPulse {
+      0% { color: var(--rose); text-shadow: 0 0 5px rgba(244, 63, 94, 0.2); }
+      100% { color: #ff788f; text-shadow: 0 0 15px rgba(244, 63, 94, 0.6); }
+    }
+
+    /* Slide 10: ЖК Фильтр */
+    .jk-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .jk-filter-btn {
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .jk-filter-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.15);
+      color: white;
+    }
+
+    .jk-filter-btn.active {
+      background: var(--gradient-cyan-violet);
+      color: white;
+      border: none;
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    }
+
+    .jk-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      max-height: 250px;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+
+    .jk-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.3s;
+      animation: jkFadeIn 0.3s ease forwards;
+    }
+
+    @keyframes jkFadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .jk-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .jk-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(6, 182, 212, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cyan);
+      font-size: 1.1rem;
+    }
+
+    .jk-name {
+      font-weight: 600;
+      color: white;
+      font-size: 0.95rem;
+    }
+
+    .jk-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Presentation Footer Navigation */
+    footer {
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border-color);
+      background: rgba(7, 9, 14, 0.9);
+      backdrop-filter: blur(8px);
+      z-index: 10;
+    }
+
+    .progress-bar-container {
+      position: absolute;
+      top: -2px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(to right, var(--cyan), var(--violet));
+      width: 10%;
+      transition: width 0.3s ease;
+      box-shadow: 0 0 8px var(--cyan);
+    }
+
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .slide-counter {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+    }
+
+    .nav-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      background: rgba(6, 182, 212, 0.1);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      border-color: var(--border-color);
+      color: white;
+      box-shadow: none;
+    }
+
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    /* Helper utility classes */
+    .text-cyan { color: var(--cyan); }
+    .text-violet { color: var(--violet); }
+    .text-emerald { color: var(--emerald); }
+    .text-amber { color: var(--amber); }
+    .text-rose { color: var(--rose); }
+    .w-full { width: 100%; }
+    .mt-4 { margin-top: 16px; }
+    .mb-4 { margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+
+  <!-- Animated Glowing Circles Background -->
+  <div class="bg-animation">
+    <div class="bg-circle bg-circle-1"></div>
+    <div class="bg-circle bg-circle-2"></div>
+  </div>
+
+  <!-- Falling Matrix Rain Canvas Background -->
+  <canvas id="matrixCanvas"></canvas>
+
+  <!-- Header -->
+  <header>
+    <div class="logo-container">
+      <div class="logo-badge">TREND</div>
+      <div class="logo-text">ФИНАНСОВЫЙ <span>ИНЖИНИРИНГ</span></div>
+    </div>
+    <div class="header-info">
+      <!-- Toggle button for Matrix -->
+      <button class="btn" id="matrixToggle" onclick="toggleMatrix()" style="padding: 4px 10px; font-size: 0.75rem; border-color: var(--emerald); border-radius: 6px; background: rgba(16, 185, 129, 0.05); font-family: inherit;">
+        <i class="fa-solid fa-code text-emerald"></i> Матрица: Вкл
+      </button>
+      <span><i class="fa-solid fa-user-tie"></i> Ведущий: Антон Цой</span>
+      <span><i class="fa-solid fa-clock"></i> ~60 минут</span>
+    </div>
+  </header>
+
+  <!-- Progress Bar -->
+  <div class="progress-bar-container">
+    <div class="progress-bar-fill" id="progressBar"></div>
+  </div>
+
+  <!-- Slides -->
+  <div class="slides-container" id="slidesContainer">
+    
+    <!-- Slide 1: Welcome -->
+    <div class="slide active" id="slide-1" data-index="1">
+      <div class="welcome-container">
+        <div class="slide-badge">КУРС ОБУЧЕНИЯ ДЛЯ АГЕНТОВ</div>
+        <h1 class="welcome-title">Финансовый инжиниринг: Как продавать в эпоху высоких ставок</h1>
+        <p class="slide-subtitle" style="font-size:1.25rem;">Переход от роли продавца планировок к роли финансового партнера клиента</p>
+        
+        <div class="welcome-meta">
+          <span><i class="fa-regular fa-calendar"></i> Июль 2026</span>
+          <span><i class="fa-solid fa-location-dot"></i> Тренд-Агент Уфа</span>
+        </div>
+        
+        <button class="btn btn-primary" onclick="changeSlide(1)">
+          Начать презентацию <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Slide 2: Разогрев -->
+    <div class="slide" id="slide-2" data-index="2">
+      <div class="slide-title-group">
+        <div class="slide-badge">Блок 1. Разогрев</div>
+        <h2 class="slide-title">3 неудобных вопроса к залу</h2>
+        <p class="slide-subtitle">Кликните по карточкам, чтобы открыть ключевые темы опроса аудитории</p>
+      </div>
+
+      <div class="grid-3">
+        <!-- Card 1 -->
+        <div class="glass-card survey-card" id="qcard-1" onclick="revealCard('qcard-1')">
+          <div class="card-index">01</div>
+          <div>
+            <h3 style="margin-bottom: 10px; font-size:1.2rem;"><i class="fa-solid fa-tag text-rose"></i> Скидка vs Платеж</h3>
+            <p style="color:var(--text-muted); font-size:0.95rem;">Когда клиент говорит «дорого» — вы предлагаете скидку или смотрите на его ежемесячный платеж?</p>
+          </div>
+          <button class="btn reveal-btn">Показать инсайт</button>
+          <div class="reveal-content">
+            <i class="fa-solid fa-lightbulb"></i> Скидка решает эмоцию. Платеж решает бюджет. Клиент живет в ежемесячном платеже, а не в полной цене!
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="glass-card survey-card" id="qcard-2" onclick="revealCard('qcard-2')">
+          <div class="card-index">02</div>
+          <div>
+            <h3 style="margin-bottom: 10px; font-size:1.2rem;"><i class="fa-solid fa-vault text-amber"></i> Депозитные выжидатели</h3>
+            <p style="color:var(--text-muted); font-size:0.95rem;">У кого в работе есть клиент с депозитом под 19%, который говорит: «Подожду, пока ставки упадут»?</p>
+          </div>
+          <button class="btn reveal-btn">Показать инсайт</button>
+          <div class="reveal-content">
+            <i class="fa-solid fa-lightbulb"></i> Вклад сгорит в росте цен, когда ставки упадут и застройщики поднимут прайс на 15-20%.
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="glass-card survey-card" id="qcard-3" onclick="revealCard('qcard-3')">
+          <div class="card-index">03</div>
+          <div>
+            <h3 style="margin-bottom: 10px; font-size:1.2rem;"><i class="fa-solid fa-house-laptop text-cyan"></i> Двойная нагрузка</h3>
+            <p style="color:var(--text-muted); font-size:0.95rem;">Клиент снимает квартиру и боится платить одновременно аренду и ипотеку. Что вы ему говорите?</p>
+          </div>
+          <button class="btn reveal-btn">Показать инсайт</button>
+          <div class="reveal-content">
+            <i class="fa-solid fa-lightbulb"></i> Траншевая ипотека снижает платеж до сдачи дома до 600-1800 ₽/мес. Аренда + 1800 ₽ — это под силу каждому.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Смена картины мира -->
+    <div class="slide" id="slide-3" data-index="3">
+      <div class="slide-title-group">
+        <div class="slide-badge">Блок 2. Картина мира</div>
+        <h2 class="slide-title">Рыбак vs Навигатор: Кто вы на рынке недвижимости?</h2>
+        <p class="slide-subtitle">Навигатор (финансовый терапевт) подбирает схему покупки, а не просто планировку</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="glass-card">
+          <h3 style="margin-bottom: 15px; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:10px;">Две стратегии продаж</h3>
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th>Рыбак (старый риелтор)</th>
+                <th>Навигатор (фин. инжиниринг)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="old-label">Получил заявку</span></td>
+                <td><span class="nav-label"><i class="fa-solid fa-list-check"></i> Финансовый аудит</span></td>
+              </tr>
+              <tr>
+                <td><span class="old-label">Скинул планировки</span></td>
+                <td><span class="nav-label"><i class="fa-solid fa-sliders"></i> Определил инструмент</span></td>
+              </tr>
+              <tr>
+                <td><span class="old-label">«Платёж 90к» → слил клиента</span></td>
+                <td><span class="nav-label"><i class="fa-solid fa-calculator"></i> Подобрал объект под схему</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="glass-card" style="display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <h3 style="margin-bottom: 20px;">Что действительно покупает клиент в 2026?</h3>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom: 20px;">Кликните, чтобы открыть элементы, определяющие сделку:</p>
+            
+            <div class="reveal-item" id="item-1" onclick="document.getElementById('item-1').classList.add('visible')">
+              <i class="fa-solid fa-circle-check"></i>
+              <div>
+                <strong style="color:white;">Стоимость обслуживания долга</strong>
+                <p style="font-size:0.85rem; color:var(--text-muted);">Размер платежа, а не полная стоимость жилья.</p>
+              </div>
+            </div>
+            
+            <div class="reveal-item" id="item-2" onclick="document.getElementById('item-2').classList.add('visible')">
+              <i class="fa-solid fa-circle-check"></i>
+              <div>
+                <strong style="color:white;">Управление своим семейным бюджетом</strong>
+                <p style="font-size:0.85rem; color:var(--text-muted);">Комфортная интеграция платежа в текущие расходы.</p>
+              </div>
+            </div>
+            
+            <div class="reveal-item" id="item-3" onclick="document.getElementById('item-3').classList.add('visible')">
+              <i class="fa-solid fa-circle-check"></i>
+              <div>
+                <strong style="color:white;">Безопасность сделки и отсутствие риска</strong>
+                <p style="font-size:0.85rem; color:var(--text-muted);">Защита от двойного платежа и потерь при продаже вторички.</p>
+              </div>
+            </div>
+          </div>
+          
+          <button class="btn" onclick="['item-1','item-2','item-3'].forEach(id=>document.getElementById(id).classList.add('visible'))">
+            Открыть всё
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Профили клиентов -->
+    <div class="slide" id="slide-4" data-index="4">
+      <div class="slide-title-group">
+        <div class="slide-badge">Блок 2. Аудитория</div>
+        <h2 class="slide-title">4 ключевых профиля клиентов в 2026 году</h2>
+        <p class="slide-subtitle">Кликните на карточку, чтобы перевернуть её и узнать финансовое решение</p>
+      </div>
+
+      <div class="grid-4">
+        <!-- Card 1 -->
+        <div class="profile-card" onclick="this.classList.toggle('flipped')">
+          <div class="profile-card-inner">
+            <div class="profile-card-front">
+              <span class="profile-tag">01. Аренда</span>
+              <h3 class="profile-title">Арендатор-ожидатель</h3>
+              <p style="color:var(--text-muted); font-size:0.85rem; line-height: 1.4;">Снимает жилье, боится платить одновременно аренду и ипотеку.</p>
+              <div style="font-size:0.75rem; color:var(--cyan); font-weight:600;"><i class="fa-solid fa-rotate"></i> Клик для решения</div>
+            </div>
+            <div class="profile-card-back">
+              <span class="profile-back-title">Решение</span>
+              <h4 style="color:#fff; margin-bottom: 8px;">Траншевая ипотека</h4>
+              <p style="font-size:0.85rem; line-height: 1.4;">Плата за ипотеку до сдачи дома — 600–1800 ₽/мес. Деньги копятся на ремонт.</p>
+              <i class="fa-solid fa-circle-check" style="font-size:1.5rem; color:var(--violet); align-self: flex-end;"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="profile-card" onclick="this.classList.toggle('flipped')">
+          <div class="profile-card-inner">
+            <div class="profile-card-front">
+              <span class="profile-tag">02. Обмен</span>
+              <h3 class="profile-title">Вторичник-переселенец</h3>
+              <p style="color:var(--text-muted); font-size:0.85rem; line-height: 1.4;">Есть старая квартира, но вторичный рынок стоит. Продавать с дисконтом не хочет.</p>
+              <div style="font-size:0.75rem; color:var(--cyan); font-weight:600;"><i class="fa-solid fa-rotate"></i> Клик для решения</div>
+            </div>
+            <div class="profile-card-back">
+              <span class="profile-back-title">Решение</span>
+              <h4 style="color:#fff; margin-bottom: 8px;">Рассрочка-мост 10/90</h4>
+              <p style="font-size:0.85rem; line-height: 1.4;">Зафиксировали цену, платим 10%. Живем дома, продаем старое жилье без дисконта 18 мес.</p>
+              <i class="fa-solid fa-circle-check" style="font-size:1.5rem; color:var(--violet); align-self: flex-end;"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="profile-card" onclick="this.classList.toggle('flipped')">
+          <div class="profile-card-inner">
+            <div class="profile-card-front">
+              <span class="profile-tag">03. Вклад</span>
+              <h3 class="profile-title">Депозитный рантье</h3>
+              <p style="color:var(--text-muted); font-size:0.85rem; line-height: 1.4;">Держит миллионы на вкладе под 19%. Хочет дождаться закрытия и купить за наличку.</p>
+              <div style="font-size:0.75rem; color:var(--cyan); font-weight:600;"><i class="fa-solid fa-rotate"></i> Клик для решения</div>
+            </div>
+            <div class="profile-card-back">
+              <span class="profile-back-title">Решение</span>
+              <h4 style="color:#fff; margin-bottom: 8px;">Транш + Арбитраж</h4>
+              <p style="font-size:0.85rem; line-height: 1.4;">Фиксируем цену сегодня. Платёж 1800 ₽/мес. Депозит приносит 47к/мес. Закрываем перед сдачей.</p>
+              <i class="fa-solid fa-circle-check" style="font-size:1.5rem; color:var(--violet); align-self: flex-end;"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="profile-card" onclick="this.classList.toggle('flipped')">
+          <div class="profile-card-inner">
+            <div class="profile-card-front">
+              <span class="profile-tag">04. Бизнес</span>
+              <h3 class="profile-title">Бизнесмен в обороте</h3>
+              <p style="color:var(--text-muted); font-size:0.85rem; line-height: 1.4;">Деньги приносят 30%+ прибыли в бизнесе. Вынимать на покупку квартиры не выгодно.</p>
+              <div style="font-size:0.75rem; color:var(--cyan); font-weight:600;"><i class="fa-solid fa-rotate"></i> Клик для решения</div>
+            </div>
+            <div class="profile-card-back">
+              <span class="profile-back-title">Решение</span>
+              <h4 style="color:#fff; margin-bottom: 8px;">Рассрочка 30/70</h4>
+              <p style="font-size:0.85rem; line-height: 1.4;">Бизнес крутит оборотку. Рассрочка выплачивается комфортными частями из операционной прибыли.</p>
+              <i class="fa-solid fa-circle-check" style="font-size:1.5rem; color:var(--violet); align-self: flex-end;"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rule Box -->
+      <div class="rule-box">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <div>
+          <strong style="color:white; font-size:1.05rem;">Внимание! Правило одной льготной ипотеки (действует с февраля 2026):</strong>
+          <p style="color:var(--text-muted); font-size:0.9rem; margin-top:2px;">1 семья = 1 льготный кредит на всю жизнь. Клиенты, которые «ждут снижения ставок», рискуют потерять лимит. Это сильный аргумент срочности для закрытия сделки уже сегодня.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 5: Дерево решений -->
+    <div class="slide" id="slide-5" data-index="5">
+      <div class="slide-title-group">
+        <div class="slide-badge">Блок 2. Диагностика</div>
+        <h2 class="slide-title">Интерактивный навигатор клиента (Дерево решений)</h2>
+        <p class="slide-subtitle">Отвечайте на вопросы вместе с клиентом, чтобы подобрать идеальный финансовый инструмент</p>
+      </div>
+
+      <div class="navigator-layout">
+        <!-- Tree logic column -->
+        <div class="glass-card" style="display:flex; flex-direction:column; justify-content:center; padding: 40px;">
+          
+          <!-- Step 1 -->
+          <div class="tree-step active" id="step-1">
+            <div class="step-indicator">Шаг 1 из 5</div>
+            <div class="step-question">Есть ли в семье дети до 7 лет или беременность?</div>
+            <div class="step-options">
+              <button class="option-btn" onclick="answerTree(1, true)"><i class="fa-solid fa-check"></i> Да</button>
+              <button class="option-btn btn-no" onclick="answerTree(1, false)"><i class="fa-solid fa-xmark"></i> Нет</button>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="tree-step" id="step-2">
+            <div class="step-indicator">Шаг 2 из 5</div>
+            <div class="step-question">Первоначальный взнос (ПВ) больше или равен 20%?</div>
+            <div class="step-options">
+              <button class="option-btn" onclick="answerTree(2, true)"><i class="fa-solid fa-check"></i> Да</button>
+              <button class="option-btn btn-no" onclick="answerTree(2, false)"><i class="fa-solid fa-xmark"></i> Нет</button>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="tree-step" id="step-3">
+            <div class="step-indicator">Шаг 3 из 5</div>
+            <div class="step-question">Дом сдается через год или позже?</div>
+            <div class="step-options">
+              <button class="option-btn" onclick="answerTree(3, true)"><i class="fa-solid fa-check"></i> Да</button>
+              <button class="option-btn btn-no" onclick="answerTree(3, false)"><i class="fa-solid fa-xmark"></i> Нет</button>
+            </div>
+          </div>
+
+          <!-- Step 3a (conditional) -->
+          <div class="tree-step" id="step-3a">
+            <div class="step-indicator">Шаг 3а из 5</div>
+            <div class="step-question">Есть ли вклад в банке или квартира под продажу?</div>
+            <div class="step-options">
+              <button class="option-btn" onclick="answerTree('3a', true)"><i class="fa-solid fa-check"></i> Да</button>
+              <button class="option-btn btn-no" onclick="answerTree('3a', false)"><i class="fa-solid fa-xmark"></i> Нет</button>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="tree-step" id="step-4">
+            <div class="step-indicator">Шаг 4 из 5</div>
+            <div class="step-question">Квартира покупается «для жизни» на срок 5+ лет?</div>
+            <div class="step-options">
+              <button class="option-btn" onclick="answerTree(4, true)"><i class="fa-solid fa-check"></i> Да</button>
+              <button class="option-btn btn-no" onclick="answerTree(4, false)"><i class="fa-solid fa-xmark"></i> Нет</button>
+            </div>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="tree-step" id="step-5">
+            <div class="step-indicator">Шаг 5 из 5</div>
+            <div class="step-question">Есть ли крупный первоначальный взнос (30–50%+)?</div>
+            <div class="step-options">
+              <button class="option-btn" onclick="answerTree(5, true)"><i class="fa-solid fa-check"></i> Да</button>
+              <button class="option-btn btn-no" onclick="answerTree(5, false)"><i class="fa-solid fa-xmark"></i> Нет</button>
+            </div>
+          </div>
+
+          <!-- Finished step -->
+          <div class="tree-step" id="step-finish">
+            <div style="text-align:center;">
+              <i class="fa-solid fa-circle-check text-emerald" style="font-size:3rem; margin-bottom:15px;"></i>
+              <h3 style="margin-bottom:10px;">Диагностика успешно завершена!</h3>
+              <p style="color:var(--text-muted); font-size:0.9rem;">Инструмент подобран на основе введенных параметров.</p>
+              <button class="btn reset-tree-btn" onclick="resetTree()"><i class="fa-solid fa-arrow-rotate-left"></i> Начать заново</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Result Box column -->
+        <div class="navigator-result" id="treeResult">
+          <i class="fa-solid fa-compass result-icon"></i>
+          <h3 class="result-title">Ожидание ответов</h3>
+          <p class="result-desc">Ответьте на вопросы слева. Система автоматически проанализирует профиль клиента и покажет эталонную финансовую стратегию.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 6: Траншевая ипотека -->
+    <div class="slide" id="slide-6" data-index="6">
+      <div class="slide-title-group">
+        <div class="slide-badge">Блок 3. Инструменты</div>
+        <h2 class="slide-title">Инструмент 1: Взаимодействие транша с арендой и депозитами</h2>
+        <p class="slide-subtitle">Кредитование частями: транш на период стройки снижает нагрузку до минимума</p>
+      </div>
+
+      <div class="calc-container">
+        <!-- Interactive Inputs -->
+        <div class="glass-card calc-inputs">
+          <h3 style="margin-bottom:15px; font-size:1.1rem;"><i class="fa-solid fa-calculator text-cyan"></i> Интерактивный расчет</h3>
+          
+          <!-- Mode Selector -->
+          <div style="display:flex; gap:10px; margin-bottom: 15px;">
+            <button class="btn w-full btn-primary" id="mode-rent-btn" onclick="switchTrenchMode('rent')">Арендатор-ожидатель</button>
+            <button class="btn w-full" id="mode-dep-btn" onclick="switchTrenchMode('deposit')">Депозитный арбитраж</button>
+          </div>
+
+          <!-- Rent inputs -->
+          <div id="trench-rent-inputs">
+            <div class="input-group">
+              <div class="input-label"><span>Аренда в месяц (₽)</span> <span class="input-val" id="val-rent">35 000 ₽</span></div>
+              <div class="range-container">
+                <input type="range" id="input-rent" min="15000" max="80000" step="1000" value="35000" oninput="calcTrenchRent()">
+              </div>
+            </div>
+
+            <div class="input-group">
+              <div class="input-label"><span>Обычная ипотека платеж (₽)</span> <span class="input-val" id="val-mort">38 000 ₽</span></div>
+              <div class="range-container">
+                <input type="range" id="input-mort" min="20000" max="100000" step="1000" value="38000" oninput="calcTrenchRent()">
+              </div>
+            </div>
+
+            <div class="input-group">
+              <div class="input-label"><span>Траншевый платеж (₽)</span> <span class="input-val" id="val-trench">1 800 ₽</span></div>
+              <div class="range-container">
+                <input type="range" id="input-trench" min="100" max="5000" step="50" value="1800" oninput="calcTrenchRent()">
+              </div>
+            </div>
+
+            <div class="input-group">
+              <div class="input-label"><span>Срок стройки (мес)</span> <span class="input-val" id="val-months">24 мес</span></div>
+              <div class="range-container">
+                <input type="range" id="input-months" min="6" max="36" step="1" value="24" oninput="calcTrenchRent()">
+              </div>
+            </div>
+          </div>
+
+          <!-- Deposit inputs (hidden by default) -->
+          <div id="trench-deposit-inputs" style="display:none;">
+            <div class="input-group">
+              <div class="input-label"><span>Сумма вклада (₽)</span> <span class="input-val" id="val-dep-sum">5 000 000 ₽</span></div>
+              <div class="range-container">
+                <input type="range" id="input-dep-sum" min="1000000" max="15000000" step="100000" value="5000000" oninput="calcTrenchDeposit()">
+              </div>
+            </div>
+
+            <div class="input-group">
+              <div class="input-label"><span>Ставка вклада (% годовых)</span> <span class="input-val" id="val-dep-rate">19%</span></div>
+              <div class="range-container">
+                <input type="range" id="input-dep-rate" min="10" max="25" step="0.5" value="19" oninput="calcTrenchDeposit()">
+              </div>
+            </div>
+
+            <div class="input-group">
+              <div class="input-label"><span>Стоимость квартиры (₽)</span> <span class="input-val" id="val-prop-price">10 000 000 ₽</span></div>
+              <div class="range-container">
+                <input type="range" id="input-prop-price" min="4000000" max="20000000" step="100000" value="10000000" oninput="calcTrenchDeposit()">
+              </div>
+            </div>
+
+            <div class="input-group">
+              <div class="input-label"><span>Рост цен на квартиры (% в год)</span> <span class="input-val" id="val-growth">15%</span></div>
+              <div class="range-container">
+                <input type="range" id="input-growth" min="5" max="30" step="1" value="15" oninput="calcTrenchDeposit()">
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Calculations & Charts -->
+        <div class="glass-card calc-outputs">
+          <!-- Rent Outputs Content -->
+          <div id="trench-rent-outputs" style="display:flex; flex-direction:column; justify-content:space-between; height:100%;">
+            <div>
+              <h3 style="margin-bottom:15px; font-size:1.1rem; color:var(--cyan);"><i class="fa-solid fa-scale-balanced"></i> Экономика платежа</h3>
+              
+              <div class="calc-box">
+                <div class="output-item">
+                  <span class="output-label">Обычный платеж (Аренда + Ипотека):</span>
+                  <span class="output-value text-rose" id="val-total-normal">73 000 ₽</span>
+                </div>
+                <div class="output-item">
+                  <span class="output-label">С траншем (Аренда + Транш):</span>
+                  <span class="output-value text-emerald" id="val-total-trench">36 800 ₽</span>
+                </div>
+                <div class="output-item" style="border-top:1px solid rgba(255,255,255,0.08); margin-top:8px; padding-top:12px;">
+                  <span class="output-label" style="font-weight:700;">Экономия в месяц:</span>
+                  <span class="output-value text-emerald" id="val-monthly-saving">36 200 ₽</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:0.95rem; color:var(--text-muted);">Итоговая экономия за стройку:</span>
+                <span class="delta-badge positive" id="val-trench-rent-savings-badge"><i class="fa-solid fa-caret-up"></i> +868к</span>
+              </div>
+              <div class="output-value-large" id="val-trench-rent-savings" style="margin-top:5px;">868 800 ₽</div>
+              <p style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">Этого бюджета с запасом хватает на полноценный ремонт новой квартиры к моменту сдачи без взятия потребительского кредита.</p>
+            </div>
+
+            <!-- Custom dynamic SVG Chart -->
+            <div class="chart-container" id="trench-rent-chart"></div>
+          </div>
+
+          <!-- Deposit Outputs Content (hidden by default) -->
+          <div id="trench-deposit-outputs" style="display:none; flex-direction:column; justify-content:space-between; height:100%;">
+            <div>
+              <h3 style="margin-bottom:15px; font-size:1.1rem; color:var(--cyan);"><i class="fa-solid fa-chart-line"></i> Транш + Депозитный арбитраж</h3>
+              
+              <div class="calc-box">
+                <div class="output-item">
+                  <span class="output-label">Доход от вклада за 1.5 года:</span>
+                  <span class="output-value text-emerald" id="val-dep-earn">+1 425 000 ₽</span>
+                </div>
+                <div class="output-item">
+                  <span class="output-label">Рост цены за 1.5 года (потери):</span>
+                  <span class="output-value text-rose" id="val-dep-loss">-2 250 000 ₽</span>
+                </div>
+                <div class="output-item" style="border-top:1px solid rgba(255,255,255,0.08); margin-top:8px; padding-top:12px;">
+                  <span class="output-label" style="font-weight:700;">Итог ожидания (В нуле/Минус):</span>
+                  <span class="output-value text-rose" id="val-dep-net-loss">-825 000 ₽</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:0.95rem; color:var(--text-muted);">Выгода стратегии «Транш + Вклад»:</span>
+                <span class="delta-badge positive" id="val-trench-dep-savings-badge"><i class="fa-solid fa-caret-up"></i> +2.22M ₽</span>
+              </div>
+              <div class="output-value-large" id="val-trench-dep-savings" style="margin-top:5px;">2 217 600 ₽</div>
+              <p style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">Мы фиксируем цену сегодня, вклад приносит проценты, квартира растет в цене, а платеж составляет всего 1 800 ₽/мес. Чистая синергия.</p>
+            </div>
+            
+            <div class="chart-container" id="trench-dep-chart"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 7: Субсидированная ипотека -->
+    <div class="slide" id="slide-7" data-index="7">
+      <div class="slide-title-group">
+        <div class="slide-badge">Блок 3. Инструменты</div>
+        <h2 class="slide-title">Инструмент 2: Субсидированная ставка (Удорожание vs Переплата)</h2>
+        <p class="slide-subtitle">Сравнение стандартной высокой ставки с низкой ставкой при удорожании стоимости</p>
+      </div>
+
+      <div class="calc-container">
+        <!-- Interactive Inputs -->
+        <div class="glass-card calc-inputs">
+          <h3 style="margin-bottom:15px; font-size:1.1rem;"><i class="fa-solid fa-calculator text-cyan"></i> Параметры кредита</h3>
+
+          <div class="input-group">
+            <div class="input-label"><span>Базовая цена квартиры (₽)</span> <span class="input-val" id="val-sub-base">7 500 000 ₽</span></div>
+            <div class="range-container">
+              <input type="range" id="input-sub-base" min="3000000" max="15000000" step="100000" value="7500000" oninput="calcSubsidy()">
+            </div>
+          </div>
+
+          <div class="input-group">
+            <div class="input-label"><span>Первоначальный взнос (%)</span> <span class="input-val" id="val-sub-pv">20%</span></div>
+            <div class="range-container">
+              <input type="range" id="input-sub-pv" min="10" max="50" step="5" value="20" oninput="calcSubsidy()">
+            </div>
+          </div>
+
+          <div class="grid-2" style="gap:15px;">
+            <div class="input-group">
+              <div class="input-label"><span>Рыночная ставка (%)</span> <span class="input-val" id="val-sub-mrate">18%</span></div>
+              <div class="range-container">
+                <input type="range" id="input-sub-mrate" min="12" max="25" step="0.5" value="18" oninput="calcSubsidy()">
+              </div>
+            </div>
+            
+            <div class="input-group">
+              <div class="input-label"><span>Сниженная ставка (%)</span> <span class="input-val" id="val-sub-srate">6%</span></div>
+              <div class="range-container">
+                <input type="range" id="input-sub-srate" min="2" max="12" step="0.5" value="6" oninput="calcSubsidy()">
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2" style="gap:15px;">
+            <div class="input-group">
+              <div class="input-label"><span>Удорожание (%)</span> <span class="input-val" id="val-sub-markup">10%</span></div>
+              <div class="range-container">
+                <input type="range" id="input-sub-markup" min="3" max="25" step="1" value="10" oninput="calcSubsidy()">
+              </div>
+            </div>
+            
+            <div class="input-group">
+              <div class="input-label"><span>Срок кредита (лет)</span> <span class="input-val" id="val-sub-term">30 лет</span></div>
+              <div class="range-container">
+                <input type="range" id="input-sub-term" min="5" max="30" step="5" value="30" oninput="calcSubsidy()">
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Calculations & Charts -->
+        <div class="glass-card calc-outputs">
+          <div>
+            <h3 style="margin-bottom:15px; font-size:1.1rem; color:var(--cyan);"><i class="fa-solid fa-scale-balanced"></i> Финансовая выгода</h3>
+            
+            <div class="calc-box">
+              <table style="width:100%; font-size:0.9rem; border-collapse:collapse;">
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                  <td style="padding: 8px 0; color:var(--text-muted);">Параметр</td>
+                  <td style="padding: 8px 0; text-align:right; font-weight:600;">Рынок (18%)</td>
+                  <td style="padding: 8px 0; text-align:right; font-weight:600; color:var(--cyan);">Субсидия (6%)</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.03);">
+                  <td style="padding: 8px 0; color:var(--text-muted);">Цена кв:</td>
+                  <td style="padding: 8px 0; text-align:right;" id="val-sub-price-m">7 500 000 ₽</td>
+                  <td style="padding: 8px 0; text-align:right; color:var(--cyan);" id="val-sub-price-s">8 250 000 ₽</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.03);">
+                  <td style="padding: 8px 0; color:var(--text-muted);">Сумма кредита:</td>
+                  <td style="padding: 8px 0; text-align:right;" id="val-sub-loan-m">6 000 000 ₽</td>
+                  <td style="padding: 8px 0; text-align:right; color:var(--cyan);" id="val-sub-loan-s">6 600 000 ₽</td>
+                </tr>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.03);">
+                  <td style="padding: 8px 0; color:var(--text-muted);">Платеж/мес:</td>
+                  <td style="padding: 8px 0; text-align:right; font-weight:700; color:var(--rose);" id="val-sub-pmt-m">90 400 ₽</td>
+                  <td style="padding: 8px 0; text-align:right; font-weight:700; color:var(--emerald);" id="val-sub-pmt-s">39 570 ₽</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; color:var(--text-muted);">Переплата (10л):</td>
+                  <td style="padding: 8px 0; text-align:right;" id="val-sub-over-m">10.7 млн ₽</td>
+                  <td style="padding: 8px 0; text-align:right; color:var(--emerald);" id="val-sub-over-s">3.5 млн ₽</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+          <div style="margin: 10px 0;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:0.85rem; color:var(--text-muted);">Удорожание (<span id="val-sub-markup-rub">750к</span>) окупается за:</span>
+              <span class="delta-badge positive" id="val-sub-breakeven">15 месяцев</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:5px;">
+              <span style="font-size:0.95rem; color:var(--text-muted); font-weight:700;">Чистая экономия (за 10 лет):</span>
+              <span class="output-value-large" id="val-sub-total-saving">4 100 000 ₽</span>
+            </div>
+          </div>
+
+          <div class="chart-container" id="subsidy-chart"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 8: Рассрочка от застройщика -->
+    <div class="slide" id="slide-8" data-index="8">
+      <div class="slide-title-group">
+        <div class="slide-badge">Блок 3. Инструменты</div>
+        <h2 class="slide-title">Инструмент 3: Рассрочка от застройщика (Мост-рассрочка 10/90)</h2>
+        <p class="slide-subtitle">Спокойная продажа старой квартиры по рыночной цене без спешки и стресса</p>
+      </div>
+
+      <div class="calc-container">
+        <!-- Interactive Inputs -->
+        <div class="glass-card calc-inputs">
+          <h3 style="margin-bottom:15px; font-size:1.1rem;"><i class="fa-solid fa-calculator text-cyan"></i> Параметры вторички и новой покупки</h3>
+
+          <div class="input-group">
+            <div class="input-label"><span>Стоимость новой квартиры (₽)</span> <span class="input-val" id="val-ras-new">10 000 000 ₽</span></div>
+            <div class="range-container">
+              <input type="range" id="input-ras-new" min="4000000" max="18000000" step="100000" value="10000000" oninput="calcRas()">
+            </div>
+          </div>
+
+          <div class="input-group">
+            <div class="input-label"><span>Стоимость старой квартиры (₽)</span> <span class="input-val" id="val-ras-old">7 000 000 ₽</span></div>
+            <div class="range-container">
+              <input type="range" id="input-ras-old" min="3000000" max="15000000" step="100000" value="7000000" oninput="calcRas()">
+            </div>
+          </div>
+
+          <div class="input-group">
+            <div class="input-label"><span>Срочный дисконт при спешке (%)</span> <span class="input-val" id="val-ras-disc">15%</span></div>
+            <div class="range-container">
+              <input type="range" id="input-ras-disc" min="5" max="25" step="1" value="15" oninput="calcRas()">
+            </div>
+          </div>
+
+          <div class="input-group">
+            <div class="input-label"><span>Первоначальный взнос рассрочки (%)</span> <span class="input-val" id="val-ras-pv">10%</span></div>
+            <div class="range-container">
+              <input type="range" id="input-ras-pv" min="10" max="30" step="5" value="10" oninput="calcRas()">
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Calculations & Charts -->
+        <div class="glass-card calc-outputs">
+          <div>
+            <h3 style="margin-bottom:15px; font-size:1.1rem; color:var(--cyan);"><i class="fa-solid fa-scale-balanced"></i> Карта рисков и выгод</h3>
+            
+            <div class="calc-box">
+              <div class="output-item">
+                <span class="output-label">Платёж по рассрочке сейчас (<span id="val-ras-pv-p">10%</span>):</span>
+                <span class="output-value text-cyan" id="val-ras-pv-rub">1 000 000 ₽</span>
+              </div>
+              <div class="output-item">
+                <span class="output-label">Сумма дисконта при срочной продаже:</span>
+                <span class="output-value text-rose" id="val-ras-disc-rub">-1 050 000 ₽</span>
+              </div>
+              <div class="output-item" style="border-top:1px solid rgba(255,255,255,0.08); margin-top:8px; padding-top:12px;">
+                <span class="output-label" style="font-weight:700;">Платёж перед сдачей (90%):</span>
+                <span class="output-value text-cyan" id="val-ras-remain">9 000 000 ₽</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:0.95rem; color:var(--text-muted);">Сохраненный семейный бюджет:</span>
+              <span class="delta-badge positive" id="val-ras-savings-badge"><i class="fa-solid fa-caret-up"></i> +1.05M ₽</span>
+            </div>
+            <div class="output-value-large" id="val-ras-savings" style="margin-top:5px;">1 050 000 ₽</div>
+            <p style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">Рассрочка-мост позволяет зафиксировать новостройку и спокойно продавать вторичку за полтора года без снижения цены.</p>
+          </div>
+
+          <div class="chart-container" id="ras-chart"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 9: Ролевые игры -->
+    <div class="slide" id="slide-9" data-index="9">
+      <div class="slide-title-group">
+        <div class="slide-badge">Блок 4. Практикум</div>
+        <h2 class="slide-title">Тренажер ролевых игр: Отработка возражений</h2>
+        <p class="slide-subtitle">Разделитесь на пары «Агент — Клиент». Выберите карточку и запустите таймер на 3 минуты</p>
+      </div>
+
+      <div class="roleplay-grid">
+        <!-- Selector & Timer Column -->
+        <div>
+          <div class="role-selectors">
+            <button class="role-btn active" id="rbtn-1" onclick="selectRoleCard(1)">
+              <span>Карточка 1: Вкладчик-Оптимист</span>
+              <i class="fa-solid fa-chevron-right role-icon"></i>
+            </button>
+            <button class="role-btn" id="rbtn-2" onclick="selectRoleCard(2)">
+              <span>Карточка 2: Семья в тесной двушке</span>
+              <i class="fa-solid fa-chevron-right role-icon"></i>
+            </button>
+            <button class="role-btn" id="rbtn-3" onclick="selectRoleCard(3)">
+              <span>Карточка 3: Паника из-за лимитов</span>
+              <i class="fa-solid fa-chevron-right role-icon"></i>
+            </button>
+            <button class="role-btn" id="rbtn-4" onclick="selectRoleCard(4)">
+              <span>Карточка 4: Удорожание — это обман</span>
+              <i class="fa-solid fa-chevron-right role-icon"></i>
+            </button>
+          </div>
+
+          <!-- Timer -->
+          <div class="timer-container">
+            <div class="timer-circle-wrap">
+              <svg class="timer-svg">
+                <circle class="timer-bg" cx="60" cy="60" r="54"></circle>
+                <circle class="timer-progress" id="timerProgress" cx="60" cy="60" r="54"></circle>
+              </svg>
+              <div class="timer-text" id="timerText">03:00</div>
+            </div>
+            
+            <div class="timer-controls">
+              <button class="timer-btn" id="timerPlayBtn" onclick="toggleTimer()"><i class="fa-solid fa-play"></i></button>
+              <button class="timer-btn" onclick="resetTimer()"><i class="fa-solid fa-rotate-left"></i></button>
+            </div>
+            <div style="font-size:0.75rem; color:var(--text-muted); margin-top:8px;">Рекомендуемое время: 3 минуты</div>
+          </div>
+        </div>
+
+        <!-- Display Card Details -->
+        <div class="role-card-display" id="roleCardDisplay">
+          <!-- Dynamically populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 10: Заключение & ЖК -->
+    <div class="slide" id="slide-10" data-index="10">
+      <div class="slide-title-group">
+        <div class="slide-badge">Блок 5. Заключение</div>
+        <h2 class="slide-title">ТОП ЖК Уфы по финансовым инструментам</h2>
+        <p class="slide-subtitle">Актуальная матрица застройщиков на июнь 2026. Используйте фильтр для быстрой навигации</p>
+      </div>
+
+      <!-- Filters -->
+      <div class="jk-filters">
+        <button class="jk-filter-btn active" onclick="filterJK('all', this)">Все ЖК</button>
+        <button class="jk-filter-btn" onclick="filterJK('trench', this)">Транш 100к</button>
+        <button class="jk-filter-btn" onclick="filterJK('subsidy', this)">Субсидия без удорожания</button>
+        <button class="jk-filter-btn" onclick="filterJK('ras', this)">Рассрочка 0%</button>
+        <button class="jk-filter-btn" onclick="filterJK('sovkom', this)">Совкомбанк сниженный</button>
+      </div>
+
+      <!-- ЖК Cards List -->
+      <div class="jk-grid" id="jkGrid">
+        <!-- Dynamically populated by JS -->
+      </div>
+
+      <!-- Final Promo -->
+      <div class="glass-card" style="display:flex; justify-content:space-between; align-items:center; margin-top:20px; padding: 15px 25px; border-color: rgba(6, 182, 212, 0.2); background: rgba(6, 182, 212, 0.02);">
+        <div style="display:flex; align-items:center; gap:20px;">
+          <div style="width: 50px; height: 50px; border-radius: 8px; background: rgba(6, 182, 212, 0.15); display: flex; align-items: center; justify-content: center; color: var(--cyan); font-size: 1.5rem;">
+            <i class="fa-solid fa-mobile-screen-button"></i>
+          </div>
+          <div>
+            <h4 style="color:#fff; font-size:1.05rem;">Материалы доступны в Telegram-боте</h4>
+            <p style="color:var(--text-muted); font-size:0.85rem; margin-top:2px;">Забирайте матрицу мэтчинга, шпаргалки по способам покупки и шаблоны расчетов.</p>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap: 15px;">
+          <div style="font-size:0.85rem; text-align:right; color:var(--text-muted);">
+            Отсканируйте QR-код<br>или перейдите по ссылке
+          </div>
+          <div style="width: 50px; height: 50px; background: white; border-radius: 6px; padding: 4px; display:flex; justify-content:center; align-items:center;">
+            <div style="display:grid; grid-template-columns: repeat(5, 1fr); gap: 2px; width:100%; height:100%;">
+              <div style="background:black;"></div><div style="background:black;"></div><div style="background:white;"></div><div style="background:black;"></div><div style="background:black;"></div>
+              <div style="background:black;"></div><div style="background:white;"></div><div style="background:black;"></div><div style="background:white;"></div><div style="background:black;"></div>
+              <div style="background:white;"></div><div style="background:black;"></div><div style="background:white;"></div><div style="background:white;"></div><div style="background:white;"></div>
+              <div style="background:black;"></div><div style="background:white;"></div><div style="background:black;"></div><div style="background:black;"></div><div style="background:black;"></div>
+              <div style="background:black;"></div><div style="background:black;"></div><div style="background:white;"></div><div style="background:black;"></div><div style="background:black;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer Navigation Controls -->
+  <footer>
+    <div class="slide-counter" id="slideCounter">Слайд 1 из 10</div>
+    <div class="nav-controls">
+      <button class="nav-btn" id="prevBtn" onclick="navigateSlide(-1)" disabled><i class="fa-solid fa-chevron-left"></i></button>
+      <button class="nav-btn" id="nextBtn" onclick="navigateSlide(1)"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+  </footer>
+
+  <script>
+    // State management
+    let currentSlide = 1;
+    const totalSlides = 10;
+    
+    // Slide Navigation
+    function updateSlide() {
+      const slides = document.querySelectorAll('.slide');
+      slides.forEach(slide => slide.classList.remove('active'));
+      
+      const activeSlideObj = document.querySelector(`.slide[data-index="${currentSlide}"]`);
+      if (activeSlideObj) {
+        activeSlideObj.classList.add('active');
+      }
+
+      document.getElementById('slideCounter').textContent = `Слайд ${currentSlide} из ${totalSlides}`;
+      document.getElementById('progressBar').style.width = `${(currentSlide / totalSlides) * 100}%`;
+      
+      document.getElementById('prevBtn').disabled = (currentSlide === 1);
+      document.getElementById('nextBtn').disabled = (currentSlide === totalSlides);
+
+      if (currentSlide === 5) {
+        // Decision tree
+      } else if (currentSlide === 6) {
+        calcTrenchRent();
+        calcTrenchDeposit();
+      } else if (currentSlide === 7) {
+        calcSubsidy();
+      } else if (currentSlide === 8) {
+        calcRas();
+      } else if (currentSlide === 9) {
+        renderRoleCard();
+      } else if (currentSlide === 10) {
+        renderJK();
+      }
+    }
+
+    function navigateSlide(direction) {
+      currentSlide += direction;
+      if (currentSlide < 1) currentSlide = 1;
+      if (currentSlide > totalSlides) currentSlide = totalSlides;
+      updateSlide();
+    }
+
+    function changeSlide(slideNum) {
+      currentSlide = slideNum + 1;
+      updateSlide();
+    }
+
+    // Keyboard controls
+    document.addEventListener('keydown', function(event) {
+      if (event.target.tagName === 'INPUT') return; 
+      
+      if (event.key === 'ArrowRight' || event.key === 'Space') {
+        navigateSlide(1);
+      } else if (event.key === 'ArrowLeft') {
+        navigateSlide(-1);
+      }
+    });
+
+    // Touch Swipe Support
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    document.getElementById('slidesContainer').addEventListener('touchstart', e => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+
+    document.getElementById('slidesContainer').addEventListener('touchend', e => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    });
+
+    function handleSwipe() {
+      const threshold = 50;
+      if (touchStartX - touchEndX > threshold) {
+        navigateSlide(1); 
+      } else if (touchEndX - touchStartX > threshold) {
+        navigateSlide(-1); 
+      }
+    }
+
+    // SLIDE 2: Card Reveal logic
+    function revealCard(id) {
+      document.getElementById(id).classList.add('revealed');
+    }
+
+
+    // SLIDE 5: Diagnostic Decision Tree
+    let treeAnswers = {};
+    const treeResultsData = {
+      'family': {
+        title: 'Семейная ипотека 3.5–6%',
+        desc: 'Приоритет №0. Поскольку в семье есть ребенок до 7 лет или беременность, вы имеете полное право на субсидируемую государством программу с минимальной ставкой. Это самый выгодный инструмент, фиксируйте лимиты.',
+        success: true,
+        icon: 'fa-solid fa-baby'
+      },
+      'trench': {
+        title: 'Траншевая ипотека',
+        desc: 'Поскольку вы покупаете строящееся жилье и у вас есть ликвидные средства (депозит или вторичка под продажу), траншевая ипотека защитит вас от двойной финансовой нагрузки на период стройки. Платёж составит от 600 до 1 800 ₽/мес.',
+        success: true,
+        icon: 'fa-solid fa-chart-pie'
+      },
+      'accum': {
+        title: 'Рассрочка «Накопи на ПВ»',
+        desc: 'У вас нет минимального первоначального взноса 20%. Идеально подойдет рассрочка «Накопи на ПВ» (например, Архстрой 3.4%) или привлечение программ КапиталЦентра под 10%. Это позволит войти в сделку с минимальным кэшем.',
+        success: true,
+        icon: 'fa-solid fa-piggy-bank'
+      },
+      'sub': {
+        title: 'Субсидированная ставка (12–14%)',
+        desc: 'Вы покупаете квартиру для жизни на длительный срок (5+ лет). Несмотря на удорожание, низкая субсидированная ставка застройщика сэкономит вам миллионы рублей на переплате банку по сравнению с рыночной ставкой.',
+        success: true,
+        icon: 'fa-solid fa-percent'
+      },
+      'ras': {
+        title: 'Рассрочка от застройщика',
+        desc: 'У вас есть крупный первоначальный взнос (30–50%+) и вы планируете краткосрочное владение или ждете снижения ключевой ставки. Рассрочка от застройщика без банковских переплат зафиксирует цену и позволит позже перейти в ипотеку.',
+        success: true,
+        icon: 'fa-solid fa-calendar-days'
+      },
+      'ind': {
+        title: 'Индивидуальный разбор',
+        desc: 'Ваша ситуация выходит за рамки стандартных шаблонов. Требуется детальный анализ доходов и составление индивидуального финансового графика платежей совместно с ипотечным брокером.',
+        success: false,
+        icon: 'fa-solid fa-user-gear'
+      }
+    };
+
+    function answerTree(step, answer) {
+      treeAnswers[step] = answer;
+      
+      const steps = document.querySelectorAll('.tree-step');
+      steps.forEach(s => s.classList.remove('active'));
+
+      const resultBox = document.getElementById('treeResult');
+      resultBox.className = 'navigator-result'; 
+
+      if (step === 1) {
+        if (answer) {
+          showTreeResult('family');
+        } else {
+          showStep(2);
+        }
+      } else if (step === 2) {
+        if (answer) {
+          showStep(3);
+        } else {
+          showTreeResult('accum');
+        }
+      } else if (step === 3) {
+        if (answer) {
+          showStep('3a');
+        } else {
+          showStep(4);
+        }
+      } else if (step === '3a') {
+        if (answer) {
+          showTreeResult('trench');
+        } else {
+          showStep(4);
+        }
+      } else if (step === 4) {
+        if (answer) {
+          showTreeResult('sub');
+        } else {
+          showStep(5);
+        }
+      } else if (step === 5) {
+        if (answer) {
+          showTreeResult('ras');
+        } else {
+          showTreeResult('ind');
+        }
+      }
+    }
+
+    function showStep(stepId) {
+      document.getElementById(`step-${stepId}`).classList.add('active');
+    }
+
+    function showTreeResult(key) {
+      document.getElementById('step-finish').classList.add('active');
+      const data = treeResultsData[key];
+      
+      const resultBox = document.getElementById('treeResult');
+      resultBox.innerHTML = `
+        <i class="${data.icon} result-icon"></i>
+        <h3 class="result-title">${data.title}</h3>
+        <p class="result-desc">${data.desc}</p>
+      `;
+      
+      if (data.success) {
+        resultBox.classList.add('result-success');
+      }
+    }
+
+    function resetTree() {
+      treeAnswers = {};
+      const steps = document.querySelectorAll('.tree-step');
+      steps.forEach(s => s.classList.remove('active'));
+      document.getElementById('step-1').classList.add('active');
+      
+      const resultBox = document.getElementById('treeResult');
+      resultBox.className = 'navigator-result';
+      resultBox.innerHTML = `
+        <i class="fa-solid fa-compass result-icon"></i>
+        <h3 class="result-title">Ожидание ответов</h3>
+        <p class="result-desc">Ответьте на вопросы слева. Система автоматически проанализирует профиль клиента и покажет эталонную финансовую стратегию.</p>
+      `;
+    }
+
+
+    // SLIDE 6: Trench Calculator
+    let currentTrenchMode = 'rent';
+
+    function switchTrenchMode(mode) {
+      currentTrenchMode = mode;
+      document.getElementById('mode-rent-btn').className = (mode === 'rent') ? 'btn w-full btn-primary' : 'btn w-full';
+      document.getElementById('mode-dep-btn').className = (mode === 'deposit') ? 'btn w-full btn-primary' : 'btn w-full';
+
+      if (mode === 'rent') {
+        document.getElementById('trench-rent-inputs').style.display = 'block';
+        document.getElementById('trench-rent-outputs').style.display = 'flex';
+        document.getElementById('trench-deposit-inputs').style.display = 'none';
+        document.getElementById('trench-deposit-outputs').style.display = 'none';
+        calcTrenchRent();
+      } else {
+        document.getElementById('trench-rent-inputs').style.display = 'none';
+        document.getElementById('trench-rent-outputs').style.display = 'none';
+        document.getElementById('trench-deposit-inputs').style.display = 'block';
+        document.getElementById('trench-deposit-outputs').style.display = 'flex';
+        calcTrenchDeposit();
+      }
+    }
+
+    function formatNumber(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " ₽";
+    }
+
+    function calcTrenchRent() {
+      const rent = parseInt(document.getElementById('input-rent').value);
+      const mort = parseInt(document.getElementById('input-mort').value);
+      const trench = parseInt(document.getElementById('input-trench').value);
+      const months = parseInt(document.getElementById('input-months').value);
+
+      document.getElementById('val-rent').textContent = formatNumber(rent);
+      document.getElementById('val-mort').textContent = formatNumber(mort);
+      document.getElementById('val-trench').textContent = formatNumber(trench);
+      document.getElementById('val-months').textContent = `${months} мес`;
+
+      const normalTotal = rent + mort;
+      const trenchTotal = rent + trench;
+      const monthlySaving = normalTotal - trenchTotal;
+      const totalSavings = monthlySaving * months;
+
+      document.getElementById('val-total-normal').textContent = formatNumber(normalTotal);
+      document.getElementById('val-total-trench').textContent = formatNumber(trenchTotal);
+      document.getElementById('val-monthly-saving').textContent = formatNumber(monthlySaving);
+      
+      const roundedSavingsK = Math.round(totalSavings / 1000);
+      document.getElementById('val-trench-rent-savings-badge').innerHTML = `<i class="fa-solid fa-caret-up"></i> +${roundedSavingsK}к`;
+      document.getElementById('val-trench-rent-savings').textContent = formatNumber(totalSavings);
+
+      const chartDiv = document.getElementById('trench-rent-chart');
+      const standardHeight = 80;
+      const trenchHeight = (trenchTotal / normalTotal) * standardHeight;
+      
+      chartDiv.innerHTML = `
+        <svg class="chart-svg" viewBox="0 0 400 120">
+          <rect x="50" y="${100 - standardHeight}" width="80" height="${standardHeight}" rx="6" fill="#f43f5e" opacity="0.8"/>
+          <rect x="230" y="${100 - trenchHeight}" width="80" height="${trenchHeight}" rx="6" fill="#10b981" opacity="0.8"/>
+          
+          <text x="90" y="${95 - standardHeight}" text-anchor="middle" fill="#f8fafc" font-size="10" font-weight="700">${Math.round(normalTotal/1000)}к/мес</text>
+          <text x="270" y="${95 - trenchHeight}" text-anchor="middle" fill="#f8fafc" font-size="10" font-weight="700">${Math.round(trenchTotal/1000)}к/мес</text>
+          
+          <text x="90" y="115" text-anchor="middle" fill="#94a3b8" font-size="9">Обычная схема</text>
+          <text x="270" y="115" text-anchor="middle" fill="#94a3b8" font-size="9">Транш</text>
+        </svg>
+      `;
+    }
+
+    function calcTrenchDeposit() {
+      const deposit = parseInt(document.getElementById('input-dep-sum').value);
+      const rate = parseFloat(document.getElementById('input-dep-rate').value);
+      const propPrice = parseInt(document.getElementById('input-prop-price').value);
+      const growth = parseFloat(document.getElementById('input-growth').value);
+      const months = 18; 
+
+      document.getElementById('val-dep-sum').textContent = formatNumber(deposit);
+      document.getElementById('val-dep-rate').textContent = `${rate}%`;
+      document.getElementById('val-prop-price').textContent = formatNumber(propPrice);
+      document.getElementById('val-growth').textContent = `${growth}%`;
+
+      const depEarn = Math.round(deposit * (rate / 100) * (months / 12));
+      const priceLoss = Math.round(propPrice * (growth / 100) * (months / 12));
+      
+      const netLoss = depEarn - priceLoss;
+      const trenchCost = 1800 * months;
+      const finalBenefit = priceLoss + depEarn - trenchCost; 
+
+      document.getElementById('val-dep-earn').textContent = `+${formatNumber(depEarn)}`;
+      document.getElementById('val-dep-loss').textContent = `-${formatNumber(priceLoss)}`;
+      
+      const netLossBox = document.getElementById('val-dep-net-loss');
+      if (netLoss >= 0) {
+        netLossBox.textContent = `+${formatNumber(netLoss)}`;
+        netLossBox.className = "output-value text-emerald";
+      } else {
+        netLossBox.textContent = formatNumber(netLoss);
+        netLossBox.className = "output-value text-rose";
+      }
+
+      document.getElementById('val-trench-dep-savings').textContent = formatNumber(finalBenefit);
+      const benefitM = (finalBenefit / 1000000).toFixed(2);
+      document.getElementById('val-trench-dep-savings-badge').innerHTML = `<i class="fa-solid fa-caret-up"></i> +${benefitM}M ₽`;
+
+      const chartDiv = document.getElementById('trench-dep-chart');
+
+      chartDiv.innerHTML = `
+        <svg class="chart-svg" viewBox="0 0 400 120">
+          <rect x="50" y="20" width="80" height="70" rx="4" fill="#f43f5e" opacity="0.3"/>
+          <rect x="50" y="20" width="80" height="30" rx="4" fill="#f43f5e" opacity="0.8"/>
+          
+          <rect x="230" y="20" width="80" height="70" rx="4" fill="#10b981" opacity="0.3"/>
+          <rect x="230" y="40" width="80" height="50" rx="4" fill="#10b981" opacity="0.8"/>
+
+          <text x="90" y="55" text-anchor="middle" fill="#fff" font-size="8" font-weight="700">Слив в цене</text>
+          <text x="270" y="65" text-anchor="middle" fill="#fff" font-size="8" font-weight="700">Капитал + Вклад</text>
+
+          <text x="90" y="110" text-anchor="middle" fill="#94a3b8" font-size="9">Просто ждать</text>
+          <text x="270" y="110" text-anchor="middle" fill="#94a3b8" font-size="9">Транш + Депозит</text>
+        </svg>
+      `;
+    }
+
+
+    // SLIDE 7: Subsidy vs Market rate
+    function calcSubsidy() {
+      const basePrice = parseInt(document.getElementById('input-sub-base').value);
+      const pvPct = parseInt(document.getElementById('input-sub-pv').value);
+      const mRate = parseFloat(document.getElementById('input-sub-mrate').value);
+      const sRate = parseFloat(document.getElementById('input-sub-srate').value);
+      const markup = parseFloat(document.getElementById('input-sub-markup').value);
+      const termYears = parseInt(document.getElementById('input-sub-term').value);
+
+      const termMonths = termYears * 12;
+      const pvAmount = basePrice * (pvPct / 100);
+
+      const loanMarket = basePrice - pvAmount;
+      const monthlyRateMarket = (mRate / 100) / 12;
+      const pmtMarket = Math.round(loanMarket * (monthlyRateMarket * Math.pow(1 + monthlyRateMarket, termMonths)) / (Math.pow(1 + monthlyRateMarket, termMonths) - 1));
+      
+      const priceSub = basePrice * (1 + markup / 100);
+      const pvSub = priceSub * (pvPct / 100);
+      const loanSub = priceSub - pvSub;
+      const monthlyRateSub = (sRate / 100) / 12;
+      const pmtSub = Math.round(loanSub * (monthlyRateSub * Math.pow(1 + monthlyRateSub, termMonths)) / (Math.pow(1 + monthlyRateSub, termMonths) - 1));
+
+      const testPeriodMonths = Math.min(120, termMonths);
+      const totalPaidMarket = pmtMarket * testPeriodMonths;
+      const totalPaidSub = pmtSub * testPeriodMonths;
+      
+      let remainingPrincipalMarket = loanMarket;
+      let remainingPrincipalSub = loanSub;
+      for (let i = 0; i < testPeriodMonths; i++) {
+        remainingPrincipalMarket = remainingPrincipalMarket * (1 + monthlyRateMarket) - pmtMarket;
+        remainingPrincipalSub = remainingPrincipalSub * (1 + monthlyRateSub) - pmtSub;
+      }
+      
+      const interestMarket = Math.max(0, Math.round(totalPaidMarket - (loanMarket - remainingPrincipalMarket)));
+      const interestSub = Math.max(0, Math.round(totalPaidSub - (loanSub - remainingPrincipalSub)));
+      
+      const pmtDiff = pmtMarket - pmtSub;
+      const markupCost = priceSub - basePrice;
+      const breakevenMonths = Math.round(markupCost / pmtDiff);
+      const savings10y = (pmtDiff * testPeriodMonths) - markupCost;
+
+      document.getElementById('val-sub-base').textContent = formatNumber(basePrice);
+      document.getElementById('val-sub-pv').textContent = `${pvPct}% (${formatNumber(pvAmount)})`;
+      document.getElementById('val-sub-mrate').textContent = `${mRate}%`;
+      document.getElementById('val-sub-srate').textContent = `${sRate}%`;
+      document.getElementById('val-sub-markup').textContent = `${markup}%`;
+      document.getElementById('val-sub-term').textContent = `${termYears} лет`;
+
+      document.getElementById('val-sub-price-m').textContent = formatNumber(basePrice);
+      document.getElementById('val-sub-price-s').textContent = formatNumber(priceSub);
+      document.getElementById('val-sub-loan-m').textContent = formatNumber(loanMarket);
+      document.getElementById('val-sub-loan-s').textContent = formatNumber(loanSub);
+      document.getElementById('val-sub-pmt-m').textContent = formatNumber(pmtMarket);
+      document.getElementById('val-sub-pmt-s').textContent = formatNumber(pmtSub);
+      
+      document.getElementById('val-sub-over-m').textContent = `${(interestMarket/1000000).toFixed(1)} млн ₽`;
+      document.getElementById('val-sub-over-s').textContent = `${(interestSub/1000000).toFixed(1)} млн ₽`;
+
+      document.getElementById('val-sub-markup-rub').textContent = formatNumber(markupCost);
+      
+      const breakevenBox = document.getElementById('val-sub-breakeven');
+      if (breakevenMonths > 0) {
+        breakevenBox.textContent = `${breakevenMonths} месяцев`;
+        breakevenBox.className = "delta-badge positive";
+      } else {
+        breakevenBox.textContent = 'Никогда';
+        breakevenBox.className = "delta-badge negative";
+      }
+
+      document.getElementById('val-sub-total-saving').textContent = formatNumber(savings10y);
+
+      const chartDiv = document.getElementById('subsidy-chart');
+      const maxVal = Math.max(pmtMarket, pmtSub);
+      const hMarket = 70;
+      const hSub = (pmtSub / pmtMarket) * hMarket;
+
+      chartDiv.innerHTML = `
+        <svg class="chart-svg" viewBox="0 0 400 120">
+          <line x1="30" y1="90" x2="370" y2="90" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+          
+          <rect x="70" y="${90 - hMarket}" width="70" height="${hMarket}" rx="4" fill="#f43f5e" opacity="0.8"/>
+          <rect x="240" y="${90 - hSub}" width="70" height="${hSub}" rx="4" fill="#10b981" opacity="0.8"/>
+          
+          <text x="105" y="${80 - hMarket}" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">${formatNumber(pmtMarket)}</text>
+          <text x="275" y="${80 - hSub}" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">${formatNumber(pmtSub)}</text>
+
+          <text x="105" y="108" text-anchor="middle" fill="#94a3b8" font-size="9">Рыночный платеж</text>
+          <text x="275" y="108" text-anchor="middle" fill="#94a3b8" font-size="9">Субсидия платеж</text>
+        </svg>
+      `;
+    }
+
+
+    // SLIDE 8: Rasrochka (10/90) Calculator
+    function calcRas() {
+      const newPrice = parseInt(document.getElementById('input-ras-new').value);
+      const oldPrice = parseInt(document.getElementById('input-ras-old').value);
+      const discPct = parseFloat(document.getElementById('input-ras-disc').value);
+      const pvPct = parseFloat(document.getElementById('input-ras-pv').value);
+
+      const pvAmount = newPrice * (pvPct / 100);
+      const discAmount = oldPrice * (discPct / 100);
+      const remainAmount = newPrice - pvAmount;
+
+      document.getElementById('val-ras-new').textContent = formatNumber(newPrice);
+      document.getElementById('val-ras-old').textContent = formatNumber(oldPrice);
+      document.getElementById('val-ras-disc').textContent = `${discPct}%`;
+      document.getElementById('val-ras-pv').textContent = `${pvPct}%`;
+
+      document.getElementById('val-ras-pv-p').textContent = `${pvPct}%`;
+      document.getElementById('val-ras-pv-rub').textContent = formatNumber(pvAmount);
+      document.getElementById('val-ras-disc-rub').textContent = `-${formatNumber(discAmount)}`;
+      document.getElementById('val-ras-remain').textContent = formatNumber(remainAmount);
+
+      document.getElementById('val-ras-savings').textContent = formatNumber(discAmount);
+      const discM = (discAmount / 1000000).toFixed(2);
+      document.getElementById('val-ras-savings-badge').innerHTML = `<i class="fa-solid fa-caret-up"></i> +${discM}M ₽`;
+
+      const chartDiv = document.getElementById('ras-chart');
+      chartDiv.innerHTML = `
+        <svg class="chart-svg" viewBox="0 0 400 120">
+          <line x1="30" y1="50" x2="370" y2="50" stroke="rgba(255,255,255,0.15)" stroke-width="4" stroke-linecap="round"/>
+          
+          <circle cx="35" cy="50" r="10" fill="var(--cyan)"/>
+          <text x="35" y="75" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">1 мес</text>
+          <text x="35" y="32" text-anchor="middle" fill="var(--cyan)" font-size="9" font-weight="700">${pvPct}% ПВ</text>
+          
+          <line x1="35" y1="50" x2="335" y2="50" stroke="var(--cyan)" stroke-width="4" opacity="0.3"/>
+          <circle cx="185" cy="50" r="6" fill="#94a3b8"/>
+          <text x="185" y="75" text-anchor="middle" fill="#94a3b8" font-size="9">Месяцы 2-17 (0 ₽)</text>
+
+          <circle cx="335" cy="50" r="10" fill="var(--violet)"/>
+          <text x="335" y="75" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">18 мес</text>
+          <text x="335" y="32" text-anchor="middle" fill="var(--violet)" font-size="9" font-weight="700">${100 - pvPct}% Сдача</text>
+        </svg>
+      `;
+    }
+
+
+    // SLIDE 9: Role Play trainer cards and countdown timer
+    let selectedRoleId = 1;
+    let timerInterval = null;
+    let timerTimeLeft = 180; 
+    const timerTotalTime = 180;
+
+    const roleCardsData = {
+      1: {
+        name: 'Вадим, 42 года',
+        status: 'Предприниматель. Депозитный рантье.',
+        quote: '«За полтора года заработаю на вкладе под 19%, потом куплю квартиру за наличку. Зачем мне ипотека сейчас с дикими ставками?»',
+        task: 'Применить технику Навигатора: (1) Присоединиться к вкладу; (2) Разрушить иллюзию роста цен; (3) Объяснить синергию транша и вклада; (4) Закрыть на расчет ЖК.',
+        mistake: '«Ну вы подумайте, цены же вырастут!» — эмоции, давление без калькулятора.',
+        solution: '«Вадим, абсолютно разумно держать деньги под 19%. Но давайте посчитаем. Если подождать 1.5 года, цены поднимутся на 15–20% из-за снижения ставок — ваш заработок на вкладе сгорит в росте цены. Сделаем умнее. Фиксируем цену квартиры сегодня. Оформляем транш: платеж до сдачи дома — 1 800 ₽/мес. Ваши деньги лежат на вкладе и приносят 47 000 ₽/мес. Перед сдачей забираем проценты и гасим долг. Запускаем расчет под ваш банк?»'
+      },
+      2: {
+        name: 'Ирина, 34 года',
+        status: 'Мама двоих детей. Вторичник-переселенец.',
+        quote: '«Нам тесно в двушке с детьми, но продавать ее сейчас за бесценок с дисконтом 1.5 млн я не буду. И на съемной жить во время стройки — кошмар.»',
+        task: 'Предложить рассрочку-мост 10/90. Показать, что нет риска, нет съемного жилья и нет спешки при продаже вторички.',
+        mistake: '«Цены растут, надо брать, потом будет дороже» — давление без решения боли.',
+        solution: '«Ирина, продавать жилье с дисконтом сейчас — это финансовая ошибка, я сам отговариваю от этого. И переезжать на съемное с детьми — не вариант. Поступим иначе. Рассрочка 10/90: вносим 10% (1 млн) сейчас. Застройщик фиксирует трешку на 18 месяцев. Цена закреплена. Вы продолжаете спокойно жить в своей двушке. У нас есть 1.5 года, чтобы найти покупателя по реальной рыночной цене. Перед сдачей продаем, вносим 90% и сразу переезжаем в новую квартиру. Согласовываем бронь?»'
+      },
+      3: {
+        name: 'Игорь, 38 лет',
+        status: 'Папа двоих детей. Сделка под угрозой.',
+        quote: '«Я смотрел новости — лимиты по семейной ипотеке закончились в Сбербанке и ВТБ. Всё, сделок не будет. Я отказываюсь от покупки.»',
+        task: 'Разделить факты и панику. Показать, что лимиты перераспределяются, предложить бесплатную бронь и подачу в другие банки с остатками.',
+        mistake: '«Не переживайте, все будет хорошо, скоро вернут» — пустые обещания без фактов.',
+        solution: '«Игорь, паника понятна — новости звучат тревожно. Но давайте разберем факты. Лимиты приостановили только Сбер и ВТБ. Но ДОМ.РФ, Совкомбанк и Альфа-Банк продолжают выдачи прямо сейчас, у меня есть список лимитов. Что делаем: фиксируем бесплатную бронь (сохраняем цену квартиры) и сегодня же подаем заявки в банки с лимитами. Лимиты постоянно перераспределяют, те, кто забронировал, получат ипотеку в первую очередь. Делаем бронь?»'
+      },
+      4: {
+        name: 'Рамиль, 45 лет',
+        status: 'Инженер. Консервативный покупатель.',
+        quote: '«Это грабеж! Застройщик нагло накручивает 960 тысяч рублей из воздуха за субсидированную ставку! Я лучше возьму обычную ипотеку под 18%.»',
+        task: 'Перевести фокус с «цены квартиры» на «стоимость денег». Показать переплату банку на бумаге и окупаемость удорожания.',
+        mistake: 'Попытка спорить с клиентом о справедливости ценообразования застройщика.',
+        solution: '«Рамиль, переплата в 960 тысяч выглядит неприятно. Но давайте посчитаем, кому мы отдаем деньги. Без удорожания под 18%: платеж — 96 600 ₽/мес, переплата банку за 10 лет — 7.5 млн ₽. С удорожанием под 10%: платеж — 55 200 ₽/мес, переплата банку — 3.4 млн ₽. Разница в платеже — 41 400 ₽ каждый месяц остается в семье. Удорожание окупается за 23 месяца. Дальше — чистая экономия. Вы переплачиваете застройщику один раз или банку каждый месяц 10 лет. Что выгоднее?»'
+      }
+    };
+
+    let activeRoleTab = 'task';
+
+    function selectRoleCard(id) {
+      selectedRoleId = id;
+      for (let i = 1; i <= 4; i++) {
+        document.getElementById(`rbtn-${i}`).className = (i === id) ? 'role-btn active' : 'role-btn';
+      }
+      activeRoleTab = 'task'; 
+      renderRoleCard();
+    }
+
+    function switchRoleTab(tab) {
+      activeRoleTab = tab;
+      renderRoleCard();
+    }
+
+    function renderRoleCard() {
+      const data = roleCardsData[selectedRoleId];
+      const display = document.getElementById('roleCardDisplay');
+      
+      let tabContent = '';
+      if (activeRoleTab === 'task') {
+        tabContent = `<p>${data.task}</p>`;
+      } else if (activeRoleTab === 'mistake') {
+        tabContent = `<p class="text-rose"><i class="fa-solid fa-circle-xmark"></i> ${data.mistake}</p>`;
+      } else if (activeRoleTab === 'solution') {
+        tabContent = `<p class="text-emerald" style="font-weight: 500;"><i class="fa-solid fa-circle-check"></i> ${data.solution}</p>`;
+      }
+
+      display.innerHTML = `
+        <div>
+          <div class="role-header">
+            <div class="role-client-name">${data.name}</div>
+            <div class="role-client-info"><i class="fa-solid fa-circle-info"></i> ${data.status}</div>
+          </div>
+          <div class="role-dialogue">
+            ${data.quote}
+          </div>
+          
+          <div class="role-tab-nav">
+            <button class="role-tab-btn ${(activeRoleTab === 'task') ? 'active' : ''}" onclick="switchRoleTab('task')">Задача агента</button>
+            <button class="role-tab-btn ${(activeRoleTab === 'mistake') ? 'active' : ''}" onclick="switchRoleTab('mistake')">Типичная ошибка</button>
+            <button class="role-tab-btn ${(activeRoleTab === 'solution') ? 'active' : ''}" onclick="switchRoleTab('solution')">Эталонный ответ</button>
+          </div>
+          
+          <div class="role-tab-content">
+            ${tabContent}
+          </div>
+        </div>
+      `;
+    }
+
+    // Timer logic
+    function toggleTimer() {
+      const playBtn = document.getElementById('timerPlayBtn');
+      
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+        playBtn.classList.remove('active');
+      } else {
+        playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+        playBtn.classList.add('active');
+        
+        timerInterval = setInterval(() => {
+          timerTimeLeft--;
+          updateTimerUI();
+          
+          if (timerTimeLeft <= 0) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+            playBtn.classList.remove('active');
+            playAlertSound();
+          }
+        }, 1000);
+      }
+    }
+
+    function resetTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+      timerTimeLeft = timerTotalTime;
+      const playBtn = document.getElementById('timerPlayBtn');
+      playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+      playBtn.classList.remove('active');
+      
+      document.getElementById('timerProgress').classList.remove('timer-expired');
+      document.getElementById('timerText').classList.remove('timer-text-expired');
+      
+      updateTimerUI();
+    }
+
+    function updateTimerUI() {
+      const minutes = Math.floor(timerTimeLeft / 60);
+      const seconds = timerTimeLeft % 60;
+      
+      document.getElementById('timerText').textContent = 
+        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+      const progressCircle = document.getElementById('timerProgress');
+      const strokeDash = 339; 
+      const offset = strokeDash - (timerTimeLeft / timerTotalTime) * strokeDash;
+      progressCircle.style.strokeDashoffset = offset;
+
+      if (timerTimeLeft <= 0) {
+        progressCircle.classList.add('timer-expired');
+        document.getElementById('timerText').classList.add('timer-text-expired');
+      }
+    }
+
+    function playAlertSound() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const playBeep = (delay, duration, frequency) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          
+          osc.frequency.setValueAtTime(frequency, audioCtx.currentTime + delay);
+          gain.gain.setValueAtTime(0.1, audioCtx.currentTime + delay);
+          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + delay + duration);
+          
+          osc.start(audioCtx.currentTime + delay);
+          osc.stop(audioCtx.currentTime + delay + duration);
+        };
+
+        playBeep(0, 0.2, 880);
+        playBeep(0.3, 0.4, 880);
+      } catch (e) {
+        console.log('Web Audio API not supported or blocked');
+      }
+    }
+
+
+    // SLIDE 10: ЖК Matrix and Filters
+    const jkList = [
+      { name: 'Зорге.Премьер', desc: 'Бизнес-класс в центре. Доступен транш 100к и Совкомбанк сниженный (4.4%)', tags: ['trench', 'sovkom'] },
+      { name: 'Нью Лайф', desc: 'Удобные планировки, развитый район. Траншевая ипотека 100к.', tags: ['trench'] },
+      { name: 'Старая Уфа', desc: 'Все 4 инструмента! Транш 100к, субсидии, рассрочки.', tags: ['trench', 'subsidy', 'ras', 'all'] },
+      { name: 'Достояние', desc: 'Исторический центр города. Траншевая ипотека 100к.', tags: ['trench'] },
+      { name: 'Бионика Парк', desc: 'Эко-квартал. Субсидированная ставка 12.49% без удорожания цены.', tags: ['subsidy'] },
+      { name: 'Конди Нова', desc: 'Комфорт-класс. Субсидированная ставка 12.49% без удорожания стоимости.', tags: ['subsidy'] },
+      { name: 'Геос', desc: 'Семейная ставка 6% фиксируется на первые 2 года без удорожания квартиры.', tags: ['subsidy'] },
+      { name: 'КПД', desc: 'Выгодная рассрочка: 25% ПВ, 25% через полгода, 50% перед сдачей.', tags: ['ras'] },
+      { name: 'Первый Трест', desc: 'Рассрочка 50/50 от надежного застройщика.', tags: ['ras'] },
+      { name: 'Альтима', desc: 'Квартальная рассрочка 50/50.', tags: ['ras'] },
+      { name: 'Нова', desc: 'Специальная программа Совкомбанка со сниженной ставкой 4.4%.', tags: ['sovkom'] },
+      { name: 'Свой берег', desc: 'Все 4 инструмента доступны! Выбор любой схемы покупки.', tags: ['trench', 'subsidy', 'ras', 'all'] },
+      { name: '8 Марта', desc: 'Все 4 инструмента: транш, субсидия, рассрочка, спецпрограммы.', tags: ['trench', 'subsidy', 'ras', 'all'] },
+      { name: 'Цветы Башкирии', desc: 'Удобный жилой комплекс. Доступны все 4 схемы покупки.', tags: ['trench', 'subsidy', 'ras', 'all'] }
+    ];
+
+    let currentJKFilter = 'all';
+
+    function filterJK(tag, btnElement) {
+      currentJKFilter = tag;
+      
+      const filterBtns = document.querySelectorAll('.jk-filter-btn');
+      filterBtns.forEach(btn => btn.classList.remove('active'));
+      btnElement.classList.add('active');
+
+      renderJK();
+    }
+
+    function renderJK() {
+      const grid = document.getElementById('jkGrid');
+      grid.innerHTML = ''; 
+
+      const filtered = jkList.filter(jk => {
+        if (currentJKFilter === 'all') return true;
+        if (jk.tags.includes('all')) return true;
+        return jk.tags.includes(currentJKFilter);
+      });
+
+      filtered.forEach(jk => {
+        const card = document.createElement('div');
+        card.className = 'jk-card';
+        
+        let iconClass = 'fa-solid fa-building';
+        if (jk.tags.includes('all')) iconClass = 'fa-solid fa-gem';
+        else if (jk.tags.includes('trench')) iconClass = 'fa-solid fa-chart-pie';
+        else if (jk.tags.includes('subsidy')) iconClass = 'fa-solid fa-percent';
+        else if (jk.tags.includes('ras')) iconClass = 'fa-solid fa-calendar-days';
+
+        card.innerHTML = `
+          <div class="jk-icon"><i class="${iconClass}"></i></div>
+          <div>
+            <div class="jk-name">${jk.name}</div>
+            <div class="jk-desc">${jk.desc}</div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // --- MATRIX DIGITAL RAIN EFFECT CODE ---
+    const matrixCanvas = document.getElementById('matrixCanvas');
+    const mCtx = matrixCanvas.getContext('2d');
+    
+    let matrixActive = true;
+    let matrixInterval = null;
+    
+    // Financial engineering custom symbols character set
+    const matrixChars = "01₽%ЖК$₮%+-*/=ТРЕНДИПОТЕКАРАССРОЧКА".split("");
+    const matrixFontSize = 14;
+    let matrixColumns = 0;
+    let matrixDrops = [];
+    
+    function initMatrix() {
+      matrixCanvas.width = window.innerWidth;
+      matrixCanvas.height = window.innerHeight;
+      matrixColumns = Math.floor(matrixCanvas.width / matrixFontSize);
+      matrixDrops = [];
+      for (let x = 0; x < matrixColumns; x++) {
+        matrixDrops[x] = Math.random() * -100; // start drops off-screen
+      }
+    }
+    
+    function drawMatrix() {
+      // Draw faint translucent background to create trails
+      mCtx.fillStyle = 'rgba(7, 9, 14, 0.08)'; 
+      mCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+      
+      mCtx.font = matrixFontSize + 'px monospace';
+      
+      for (let i = 0; i < matrixDrops.length; i++) {
+        const text = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+        
+        // Custom Matrix theme: mix emerald green with cyan highlights
+        if (Math.random() > 0.85) {
+          mCtx.fillStyle = 'rgba(6, 182, 212, 0.65)'; // cyan glow
+        } else {
+          mCtx.fillStyle = 'rgba(16, 185, 129, 0.55)'; // emerald standard green
+        }
+        
+        mCtx.fillText(text, i * matrixFontSize, matrixDrops[i] * matrixFontSize);
+        
+        // Reset drop to the top with random delay
+        if (matrixDrops[i] * matrixFontSize > matrixCanvas.height && Math.random() > 0.975) {
+          matrixDrops[i] = 0;
+        }
+        matrixDrops[i]++;
+      }
+    }
+    
+    function startMatrix() {
+      initMatrix();
+      if (matrixInterval) clearInterval(matrixInterval);
+      matrixInterval = setInterval(drawMatrix, 35);
+    }
+    
+    function stopMatrix() {
+      clearInterval(matrixInterval);
+      matrixInterval = null;
+      mCtx.clearRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+    }
+    
+    function toggleMatrix() {
+      matrixActive = !matrixActive;
+      const btn = document.getElementById('matrixToggle');
+      if (matrixActive) {
+        startMatrix();
+        matrixCanvas.style.opacity = '0.12';
+        btn.innerHTML = '<i class="fa-solid fa-code text-emerald"></i> Матрица: Вкл';
+        btn.style.borderColor = 'var(--emerald)';
+        btn.style.background = 'rgba(16, 185, 129, 0.05)';
+      } else {
+        stopMatrix();
+        matrixCanvas.style.opacity = '0';
+        btn.innerHTML = '<i class="fa-solid fa-code text-rose"></i> Матрица: Выкл';
+        btn.style.borderColor = 'var(--border-color)';
+        btn.style.background = 'rgba(255, 255, 255, 0.02)';
+      }
+    }
+    
+    window.addEventListener('resize', () => {
+      if (matrixActive) {
+        initMatrix();
+      }
+    });
+
+    window.onload = function() {
+      updateSlide();
+      resetTimer();
+      // Start matrix background rain
+      startMatrix();
+    };
+
+  </script>
+</body>
+</html>
