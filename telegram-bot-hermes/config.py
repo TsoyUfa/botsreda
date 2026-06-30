@@ -18,6 +18,11 @@ GITHUB_OWNER = os.environ.get("GITHUB_OWNER", "TsoyUfa")
 GITHUB_REPO = os.environ.get("GITHUB_REPO", "obsidian-vault")
 GITHUB_BRANCH = os.environ.get("GITHUB_BRANCH", "main")
 OBSIDIAN_INBOX_DIR = os.environ.get("OBSIDIAN_INBOX_DIR", "Inbox").strip("/")
+TELEGRAM_LOG_FILE = os.environ.get("TELEGRAM_LOG_FILE", "Inbox/Telegram_Archive.md").strip("/")
+
+# Google Calendar
+GOOGLE_CALENDAR_WEBHOOK_URL = os.environ.get("GOOGLE_CALENDAR_WEBHOOK_URL", "")
+CALENDAR_TIMEZONE = os.environ.get("CALENDAR_TIMEZONE", "Asia/Yekaterinburg")
 
 def is_admin(user_id: int) -> bool:
     """Проверка, является ли пользователь администратором бота"""

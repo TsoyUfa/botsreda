@@ -34,6 +34,19 @@
     -webkit-tap-highlight-color: transparent; /* Disable tap highlight on mobile */
 }
 
+button {
+    background: none;
+    border: none;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    cursor: pointer;
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
 html {
     scroll-behavior: smooth;
     overflow-x: hidden;
@@ -1286,7 +1299,7 @@ h1, h2, h3, h4, .logo, .stat-num {
         0 0 80px hsla(270, 95%, 60%, 0.06);
     background: var(--bg-surface);
     width: 100%;
-    max-width: 280px !important; /* Сделаем чуть компактнее по ширине */
+    max-width: 180px !important; /* Уменьшаем ширину портрета */
     margin: 0 auto;
     overflow: hidden; /* Закруглим углы */
 }
@@ -1294,7 +1307,7 @@ h1, h2, h3, h4, .logo, .stat-num {
 .about-photo-full {
     width: 100%;
     height: auto;
-    max-height: 380px !important; /* Ограничим максимальную высоту, чтобы фото не выглядело огромным */
+    max-height: 240px !important; /* Ограничиваем максимальную высоту на мобильном */
     object-fit: cover !important; /* Заполним рамку */
     display: block;
     border-radius: var(--border-radius-lg);
@@ -1310,7 +1323,7 @@ h1, h2, h3, h4, .logo, .stat-num {
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 40px 20px 20px;
+    padding: 30px 12px 12px; /* Более компактные отступы */
     border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
     background: linear-gradient(
         to top,
@@ -1323,15 +1336,15 @@ h1, h2, h3, h4, .logo, .stat-num {
 .about-photo-overlay strong {
     display: block;
     font-family: 'Outfit', sans-serif;
-    font-size: 1.25rem;
+    font-size: 1.05rem; /* Чуть меньше шрифт */
     font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 .about-photo-overlay span {
     display: block;
-    font-size: 0.8rem;
+    font-size: 0.72rem; /* Чуть меньше шрифт */
     color: var(--text-muted);
 }
 

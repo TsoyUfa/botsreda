@@ -330,6 +330,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (galleryGrid && lightboxModal) {
         const totalPhotos = 56;
+        const photosPerPage = 8;
+        let loadedPhotosCount = 0;
         let currentPhotoIndex = 1;
 
         const createGalleryItem = (num) => {
@@ -344,15 +346,28 @@ document.addEventListener('DOMContentLoaded', () => {
             return item;
         };
 
-        // Load ALL photos immediately
-        for (let i = 1; i <= totalPhotos; i++) {
-            const item = createGalleryItem(i);
-            galleryGrid.appendChild(item);
-            scrollReveal.observe(item);
-        }
+        const loadNextPhotos = () => {
+            const start = loadedPhotosCount + 1;
+            const end = Math.min(loadedPhotosCount + photosPerPage, totalPhotos);
+            for (let i = start; i <= end; i++) {
+                const item = createGalleryItem(i);
+                galleryGrid.appendChild(item);
+                scrollReveal.observe(item);
+            }
+            loadedPhotosCount = end;
+            if (loadedPhotosCount >= totalPhotos) {
+                if (btnGalleryMore) btnGalleryMore.style.display = 'none';
+            }
+        };
 
-        // Hide the "show more" button — all photos already loaded
-        if (btnGalleryMore) btnGalleryMore.style.display = 'none';
+        // Load initial photos
+        loadNextPhotos();
+
+        if (btnGalleryMore) {
+            btnGalleryMore.addEventListener('click', () => {
+                loadNextPhotos();
+            });
+        }
 
         const openLightbox = (idx) => {
             currentPhotoIndex = idx;
