@@ -211,7 +211,83 @@ async def init_db():
             )
         """)
         
+        # --- Таблицы кастомной CRM для новостроек (Блок 1 ТЗ) ---
+        
+        # Таблица жилых комплексов / застройщиков
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS objects_jk (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                jk_name TEXT NOT NULL,
+                developer_name TEXT NOT NULL,
+                address TEXT,
+                avg_price_sqm REAL,
+                commission_percent REAL NOT NULL,
+                tranche_available BOOLEAN DEFAULT 0,
+                subsidized_available BOOLEAN DEFAULT 0,
+                installment_available BOOLEAN DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        
+        # Таблица лидов (покупателей/инвесторов)
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS leads (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                agent_id INTEGER,
+                client_name TEXT NOT NULL,
+                phone TEXT,
+                telegram_username TEXT,
+                is_investor BOOLEAN DEFAULT 0,
+                budget_limit REAL,
+                down_payment REAL,
+                comfort_monthly_payment REAL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (agent_id) REFERENCES users (user_id) ON DELETE CASCADE
+            )
+        """)
+        
+        # Таблица сделок
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS deals (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                lead_id INTEGER,
+                object_id INTEGER,
+                stage TEXT NOT NULL,
+                base_price REAL NOT NULL,
+                final_price REAL NOT NULL,
+                scheme_type TEXT CHECK (scheme_type IN ('standard', 'subsidized', 'tranche', 'installment')),
+                mortgage_payment REAL,
+                first_tranche_amount REAL DEFAULT 0,
+                second_tranche_date TEXT,
+                expected_commission REAL,
+                escrow_account_opened BOOLEAN DEFAULT 0,
+                escrow_deadline TEXT,
+                closure_date TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (lead_id) REFERENCES leads (id) ON DELETE CASCADE,
+                FOREIGN KEY (object_id) REFERENCES objects_jk (id) ON DELETE SET NULL
+            )
+        """)
+        
+        # Таблица задач и следующих шагов
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS tasks (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                deal_id INTEGER,
+                task_type TEXT CHECK (task_type IN ('next_action', 'follow_up', 'financial_model', 'document_check')),
+                description TEXT NOT NULL,
+                due_date TEXT NOT NULL,
+                status TEXT DEFAULT 'pending',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                completed_at TEXT,
+                FOREIGN KEY (deal_id) REFERENCES deals (id) ON DELETE CASCADE
+            )
+        """)
+        
         await db.commit()
+
 
 
 # Функции для работы с пользователями
@@ -610,5 +686,140 @@ async def log_ai_chat(user_id: int, user_message: str, bot_response: str, retrie
             """INSERT INTO ai_chat_logs (user_id, user_message, bot_response, retrieved_chunks, tokens_used)
                VALUES (?, ?, ?, ?, ?)""",
             (user_id, user_message, bot_response, retrieved_chunks, tokens_used)
+        )
+        await db.commit()
+
+
+# --- CRUD-функции для Кастомной CRM риэлторов (Блок 1 ТЗ) ---
+
+async def create_object_jk(jk_name: str, developer_name: str, address: str = "", avg_price_sqm: float = 0, commission_percent: float = 3.0, tranche_available: bool = False, subsidized_available: bool = False, installment_available: bool = False) -> int:
+    """Создание нового объекта ЖК"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        async with db.execute(
+            """INSERT INTO objects_jk (jk_name, developer_name, address, avg_price_sqm, commission_percent, tranche_available, subsidized_available, installment_available)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+            (jk_name, developer_name, address, avg_price_sqm, commission_percent, int(tranche_available), int(subsidized_available), int(installment_available))
+        ) as cursor:
+            jk_id = cursor.lastrowid
+            await db.commit()
+            return jk_id
+
+async def get_all_objects_jk() -> List[Dict]:
+    """Получение всех ЖК"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        async with db.execute("SELECT * FROM objects_jk ORDER BY jk_name") as cursor:
+            rows = await cursor.fetchall()
+            return [dict(r) for r in rows]
+
+async def create_lead(agent_id: int, client_name: str, phone: str = "", telegram_username: str = "", is_investor: bool = False, budget_limit: float = 0, down_payment: float = 0, comfort_monthly_payment: float = 0) -> int:
+    """Создание нового лида"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        async with db.execute(
+            """INSERT INTO leads (agent_id, client_name, phone, telegram_username, is_investor, budget_limit, down_payment, comfort_monthly_payment)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+            (agent_id, client_name, phone, telegram_username, int(is_investor), budget_limit, down_payment, comfort_monthly_payment)
+        ) as cursor:
+            lead_id = cursor.lastrowid
+            await db.commit()
+            return lead_id
+
+async def get_leads_by_agent(agent_id: int) -> List[Dict]:
+    """Получение всех лидов агента"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        async with db.execute("SELECT * FROM leads WHERE agent_id = ? ORDER BY created_at DESC", (agent_id,)) as cursor:
+            rows = await cursor.fetchall()
+            return [dict(r) for r in rows]
+
+async def create_deal(lead_id: int, object_id: Optional[int], stage: str, base_price: float, final_price: float, scheme_type: str, mortgage_payment: float = 0, first_tranche_amount: float = 0, second_tranche_date: str = "", expected_commission: float = 0, escrow_account_opened: bool = False, escrow_deadline: str = "", closure_date: str = "") -> int:
+    """Создание новой сделки"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        async with db.execute(
+            """INSERT INTO deals (lead_id, object_id, stage, base_price, final_price, scheme_type, mortgage_payment, first_tranche_amount, second_tranche_date, expected_commission, escrow_account_opened, escrow_deadline, closure_date)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            (lead_id, object_id, stage, base_price, final_price, scheme_type, mortgage_payment, first_tranche_amount, second_tranche_date, expected_commission, int(escrow_account_opened), escrow_deadline, closure_date)
+        ) as cursor:
+            deal_id = cursor.lastrowid
+            await db.commit()
+            return deal_id
+
+async def get_deals_by_agent(agent_id: int) -> List[Dict]:
+    """Получение всех сделок агента с деталями по лиду и ЖК"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        async with db.execute(
+            """SELECT d.*, l.client_name, l.phone as client_phone, l.is_investor,
+                      o.jk_name, o.developer_name, o.commission_percent
+               FROM deals d
+               JOIN leads l ON d.lead_id = l.id
+               LEFT JOIN objects_jk o ON d.object_id = o.id
+               WHERE l.agent_id = ?
+               ORDER BY d.updated_at DESC""",
+            (agent_id,)
+        ) as cursor:
+            rows = await cursor.fetchall()
+            return [dict(r) for r in rows]
+
+async def update_deal_stage(deal_id: int, stage: str):
+    """Обновление этапа сделки"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        await db.execute(
+            "UPDATE deals SET stage = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?",
+            (stage, deal_id)
+        )
+        await db.commit()
+
+async def update_deal_escrow(deal_id: int, escrow_account_opened: bool):
+    """Обновление флага открытия эскроу-счета"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        await db.execute(
+            "UPDATE deals SET escrow_account_opened = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?",
+            (int(escrow_account_opened), deal_id)
+        )
+        await db.commit()
+
+async def create_task(deal_id: int, task_type: str, description: str, due_date: str) -> int:
+    """Создание задачи по сделке"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        async with db.execute(
+            """INSERT INTO tasks (deal_id, task_type, description, due_date, status)
+               VALUES (?, ?, ?, ?, 'pending')""",
+            (deal_id, task_type, description, due_date)
+        ) as cursor:
+            task_id = cursor.lastrowid
+            await db.commit()
+            return task_id
+
+async def get_tasks_by_deal(deal_id: int) -> List[Dict]:
+    """Получение всех задач по сделке"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        async with db.execute("SELECT * FROM tasks WHERE deal_id = ? ORDER BY due_date ASC", (deal_id,)) as cursor:
+            rows = await cursor.fetchall()
+            return [dict(r) for r in rows]
+
+async def get_active_tasks_by_agent(agent_id: int) -> List[Dict]:
+    """Получение всех активных задач по всем сделкам агента"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        async with db.execute(
+            """SELECT t.*, d.stage as deal_stage, l.client_name
+               FROM tasks t
+               JOIN deals d ON t.deal_id = d.id
+               JOIN leads l ON d.lead_id = l.id
+               WHERE l.agent_id = ? AND t.status = 'pending'
+               ORDER BY t.due_date ASC""",
+            (agent_id,)
+        ) as cursor:
+            rows = await cursor.fetchall()
+            return [dict(r) for r in rows]
+
+async def complete_task(task_id: int):
+    """Отметка задачи как выполненной"""
+    async with aiosqlite.connect(DB_PATH) as db:
+        await db.execute(
+            "UPDATE tasks SET status = 'completed', completed_at = CURRENT_TIMESTAMP WHERE id = ?",
+            (task_id,)
         )
         await db.commit()

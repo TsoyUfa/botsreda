@@ -160,11 +160,126 @@
         </div>
     </div>
 
+    <!-- Экран CRM Bento-Dashboard -->
+    <div id="crm-screen" class="screen" style="display: none;">
+        <header class="crm-header">
+            <h2 class="crm-title">Навигатор CRM</h2>
+            <button class="add-lead-btn" onclick="openAddLeadModal()">+ Лид</button>
+        </header>
+
+        <div class="bento-grid">
+            <!-- Блок 1 (2x2): Сделки и Комиссия -->
+            <div class="bento-card col-span-2 crm-stats-card">
+                <div class="card-label">Сделки в работе</div>
+                <div class="card-large-number" id="crm-total-volume">0 ₽</div>
+                <div class="card-sub-info">Ожидаемая комиссия: <span id="crm-expected-commission" class="text-accent">0 ₽</span></div>
+                <div class="pipeline-flow" id="crm-pipeline-flow">
+                    <!-- Будет заполнено динамически -->
+                </div>
+            </div>
+
+            <!-- Блок 2 (1x1): Действия на сегодня -->
+            <div class="bento-card crm-tasks-card">
+                <div class="card-label">Действия сегодня</div>
+                <ul class="task-mini-list" id="crm-today-tasks">
+                    <li class="empty-task">Задач нет</li>
+                </ul>
+            </div>
+
+            <!-- Блок 3 (1x1): Инвест-Алерты -->
+            <div class="bento-card crm-alerts-card">
+                <div class="card-label">Инвест-Алерты</div>
+                <ul class="alert-mini-list" id="crm-investor-alerts">
+                    <li class="empty-alert">Алертов нет</li>
+                </ul>
+            </div>
+
+            <!-- Блок 4 (2x1): Калькулятор программ -->
+            <div class="bento-card col-span-2 crm-calc-card">
+                <div class="card-label">Финансовое конструирование</div>
+                <div class="calc-inputs">
+                    <div class="input-group">
+                        <label>Стоимость (млн)</label>
+                        <input type="number" id="calc-price-input" value="8.0" step="0.1" onchange="runCrmCalc()">
+                    </div>
+                    <div class="input-group">
+                        <label>ПВ (млн)</label>
+                        <input type="number" id="calc-pv-input" value="1.6" step="0.1" onchange="runCrmCalc()">
+                    </div>
+                </div>
+                <div class="calc-selector">
+                    <button class="calc-tab-btn active" id="calc-btn-standard" onclick="selectCalcTab('standard')">Стандарт</button>
+                    <button class="calc-tab-btn" id="calc-btn-subsidized" onclick="selectCalcTab('subsidized')">Субсидия</button>
+                    <button class="calc-tab-btn" id="calc-btn-tranche" onclick="selectCalcTab('tranche')">Транш</button>
+                </div>
+                <div class="calc-results" id="calc-results-output">
+                    <!-- Будет заполнено динамически -->
+                </div>
+            </div>
+
+            <!-- Блок 5 (2x1): ИИ-Фидбек -->
+            <div class="bento-card col-span-2 crm-ai-feedback-card">
+                <div class="card-label">AI-Коуч: Анализ звонков</div>
+                <div class="ai-feedback-preview" id="crm-ai-feedback">
+                    Оценок переговоров пока нет. Запустите /simulator в боте, чтобы потренироваться.
+                </div>
+            </div>
+
+            <!-- Блок 6 (1x1): OKR Цель -->
+            <div class="bento-card crm-okr-card">
+                <div class="card-label">OKR: Цель 500к</div>
+                <div class="progress-circle-container">
+                    <div class="circle-progress" id="okr-progress-bar" style="--percent: 50%;">
+                        <span id="okr-progress-text">50%</span>
+                    </div>
+                </div>
+                <div class="card-sub-info" style="margin-top: 8px;">Доход: <span id="okr-income">250к</span> / 500к</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно добавления лида -->
+    <div id="add-lead-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeAddLeadModal()">&times;</span>
+            <h3>Добавить лида</h3>
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label style="display:block; margin-bottom:4px;">ФИО клиента</label>
+                <input type="text" id="modal-lead-name" placeholder="Иван Иванов" style="width:100%; padding:8px; border-radius:6px; border:1px solid #ccc;">
+            </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label style="display:block; margin-bottom:4px;">Телефон</label>
+                <input type="text" id="modal-lead-phone" placeholder="+7..." style="width:100%; padding:8px; border-radius:6px; border:1px solid #ccc;">
+            </div>
+            <div class="form-group" style="margin-bottom: 12px; display:flex; align-items:center; gap:8px;">
+                <input type="checkbox" id="modal-lead-investor">
+                <label>Тип: Инвестор?</label>
+            </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label style="display:block; margin-bottom:4px;">Бюджет лимита (руб)</label>
+                <input type="number" id="modal-lead-budget" value="8000000" style="width:100%; padding:8px; border-radius:6px; border:1px solid #ccc;">
+            </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label style="display:block; margin-bottom:4px;">Первоначальный взнос (руб)</label>
+                <input type="number" id="modal-lead-pv" value="1600000" style="width:100%; padding:8px; border-radius:6px; border:1px solid #ccc;">
+            </div>
+            <div class="form-group" style="margin-bottom: 16px;">
+                <label style="display:block; margin-bottom:4px;">Комфортный платеж (руб/мес)</label>
+                <input type="number" id="modal-lead-pm" value="40000" style="width:100%; padding:8px; border-radius:6px; border:1px solid #ccc;">
+            </div>
+            <button class="btn btn-primary" onclick="submitNewLead()" style="width:100%; padding:10px; background:#B45309; border:none; color:white; border-radius:8px; font-weight:bold; cursor:pointer;">Добавить</button>
+        </div>
+    </div>
+
     <!-- Навигация внизу -->
     <nav class="bottom-nav">
         <button class="nav-btn active" onclick="showMainScreen()">
             <span class="nav-icon">📚</span>
             <span class="nav-label">Учеба</span>
+        </button>
+        <button class="nav-btn" onclick="showCRM()">
+            <span class="nav-icon">💼</span>
+            <span class="nav-label">CRM</span>
         </button>
         <button class="nav-btn" onclick="showProfile()">
             <span class="nav-icon">👤</span>

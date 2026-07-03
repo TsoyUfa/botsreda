@@ -550,3 +550,308 @@ body {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+/* --- CRM Bento Grid styles (Quiet Luxury & Tech) --- */
+#crm-screen {
+    background-color: #090D1A;
+    color: #F8FAFC;
+    padding: 16px;
+}
+
+.crm-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #1E293B;
+    padding-bottom: 12px;
+}
+
+.crm-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #F8FAFC;
+}
+
+.add-lead-btn {
+    background-color: #B45309;
+    color: #FFFFFF;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.add-lead-btn:hover {
+    background-color: #92400E;
+}
+
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 60px;
+}
+
+.bento-card {
+    background: #121829;
+    border: 1px solid #1E293B;
+    border-radius: 16px;
+    padding: 16px;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.col-span-2 {
+    grid-column: span 2;
+}
+
+.card-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #94A3B8;
+    font-weight: 600;
+}
+
+.card-large-number {
+    font-size: 28px;
+    font-weight: 800;
+    color: #F8FAFC;
+    font-family: 'Outfit', sans-serif;
+}
+
+.card-sub-info {
+    font-size: 12px;
+    color: #94A3B8;
+}
+
+.text-accent {
+    color: #B45309;
+    font-weight: 700;
+}
+
+.pipeline-flow {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    gap: 4px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+}
+
+.pipeline-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    min-width: 60px;
+}
+
+.stage-bubble {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #1E293B;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #94A3B8;
+    border: 2px solid transparent;
+    transition: all 0.3s;
+}
+
+.pipeline-stage.active .stage-bubble {
+    background-color: #B45309;
+    color: #FFFFFF;
+    border-color: #FFFFFF;
+}
+
+.stage-label {
+    font-size: 8px;
+    color: #94A3B8;
+    margin-top: 4px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.task-mini-list, .alert-mini-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.task-item, .alert-item {
+    font-size: 12px;
+    padding: 8px;
+    border-radius: 8px;
+    background-color: rgba(30, 41, 59, 0.4);
+    border-left: 3px solid #B45309;
+}
+
+.alert-item {
+    border-left-color: #EF4444;
+}
+
+.empty-task, .empty-alert {
+    font-size: 12px;
+    color: #64748B;
+    text-align: center;
+    padding: 12px 0;
+}
+
+/* Calculator grid widget */
+.calc-inputs {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.input-group label {
+    font-size: 10px;
+    color: #94A3B8;
+    margin-bottom: 2px;
+}
+
+.input-group input {
+    background-color: #1E293B;
+    border: 1px solid #334155;
+    color: #F8FAFC;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+.calc-selector {
+    display: flex;
+    background-color: #1E293B;
+    border-radius: 8px;
+    padding: 2px;
+    margin-top: 8px;
+}
+
+.calc-tab-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    color: #94A3B8;
+    font-size: 11px;
+    padding: 6px 0;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.calc-tab-btn.active {
+    background-color: #B45309;
+    color: #FFFFFF;
+}
+
+.calc-results {
+    margin-top: 10px;
+    background-color: rgba(30, 41, 59, 0.3);
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.calc-result-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-bottom: 6px;
+}
+
+.calc-result-row:last-child {
+    margin-bottom: 0;
+}
+
+.calc-result-val {
+    font-weight: 700;
+    color: #F8FAFC;
+}
+
+/* AI Feedback previews */
+.ai-feedback-preview {
+    font-size: 12px;
+    line-height: 1.5;
+    color: #CBD5E1;
+    background-color: rgba(30, 41, 59, 0.3);
+    padding: 10px;
+    border-radius: 8px;
+    border-left: 3px solid #10B981;
+}
+
+/* OKR progress circle widget */
+.progress-circle-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.circle-progress {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, #121829 79%, transparent 80% 100%),
+                conic-gradient(#B45309 var(--percent), #1E293B 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.circle-progress span {
+    font-size: 14px;
+    font-weight: 700;
+    color: #F8FAFC;
+}
+
+/* Modal styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-content {
+    background-color: #121829;
+    border: 1px solid #1E293B;
+    border-radius: 16px;
+    padding: 20px;
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+    color: #F8FAFC;
+}
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #94A3B8;
+    cursor: pointer;
+}

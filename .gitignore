@@ -1,7 +1,7 @@
 .DS_Store
 .trash/
 
-# Локальные настройки окна Obsidian (разные на каждом устройстве)
+# Локальные настройки окна Obsidian (разное на каждом устройстве)
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json
 
@@ -19,4 +19,27 @@
 *.MP3
 *.wav
 *.m4a
+
+# 🔐 Секреты — НИКОГДА не коммитить (токены, ключи API)
+.env
+.env.*
+!.env.example
+
+# Python кэш и виртуальные окружения
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Базы данных и логи
+*.db
+*.sqlite
+*.sqlite3
+*.log
+
+# Системные файлы
+Thumbs.db
 

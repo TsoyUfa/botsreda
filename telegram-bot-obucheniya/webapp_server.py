@@ -468,6 +468,227 @@ def api_ai_ask():
         })
 
 
+# --- API эндпоинты для Кастомной CRM риэлторов (Блок 3 ТЗ) ---
+
+async def async_onboard_user(user_id, full_name, crm_link):
+    """Асинхронная отправка сообщения об успешном онбординге в Telegram"""
+    bot = Bot(token=config.BOT_TOKEN)
+    try:
+        welcome_text = (
+            f"🎉 <b>Оплата 100 000 руб. успешно получена!</b>\n\n"
+            f"Здравствуйте, {full_name}! Твой премиальный статус наставничества активирован.\n\n"
+            f"💼 <b>Твоя персональная CRM для новостроек готова:</b>\n"
+            f"👉 <a href='{crm_link}'>Открыть личный кабинет CRM</a>\n\n"
+            f"🚀 <b>Быстрый старт:</b>\n"
+            f"1. Открой интерактивное обучение в Web App.\n"
+            f"2. Проверь свои навыки переговоров: отправь команду /simulator в этот чат.\n"
+            f"3. Начни вести своих лидов в CRM."
+        )
+        await bot.send_message(
+            chat_id=user_id,
+            text=welcome_text,
+            parse_mode="HTML"
+        )
+    except Exception as e:
+        logger.error(f"Failed to send telegram welcome message: {e}")
+    finally:
+        session = await bot.get_session()
+        if session:
+            await session.close()
+
+@app.route('/api/payment/webhook', methods=['POST'])
+def payment_webhook():
+    """Вебхук оплаты (симуляция Prodamus/Tinkoff) для онбординга премиум-тарифа"""
+    data = request.json or {}
+    user_id = data.get("user_id")
+    email = data.get("email", "")
+    full_name = data.get("full_name", "Студент")
+    
+    if not user_id:
+        return jsonify({"success": False, "error": "user_id is required"}), 400
+        
+    try:
+        # 1. Активируем премиум и статус в БД
+        run_async(db.update_user_premium(user_id, True))
+        run_async(db.update_user_status(user_id, "active"))
+        
+        # 2. Симулируем дублирование шаблона CRM
+        crm_link = f"https://notion.so/tsoy-crm-template-{user_id}"
+        
+        # 3. Отправляем уведомление
+        run_async(async_onboard_user(user_id, full_name, crm_link))
+        
+        return jsonify({
+            "success": True, 
+            "message": "Onboarding completed successfully",
+            "crm_link": crm_link
+        })
+    except Exception as e:
+        logger.error(f"Error in payment webhook onboarding: {e}")
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route('/api/crm/leads', methods=['GET', 'POST'])
+def crm_leads():
+    """Получение или добавление лидов агента"""
+    if request.method == 'GET':
+        user_id = int(request.args.get("user_id", 0))
+        if not user_id:
+            return jsonify({"success": False, "error": "user_id required"}), 400
+        leads = run_async(db.get_leads_by_agent(user_id))
+        return jsonify({"success": True, "leads": leads})
+        
+    else: # POST
+        data = request.json or {}
+        user_id = data.get("user_id")
+        client_name = data.get("client_name")
+        phone = data.get("phone", "")
+        telegram_username = data.get("telegram_username", "")
+        is_investor = bool(data.get("is_investor", False))
+        budget_limit = float(data.get("budget_limit", 0))
+        down_payment = float(data.get("down_payment", 0))
+        comfort_monthly_payment = float(data.get("comfort_monthly_payment", 0))
+        
+        if not user_id or not client_name:
+            return jsonify({"success": False, "error": "user_id and client_name required"}), 400
+            
+        lead_id = run_async(db.create_lead(
+            user_id, client_name, phone, telegram_username, is_investor,
+            budget_limit, down_payment, comfort_monthly_payment
+        ))
+        return jsonify({"success": True, "lead_id": lead_id})
+
+
+@app.route('/api/crm/deals', methods=['GET', 'POST'])
+def crm_deals():
+    """Получение или добавление сделок агента"""
+    if request.method == 'GET':
+        user_id = int(request.args.get("user_id", 0))
+        if not user_id:
+            return jsonify({"success": False, "error": "user_id required"}), 400
+        deals = run_async(db.get_deals_by_agent(user_id))
+        return jsonify({"success": True, "deals": deals})
+        
+    else: # POST
+        data = request.json or {}
+        lead_id = data.get("lead_id")
+        object_id = data.get("object_id")
+        stage = data.get("stage", "Qualification")
+        base_price = float(data.get("base_price", 0))
+        final_price = float(data.get("final_price", 0))
+        scheme_type = data.get("scheme_type", "standard")
+        mortgage_payment = float(data.get("mortgage_payment", 0))
+        first_tranche_amount = float(data.get("first_tranche_amount", 0))
+        second_tranche_date = data.get("second_tranche_date", "")
+        expected_commission = float(data.get("expected_commission", 0))
+        escrow_account_opened = bool(data.get("escrow_account_opened", False))
+        escrow_deadline = data.get("escrow_deadline", "")
+        closure_date = data.get("closure_date", "")
+        
+        if not lead_id or not base_price:
+            return jsonify({"success": False, "error": "lead_id and base_price required"}), 400
+            
+        deal_id = run_async(db.create_deal(
+            lead_id, object_id, stage, base_price, final_price, scheme_type,
+            mortgage_payment, first_tranche_amount, second_tranche_date,
+            expected_commission, escrow_account_opened, escrow_deadline, closure_date
+        ))
+        return jsonify({"success": True, "deal_id": deal_id})
+
+
+@app.route('/api/crm/deals/update_stage', methods=['POST'])
+def crm_update_deal_stage():
+    """Обновление статуса (этапа воронки) сделки"""
+    data = request.json or {}
+    deal_id = data.get("deal_id")
+    stage = data.get("stage")
+    
+    if not deal_id or not stage:
+        return jsonify({"success": False, "error": "deal_id and stage required"}), 400
+        
+    run_async(db.update_deal_stage(deal_id, stage))
+    return jsonify({"success": True})
+
+
+@app.route('/api/crm/deals/update_escrow', methods=['POST'])
+def crm_update_deal_escrow():
+    """Обновление отметки открытия эскроу-счета"""
+    data = request.json or {}
+    deal_id = data.get("deal_id")
+    escrow_account_opened = bool(data.get("escrow_account_opened", False))
+    
+    if not deal_id:
+        return jsonify({"success": False, "error": "deal_id required"}), 400
+        
+    run_async(db.update_deal_escrow(deal_id, escrow_account_opened))
+    return jsonify({"success": True})
+
+
+@app.route('/api/crm/tasks', methods=['GET', 'POST'])
+def crm_tasks():
+    """Получение активных задач агента или добавление новой задачи"""
+    if request.method == 'GET':
+        user_id = int(request.args.get("user_id", 0))
+        if not user_id:
+            return jsonify({"success": False, "error": "user_id required"}), 400
+        tasks = run_async(db.get_active_tasks_by_agent(user_id))
+        return jsonify({"success": True, "tasks": tasks})
+        
+    else: # POST
+        data = request.json or {}
+        deal_id = data.get("deal_id")
+        task_type = data.get("task_type", "next_action")
+        description = data.get("description")
+        due_date = data.get("due_date")
+        
+        if not deal_id or not description or not due_date:
+            return jsonify({"success": False, "error": "deal_id, description and due_date required"}), 400
+            
+        task_id = run_async(db.create_task(deal_id, task_type, description, due_date))
+        return jsonify({"success": True, "task_id": task_id})
+
+
+@app.route('/api/crm/tasks/complete', methods=['POST'])
+def crm_complete_task():
+    """Выполнение задачи"""
+    data = request.json or {}
+    task_id = data.get("task_id")
+    
+    if not task_id:
+        return jsonify({"success": False, "error": "task_id required"}), 400
+        
+    run_async(db.complete_task(task_id))
+    return jsonify({"success": True})
+
+
+@app.route('/api/crm/objects', methods=['GET', 'POST'])
+def crm_objects():
+    """Получение всех объектов ЖК или создание нового"""
+    if request.method == 'GET':
+        objects = run_async(db.get_all_objects_jk())
+        return jsonify({"success": True, "objects": objects})
+        
+    else: # POST
+        data = request.json or {}
+        jk_name = data.get("jk_name")
+        developer_name = data.get("developer_name")
+        address = data.get("address", "")
+        avg_price_sqm = float(data.get("avg_price_sqm", 0))
+        commission_percent = float(data.get("commission_percent", 3.0))
+        tranche_available = bool(data.get("tranche_available", False))
+        subsidized_available = bool(data.get("subsidized_available", False))
+        installment_available = bool(data.get("installment_available", False))
+        
+        if not jk_name or not developer_name:
+            return jsonify({"success": False, "error": "jk_name and developer_name required"}), 400
+            
+        jk_id = run_async(db.create_object_jk(
+            jk_name, developer_name, address, avg_price_sqm, commission_percent,
+            tranche_available, subsidized_available, installment_available
+        ))
+        return jsonify({"success": True, "object_id": jk_id})
+
+
 if __name__ == '__main__':
     # Автоматическая инициализация БД перед стартом API
     run_async(db.init_db())

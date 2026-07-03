@@ -47,6 +47,10 @@ class AdminStates(StatesGroup):
     choosing_broadcast_type = State()
     entering_broadcast_message = State()
 
+class SimulatorStates(StatesGroup):
+    choosing_persona = State()
+    in_dialog = State()
+
 # Инициализация бота с поддержкой HTML по умолчанию
 bot = Bot(token=config.BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 dp = Dispatcher()
@@ -819,10 +823,16 @@ def answer_question_rag_sync(user_id: int, query: str) -> Tuple[str, List[str]]:
     if chunks:
         context = "\n\n".join([f"Файл: {c['filename']}\n{c['text']}" for c in chunks])
         
-    system_instruction = (
-        "Ты — ИИ-коуч в роли Антона Цоя. Твой ToV: прямо, по делу, без пафоса и давления. "
-        "Помогай агентам решать задачи по недвижимости и объяснять клиентам сложные финансовые выгоды (рассрочки, транши, субсидии)."
-    )
+    # Загружаем системный промпт из файла ai_mentor_prompt.md
+    try:
+        prompt_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ai_mentor_prompt.md")
+        with open(prompt_path, "r", encoding="utf-8") as f:
+            system_instruction = f.read()
+    except Exception:
+        system_instruction = (
+            "Ты — ИИ-коуч в роли Антона Цоя. Твой ToV: прямо, по делу, без пафоса и давления. "
+            "Помогай агентам решать задачи по недвижимости и объяснять клиентам сложные финансовые выгоды (рассрочки, транши, субсидии)."
+        )
     
     prompt = f"Вопрос агента: {query}\n\n"
     if context:
@@ -1422,6 +1432,178 @@ async def process_test_rejection_reason(message: types.Message, state: FSMContex
         
     await message.answer("✅ Замечания сохранены и отправлены студенту.")
     await state.clear()
+
+
+# --- ИИ-Тренажер Переговоров (/simulator) ---
+
+@dp.message(Command("simulator"))
+async def cmd_simulator(message: types.Message, state: FSMContext):
+    await state.clear()
+    
+    text = (
+        "🎭 <b>ИИ-Тренажер переговоров Среда 2.0</b>\n\n"
+        "Здесь ты можешь отработать навыки финансового инжиниринга и преодоления возражений на реальных сложных кейсах.\n\n"
+        "<b>Выбери персонажа, с которым хочешь провести диалог:</b>"
+    )
+    
+    builder = InlineKeyboardBuilder()
+    builder.button(text="А) Инвестор Вадим (Депозит vs Ипотека)", callback_data="sim_persona:vadim")
+    builder.button(text="Б) Арендатор Алина (Аренда + Ипотека)", callback_data="sim_persona:alina")
+    builder.button(text="В) Застройщик (Саботаж комиссии)", callback_data="sim_persona:dev")
+    builder.adjust(1)
+    
+    await message.answer(text, reply_markup=builder.as_markup())
+    await state.set_state(SimulatorStates.choosing_persona)
+
+@dp.callback_query(SimulatorStates.choosing_persona, F.data.startswith("sim_persona:"))
+async def process_sim_persona(callback: types.CallbackQuery, state: FSMContext):
+    persona_key = callback.data.split(":")[1]
+    
+    persona_names = {
+        "vadim": "Инвестор Вадим",
+        "alina": "Арендатор Алина",
+        "dev": "Менеджер Застройщика"
+    }
+    
+    starting_messages = {
+        "vadim": "Вадим: Да зачем мне ваша семейная ипотека? У меня есть 5 млн наличными, я лучше на депозит положу под 18% и буду без долгов жить.",
+        "alina": "Алина: Я не буду брать ипотеку сейчас. Мне придется платить 35 тысяч за аренду и еще 38 тысяч по ипотеке за строящийся дом. Откуда у меня 73 тысячи в месяц во время стройки?",
+        "dev": "Менеджер застройщика: Извините, но по этому клиенту мы не сможем выплатить вам полную комиссию в 3%. Клиент ранее проходил у нас в базе как самоход, поэтому либо 0.5%, либо пусть покупает напрямую со скидкой."
+    }
+    
+    p_name = persona_names[persona_key]
+    first_msg = starting_messages[persona_key]
+    
+    await state.update_data(
+        persona=p_name,
+        persona_key=persona_key,
+        history=[{"role": "assistant", "content": first_msg}],
+        turns_count=1
+    )
+    
+    await callback.message.answer(
+        f"🏁 <b>Диалог с {p_name} начат!</b>\n\n"
+        f"💬 <b>{first_msg}</b>\n\n"
+        f"✍️ <i>Напиши свой ответ клиенту. Для завершения диалога и получения оценки от ИИ отправь <b>/stop</b>.</i>"
+    )
+    await state.set_state(SimulatorStates.in_dialog)
+    await callback.answer()
+
+@dp.message(SimulatorStates.in_dialog)
+async def process_sim_message(message: types.Message, state: FSMContext):
+    user_text = message.text.strip()
+    
+    # Загружаем данные
+    data = await state.get_data()
+    history = data.get("history", [])
+    turns_count = data.get("turns_count", 0)
+    persona = data.get("persona", "Клиент")
+    persona_key = data.get("persona_key", "vadim")
+    
+    if user_text.lower() == "/stop":
+        # Запуск оценки
+        await evaluate_simulator_dialog(message, state, history, persona)
+        return
+        
+    # Добавляем сообщение пользователя в историю
+    history.append({"role": "user", "content": f"Агент: {user_text}"})
+    turns_count += 1
+    
+    if turns_count >= 6: # Ограничение: 5 шагов агента
+        await message.answer("⚠️ <i>Лимит диалога (5 ходов) исчерпан. Перехожу к оценке...</i>")
+        await evaluate_simulator_dialog(message, state, history, persona)
+        return
+        
+    await state.update_data(history=history, turns_count=turns_count)
+    
+    waiting_msg = await message.answer("🤖 <i>Клиент пишет ответ...</i>")
+    
+    # Загружаем промпт симулятора
+    try:
+        prompt_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ai_simulator_prompt.md")
+        with open(prompt_path, "r", encoding="utf-8") as f:
+            system_instruction = f.read()
+    except Exception:
+        system_instruction = "Ты играешь роль сложного клиента или застройщика. Сопротивляйся манипуляциям, соглашайся на расчеты."
+        
+    # Форматируем историю для модели
+    history_str = ""
+    for msg in history:
+        history_str += f"{msg['content']}\n"
+            
+    prompt = (
+        f"Ты играешь роль '{persona}'. Продолжай диалог с Агентом.\n"
+        f"Соблюдай правила роли и веди себя реалистично. Если агент давит или манипулирует — сопротивляйся. Если приводит четкие расчеты — соглашайся.\n\n"
+        f"История переписки:\n{history_str}\n"
+        f"Ответь ровно одной репликой от лица '{persona}'. Никакого дополнительного текста, только реплика клиента."
+    )
+    
+    response_text = ""
+    if config.GEMINI_API_KEY:
+        try:
+            response_text = call_gemini_api(prompt, system_instruction)
+        except Exception as e:
+            logger.error(f"Gemini API Error in simulator: {e}")
+            response_text = f"{persona}: Хм, я вас не совсем понял. Можете объяснить подробнее или с цифрами?"
+    else:
+        response_text = f"{persona}: К сожалению, ИИ-Тренажер временно отключен (нет API ключа Gemini)."
+        
+    # Добавляем ответ ассистента в историю
+    history.append({"role": "assistant", "content": response_text})
+    await state.update_data(history=history)
+    
+    await waiting_msg.edit_text(response_text)
+
+
+async def evaluate_simulator_dialog(message: types.Message, state: FSMContext, history: list, persona: str):
+    waiting_msg = await message.answer("🤖 <i>ИИ-Коуч анализирует твой диалог и выставляет оценки...</i>")
+    
+    # Загружаем промпт симулятора для оценки
+    try:
+        prompt_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ai_simulator_prompt.md")
+        with open(prompt_path, "r", encoding="utf-8") as f:
+            system_instruction = f.read()
+    except Exception:
+        system_instruction = "Оцени диалог по критериям: Присоединение, Разрушение иллюзии, Математика, ToV, CTA."
+        
+    history_str = ""
+    for msg in history:
+        history_str += f"{msg['content']}\n"
+        
+    prompt = (
+        f"Проведи аудит следующего диалога между Агентом и {persona}.\n\n"
+        f"Диалог:\n{history_str}\n\n"
+        f"Выведи оценку строго по критериям из твоего системного промпта. Подготовь Markdown-таблицу с оценками (0-5) и комментариями.\n"
+        f"Выдели ключевые ошибки в цитатах и покажи, как их переписать по ToV Антона Цоя.\n"
+        f"Напиши финальный вердикт: Зачет (при сумме от 18 баллов включительно) или Незачет."
+    )
+    
+    evaluation = ""
+    if config.GEMINI_API_KEY:
+        try:
+            evaluation = call_gemini_api(prompt, system_instruction)
+        except Exception as e:
+            logger.error(f"Gemini API Evaluation error: {e}")
+            evaluation = "⚠️ Не удалось сгенерировать оценку ИИ. Пожалуйста, обратитесь к кураторам."
+    else:
+        evaluation = "⚠️ Оценка ИИ недоступна, так как GEMINI_API_KEY не задан."
+        
+    # Логируем диалог в базу данных
+    try:
+        await db.log_ai_chat(message.from_user.id, "[Диалог-тренажер]", evaluation, "[]")
+    except Exception as e:
+        logger.error(f"Не удалось сохранить лог тренажера: {e}")
+        
+    await state.clear()
+    
+    # Отправляем результаты
+    await waiting_msg.delete()
+    await message.answer(
+        f"📊 <b>Результаты тренировки с {persona}:</b>\n\n"
+        f"{evaluation}\n\n"
+        f"ℹ️ <i>Твои результаты сохранены в базу данных CRM для анализа твоим куратором.</i>"
+    )
+
 
 
 # Основная функция запуска

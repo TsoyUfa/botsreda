@@ -499,6 +499,44 @@
       font-family: 'Outfit', sans-serif;
     }
 
+    /* Slide 9: Collapsible Cards */
+    .collapsible-card {
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    .collapsible-card .reveal-content {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, opacity 0.3s ease, margin-top 0.3s ease, padding-top 0.3s ease;
+      border-top: 1px dashed transparent;
+      margin-top: 0;
+      padding-top: 0;
+    }
+    .collapsible-card.revealed .reveal-content {
+      max-height: 500px;
+      opacity: 1;
+      border-top: 1px dashed var(--border-color);
+      margin-top: 15px;
+      padding-top: 15px;
+    }
+    .collapsible-card .reveal-btn {
+      transition: all 0.3s ease;
+    }
+    .collapsible-card.revealed .reveal-btn {
+      display: none;
+    }
+    .collapsible-card .card-index {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 4rem;
+      font-weight: 900;
+      opacity: 0.05;
+      font-family: 'Outfit', sans-serif;
+    }
+
     /* Slide 3: Блок 2. Смена картины мира */
     .compare-table {
       width: 100%;
@@ -1297,7 +1335,6 @@
   <!-- Header -->
   <header>
     <div class="logo-container">
-      <div class="logo-badge">TREND</div>
       <div class="logo-text">ФИНАНСОВЫЙ <span>ИНЖИНИРИНГ</span></div>
     </div>
     <div class="header-info">
@@ -1321,14 +1358,9 @@
     <!-- Slide 1: Welcome -->
     <div class="slide active" id="slide-1" data-index="1">
       <div class="welcome-container">
-        <div class="slide-badge">КУРС ОБУЧЕНИЯ ДЛЯ АГЕНТОВ</div>
+        <div class="slide-badge">2 из 10 блоков обучения агентов</div>
         <h1 class="welcome-title">Финансовый инжиниринг: Как продавать в эпоху высоких ставок</h1>
         <p class="slide-subtitle" style="font-size:1.25rem;">Переход от роли продавца планировок к роли финансового партнера клиента</p>
-        
-        <div class="welcome-meta">
-          <span><i class="fa-regular fa-calendar"></i> Июль 2026</span>
-          <span><i class="fa-solid fa-location-dot"></i> Тренд-Агент Уфа</span>
-        </div>
         
         <button class="btn btn-primary" onclick="changeSlide(1)">
           Начать презентацию <i class="fa-solid fa-arrow-right"></i>
@@ -1380,7 +1412,7 @@
           </div>
           <button class="btn reveal-btn">Показать инсайт</button>
           <div class="reveal-content">
-            <i class="fa-solid fa-lightbulb"></i> Траншевая ипотека снижает платеж до сдачи дома до 600-1800 ₽/мес. Аренда + 1800 ₽ — это под силу каждому.
+            <i class="fa-solid fa-lightbulb"></i> Траншевая ипотека снижает платеж до сдачи дома до 1800 ₽/мес. Аренда + 1800 ₽ — это под силу каждому.
           </div>
         </div>
       </div>
@@ -1544,8 +1576,8 @@
       <div class="rule-box">
         <i class="fa-solid fa-circle-exclamation"></i>
         <div>
-          <strong style="color:white; font-size:1.05rem;">Внимание! Правило одной льготной ипотеки (действует с февраля 2026):</strong>
-          <p style="color:var(--text-muted); font-size:0.9rem; margin-top:2px;">1 семья = 1 льготный кредит на всю жизнь. Клиенты, которые «ждут снижения ставок», рискуют потерять лимит. Это сильный аргумент срочности для закрытия сделки уже сегодня.</p>
+          <strong style="color:white; font-size:1.05rem;">Основные инструменты на рынке сегодня:</strong>
+          <p style="color:var(--text-muted); font-size:0.9rem; margin-top:2px;">На рынке сейчас есть 3 основных продукта — это Траншевая ипотека, Субсидированная ипотека и рассрочка. Наша задача как навигаторов — подобрать нужную комбинацию под ситуацию клиента.</p>
         </div>
       </div>
     </div>
@@ -1990,8 +2022,188 @@
       </div>
     </div>
 
-    <!-- Slide 9: Ролевые игры -->
+    <!-- Slide 9: Классификация рассрочек -->
     <div class="slide" id="slide-9" data-index="9">
+      <div class="slide-title-group">
+        <div class="slide-badge">Блок 3. Инструменты</div>
+        <h2 class="slide-title">Рассрочка от застройщика: 5 типов программ</h2>
+        <p class="slide-subtitle">Каждая рассрочка решает свою задачу. Задача агента — подобрать нужный тип под ситуацию клиента (кликните для раскрытия)</p>
+      </div>
+
+      <div class="grid-3" style="margin-top: 20px;">
+        <!-- Card 1 -->
+        <div class="glass-card collapsible-card" id="rascard-1" onclick="this.classList.toggle('revealed')" style="padding: 20px; display: flex; flex-direction: column; justify-content: space-between; min-height: 160px; height: auto;">
+          <div class="card-index">01</div>
+          <div>
+            <div style="font-size: 0.75rem; color: var(--cyan); font-weight: 700; text-transform: uppercase; margin-bottom: 8px;">01. Короткая схема</div>
+            <h3 style="font-size: 1.15rem; margin-bottom: 8px; color: #fff;">Рассрочка 50/50 или 25/25/50</h3>
+          </div>
+          <button class="btn reveal-btn" style="padding: 4px 10px; font-size: 0.8rem; border-color: rgba(6,182,212,0.3); background: rgba(6,182,212,0.05); color: var(--cyan); margin-top: 15px; align-self: flex-start;">Показать детали</button>
+          <div class="reveal-content">
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 8px;">ПВ 50% (или по 25%), остаток вносится единым платежом перед вводом дома.</p>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">
+              <strong style="color: var(--emerald);">Удорожание: 0%</strong> | Для тех, кто продает вторичку или держит вклад.
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="glass-card collapsible-card" id="rascard-2" onclick="this.classList.toggle('revealed')" style="padding: 20px; display: flex; flex-direction: column; justify-content: space-between; min-height: 160px; height: auto;">
+          <div class="card-index">02</div>
+          <div>
+            <div style="font-size: 0.75rem; color: var(--cyan); font-weight: 700; text-transform: uppercase; margin-bottom: 8px;">02. Длинная схема</div>
+            <h3 style="font-size: 1.15rem; margin-bottom: 8px; color: #fff;">С платежами до сдачи</h3>
+          </div>
+          <button class="btn reveal-btn" style="padding: 4px 10px; font-size: 0.8rem; border-color: rgba(6,182,212,0.3); background: rgba(6,182,212,0.05); color: var(--cyan); margin-top: 15px; align-self: flex-start;">Показать детали</button>
+          <div class="reveal-content">
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 8px;">Минимальный ПВ (10-20%) и комфортные платежи (30-50к/мес) до ввода дома с выходом в ипотеку.</p>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">
+              <strong style="color: var(--rose);">Удорожание: от +5% до +30%</strong> | Для людей с высоким доходом, но без ПВ.
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="glass-card collapsible-card" id="rascard-3" onclick="this.classList.toggle('revealed')" style="padding: 20px; display: flex; flex-direction: column; justify-content: space-between; min-height: 160px; height: auto;">
+          <div class="card-index">03</div>
+          <div>
+            <div style="font-size: 0.75rem; color: var(--cyan); font-weight: 700; text-transform: uppercase; margin-bottom: 8px;">03. Trade-In мост</div>
+            <h3 style="font-size: 1.15rem; margin-bottom: 8px; color: #fff;">Быстрая рассрочка (5/95 или 10/90)</h3>
+          </div>
+          <button class="btn reveal-btn" style="padding: 4px 10px; font-size: 0.8rem; border-color: rgba(6,182,212,0.3); background: rgba(6,182,212,0.05); color: var(--cyan); margin-top: 15px; align-self: flex-start;">Показать детали</button>
+          <div class="reveal-content">
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 8px;">Сверхнизкий ПВ (5-10%), остаток вносится строго через 3-6 месяцев.</p>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">
+              <strong style="color: var(--emerald);">Удорожание: 0%</strong> | Бронь новостройки на время продажи вторички.
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="glass-card collapsible-card" id="rascard-4" onclick="this.classList.toggle('revealed')" style="padding: 20px; display: flex; flex-direction: column; justify-content: space-between; min-height: 160px; height: auto;">
+          <div class="card-index">04</div>
+          <div>
+            <div style="font-size: 0.75rem; color: var(--cyan); font-weight: 700; text-transform: uppercase; margin-bottom: 8px;">04. Накопительный мост</div>
+            <h3 style="font-size: 1.15rem; margin-bottom: 8px; color: #fff;">Рассрочка «Накопи на ПВ»</h3>
+          </div>
+          <button class="btn reveal-btn" style="padding: 4px 10px; font-size: 0.8rem; border-color: rgba(6,182,212,0.3); background: rgba(6,182,212,0.05); color: var(--cyan); margin-top: 15px; align-self: flex-start;">Показать детали</button>
+          <div class="reveal-content">
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 8px;">Разбивка обязательного ПВ 20.1% на ежемесячные платежи в течение 6-12 месяцев.</p>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">
+              <strong style="color: var(--emerald);">Удорожание: 0% - 5%</strong> | Для тех, кому нужна семейная ипотека, но нет ПВ.
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="glass-card collapsible-card" id="rascard-5" onclick="this.classList.toggle('revealed')" style="padding: 20px; display: flex; flex-direction: column; justify-content: space-between; min-height: 160px; height: auto;">
+          <div class="card-index">05</div>
+          <div>
+            <div style="font-size: 0.75rem; color: var(--cyan); font-weight: 700; text-transform: uppercase; margin-bottom: 8px;">05. Социальный мост</div>
+            <h3 style="font-size: 1.15rem; margin-bottom: 8px; color: #fff;">«Для будущих родителей»</h3>
+          </div>
+          <button class="btn reveal-btn" style="padding: 4px 10px; font-size: 0.8rem; border-color: rgba(6,182,212,0.3); background: rgba(6,182,212,0.05); color: var(--cyan); margin-top: 15px; align-self: flex-start;">Показать детали</button>
+          <div class="reveal-content">
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 8px;">Взнос 15%, платежи до рождения ребенка, затем переход на Семейную ипотеку 6%.</p>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">
+              <strong style="color: var(--emerald);">Удорожание: минимальное</strong> | Для пар, ожидающих пополнения.
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="glass-card collapsible-card" id="rascard-6" onclick="this.classList.toggle('revealed')" style="padding: 20px; display: flex; flex-direction: column; justify-content: space-between; min-height: 160px; height: auto; border-color: rgba(139, 92, 246, 0.3); background: rgba(139, 92, 246, 0.03);">
+          <div class="card-index">💡</div>
+          <div>
+            <div style="font-size: 0.75rem; color: var(--violet); font-weight: 700; text-transform: uppercase; margin-bottom: 8px;">💡 Главный принцип</div>
+            <h3 style="font-size: 1.15rem; margin-bottom: 8px; color: #fff;">Рассрочка — это мост</h3>
+          </div>
+          <button class="btn reveal-btn" style="padding: 4px 10px; font-size: 0.8rem; border-color: rgba(139, 92, 246, 0.4); background: rgba(139, 92, 246, 0.05); color: var(--violet); margin-top: 15px; align-self: flex-start;">Показать детали</button>
+          <div class="reveal-content">
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 8px;">Это временный инструмент для фиксации цены лота. У любой рассрочки должен быть чёткий план финала (выход в кэш или рефинансирование в ипотеку).</p>
+            <div style="font-size: 0.8rem; color: var(--violet); font-weight: 600;">
+              Всегда прописывайте стратегию выхода!
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 10: Красные флаги рассрочек -->
+    <div class="slide" id="slide-10" data-index="10">
+      <div class="slide-title-group">
+        <div class="slide-badge">Блок 3. Инструменты</div>
+        <h2 class="slide-title">Красные флаги и правила продаж рассрочек</h2>
+        <p class="slide-subtitle">О чем агент обязан предупредить клиента заранее, чтобы не сорвать сделку</p>
+      </div>
+
+      <div class="grid-2" style="margin-top: 20px;">
+        <!-- Left: Red Flags -->
+        <div class="glass-card" style="padding: 30px;">
+          <h3 style="font-size: 1.25rem; margin-bottom: 20px; color: var(--rose); display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-triangle-exclamation"></i> Красные флаги (Зоны риска)
+          </h3>
+          
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 20px;">
+            <li style="display: flex; gap: 15px; align-items: flex-start;">
+              <span style="background: rgba(244,63,94,0.1); color: var(--rose); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; font-size: 0.85rem;">1</span>
+              <div>
+                <strong style="color: #fff; font-size: 0.95rem; display: block; margin-bottom: 3px;">Скрытое удорожание лота</strong>
+                <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">«Беспроцентная» рассрочка часто увеличивает цену квартиры на 10-30%. Это скрытый процент, который нужно считать сразу.</span>
+              </div>
+            </li>
+            <li style="display: flex; gap: 15px; align-items: flex-start;">
+              <span style="background: rgba(244,63,94,0.1); color: var(--rose); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; font-size: 0.85rem;">2</span>
+              <div>
+                <strong style="color: #fff; font-size: 0.95rem; display: block; margin-bottom: 3px;">Ключи только после 100% оплаты</strong>
+                <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">Заселиться в квартиру до полной выплаты договора ДДУ или перехода на ипотеку нельзя, даже если дом уже сдан.</span>
+              </div>
+            </li>
+            <li style="display: flex; gap: 15px; align-items: flex-start;">
+              <span style="background: rgba(244,63,94,0.1); color: var(--rose); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; font-size: 0.85rem;">3</span>
+              <div>
+                <strong style="color: #fff; font-size: 0.95rem; display: block; margin-bottom: 3px;">Риск отказа в ипотеке на остаток</strong>
+                <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">Если банк откажет в кредите перед вводом дома, client рискует потерять квартиру и получить штрафы от застройщика.</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Right: Sales Scripts -->
+        <div class="glass-card" style="padding: 30px;">
+          <h3 style="font-size: 1.25rem; margin-bottom: 20px; color: var(--emerald); display: flex; align-items: center; gap: 10px;">
+            <i class="fa-solid fa-comments"></i> Речевые скрипты и сценарные продажи
+          </h3>
+          
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 20px;">
+            <li style="display: flex; gap: 15px; align-items: flex-start;">
+              <span style="background: rgba(16,185,129,0.1); color: var(--emerald); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; font-size: 0.85rem;"><i class="fa-solid fa-percent"></i></span>
+              <div>
+                <strong style="color: #fff; font-size: 0.95rem; display: block; margin-bottom: 3px;">Арбитраж депозита:</strong>
+                <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">*«Ваш вклад под 19% дает 60к/мес. Мы берем рассрочку с платежом 30к/мес. Вы платите за новую квартиру чисто из процентов, не трогая тело вклада»*</span>
+              </div>
+            </li>
+            <li style="display: flex; gap: 15px; align-items: flex-start;">
+              <span style="background: rgba(16,185,129,0.1); color: var(--emerald); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; font-size: 0.85rem;"><i class="fa-solid fa-tags"></i></span>
+              <div>
+                <strong style="color: #fff; font-size: 0.95rem; display: block; margin-bottom: 3px;">Фиксация цены без дисконта:</strong>
+                <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">*«Мы вносим 10% и фиксируем цену. У нас есть 18 месяцев, чтобы продать вашу вторичку за полную рыночную стоимость без спешки и дисконта»*</span>
+              </div>
+            </li>
+            <li style="display: flex; gap: 15px; align-items: flex-start;">
+              <span style="background: rgba(16,185,129,0.1); color: var(--emerald); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; font-size: 0.85rem;"><i class="fa-solid fa-coins"></i></span>
+              <div>
+                <strong style="color: #fff; font-size: 0.95rem; display: block; margin-bottom: 3px;">Сравнение переплат:</strong>
+                <span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">*«Что выгоднее: переплатить застройщику 600 тысяч за удорожание один раз или отдать банку 4 миллиона по рыночной ставке 21%?»*</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 11: Ролевые игры -->
+    <div class="slide" id="slide-11" data-index="11">
       <div class="slide-title-group">
         <div class="slide-badge">Блок 4. Практикум</div>
         <h2 class="slide-title">Тренажер ролевых игр: Отработка возражений</h2>
@@ -2045,8 +2257,8 @@
       </div>
     </div>
 
-    <!-- Slide 10: Заключение & ЖК -->
-    <div class="slide" id="slide-10" data-index="10">
+    <!-- Slide 12: Заключение & ЖК -->
+    <div class="slide" id="slide-12" data-index="12">
       <div class="slide-title-group">
         <div class="slide-badge">Блок 5. Заключение</div>
         <h2 class="slide-title">ТОП ЖК Уфы по финансовым инструментам</h2>
@@ -2099,7 +2311,7 @@
 
   <!-- Footer Navigation Controls -->
   <footer>
-    <div class="slide-counter" id="slideCounter">Слайд 1 из 10</div>
+    <div class="slide-counter" id="slideCounter">Слайд 1 из 12</div>
     <div class="nav-controls">
       <button class="nav-btn" id="prevBtn" onclick="navigateSlide(-1)" disabled><i class="fa-solid fa-chevron-left"></i></button>
       <button class="nav-btn" id="nextBtn" onclick="navigateSlide(1)"><i class="fa-solid fa-chevron-right"></i></button>
@@ -2109,7 +2321,7 @@
   <script>
     // State management
     let currentSlide = 1;
-    const totalSlides = 10;
+    const totalSlides = 12;
     
     // Slide Navigation
     function updateSlide() {
@@ -2136,9 +2348,9 @@
         calcSubsidy();
       } else if (currentSlide === 8) {
         calcRas();
-      } else if (currentSlide === 9) {
+      } else if (currentSlide === 11) {
         renderRoleCard();
-      } else if (currentSlide === 10) {
+      } else if (currentSlide === 12) {
         renderJK();
       }
     }
@@ -2343,7 +2555,7 @@
     }
 
     function formatNumber(num) {
-      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " ₽";
+      return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " ₽";
     }
 
     function calcTrenchRent() {

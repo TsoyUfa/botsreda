@@ -494,8 +494,10 @@ class WebApp {
         
         if (active === 'main') {
             navBtns[0].classList.add('active');
-        } else if (active === 'profile') {
+        } else if (active === 'crm') {
             navBtns[1].classList.add('active');
+        } else if (active === 'profile') {
+            navBtns[2].classList.add('active');
         }
     }
 
@@ -510,6 +512,8 @@ class WebApp {
         } else if (this.currentScreen === 'module') {
             this.showMainScreen();
         } else if (this.currentScreen === 'profile') {
+            this.showMainScreen();
+        } else if (this.currentScreen === 'crm') {
             this.showMainScreen();
         } else {
             this.showMainScreen();
@@ -627,6 +631,292 @@ class WebApp {
     markLessonCompleted() {
         this.telegram.showAlert('Отметить урок как завершенный?');
     }
+
+    showCRM() {
+        this.currentScreen = 'crm';
+        this.hideAllScreens();
+        document.getElementById('crm-screen').style.display = 'flex';
+        this.updateNavigation('crm');
+        this.telegram.BackButton.show();
+        
+        // Load CRM data
+        this.loadCRMData();
+        
+        // Initial calc run
+        this.currentCalcTab = this.currentCalcTab || 'standard';
+        this.runCrmCalc();
+    }
+
+    async loadCRMData() {
+        try {
+            // Load leads
+            const leadsResponse = await this.apiRequest('/crm/leads', { user_id: this.userData.id });
+            const leads = leadsResponse.success ? leadsResponse.leads : [];
+
+            // Load deals
+            const dealsResponse = await this.apiRequest('/crm/deals', { user_id: this.userData.id });
+            const deals = dealsResponse.success ? dealsResponse.deals : [];
+
+            // Load active tasks
+            const tasksResponse = await this.apiRequest('/crm/tasks', { user_id: this.userData.id });
+            const tasks = tasksResponse.success ? tasksResponse.tasks : [];
+
+            this.renderCRM(leads, deals, tasks);
+        } catch (error) {
+            console.error('Error loading CRM data:', error);
+        }
+    }
+
+    renderCRM(leads, deals, tasks) {
+        // Calculate metrics
+        let totalVolume = 0;
+        let totalCommission = 0;
+        const stagesCount = {
+            'Qualification': 0,
+            'Financial Engineering': 0,
+            'Presentation': 0,
+            'Booking': 0,
+            'Signing': 0,
+            'Active Escrow Hold': 0,
+            'Exit': 0
+        };
+
+        deals.forEach(deal => {
+            totalVolume += deal.final_price || 0;
+            totalCommission += deal.expected_commission || 0;
+            
+            // Increment stage count
+            const stage = deal.stage;
+            if (stagesCount[stage] !== undefined) {
+                stagesCount[stage]++;
+            } else {
+                stagesCount['Qualification']++; // fallback
+            }
+        });
+
+        // Format numbers for display
+        document.getElementById('crm-total-volume').textContent = this.formatCurrency(totalVolume);
+        document.getElementById('crm-expected-commission').textContent = this.formatCurrency(totalCommission);
+
+        // Render pipeline
+        const pipelineFlow = document.getElementById('crm-pipeline-flow');
+        pipelineFlow.innerHTML = '';
+        
+        const stageLabels = {
+            'Qualification': 'Квал',
+            'Financial Engineering': 'ФинИнж',
+            'Presentation': 'Презент',
+            'Booking': 'Бронь',
+            'Signing': 'Подпись',
+            'Active Escrow Hold': 'Эскроу',
+            'Exit': 'Выход'
+        };
+
+        Object.keys(stagesCount).forEach(stage => {
+            const count = stagesCount[stage];
+            const stageDiv = document.createElement('div');
+            stageDiv.className = `pipeline-stage ${count > 0 ? 'active' : ''}`;
+            stageDiv.innerHTML = `
+                <div class="stage-bubble">${count}</div>
+                <div class="stage-label">${stageLabels[stage]}</div>
+            `;
+            pipelineFlow.appendChild(stageDiv);
+        });
+
+        // Render today's tasks
+        const todayTasks = document.getElementById('crm-today-tasks');
+        todayTasks.innerHTML = '';
+        const pendingTasks = tasks.filter(t => t.status === 'pending');
+        
+        if (pendingTasks.length === 0) {
+            todayTasks.innerHTML = '<li class="empty-task">Задач нет</li>';
+        } else {
+            pendingTasks.forEach(task => {
+                const li = document.createElement('li');
+                li.className = 'task-item';
+                li.innerHTML = `
+                    <div style="font-weight: 600;">${task.client_name}: ${task.task_type === 'next_action' ? 'След. шаг' : 'Задача'}</div>
+                    <div style="font-size:11px; margin-top:2px;">${task.description}</div>
+                    <div style="font-size: 10px; color: #94A3B8; margin-top:4px;">До: ${task.due_date}</div>
+                    <button onclick="completeCrmTask(${task.id})" style="margin-top:6px; font-size:10px; background:#10B981; border:none; color:white; padding:2px 6px; border-radius:4px; cursor:pointer;">✓ Выполнено</button>
+                `;
+                todayTasks.appendChild(li);
+            });
+        }
+
+        // Render investor alerts (SLA checks, etc.)
+        const investorAlerts = document.getElementById('crm-investor-alerts');
+        investorAlerts.innerHTML = '';
+        let alerts = [];
+
+        deals.forEach(deal => {
+            if (deal.stage === 'Signing' && !deal.escrow_account_opened) {
+                alerts.push({
+                    type: 'escrow',
+                    text: `Сделка с ${deal.client_name} (ЖК ${deal.jk_name || 'Новостройка'}): не открыт эскроу-счет! Срок до ${deal.escrow_deadline || 'ближайших дней'}.`
+                });
+            }
+            if (deal.scheme_type === 'tranche' && deal.second_tranche_date) {
+                alerts.push({
+                    type: 'tranche',
+                    text: `2-й транш по ${deal.client_name}: плановая дата ${deal.second_tranche_date}.`
+                });
+            }
+        });
+
+        if (alerts.length === 0) {
+            investorAlerts.innerHTML = '<li class="empty-alert">Алертов нет</li>';
+        } else {
+            alerts.forEach(alert => {
+                const li = document.createElement('li');
+                li.className = 'alert-item';
+                li.textContent = alert.text;
+                investorAlerts.appendChild(li);
+            });
+        }
+
+        // Update OKR Progress
+        const okrIncome = 250000;
+        const okrTarget = 500000;
+        const okrPercent = Math.min(Math.round((okrIncome / okrTarget) * 100), 100);
+        
+        const progressBar = document.getElementById('okr-progress-bar');
+        if (progressBar) {
+            progressBar.style.setProperty('--percent', `${okrPercent}%`);
+        }
+        const progressText = document.getElementById('okr-progress-text');
+        if (progressText) {
+            progressText.textContent = `${okrPercent}%`;
+        }
+        const incomeText = document.getElementById('okr-income');
+        if (incomeText) {
+            incomeText.textContent = `${Math.round(okrIncome / 1000)}к`;
+        }
+    }
+
+    formatCurrency(value) {
+        if (!value) return '0 ₽';
+        return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(value);
+    }
+
+    openAddLeadModal() {
+        document.getElementById('add-lead-modal').style.display = 'flex';
+    }
+
+    closeAddLeadModal() {
+        document.getElementById('add-lead-modal').style.display = 'none';
+    }
+
+    async submitNewLead() {
+        const name = document.getElementById('modal-lead-name').value.trim();
+        const phone = document.getElementById('modal-lead-phone').value.trim();
+        const isInvestor = document.getElementById('modal-lead-investor').checked;
+        const budget = parseFloat(document.getElementById('modal-lead-budget').value) || 0;
+        const pv = parseFloat(document.getElementById('modal-lead-pv').value) || 0;
+        const pm = parseFloat(document.getElementById('modal-lead-pm').value) || 0;
+
+        if (!name) {
+            this.telegram.showAlert('Введите ФИО клиента!');
+            return;
+        }
+
+        try {
+            const response = await this.apiRequest('/crm/leads', {
+                user_id: this.userData.id,
+                client_name: name,
+                phone: phone,
+                is_investor: isInvestor,
+                budget_limit: budget,
+                down_payment: pv,
+                comfort_monthly_payment: pm
+            });
+
+            if (response.success) {
+                // Automatically create a deal for this lead
+                await this.apiRequest('/crm/deals', {
+                    lead_id: response.lead_id,
+                    stage: 'Qualification',
+                    base_price: budget,
+                    final_price: budget,
+                    scheme_type: 'standard',
+                    expected_commission: budget * 0.03
+                });
+
+                this.telegram.showAlert('Лид успешно добавлен!');
+                this.closeAddLeadModal();
+                this.loadCRMData();
+            } else {
+                this.telegram.showAlert('Ошибка создания лида.');
+            }
+        } catch (error) {
+            console.error('Error adding lead:', error);
+            this.telegram.showAlert('Ошибка добавления лида.');
+        }
+    }
+
+    async runCrmCalc() {
+        const price = parseFloat(document.getElementById('calc-price-input').value) * 1000000 || 8000000;
+        const pv = parseFloat(document.getElementById('calc-pv-input').value) * 1000000 || 1600000;
+        const tab = this.currentCalcTab || 'standard';
+
+        try {
+            const response = await this.apiRequest('/calculator/calculate', {
+                price: price,
+                down_payment: pv
+            });
+
+            if (response.success) {
+                const results = response.results;
+                const output = document.getElementById('calc-results-output');
+                
+                if (tab === 'standard') {
+                    const data = results.standard;
+                    output.innerHTML = `
+                        <div class="calc-result-row"><span>Кредит:</span><span class="calc-result-val">${this.formatCurrency(data.loan_amount)}</span></div>
+                        <div class="calc-result-row"><span>Ставка:</span><span class="calc-result-val">${data.rate}%</span></div>
+                        <div class="calc-result-row"><span>Платеж/мес:</span><span class="calc-result-val" style="color:#B45309;">${this.formatCurrency(data.monthly_payment)}</span></div>
+                    `;
+                } else if (tab === 'subsidized') {
+                    const data = results.subsidized;
+                    output.innerHTML = `
+                        <div class="calc-result-row"><span>Цена с удорожанием:</span><span class="calc-result-val">${this.formatCurrency(data.price_subsidized)}</span></div>
+                        <div class="calc-result-row"><span>Платеж/мес:</span><span class="calc-result-val" style="color:#10B981;">${this.formatCurrency(data.monthly_payment)}</span></div>
+                        <div class="calc-result-row"><span>Окупаемость удорожания:</span><span class="calc-result-val">${data.break_even_years} лет</span></div>
+                    `;
+                } else if (tab === 'tranche') {
+                    const data = results.tranche;
+                    output.innerHTML = `
+                        <div class="calc-result-row"><span>Платеж до сдачи (1-й транш):</span><span class="calc-result-val" style="color:#10B981;">${this.formatCurrency(data.payment_phase_1)}</span></div>
+                        <div class="calc-result-row"><span>Платеж после сдачи:</span><span class="calc-result-val">${this.formatCurrency(data.payment_phase_2)}</span></div>
+                        <div class="calc-result-row"><span>Прибыль с депозита за 2 года:</span><span class="calc-result-val" style="color:#10B981;">+${this.formatCurrency(data.deposit_profit_estimation)}</span></div>
+                    `;
+                }
+            }
+        } catch (error) {
+            console.error('Error in CRM calculator:', error);
+        }
+    }
+
+    selectCalcTab(tab) {
+        this.currentCalcTab = tab;
+        document.getElementById('calc-btn-standard').classList.remove('active');
+        document.getElementById('calc-btn-subsidized').classList.remove('active');
+        document.getElementById('calc-btn-tranche').classList.remove('active');
+        document.getElementById(`calc-btn-${tab}`).classList.add('active');
+        this.runCrmCalc();
+    }
+
+    async completeCrmTask(taskId) {
+        try {
+            const response = await this.apiRequest('/crm/tasks/complete', { task_id: taskId });
+            if (response.success) {
+                this.telegram.showAlert('Задача выполнена!');
+                this.loadCRMData();
+            }
+        } catch (error) {
+            console.error('Error completing task:', error);
+        }
+    }
 }
 
 // Initialize app when page loads
@@ -657,4 +947,32 @@ function showMainScreen() {
 
 function showProfile() {
     window.webApp.showProfile();
+}
+
+function showCRM() {
+    window.webApp.showCRM();
+}
+
+function openAddLeadModal() {
+    window.webApp.openAddLeadModal();
+}
+
+function closeAddLeadModal() {
+    window.webApp.closeAddLeadModal();
+}
+
+function submitNewLead() {
+    window.webApp.submitNewLead();
+}
+
+function runCrmCalc() {
+    window.webApp.runCrmCalc();
+}
+
+function selectCalcTab(tab) {
+    window.webApp.selectCalcTab(tab);
+}
+
+function completeCrmTask(taskId) {
+    window.webApp.completeCrmTask(taskId);
 }

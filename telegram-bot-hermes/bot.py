@@ -37,7 +37,15 @@ else:
     logger.warning("GEMINI_API_KEY не задан. Голосовые сообщения не смогут быть расшифрованы.")
 
 # Инициализация Bot и Dispatcher
-bot = Bot(token=config.BOT_TOKEN)
+import os
+from aiogram.client.session.aiohttp import AiohttpSession
+
+proxy_url = os.getenv("PROXY_URL")
+if proxy_url:
+    bot = Bot(token=config.BOT_TOKEN, session=AiohttpSession(proxy=proxy_url))
+    logger.info(f"Запуск бота Hermes с прокси: {proxy_url}")
+else:
+    bot = Bot(token=config.BOT_TOKEN)
 dp = Dispatcher()
 
 # Фильтр для проверки администратора

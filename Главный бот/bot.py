@@ -174,13 +174,14 @@ async def deliver_lead_magnet(bot: Bot, user_id: int, keyword: str):
         return
         
     try:
-        # Отправляем документ
+        # Отправляем документ локальным файлом с увеличенным таймаутом
         document = FSInputFile(file_path, filename=send_name)
         await bot.send_document(
             chat_id=user_id,
             document=document,
             caption=f"🔥 Держи полезный материал:\n«<b>{magnet['title']}</b>»\n\nСкачивай и внедряй в практику!",
-            parse_mode="HTML"
+            parse_mode="HTML",
+            request_timeout=300
         )
         
         # Запись в БД
@@ -613,7 +614,7 @@ async def cmd_leads(message: Message, bot: Bot):
             writer.writerow([row[0], row[1], row[2], is_sub, score, row[5]])
             
     doc = FSInputFile(csv_path)
-    await bot.send_document(chat_id=config.ADMIN_ID, document=doc, caption="📊 Список агентов в базе бота")
+    await bot.send_document(chat_id=config.ADMIN_ID, document=doc, caption="📊 Список агентов в базе бота", request_timeout=120)
     os.remove(csv_path)
 
 @router.message(Command("stats"))

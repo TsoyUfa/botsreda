@@ -64,6 +64,11 @@ LEAD_MAGNETS = {
         "title": "Методичка: Как выбрать новостройку без переплат",
         "file_name": "client_manual.md",
         "source_name": "Методичка_для_клиента.md"
+    },
+    "INZINER": {
+        "title": "Практикум: Способы покупки",
+        "file_name": "inziner.pdf",
+        "source_name": "Практикум — Способы покупки.pdf"
     }
 }
 
