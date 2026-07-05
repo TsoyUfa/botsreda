@@ -1,0 +1,1829 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Сценарный анализ: Агентский vs Прямой канал | Девелопер</title>
+  <meta name="description" content="Интерактивная финансовая модель для девелопера: сравнение каналов реализации с учётом проектного финансирования и трёх сценариев развития">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root {
+      --bg:        #f4f6fa;
+      --surface:   #ffffff;
+      --surface2:  #f8fafd;
+      --surface3:  #edf2f9;
+      --border:    rgba(0,0,0,0.06);
+      --border2:   rgba(0,0,0,0.1);
+      --gold:      #c28b15;
+      --gold2:     #a0710f;
+      --gold-dim:  rgba(194,139,21,0.07);
+      --green:     #1b7a43;
+      --green-l:   #27ae60;
+      --red:       #b02a1b;
+      --red-l:     #c0392b;
+      --yellow:    #d35400;
+      --blue:      #1a5f8a;
+      --blue-l:    #2980b9;
+      --text:      #1e293b;
+      --text2:     #5e6e85;
+      --text3:     #8fa0bc;
+      --radius:    14px;
+      --radius-sm: 8px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* ──────────────── HERO ──────────────── */
+    .hero {
+      background: linear-gradient(140deg, #f8fafc 0%, #e2e8f0 60%, #f1f5f9 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 44px 56px 36px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      right: -80px; top: -120px;
+      width: 560px; height: 560px;
+      background: radial-gradient(circle, rgba(194,139,21,0.04) 0%, transparent 68%);
+      pointer-events: none;
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--gold-dim);
+      border: 1px solid rgba(194,139,21,0.22);
+      border-radius: 100px; padding: 5px 16px;
+      font-size: 11px; font-weight: 700; letter-spacing: .07em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(26px, 3vw, 38px);
+      font-weight: 900; line-height: 1.18;
+      background: linear-gradient(130deg, #0f172a 0%, var(--gold) 80%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; margin-bottom: 12px;
+    }
+    .hero p {
+      font-size: 14px; color: var(--text2); max-width: 620px; line-height: 1.7;
+    }
+    .hero-meta {
+      display: flex; gap: 24px; margin-top: 24px; flex-wrap: wrap;
+    }
+    .hero-meta-item {
+      font-size: 12px; color: var(--text3);
+    }
+    .hero-meta-item b { color: var(--text2); font-weight: 600; }
+
+    /* ──────────────── LAYOUT ──────────────── */
+    .wrap {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 36px 56px 60px;
+    }
+    .sec-head {
+      display: flex; align-items: flex-start; gap: 14px; margin-bottom: 22px;
+    }
+    .sec-icon {
+      width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+      background: var(--gold-dim); border: 1px solid rgba(232,184,75,0.22);
+      display: flex; align-items: center; justify-content: center; font-size: 19px;
+    }
+    .sec-head h2 { font-size: 18px; font-weight: 800; margin-bottom: 2px; }
+    .sec-head p { font-size: 12px; color: var(--text2); }
+
+    .divider { height: 1px; background: var(--border); margin: 44px 0; }
+
+    /* ──────────────── PARAMS GRID ──────────────── */
+    .params-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px; margin-bottom: 44px;
+    }
+    .param-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 18px 20px;
+      transition: border-color .2s;
+    }
+    .param-card:hover { border-color: var(--border2); }
+    .param-card label {
+      display: block; font-size: 11px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .06em;
+      color: var(--text3); margin-bottom: 6px;
+    }
+    .param-val {
+      font-size: 22px; font-weight: 800; color: var(--gold);
+      margin-bottom: 10px; line-height: 1;
+    }
+    .param-val small { font-size: 12px; font-weight: 400; color: var(--text3); }
+    input[type=range] {
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: 4px; border-radius: 2px;
+      background: var(--surface3); cursor: pointer; outline: none;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 16px; height: 16px;
+      border-radius: 50%; background: var(--gold);
+      border: 2px solid var(--surface); cursor: pointer;
+      transition: transform .15s, box-shadow .15s;
+    }
+    input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.25);
+      box-shadow: 0 0 0 4px rgba(232,184,75,0.2);
+    }
+
+    /* ──────────────── SCENARIOS ──────────────── */
+    .scenarios-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 18px; margin-bottom: 44px;
+    }
+    .sc-card {
+      border-radius: var(--radius); padding: 24px;
+      border: 1px solid; position: relative; overflow: hidden;
+    }
+    .sc-card::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+    }
+    .sc-opt { background: rgba(39,174,96,.04); border-color: rgba(46,204,113,.22); }
+    .sc-opt::before { background: linear-gradient(90deg, var(--green-l), #00d2a0); }
+    .sc-cur { background: rgba(194,139,21,.03); border-color: rgba(194,139,21,.22); }
+    .sc-cur::before { background: linear-gradient(90deg, var(--gold), var(--yellow)); }
+    .sc-pes { background: rgba(192,57,43,.04); border-color: rgba(231,76,60,.22); }
+    .sc-pes::before { background: linear-gradient(90deg, var(--red-l), #c0392b); }
+
+    .sc-badge {
+      display: inline-block; padding: 4px 12px;
+      border-radius: 100px; font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: .08em; margin-bottom: 14px;
+    }
+    .sc-opt .sc-badge { background: rgba(46,204,113,.1); color: var(--green); }
+    .sc-cur .sc-badge { background: rgba(194,139,21,.1); color: var(--gold); }
+    .sc-pes .sc-badge { background: rgba(231,76,60,.1); color: var(--red); }
+
+    .sc-title { font-size: 17px; font-weight: 800; margin-bottom: 4px; }
+    .sc-desc { font-size: 12px; color: var(--text2); margin-bottom: 18px; line-height: 1.6; }
+
+    .sc-month-row {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 16px;
+    }
+    .sc-month-row label { font-size: 12px; color: var(--text3); white-space: nowrap; }
+    .sc-month-row input[type=number] {
+      width: 68px; background: rgba(0,0,0,.03);
+      border: 1px solid var(--border2); border-radius: var(--radius-sm);
+      padding: 6px 10px; color: var(--text); font-family: inherit;
+      font-size: 13px; font-weight: 700; text-align: center; outline: none;
+      transition: border-color .2s;
+    }
+    .sc-month-row input[type=number]:focus { border-color: var(--gold); }
+    .sc-month-row span { font-size: 12px; color: var(--text3); }
+
+    .metric-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 9px 0; border-top: 1px solid rgba(0,0,0,.05);
+      font-size: 12px;
+    }
+    .metric-row .ml { color: var(--text2); }
+    .metric-row .mv { font-weight: 700; font-size: 13px; }
+    .col-green { color: var(--green-l); }
+    .col-gold  { color: var(--gold); }
+    .col-red   { color: var(--red-l); }
+
+    .mini-bar {
+      height: 5px; border-radius: 3px;
+      background: var(--surface3); margin-top: 12px; overflow: hidden;
+    }
+    .mini-fill {
+      height: 100%; border-radius: 3px; transition: width .6s ease;
+    }
+    .sc-opt .mini-fill { background: var(--green-l); }
+    .sc-cur .mini-fill { background: var(--gold); }
+    .sc-pes .mini-fill { background: var(--red-l); }
+
+    /* ──────────────── CHANNELS ──────────────── */
+    .channels-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 18px; margin-bottom: 44px;
+    }
+    .ch-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px;
+      transition: border-color .2s;
+    }
+    .ch-card.best {
+      background: rgba(39,174,96,.05);
+      border-color: rgba(46,204,113,.28);
+    }
+    .ch-head {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 6px;
+    }
+    .ch-title { font-size: 16px; font-weight: 800; }
+    .ch-sub { font-size: 12px; color: var(--text2); margin-bottom: 20px; }
+    .tag-green {
+      display: inline-block; padding: 3px 10px;
+      border-radius: 6px; font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: .06em;
+      background: rgba(46,204,113,.15); color: var(--green-l);
+    }
+    .ch-slider-block { margin-bottom: 14px; }
+    .ch-slider-label {
+      display: flex; justify-content: space-between;
+      font-size: 11px; color: var(--text3); margin-bottom: 6px;
+    }
+    .ch-slider-label b { color: var(--gold); font-weight: 700; }
+
+    .ch-divider { height: 1px; background: var(--border); margin: 16px 0; }
+
+    .cost-row {
+      display: flex; justify-content: space-between;
+      padding: 7px 0; font-size: 12px; border-bottom: 1px solid rgba(0,0,0,.04);
+    }
+    .cost-row .cl { color: var(--text2); }
+    .cost-total {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 0 0; margin-top: 6px; font-weight: 800; font-size: 14px;
+      border-top: 2px solid var(--border2);
+    }
+    .ch-scenario-note {
+      font-size: 11px; color: var(--text3);
+      background: var(--surface3); border-radius: 6px;
+      padding: 6px 10px; margin-bottom: 12px;
+    }
+
+    /* ──────────────── CHARTS ──────────────── */
+    .charts-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 20px; margin-bottom: 44px;
+    }
+    .chart-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px;
+    }
+    .chart-card.wide { grid-column: 1 / -1; }
+    .chart-title { font-size: 14px; font-weight: 800; margin-bottom: 3px; }
+    .chart-sub { font-size: 11px; color: var(--text2); margin-bottom: 18px; line-height: 1.5; }
+    .chart-wrap { position: relative; height: 290px; }
+
+    /* ──────────────── INSIGHT ──────────────── */
+    .insight-card {
+      border-radius: 20px; padding: 44px 48px;
+      background: linear-gradient(135deg, rgba(194,139,21,.05) 0%, rgba(194,139,21,.01) 100%);
+      border: 1px solid rgba(194,139,21,.22);
+      position: relative; overflow: hidden; margin-bottom: 44px;
+    }
+    .insight-card::before {
+      content: ''; position: absolute;
+      top: -90px; right: -80px;
+      width: 320px; height: 320px;
+      background: radial-gradient(circle, rgba(194,139,21,.05) 0%, transparent 68%);
+    }
+    .insight-tag {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--gold-dim); border: 1px solid rgba(194,139,21,.3);
+      border-radius: 100px; padding: 5px 16px;
+      font-size: 11px; font-weight: 800; color: var(--gold);
+      text-transform: uppercase; letter-spacing: .07em; margin-bottom: 18px;
+    }
+    .insight-title {
+      font-size: clamp(22px, 2.5vw, 30px);
+      font-weight: 900; line-height: 1.25; margin-bottom: 14px;
+    }
+    .insight-title .acc { color: var(--gold); }
+    .insight-body {
+      font-size: 13px; color: var(--text2); line-height: 1.7;
+      max-width: 680px; margin-bottom: 30px;
+    }
+    .insight-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .insight-metric {
+      background: rgba(0,0,0,.02);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px 18px;
+    }
+    .insight-metric.win {
+      background: rgba(39,174,96,.04);
+      border-color: rgba(46,204,113,.25);
+    }
+    .im-label {
+      font-size: 10px; text-transform: uppercase; letter-spacing: .08em;
+      color: var(--text3); margin-bottom: 8px; font-weight: 700;
+    }
+    .im-val {
+      font-size: 22px; font-weight: 900; color: var(--gold); margin-bottom: 4px;
+    }
+    .im-val.pos { color: var(--red-l); }
+    .im-val.neg { color: var(--green-l); }
+    .im-val.net { color: var(--green-l); }
+    .im-sub { font-size: 11px; color: var(--text2); }
+
+    /* ──────────────── FOOTER NOTE ──────────────── */
+    .footer-note {
+      text-align: center; font-size: 11px; color: var(--text3); padding-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    /* ──────────────── PROFILE TOGGLE ──────────────── */
+    .profile-toggle {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;
+    }
+    .profile-btn {
+      padding: 8px 18px; border-radius: 100px;
+      border: 1px solid var(--border2);
+      background: var(--surface3); color: var(--text2);
+      font-family: inherit; font-size: 12px; font-weight: 600;
+      cursor: pointer; transition: all .2s;
+    }
+    .profile-btn:hover {
+      border-color: var(--gold); color: var(--gold);
+    }
+    .profile-btn.active {
+      background: var(--gold-dim); border-color: rgba(232,184,75,.4);
+      color: var(--gold);
+    }
+    .drawdown-summary {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 12px; margin-top: 20px;
+    }
+    .ds-item {
+      background: var(--surface3); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 16px;
+    }
+    .ds-label { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--text3); margin-bottom: 6px; font-weight: 700; }
+    .ds-val   { font-size: 18px; font-weight: 800; color: var(--gold); }
+    .ds-sub   { font-size: 11px; color: var(--text2); margin-top: 3px; }
+
+    /* ──────────────── ANIMATION ──────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .param-card, .sc-card, .ch-card, .chart-card, .insight-card {
+      animation: fadeUp .4s ease both;
+    }
+
+    /* ──────────────── REQUIRED PACE ──────────────── */
+    .req-pace {
+      background: rgba(0,0,0,0.03);
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 10px; padding: 14px 16px;
+      margin: 12px 0;
+    }
+    .rp-label {
+      font-size: 9px; font-weight: 800; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--text3); margin-bottom: 5px;
+    }
+    .rp-val {
+      font-size: 24px; font-weight: 900; line-height: 1;
+    }
+    .rp-sub { font-size: 11px; color: var(--text2); margin-top: 4px; }
+
+    .pace-gauge {
+      height: 8px; border-radius: 4px;
+      background: var(--surface3); margin-top: 6px; overflow: hidden;
+      position: relative;
+    }
+    .pace-fill {
+      height: 100%; border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+    .pace-marker {
+      position: absolute; top: -3px;
+      width: 2px; height: 14px; border-radius: 1px;
+      background: rgba(0,0,0,0.6);
+      transition: left 0.5s ease;
+    }
+
+    /* Шкала сравнения темпов */
+    .pace-compare {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px 24px;
+      margin-bottom: 24px;
+    }
+    .pc-title { font-size: 13px; font-weight: 800; margin-bottom: 14px; }
+    .pc-row {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 10px; font-size: 12px;
+    }
+    .pc-name { width: 180px; color: var(--text2); flex-shrink: 0; }
+    .pc-bar-wrap { flex: 1; height: 10px; background: var(--surface3); border-radius: 5px; overflow: visible; position: relative; }
+    .pc-bar { height: 100%; border-radius: 5px; transition: width .5s ease; }
+    .pc-num { width: 90px; text-align: right; font-weight: 700; flex-shrink: 0; }
+
+    /* ──────────────── CHANNEL MIX SECTION ──────────────── */
+    .mix-params {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;
+    }
+    .mix-cards {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px;
+    }
+    .mix-card {
+      background: var(--surface3); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 16px;
+    }
+    .mc-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; color: var(--text3); margin-bottom: 6px; }
+    .mc-val   { font-size: 20px; font-weight: 900; margin-bottom: 3px; }
+    .mc-sub   { font-size: 11px; color: var(--text2); }
+
+    .share-bar {
+      display: flex; height: 12px; border-radius: 6px; overflow: hidden; margin: 12px 0 6px;
+    }
+    .share-agent  { background: #27ae60; transition: width .5s ease; }
+    .share-direct { background: #3498db; transition: width .5s ease; }
+    .share-legend {
+      display: flex; gap: 16px; font-size: 11px; color: var(--text2);
+    }
+    .share-legend span { display: flex; align-items: center; gap: 5px; }
+    .share-legend span::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
+    .share-legend .agent-dot::before  { background: #27ae60; }
+    .share-legend .direct-dot::before { background: #3498db; }
+
+    .commission-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 16px; }
+    .commission-table th { text-align: left; padding: 8px 10px; color: var(--text3); font-size: 10px; text-transform: uppercase; letter-spacing: .06em; font-weight: 700; border-bottom: 1px solid var(--border2); }
+    .commission-table td { padding: 9px 10px; border-bottom: 1px solid rgba(0,0,0,0.04); }
+    .commission-table tr.active-row td { background: var(--gold-dim); border-left: 2px solid var(--gold); }
+    .commission-table tr.active-row td:first-child { padding-left: 8px; }
+    @media (max-width: 1200px) {
+      .params-grid { grid-template-columns: repeat(2, 1fr); }
+      .insight-grid { grid-template-columns: repeat(2, 1fr); }
+      .wrap { padding: 28px 32px 48px; }
+      .hero { padding: 36px 32px 28px; }
+    }
+    @media (max-width: 860px) {
+      .params-grid { grid-template-columns: 1fr 1fr; }
+      .scenarios-grid, .channels-grid { grid-template-columns: 1fr; }
+      .charts-grid { grid-template-columns: 1fr; }
+      .chart-card.wide { grid-column: unset; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header class="hero">
+  <div class="hero-tag">📊 Финансовый инструмент девелопера</div>
+  <h1>Сценарный анализ:<br>Агентский канал vs Прямой</h1>
+  <p>Интерактивная модель для обоснования стратегии реализации. Изменяйте параметры — модель пересчитывается мгновенно.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">Ключевой аргумент: <b>Экономия на ПФД &gt; Дополнительная комиссия агентам</b></div>
+    <div class="hero-meta-item">Версия: <b>1.0</b></div>
+  </div>
+</header>
+
+<!-- ══════════════ MAIN ══════════════ -->
+<main class="wrap">
+
+  <!-- ───── ПАРАМЕТРЫ ───── -->
+  <div class="sec-head">
+    <div class="sec-icon">⚙️</div>
+    <div><h2>Параметры проекта</h2><p>Задайте вводные — все расчёты обновятся автоматически</p></div>
+  </div>
+
+  <div class="params-grid">
+
+    <div class="param-card">
+      <label for="p-area">Общий объём реализации</label>
+      <div class="param-val" id="d-area">10 000 <small>м²</small></div>
+      <input type="range" id="p-area" min="2000" max="60000" step="500" value="10000" oninput="recalc()">
+    </div>
+
+    <div class="param-card">
+      <label for="p-price">Цена реализации</label>
+      <div class="param-val" id="d-price">120 000 <small>руб./м²</small></div>
+      <input type="range" id="p-price" min="50000" max="400000" step="5000" value="120000" oninput="recalc()">
+    </div>
+
+    <div class="param-card">
+      <label for="p-cost">Себестоимость</label>
+      <div class="param-val" id="d-cost">70 000 <small>руб./м²</small></div>
+      <input type="range" id="p-cost" min="25000" max="250000" step="5000" value="70000" oninput="recalc()">
+    </div>
+
+    <!-- Общий объём работ (СМР) — рассчитывается автоматически -->
+    <div class="param-card" style="border-color:rgba(232,184,75,0.2);background:rgba(232,184,75,0.04)">
+      <label>Общий объём работ (СМР)</label>
+      <div class="param-val" id="d-smr">700 <small>млн руб.</small></div>
+      <div style="font-size:11px;color:var(--text3);margin-top:4px">= Площадь × Себестоимость/м²</div>
+    </div>
+
+    <!-- Тело кредита ПФД — рассчитывается от объёма работ -->
+    <div class="param-card" style="border-color:rgba(52,152,219,0.2);background:rgba(52,152,219,0.04)">
+      <label>Тело кредита ПФД</label>
+      <div class="param-val" id="d-pfd">700 <small>млн руб.</small></div>
+      <div style="font-size:11px;color:var(--text3);margin-top:4px">= Общий объём работ (СМР)</div>
+    </div>
+
+    <div class="param-card">
+      <label for="p-key">Ключевая ставка ЦБ</label>
+      <div class="param-val" id="d-key">21 <small>%</small></div>
+      <input type="range" id="p-key" min="5" max="30" step="0.25" value="21" oninput="recalc()">
+    </div>
+
+    <div class="param-card">
+      <label for="p-margin">Надбавка по ПФД</label>
+      <div class="param-val" id="d-margin">3 <small>%</small></div>
+      <input type="range" id="p-margin" min="0.5" max="8" step="0.25" value="3" oninput="recalc()">
+    </div>
+
+    <div class="param-card">
+      <label for="p-льгота">Льготная ставка ПФД <small style="text-transform:none">(при эскроу ≥ 70%)</small></label>
+      <div class="param-val" id="d-льгота">7 <small>%</small></div>
+      <input type="range" id="p-льгота" min="1" max="15" step="0.25" value="7" oninput="recalc()">
+    </div>
+
+    <div class="param-card">
+      <label for="p-growth">Рост себестоимости</label>
+      <div class="param-val" id="d-growth">15 <small>%/год</small></div>
+      <input type="range" id="p-growth" min="3" max="35" step="1" value="15" oninput="recalc()">
+    </div>
+
+  </div>
+
+  <!-- ───── СЦЕНАРИИ ───── -->
+  <!-- ───── СЦЕНАРИИ ───── -->
+  <div class="sec-head">
+    <div class="sec-icon">🎯</div>
+    <div>
+      <h2>Сценарии реализации</h2>
+      <p>Обратная задача: сколько нужно продавать в месяц для достижения каждой цели ПФД</p>
+    </div>
+  </div>
+
+  <!-- Текущий темп + целевой % ПФД -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
+
+    <div class="param-card">
+      <label for="p-pace">Текущий темп продаж</label>
+      <div class="param-val" id="d-pace">300 <small>м²/мес.</small></div>
+      <input type="range" id="p-pace" min="50" max="3000" step="50" value="300" oninput="recalc()">
+      <div style="font-size:11px;color:var(--text3);margin-top:6px">Среднемесячный фактический темп сделок</div>
+    </div>
+
+    <div class="param-card">
+      <label for="p-tpfd">Целевой ПФД (базовый сценарий)</label>
+      <div class="param-val" id="d-tpfd">3 <small>% от выручки</small></div>
+      <input type="range" id="p-tpfd" min="0.5" max="12" step="0.5" value="3" oninput="recalc()">
+      <div style="font-size:11px;color:var(--text3);margin-top:6px">Стоимость ПФД допустимая в финмодели</div>
+    </div>
+
+  </div>
+
+  <!-- Шкала сравнения темпов -->
+  <div class="pace-compare" id="pace-compare"></div>
+
+  <div class="scenarios-grid">
+
+    <!-- ОПТИМИСТИЧНЫЙ: ПФД → минимум -->
+    <div class="sc-card sc-opt">
+      <div class="sc-badge">✅ Оптимистичный</div>
+      <div class="sc-title">ПФД → минимум</div>
+      <div class="sc-desc">Льготная ставка начинается не позже 50% срока строительства. Требует агентского канала и активных инструментов.</div>
+      <div class="req-pace">
+        <div class="rp-label">Требуемый темп продаж</div>
+        <div class="rp-val col-green" id="sc-opt-pace">— м²/мес.</div>
+        <div class="rp-sub" id="sc-opt-pace-sub">расчёт...</div>
+      </div>
+      <div id="sc-opt-metrics"></div>
+      <div class="mini-bar"><div class="mini-fill" id="bar-opt"></div></div>
+    </div>
+
+    <!-- БАЗОВЫЙ: ПФД = N% -->
+    <div class="sc-card sc-cur">
+      <div class="sc-badge">⚡ Базовый</div>
+      <div class="sc-title">ПФД = <span id="sc-tpfd-label">3</span>% от выручки</div>
+      <div class="sc-desc">Целевая стоимость ПФД из финмодели. Отсюда рассчитывается необходимый ежемесячный темп реализации.</div>
+      <div class="req-pace">
+        <div class="rp-label">Требуемый темп продаж</div>
+        <div class="rp-val col-gold" id="sc-base-pace">— м²/мес.</div>
+        <div class="rp-sub" id="sc-base-pace-sub">расчёт...</div>
+      </div>
+      <div id="sc-cur-metrics"></div>
+      <div class="mini-bar"><div class="mini-fill" id="bar-cur"></div></div>
+    </div>
+
+    <!-- ПЕССИМИСТИЧНЫЙ: 0 продаж в строительстве -->
+    <div class="sc-card sc-pes">
+      <div class="sc-badge">⚠️ Пессимистичный</div>
+      <div class="sc-title">0 продаж в период строительства</div>
+      <div class="sc-desc">Полное отсутствие реализации во время строительства. ПФД идёт по максимальной базовой ставке весь срок. Продажи начинаются после ввода объекта.</div>
+      <div class="req-pace" style="border-color:rgba(231,76,60,0.25)">
+        <div class="rp-label">Стоимость часа ПФД за строительство</div>
+        <div class="rp-val col-red" id="sc-pes-cost">—</div>
+        <div class="rp-sub" id="sc-pes-cost-sub">расчёт...</div>
+      </div>
+      <div id="sc-pes-metrics"></div>
+      <div class="mini-bar"><div class="mini-fill" id="bar-pes"></div></div>
+    </div>
+
+  </div>
+
+  <!-- ───── КАНАЛЫ ───── -->
+  <div class="sec-head">
+    <div class="sec-icon">🔀</div>
+    <div>
+      <h2>Сравнение каналов реализации</h2>
+      <p>Полная стоимость привлечения покупателя: расходы на канал + накопленные расходы на ПФД за период реализации</p>
+    </div>
+  </div>
+
+  <div class="channels-grid">
+
+    <!-- Прямой -->
+    <div class="ch-card">
+      <div class="ch-head"><span style="font-size:22px">📢</span><div class="ch-title">Прямой канал</div></div>
+      <div class="ch-sub">Собственный отдел продаж + маркетинговый бюджет</div>
+      <div class="ch-scenario-note">📅 Темп реализации: <b>«Текущий» сценарий</b></div>
+      <div class="ch-slider-block">
+        <div class="ch-slider-label"><span>Маркетинг, % от выручки</span><b id="d-marketing">4.0%</b></div>
+        <input type="range" id="ch-marketing" min="1" max="12" step="0.5" value="4" oninput="recalc()">
+      </div>
+      <div class="ch-slider-block">
+        <div class="ch-slider-label"><span>ФОТ отдела продаж, % от выручки</span><b id="d-salary">3.0%</b></div>
+        <input type="range" id="ch-salary" min="0.5" max="10" step="0.5" value="3" oninput="recalc()">
+      </div>
+      <div class="ch-divider"></div>
+      <div id="ch-direct-costs"></div>
+    </div>
+
+    <!-- Агентский базовый -->
+    <div class="ch-card">
+      <div class="ch-head"><span style="font-size:22px">🤝</span><div class="ch-title">Агентский базовый</div></div>
+      <div class="ch-sub">Текущая модель: комиссия 2–3%, агентская сеть не мотивирована</div>
+      <div class="ch-scenario-note">📅 Темп реализации: <b>«Текущий» сценарий</b></div>
+      <div class="ch-slider-block">
+        <div class="ch-slider-label"><span>Комиссия агентам, % от выручки</span><b id="d-agent-base">2.5%</b></div>
+        <input type="range" id="ch-agent-base" min="0.5" max="8" step="0.5" value="2.5" oninput="recalc()">
+      </div>
+      <div class="ch-divider"></div>
+      <div id="ch-base-costs"></div>
+    </div>
+
+    <!-- Агентский расширенный -->
+    <div class="ch-card best">
+      <div class="ch-head">
+        <span style="font-size:22px">🚀</span>
+        <div class="ch-title">Агентский расширенный</div>
+        <span class="tag-green">Рекомендуется</span>
+      </div>
+      <div class="ch-sub">5% комиссия + нематериальные инструменты: мотивированная сеть, максимальный темп</div>
+      <div class="ch-scenario-note">📅 Темп реализации: <b>«Оптимистичный» сценарий</b></div>
+      <div class="ch-slider-block">
+        <div class="ch-slider-label"><span>Комиссия агентам, % от выручки</span><b id="d-agent-ext">5.0%</b></div>
+        <input type="range" id="ch-agent-ext" min="2" max="10" step="0.5" value="5" oninput="recalc()">
+      </div>
+      <div class="ch-slider-block">
+        <div class="ch-slider-label"><span>Нематериальные инструменты, %</span><b id="d-nonmat">1.5%</b></div>
+        <input type="range" id="ch-nonmat" min="0" max="4" step="0.25" value="1.5" oninput="recalc()">
+      </div>
+      <div class="ch-divider"></div>
+      <div id="ch-ext-costs"></div>
+    </div>
+
+  </div>
+
+  <!-- ───── СТРУКТУРА КАНАЛА ПРОДАЖ ───── -->
+  <div class="sec-head">
+    <div class="sec-icon">📊</div>
+    <div>
+      <h2>Структура канала продаж</h2>
+      <p>Ежемесячная цель выручки → разбивка агентский/прямой по формуле комиссии. Чем выше комиссия — больше доля агентов и выше темп продаж.</p>
+    </div>
+  </div>
+
+  <div class="chart-card" style="margin-bottom:44px">
+
+    <!-- Параметры -->
+    <div class="mix-params">
+
+      <div>
+        <div class="param-label" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:8px">Ежемесячная цель выручки</div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <input type="range" id="p-rev-target" min="10" max="1000" step="10" value="100"
+                 oninput="recalc()" style="flex:1">
+          <div id="d-rev-target" style="font-size:20px;font-weight:800;color:var(--gold);white-space:nowrap">100 <small style="font-size:12px;font-weight:400;color:var(--text3)">млн/мес</small></div>
+        </div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px">Суммарная цель продаж по всем каналам</div>
+      </div>
+
+      <div>
+        <div class="param-label" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:8px">Комиссия агентского канала</div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <input type="range" id="p-agent-comm" min="1" max="10" step="0.5" value="3"
+                 oninput="recalc()" style="flex:1">
+          <div id="d-agent-comm" style="font-size:20px;font-weight:800;color:var(--gold);white-space:nowrap">3 <small style="font-size:12px;font-weight:400;color:var(--text3)">%</small></div>
+        </div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px">База: 3% → 40% агентский. Каждый +1% даёт +15% доли агентского канала</div>
+      </div>
+
+    </div>
+
+    <!-- Шкала долей -->
+    <div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);margin-bottom:8px">Структура канала при комиссии <span id="d-comm-cur" style="color:var(--gold)">3%</span></div>
+      <div class="share-bar">
+        <div class="share-agent"  id="mix-agent-bar"  style="width:40%"></div>
+        <div class="share-direct" id="mix-direct-bar" style="width:60%"></div>
+      </div>
+      <div class="share-legend">
+        <span class="agent-dot">  Агентский: <b id="mix-agent-pct">40%</b></span>
+        <span class="direct-dot"> Прямой:    <b id="mix-direct-pct">60%</b></span>
+      </div>
+    </div>
+
+    <!-- Метрики -->
+    <div class="mix-cards" id="mix-cards" style="margin-top:20px"></div>
+
+    <!-- График -->
+    <div class="chart-title" style="margin-top:4px">Доля каналов и стоимость реализации по размеру комиссии</div>
+    <div class="chart-sub">Столбцы — объём по каналам. Линия — суммарная стоимость реализации (млн руб.). Жёлтая полоса — текущая комиссия</div>
+    <div class="chart-wrap" style="height:300px"><canvas id="c-mix"></canvas></div>
+
+    <!-- Таблица разреза -->
+    <div style="margin-top:24px;overflow-x:auto">
+      <table class="commission-table" id="mix-table"></table>
+    </div>
+
+  </div>
+
+  <!-- ───── ГРАФИК ВЫБОРКИ ПФД ───── -->
+  <div class="sec-head">
+    <div class="sec-icon">🏧</div>
+    <div>
+      <h2>График выборки ПФД</h2>
+      <p>Ежемесячное освоение кредитной линии под нужды строительства — профиль, суммы, остаток лимита</p>
+    </div>
+  </div>
+
+  <div class="chart-card" style="margin-bottom:44px">
+
+    <!-- Параметры выборки -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px">
+      <div>
+        <div class="param-label" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:8px">Срок строительства, мес.</div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <input type="range" id="p-build" min="6" max="60" step="1" value="24"
+                 oninput="recalc()" style="flex:1">
+          <div id="d-build" style="font-size:20px;font-weight:800;color:var(--gold);white-space:nowrap">24 <small style="font-size:12px;font-weight:400;color:var(--text3)">мес.</small></div>
+        </div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px">Период освоения кредитной линии под строительство</div>
+      </div>
+      <div>
+        <div class="param-label" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:8px">Профиль выборки</div>
+        <div class="profile-toggle">
+          <button class="profile-btn active" id="btn-linear" onclick="setProfile('linear')">&#9646;&#9646;&#9646; Равномерная</button>
+          <button class="profile-btn" id="btn-scurve" onclick="setProfile('scurve')">&#8767; S-кривая (строительство)</button>
+          <button class="profile-btn" id="btn-backend" onclick="setProfile('backend')">&#9650; Нарастающая</button>
+        </div>
+        <div style="font-size:11px;color:var(--text3)">С-кривая: медленно → активно → завершение &nbsp;|&nbsp; Нарастающая: разгон к сдаче</div>
+      </div>
+    </div>
+
+    <!-- График -->
+    <div class="chart-title">Выборка кредита ПФД по месяцам</div>
+    <div class="chart-sub">Столбцы — ежемесячная выборка. Линии — накопленное освоение и остаток лимита. Линия остатка должна стремиться к нулю к дате сдачи</div>
+    <div class="chart-wrap" style="height:320px"><canvas id="c-drawdown"></canvas></div>
+
+    <!-- Сводная строка -->
+    <div class="drawdown-summary" id="drawdown-summary"></div>
+
+  </div>
+
+  <!-- ───── ГРАФИКИ ───── -->
+  <div class="sec-head">
+    <div class="sec-icon">📈</div>
+    <div><h2>Визуализация</h2><p>Динамика расходов на ПФД, сравнение каналов и риск роста себестоимости</p></div>
+  </div>
+
+  <div class="charts-grid">
+
+    <div class="chart-card wide">
+      <div class="chart-title">Накопленные расходы на ПФД по сценариям</div>
+      <div class="chart-sub">Нарастающий итог процентных платежей банку. Ставка снижается с <span id="chart-base-rate-hint">—</span>% до <span id="chart-льгота-hint">—</span>% при заполнении эскроу на 70%</div>
+      <div class="chart-wrap"><canvas id="c-pfd"></canvas></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title">Эффективная ставка ПФД во времени</div>
+      <div class="chart-sub">Как темп продаж влияет на момент перехода к льготной ставке (эскроу ≥ 70%)</div>
+      <div class="chart-wrap"><canvas id="c-rate"></canvas></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title">Полная стоимость: канал + ПФД</div>
+      <div class="chart-sub">Суммарные затраты по каждому каналу с учётом темпа продаж</div>
+      <div class="chart-wrap"><canvas id="c-channels"></canvas></div>
+    </div>
+
+    <div class="chart-card wide">
+      <div class="chart-title">Риск роста себестоимости по сценариям</div>
+      <div class="chart-sub">Задержка реализации увеличивает себестоимость. Точки — момент полной реализации в каждом сценарии</div>
+      <div class="chart-wrap"><canvas id="c-cost"></canvas></div>
+    </div>
+
+  </div>
+
+  <!-- ───── ГЛАВНЫЙ ВЫВОД ───── -->
+  <div class="insight-card">
+    <div class="insight-tag">💡 Главный вывод модели</div>
+    <div class="insight-title">
+      Платим на <span class="acc" id="ins-extra-pct">X%</span> больше агентам —
+      экономим <span class="acc" id="ins-pfd-save">X млн</span> на процентах ПФД
+    </div>
+    <div class="insight-body">
+      Расширенный агентский канал ускоряет реализацию → быстрее заполняет эскроу → снижает ставку ПФД
+      с базовой до льготной → сокращает срок дорогого обслуживания. Экономия на банковских процентах
+      перекрывает дополнительную комиссию агентам. Плюс — снижение риска роста себестоимости.
+    </div>
+    <div class="insight-grid">
+      <div class="insight-metric">
+        <div class="im-label">Доп. расходы на агентов</div>
+        <div class="im-val pos" id="ins-extra-cost">—</div>
+        <div class="im-sub">Разница в % комиссии</div>
+      </div>
+      <div class="insight-metric">
+        <div class="im-label">Экономия на ПФД</div>
+        <div class="im-val neg" id="ins-pfd-eco">—</div>
+        <div class="im-sub">Быстрее → меньше процентов</div>
+      </div>
+      <div class="insight-metric">
+        <div class="im-label">Экономия на себестоимости</div>
+        <div class="im-val neg" id="ins-cost-eco">—</div>
+        <div class="im-sub">Меньше риска роста цен</div>
+      </div>
+      <div class="insight-metric win">
+        <div class="im-label">Чистый выигрыш</div>
+        <div class="im-val net" id="ins-net">—</div>
+        <div class="im-sub">Расширенный vs Прямой</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div class="footer-note">
+  Модель носит иллюстративный характер. Все параметры настраиваются под конкретный проект.<br>
+  Расчёт ПФД: базовая ставка применяется до достижения эскроу 70% тела кредита, далее — льготная.
+</div>
+
+<!-- ══════════════ SCRIPT ══════════════ -->
+<script>
+'use strict';
+
+// ── Helpers ──────────────────────────────────────────────
+function num(id)   { return +document.getElementById(id).value; }
+function el(id)    { return document.getElementById(id); }
+function set(id,v) { const e = el(id); if(e) e.innerHTML = v; }
+
+function fmt(n, suf='') {
+  const abs = Math.abs(n);
+  if (abs >= 1e9) return (n/1e9).toFixed(2) + ' млрд' + suf;
+  if (abs >= 1e6) return (n/1e6).toFixed(1) + ' млн' + suf;
+  if (abs >= 1e3) return (n/1e3).toFixed(0) + ' тыс.' + suf;
+  return n.toFixed(0) + suf;
+}
+function fmtRu(n) {
+  return new Intl.NumberFormat('ru-RU').format(Math.round(n));
+}
+function fmtPct(v, dec=1) { return v.toFixed(dec) + '%'; }
+
+const CHART_DEFAULTS = {
+  responsive: true,
+  maintainAspectRatio: false,
+  interaction: { mode: 'index', intersect: false },
+  plugins: {
+    legend: {
+      labels: {
+        color: '#5e6e85',
+        font: { family: 'Inter', size: 11 },
+        boxWidth: 12, padding: 16,
+      }
+    }
+  },
+  scales: {
+    x: {
+      ticks: { color: '#5e6e85', maxTicksLimit: 12, font: { size: 10 } },
+      grid:  { color: 'rgba(0,0,0,0.06)' }
+    },
+    y: {
+      ticks: { color: '#5e6e85', font: { size: 10 } },
+      grid:  { color: 'rgba(0,0,0,0.06)' }
+    }
+  }
+};
+
+let charts = {};
+
+// ── PFD Calculation ──────────────────────────────────────
+// In Russia's project financing:
+// – The loan body remains fixed until project completion
+// – The RATE changes based on escrow coverage:
+//     escrow < 70% of loan → base rate (key + margin)
+//     escrow ≥ 70% of loan → льготная ставка
+// – Escrow fills as buyers pay (proportional to sales)
+function calcPFD(p, months) {
+  const totalRev    = p.area * p.price;
+  const baseRate    = (p.keyRate + p.margin) / 100;
+  const льготаRate  = p.льгота / 100;
+  const maxMonths   = months + 8;
+
+  let cumRev       = 0;
+  let totalInterest = 0;
+  const monthly    = [];
+
+  for (let m = 1; m <= maxMonths; m++) {
+    if (m <= months) {
+      cumRev = Math.min(cumRev + totalRev / months, totalRev);
+    }
+
+    const escrowCoverage = cumRev / p.pfd;  // ratio: escrow / loan body
+    const effectiveRate  = escrowCoverage >= 0.7 ? льготаRate : baseRate;
+    const monthInterest  = p.pfd * effectiveRate / 12;
+
+    totalInterest += monthInterest;
+    monthly.push({
+      m, escrowCoverage,
+      effectiveRatePct: effectiveRate * 100,
+      monthInterest,
+      totalInterest,
+      cumRev,
+    });
+
+    if (cumRev >= totalRev && m > months) break;
+  }
+
+  return { monthly, totalInterest };
+}
+
+// ── Cost-growth risk ────────────────────────────────────
+// Месячная модель: годовая ставка 15% ÷ 12 = 1.25%/мес с ежемесячным начислением
+function costRisk(p, fasterMonths, slowerMonths) {
+  if (slowerMonths <= fasterMonths) return 0;
+  const delayMonths = slowerMonths - fasterMonths;   // задержка в месяцах
+  const monthlyRate = p.growth / 12;                 // 15%/12 = 1.25% в месяц
+  const base = p.area * p.cost;
+  return base * (Math.pow(1 + monthlyRate, delayMonths) - 1);
+}
+
+// ── Drawdown profile state ─────────────────────────────────
+let drawdownProfile = 'linear'; // 'linear' | 'scurve' | 'backend'
+
+function setProfile(p) {
+  drawdownProfile = p;
+  document.querySelectorAll('.profile-btn').forEach(b => b.classList.remove('active'));
+  el('btn-' + p).classList.add('active');
+  recalc();
+}
+
+// ── Drawdown weights per month ───────────────────────────────
+// Возвращает массив нормализованных весов (сумма = 1.0) для каждого месяца строительства
+function drawdownWeights(months, profile) {
+  const raw = [];
+  for (let m = 1; m <= months; m++) {
+    const t = m / months; // 0..1
+    let w;
+    if (profile === 'linear') {
+      w = 1;                                  // равномерный
+    } else if (profile === 'scurve') {
+      // S-крива: sigmoid k=10 центрированная на 0.5
+      const s  = 1 / (1 + Math.exp(-12 * (t - 0.5)));
+      const s0 = 1 / (1 + Math.exp(-12 * ((m-1)/months - 0.5)));
+      w = s - s0;
+    } else {
+      // backend: нарастающая (квадратичная) — больше к концу
+      w = t * t;
+    }
+    raw.push(Math.max(w, 0));
+  }
+  const sum = raw.reduce((a, b) => a + b, 0);
+  return raw.map(v => v / sum);   // нормализация: сумма = 1.0
+}
+
+// ── Calculate drawdown schedule ──────────────────────────────
+function calcDrawdown(pfd, buildMonths, profile) {
+  const weights = drawdownWeights(buildMonths, profile);
+  const monthly = weights.map((w, i) => ({
+    m: i + 1,
+    draw:  w * pfd,               // выборка за месяц (RUB)
+  }));
+  // накопленный остаток
+  let cum = 0;
+  monthly.forEach(m => {
+    cum += m.draw;
+    m.cumDrawn    = cum;           // уже освоено
+    m.remaining   = pfd - cum;     // остаток лимита
+  });
+  return monthly;
+}
+
+// ── Render drawdown chart ────────────────────────────────────
+function renderDrawdown(p) {
+  const buildMonths = Math.max(6, num('p-build'));
+  set('d-build', `${buildMonths} <small style="font-size:12px;font-weight:400;color:var(--text3)">мес.</small>`);
+
+  const schedule = calcDrawdown(p.pfd, buildMonths, drawdownProfile);
+  const labels   = schedule.map(m => `${m.m} м`);
+
+  const maxDraw  = Math.max(...schedule.map(m => m.draw));
+  const avgDraw  = p.pfd / buildMonths;
+  const peak     = schedule.findIndex(m => m.draw === maxDraw) + 1;
+  set('drawdown-summary', `
+    <div class="ds-item">
+      <div class="ds-label">Тело кредита (СМР)</div>
+      <div class="ds-val">${fmt(p.pfd)}</div>
+      <div class="ds-sub">руб. — полное освоение</div>
+    </div>
+    <div class="ds-item">
+      <div class="ds-label">Срок строительства</div>
+      <div class="ds-val">${buildMonths} мес.</div>
+      <div class="ds-sub">период выборки</div>
+    </div>
+    <div class="ds-item">
+      <div class="ds-label">Средняя выборка/мес.</div>
+      <div class="ds-val">${fmt(avgDraw)}</div>
+      <div class="ds-sub">руб. (равномерный базис)</div>
+    </div>
+    <div class="ds-item">
+      <div class="ds-label">Пик выборки</div>
+      <div class="ds-val">${fmt(maxDraw)}</div>
+      <div class="ds-sub">мес. ${peak} (${drawdownProfile === 'linear' ? 'равномерно' : drawdownProfile === 'scurve' ? 'центр С-кривой' : 'разгон к сдаче'})</div>
+    </div>
+  `);
+
+  if (charts.draw) charts.draw.destroy();
+  charts.draw = new Chart(el('c-drawdown'), {
+    data: {
+      labels,
+      datasets: [
+        {
+          type: 'bar',
+          label: 'Выборка за месяц (млн руб.)',
+          data: schedule.map(m => m.draw / 1e6),
+          backgroundColor: 'rgba(232,184,75,0.55)',
+          borderColor:     'rgba(232,184,75,0.9)',
+          borderWidth: 1.5,
+          borderRadius: 4,
+          yAxisID: 'yBar',
+          order: 2,
+        },
+        {
+          type: 'line',
+          label: 'Накопленно освоено',
+          data: schedule.map(m => m.cumDrawn / 1e6),
+          borderColor: '#3498db',
+          backgroundColor: 'rgba(52,152,219,0.08)',
+          fill: true, tension: 0.4,
+          borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 5,
+          yAxisID: 'yLine',
+          order: 1,
+        },
+        {
+          type: 'line',
+          label: 'Остаток лимита',
+          data: schedule.map(m => m.remaining / 1e6),
+          borderColor: '#e74c3c',
+          borderDash: [6, 4],
+          tension: 0.4,
+          borderWidth: 2, pointRadius: 0, pointHoverRadius: 5,
+          yAxisID: 'yLine',
+          order: 0,
+        },
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { labels: { color: '#8994ad', font: { family: 'Inter', size: 11 }, boxWidth: 12, padding: 14 } },
+        tooltip: {
+          callbacks: {
+            label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y?.toFixed(1)} млн руб.`
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { color: '#495670', maxTicksLimit: 14, font: { size: 10 } },
+          grid:  { color: 'rgba(255,255,255,0.04)' }
+        },
+        yBar: {
+          type: 'linear', position: 'left',
+          title: { display: true, text: 'Выборка/мес. (млн)', color: '#495670', font: { size: 10 } },
+          ticks: { color: '#495670', callback: v => v.toFixed(0) + ' м', font: { size: 10 } },
+          grid:  { color: 'rgba(255,255,255,0.04)' },
+        },
+        yLine: {
+          type: 'linear', position: 'right',
+          title: { display: true, text: 'Накопленно (млн)', color: '#495670', font: { size: 10 } },
+          ticks: { color: '#495670', callback: v => v.toFixed(0) + ' м', font: { size: 10 } },
+          grid:  { drawOnChartArea: false },
+        },
+      }
+    }
+  });
+}
+
+// ── Scenario calculations ──────────────────────
+
+function calcOptScenario(p, buildMonths) {
+  const halfBuild  = Math.max(1, Math.floor(buildMonths / 2));
+  const revFor70   = 0.7 * p.pfd;
+  const monthlyRev = revFor70 / halfBuild;
+  const monthlySqm = monthlyRev / p.price;
+  const totalMonths = Math.ceil(p.area / monthlySqm);
+  const { totalInterest } = calcPFD(p, totalMonths);
+  const rev = p.area * p.price;
+  const pfdPct = totalInterest / rev * 100;
+  return { monthlySqm, totalMonths, totalInterest, pfdPct };
+}
+
+function calcBaseScenario(p) {
+  const rev = p.area * p.price;
+  const targetInterest = rev * p.targetPFDpct / 100;
+  let lo = 1, hi = 240;
+  for (let i = 0; i < 80; i++) {
+    const mid = (lo + hi) / 2;
+    const { totalInterest: ti } = calcPFD(p, mid);
+    if (ti < targetInterest) { lo = mid; } else { hi = mid; }
+    if (hi - lo < 0.05) break;
+  }
+  const totalMonths = (lo + hi) / 2;
+  const monthlySqm  = p.area / totalMonths;
+  const { totalInterest } = calcPFD(p, totalMonths);
+  const pfdPct = totalInterest / rev * 100;
+  return { monthlySqm, totalMonths, totalInterest, pfdPct };
+}
+
+function calcPesScenario(p, buildMonths, postPace) {
+  const baseRate = (p.keyRate + p.margin) / 100;
+  const льготаRate = p.льгота / 100;
+  const totalRev = p.area * p.price;
+  const postRevPerMonth = postPace * p.price;
+
+  let totalInterest = 0;
+  const monthly = [];
+  for (let m = 1; m <= buildMonths; m++) {
+    const interest = p.pfd * baseRate / 12;
+    totalInterest += interest;
+    monthly.push({ m, phase: 'build', cumRev: 0, interest, totalInterest, ratePct: baseRate * 100 });
+  }
+  let cumRev = 0;
+  for (let m = buildMonths + 1; m <= buildMonths + 200; m++) {
+    cumRev = Math.min(cumRev + postRevPerMonth, totalRev);
+    const coverage = cumRev / p.pfd;
+    const rate = coverage >= 0.7 ? льготаRate : baseRate;
+    const interest = p.pfd * rate / 12;
+    totalInterest += interest;
+    monthly.push({ m, phase: 'sell', cumRev, interest, totalInterest, ratePct: rate * 100 });
+    if (cumRev >= totalRev) break;
+  }
+  const pfdPct = totalInterest / totalRev * 100;
+  return { monthly, totalInterest, pfdPct, buildMonths };
+}
+
+function renderScenarios(p) {
+  const buildMonths = Math.max(6, num('p-build'));
+  const rev         = p.area * p.price;
+
+  set('d-pace', `${fmtRu(p.currentPace)} <small>м²/мес.</small>`);
+  set('d-tpfd', `${p.targetPFDpct} <small>% от выручки</small>`);
+  set('sc-tpfd-label', p.targetPFDpct.toFixed(1));
+
+  const opt = calcOptScenario(p, buildMonths);
+  p.mOpt = Math.round(opt.totalMonths);
+  const optProfit = rev - p.area * p.cost - opt.totalInterest;
+  const optMargin = optProfit / rev * 100;
+  set('sc-opt-pace',     `${fmtRu(Math.round(opt.monthlySqm))} м²/мес.`);
+  set('sc-opt-pace-sub', `Срок: ${Math.round(opt.totalMonths)} мес. • ПФД: ${opt.pfdPct.toFixed(1)}% от выручки`);
+  set('sc-opt-metrics', `
+    <div class="metric-row"><span class="ml">Выручка</span><span class="mv">${fmt(rev)} руб.</span></div>
+    <div class="metric-row"><span class="ml">Стоимость ПФД</span><span class="mv col-green">${fmt(opt.totalInterest)} руб. (${opt.pfdPct.toFixed(1)}%)</span></div>
+    <div class="metric-row"><span class="ml">Ориентир маржи</span><span class="mv ${optMargin >= 15 ? 'col-green' : optMargin >= 8 ? 'col-gold' : 'col-red'}">${optMargin.toFixed(1)}%</span></div>
+    <div class="metric-row"><span class="ml">Переход на льготную к мес.</span><span class="mv col-green">${Math.ceil(buildMonths / 2)} мес.</span></div>
+  `);
+
+  const base = calcBaseScenario(p);
+  p.mCur = Math.round(base.totalMonths);
+  const baseProfit = rev - p.area * p.cost - base.totalInterest;
+  const baseMargin = baseProfit / rev * 100;
+  set('sc-base-pace',     `${fmtRu(Math.round(base.monthlySqm))} м²/мес.`);
+  set('sc-base-pace-sub', `Срок: ${Math.round(base.totalMonths)} мес. • ПФД: ${base.pfdPct.toFixed(2)}% от выручки`);
+  set('sc-cur-metrics', `
+    <div class="metric-row"><span class="ml">Целевой ПФД</span><span class="mv col-gold">${fmt(base.totalInterest)} руб. (${base.pfdPct.toFixed(2)}%)</span></div>
+    <div class="metric-row"><span class="ml">Ориентир маржи</span><span class="mv ${baseMargin >= 15 ? 'col-green' : baseMargin >= 8 ? 'col-gold' : 'col-red'}">${baseMargin.toFixed(1)}%</span></div>
+    <div class="metric-row"><span class="ml">Текущий темп vs требуемый</span>
+      <span class="mv ${p.currentPace >= base.monthlySqm ? 'col-green' : 'col-red'}">
+        ${p.currentPace >= base.monthlySqm ? '✅ выполняется' : '⚠️ недостатачно'}
+      </span>
+    </div>
+    <div class="metric-row"><span class="ml">Дефицит темпа (+ = надо больше)</span>
+      <span class="mv ${p.currentPace >= base.monthlySqm ? 'col-green' : 'col-red'}">
+        ${p.currentPace >= base.monthlySqm ? '−' : '+'}${fmtRu(Math.abs(Math.round(base.monthlySqm - p.currentPace)))} м²/мес.
+      </span>
+    </div>
+  `);
+
+  const pes = calcPesScenario(p, buildMonths, p.currentPace);
+  p.mPes = pes.monthly.length;
+  const pesCostInBuild  = p.pfd * (p.keyRate + p.margin) / 100 / 12 * buildMonths;
+  const pesProfit = rev - p.area * p.cost - pes.totalInterest;
+  const pesMargin = pesProfit / rev * 100;
+  set('sc-pes-cost',     `${fmt(pesCostInBuild)} руб.`);
+  set('sc-pes-cost-sub', `Только за ${buildMonths} мес. стройки • ПФД итого: ${pes.pfdPct.toFixed(1)}% выручки`);
+  set('sc-pes-metrics', `
+    <div class="metric-row"><span class="ml">Итого расход ПФД</span><span class="mv col-red">${fmt(pes.totalInterest)} руб. (${pes.pfdPct.toFixed(1)}%)</span></div>
+    <div class="metric-row"><span class="ml">Ориентир маржи</span><span class="mv ${pesMargin >= 8 ? 'col-gold' : 'col-red'}">${pesMargin.toFixed(1)}%</span></div>
+    <div class="metric-row"><span class="ml">Переплата vs Оптимистичный</span><span class="mv col-red">+${fmt(pes.totalInterest - opt.totalInterest)} руб.</span></div>
+    <div class="metric-row"><span class="ml">Продажи начинаются с</span><span class="mv">мес. ${buildMonths + 1}</span></div>
+  `);
+
+  const maxM = Math.max(opt.totalMonths, base.totalMonths, pes.monthly.length);
+  el('bar-opt').style.width = Math.round(100 - (opt.totalMonths / maxM) * 90) + '%';
+  el('bar-cur').style.width = Math.round(100 - (base.totalMonths / maxM) * 90) + '%';
+  el('bar-pes').style.width = '10%';
+
+  const maxPace = Math.max(opt.monthlySqm, base.monthlySqm, p.currentPace) * 1.2;
+  const paces = [
+    { label: 'Оптимистичный (ПФД → минимум)', val: opt.monthlySqm, color: '#27ae60' },
+    { label: `Базовый (ПФД = ${p.targetPFDpct}%)`, val: base.monthlySqm, color: '#e8b84b' },
+    { label: 'Текущий фактический темп', val: p.currentPace,  color: '#3498db' },
+  ];
+  set('pace-compare', `
+    <div class="pc-title">Сравнение темпов продаж (м²/мес.) — какая скорость нужна для каждой цели</div>
+    ${paces.map(r => `
+      <div class="pc-row">
+        <div class="pc-name" style="color:${r.color}">● ${r.label}</div>
+        <div class="pc-bar-wrap">
+          <div class="pc-bar" style="width:${Math.min(100, r.val/maxPace*100).toFixed(1)}%;background:${r.color}88"></div>
+        </div>
+        <div class="pc-num" style="color:${r.color}">${fmtRu(Math.round(r.val))} м²/мес.</div>
+      </div>
+    `).join('')}
+    <div style="font-size:11px;color:var(--text3);margin-top:10px">
+      Анализ: текущий темп ${fmtRu(p.currentPace)} м²/мес. ${p.currentPace >= opt.monthlySqm ? '✅ выше оптимального' : p.currentPace >= base.monthlySqm ? '⚡ выше базового' : '⚠️ ниже базового — ПФД обходится дороже целевого'}
+    </div>
+  `);
+
+  return { opt, base, pes };
+}
+
+// ── Channel Mix Model ──────────────────────────────────────────────
+// База: 3% комиссия → 40% агентский объём
+// Каждый +1% комиссии → +15% агентской доли
+function calcChannelShare(commPct) {
+  const agentShare  = Math.max(0, Math.min(100, 40 + (commPct - 3) * 15));
+  const directShare = 100 - agentShare;
+  return { agentShare, directShare };
+}
+
+function calcChannelMix(monthlyRevMln, commPct, directCostPct) {
+  const { agentShare, directShare } = calcChannelShare(commPct);
+  const rev       = monthlyRevMln;              // млн руб.
+
+  const agentRev  = rev * agentShare  / 100;   // объём агентского
+  const directRev = rev * directShare / 100;   // объём прямого
+
+  const agentCost  = agentRev  * commPct       / 100;
+  const directCost = directRev * directCostPct / 100;
+  const totalCost  = agentCost + directCost;
+  const costPct    = totalCost / rev * 100;
+
+  return { agentShare, directShare, agentRev, directRev, agentCost, directCost, totalCost, costPct };
+}
+
+function renderChannelMix(p) {
+  const monthlyRevMln = Math.max(1, num('p-rev-target'));
+  const commPct       = Math.max(1, num('p-agent-comm'));
+  const directCostPct = (p.marketing + p.salary) * 100;  // % от выручки
+
+  // Обновить дисплей
+  set('d-rev-target', `${monthlyRevMln} <small style="font-size:12px;font-weight:400;color:var(--text3)">млн/мес</small>`);
+  set('d-agent-comm', `${commPct} <small style="font-size:12px;font-weight:400;color:var(--text3)">%</small>`);
+  set('d-comm-cur',   `${commPct}%`);
+
+  const mix = calcChannelMix(monthlyRevMln, commPct, directCostPct);
+
+  // Шкала долей
+  el('mix-agent-bar').style.width  = mix.agentShare  + '%';
+  el('mix-direct-bar').style.width = mix.directShare + '%';
+  set('mix-agent-pct',  `${mix.agentShare.toFixed(0)}%`);
+  set('mix-direct-pct', `${mix.directShare.toFixed(0)}%`);
+
+  // Метрики
+  const pureDirectMix  = calcChannelMix(monthlyRevMln, commPct, directCostPct);
+  const pureDirectOnly = monthlyRevMln * directCostPct / 100;
+  const saving = pureDirectOnly - mix.totalCost;
+  const tc = mix.costPct < 8 ? 'col-green' : mix.costPct < 14 ? 'col-gold' : 'col-red';
+
+  set('mix-cards', `
+    <div class="mix-card">
+      <div class="mc-label">Агентский канал</div>
+      <div class="mc-val col-green">${mix.agentRev.toFixed(1)} млн</div>
+      <div class="mc-sub">${mix.agentShare.toFixed(0)}% объёма • комис. ${mix.agentCost.toFixed(2)} млн</div>
+    </div>
+    <div class="mix-card">
+      <div class="mc-label">Прямой канал</div>
+      <div class="mc-val" style="color:#3498db">${mix.directRev.toFixed(1)} млн</div>
+      <div class="mc-sub">${mix.directShare.toFixed(0)}% объёма • расход ${mix.directCost.toFixed(2)} млн</div>
+    </div>
+    <div class="mix-card">
+      <div class="mc-label">Итого стоимость/мес.</div>
+      <div class="mc-val ${tc}">${mix.totalCost.toFixed(2)} млн</div>
+      <div class="mc-sub">${mix.costPct.toFixed(1)}% от целевой выручки</div>
+    </div>
+    <div class="mix-card" style="border-color:${saving >= 0 ? 'rgba(39,174,96,.3)' : 'rgba(231,76,60,.3)'}">
+      <div class="mc-label">Выгода vs 100% прямой</div>
+      <div class="mc-val ${saving >= 0 ? 'col-green' : 'col-red'}">${saving >= 0 ? '−' : '+'}${Math.abs(saving).toFixed(2)} млн</div>
+      <div class="mc-sub">на каждые ${monthlyRevMln} млн выручки</div>
+    </div>
+  `);
+
+  // ─ График: от 1% до 10% комиссии ─
+  const commPoints = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8];
+  const labels = commPoints.map(c => `${c}%`);
+
+  const agentVolData  = commPoints.map(c => calcChannelMix(monthlyRevMln, c, directCostPct).agentRev);
+  const directVolData = commPoints.map(c => calcChannelMix(monthlyRevMln, c, directCostPct).directRev);
+  const costData      = commPoints.map(c => calcChannelMix(monthlyRevMln, c, directCostPct).totalCost);
+  const costPctData   = commPoints.map(c => calcChannelMix(monthlyRevMln, c, directCostPct).costPct);
+
+  // Маркер текущей комиссии
+  const curIdx = commPoints.findIndex(c => Math.abs(c - commPct) < 0.26);
+  const markerData = commPoints.map((c, i) => i === curIdx ? costData[i] : null);
+
+  if (charts.mix) charts.mix.destroy();
+  charts.mix = new Chart(el('c-mix'), {
+    data: {
+      labels,
+      datasets: [
+        {
+          type: 'bar',
+          label: 'Агентский объём (млн руб.)',
+          data: agentVolData,
+          backgroundColor: 'rgba(39,174,96,0.55)',
+          borderColor:     '#27ae60',
+          borderWidth: 1.5, borderRadius: 3,
+          stack: 'vol', yAxisID: 'yVol', order: 3,
+        },
+        {
+          type: 'bar',
+          label: 'Прямой объём (млн руб.)',
+          data: directVolData,
+          backgroundColor: 'rgba(52,152,219,0.45)',
+          borderColor:     '#3498db',
+          borderWidth: 1.5, borderRadius: 3,
+          stack: 'vol', yAxisID: 'yVol', order: 3,
+        },
+        {
+          type: 'line',
+          label: 'Стоимость реализации/мес. (млн руб.)',
+          data: costData,
+          borderColor: '#e8b84b',
+          backgroundColor: 'transparent',
+          tension: 0.4, borderWidth: 2.5,
+          pointRadius: 4, pointHoverRadius: 7,
+          pointBackgroundColor: '#e8b84b',
+          yAxisID: 'yCost', order: 1,
+        },
+        {
+          type: 'line',
+          label: 'Текущая комиссия',
+          data: markerData,
+          borderColor: 'rgba(232,184,75,0)',
+          pointRadius: 14, pointHoverRadius: 16,
+          pointBackgroundColor: 'rgba(232,184,75,0.25)',
+          pointBorderColor: '#e8b84b',
+          pointBorderWidth: 2,
+          showLine: false,
+          yAxisID: 'yCost', order: 0,
+        },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { labels: { color: '#5e6e85', font: { family: 'Inter', size: 11 }, boxWidth: 12, padding: 14 } },
+        tooltip: {
+          callbacks: {
+            label: ctx => {
+              const v = ctx.parsed.y;
+              if (v == null) return '';
+              if (ctx.datasetIndex <= 1) return `${ctx.dataset.label}: ${v?.toFixed(1)} млн`;
+              return `${ctx.dataset.label}: ${v?.toFixed(2)} млн`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { color: '#5e6e85', font: { size: 10 } },
+          grid:  { color: 'rgba(0,0,0,0.06)' },
+          stacked: true,
+          title: { display: true, text: 'Размер комиссии агентского канала', color: '#5e6e85', font: { size: 10 } },
+        },
+        yVol: {
+          type: 'linear', position: 'left', stacked: true,
+          title: { display: true, text: 'Объём по каналам (млн)', color: '#5e6e85', font: { size: 10 } },
+          ticks: { color: '#5e6e85', callback: v => v.toFixed(0) + ' м', font: { size: 10 } },
+          grid:  { color: 'rgba(0,0,0,0.06)' },
+        },
+        yCost: {
+          type: 'linear', position: 'right',
+          title: { display: true, text: 'Стоимость/мес. (млн)', color: '#5e6e85', font: { size: 10 } },
+          ticks: { color: '#5e6e85', callback: v => v.toFixed(1) + ' м', font: { size: 10 } },
+          grid:  { drawOnChartArea: false },
+        },
+      }
+    }
+  });
+
+  // ─ Таблица разреза ─
+  const tableComm = [1, 2, 3, 4, 5, 6, 7, 8];
+  const rows = tableComm.map(c => {
+    const m = calcChannelMix(monthlyRevMln, c, directCostPct);
+    const isActive = Math.abs(c - commPct) < 0.5;
+    return `<tr class="${isActive ? 'active-row' : ''}">
+      <td>${isActive ? '▶ ' : ''}<b>${c}%</b></td>
+      <td style="color:#27ae60">${m.agentShare.toFixed(0)}% (${m.agentRev.toFixed(1)} млн)</td>
+      <td style="color:#3498db">${m.directShare.toFixed(0)}% (${m.directRev.toFixed(1)} млн)</td>
+      <td style="color:#e8b84b">${m.agentCost.toFixed(2)} млн</td>
+      <td>${m.directCost.toFixed(2)} млн</td>
+      <td class="${m.costPct < 8 ? 'col-green' : m.costPct < 14 ? 'col-gold' : 'col-red'}"><b>${m.totalCost.toFixed(2)} млн (${m.costPct.toFixed(1)}%)</b></td>
+    </tr>`;
+  }).join('');
+
+  set('mix-table', `
+    <thead><tr>
+      <th>Комиссия</th>
+      <th>Агентский канал</th>
+      <th>Прямой канал</th>
+      <th>Комис. агентам</th>
+      <th>Расход ОП+маркетинг</th>
+      <th>Итого/мес.</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  `);
+}
+
+// ── Get all params ────────────────────────────────────────
+function getP() {
+  const area = num('p-area');
+  const cost = num('p-cost');
+  const smr  = area * cost;
+  const pfd  = smr;
+
+  return {
+    area,
+    price:   num('p-price'),
+    cost,
+    smr,
+    pfd,
+    keyRate: num('p-key'),
+    margin:  num('p-margin'),
+    льгота:  num('p-льгота'),
+    growth:  num('p-growth') / 100,
+    currentPace: Math.max(10, num('p-pace')),
+    targetPFDpct: num('p-tpfd'),
+    mOpt: 18,
+    mCur: 36,
+    mPes: 60,
+    marketing:  num('ch-marketing')   / 100,
+    salary:     num('ch-salary')      / 100,
+    agentBase:  num('ch-agent-base')  / 100,
+    agentExt:   num('ch-agent-ext')   / 100,
+    nonmat:     num('ch-nonmat')      / 100,
+  };
+}
+
+// ── Render slider displays ────────────────────────────────
+function renderSliders(p) {
+  set('d-area',    `${fmtRu(p.area)} <small>м²</small>`);
+  set('d-price',   `${fmtRu(p.price)} <small>руб./м²</small>`);
+  set('d-cost',    `${fmtRu(p.cost)} <small>руб./м²</small>`);
+  set('d-smr',     `${fmt(p.smr)} <small>руб.</small>`);
+  set('d-pfd',     `${fmt(p.pfd)} <small>руб.</small>`);
+  set('d-key',     `${p.keyRate} <small>%</small>`);
+  set('d-margin',  `${p.margin} <small>%</small>`);
+  set('d-льгота',  `${p.льгота} <small>%</small>`);
+  set('d-growth',  `${Math.round(p.growth*100)} <small>%/год</small>`);
+
+  set('d-marketing',  fmtPct(p.marketing*100));
+  set('d-salary',     fmtPct(p.salary*100));
+  set('d-agent-base', fmtPct(p.agentBase*100));
+  set('d-agent-ext',  fmtPct(p.agentExt*100));
+  set('d-nonmat',     fmtPct(p.nonmat*100));
+
+  set('chart-base-rate-hint', (p.keyRate + p.margin).toFixed(1));
+  set('chart-льгота-hint',    p.льгота.toFixed(1));
+}
+
+// ── Render channel costs ──────────────────────────────────
+function renderChannel(targetId, p, months, channelPct) {
+  const rev = p.area * p.price;
+  const channelCost = rev * channelPct;
+  const { totalInterest } = calcPFD(p, months);
+  const total = channelCost + totalInterest;
+  const totalPct = total / rev * 100;
+  const tc = totalPct < 22 ? 'col-green' : totalPct < 32 ? 'col-gold' : 'col-red';
+
+  set(targetId, `
+    <div class="cost-row"><span class="cl">Маркетинг / Комиссия</span><span>${fmt(channelCost)} руб. (${fmtPct(channelPct*100)})</span></div>
+    <div class="cost-row"><span class="cl">Расходы на ПФД за ${months} мес.</span><span>${fmt(totalInterest)} руб. (${fmtPct(totalInterest/rev*100)})</span></div>
+    <div class="cost-row"><span class="cl">Суммарно от выручки</span><span class="${tc}">${fmtPct(totalPct)}</span></div>
+    <div class="cost-total">
+      <span>Итого расходов</span>
+      <span class="${tc}">${fmt(total)} руб.</span>
+    </div>
+  `);
+}
+
+function costRisk(p, fasterMonths, slowerMonths) {
+  if (slowerMonths <= fasterMonths) return 0;
+  const delayYears = (slowerMonths - fasterMonths) / 12;
+  const base = p.area * p.cost;
+  return base * (Math.pow(1 + p.growth, delayYears) - 1);
+}
+
+function renderInsight(p) {
+  const rev = p.area * p.price;
+  const directPct = p.marketing + p.salary;
+  const extPct    = p.agentExt + p.nonmat;
+
+  const directCost = rev * directPct;
+  const { totalInterest: directPFD } = calcPFD(p, p.mCur);
+  const directTotal = directCost + directPFD;
+
+  const extCost = rev * extPct;
+  const { totalInterest: extPFD } = calcPFD(p, p.mOpt);
+  const extTotal = extCost + extPFD;
+
+  const extraAgent  = extCost - directCost;
+  const pfdEco      = directPFD - extPFD;
+  const costEco     = costRisk(p, p.mOpt, p.mCur);
+  const netGain     = pfdEco + costEco - extraAgent;
+
+  const extraPct = (extPct - directPct) * 100;
+
+  set('ins-extra-pct',  `${extraPct >= 0 ? '+' : ''}${extraPct.toFixed(1)}%`);
+  set('ins-pfd-save',   `${fmt(pfdEco)} руб.`);
+
+  set('ins-extra-cost', `${extraAgent >= 0 ? '+' : ''}${fmt(extraAgent)} руб.`);
+  set('ins-pfd-eco',    `−${fmt(Math.max(0,pfdEco))} руб.`);
+  set('ins-cost-eco',   `−${fmt(costEco)} руб.`);
+
+  const netEl = el('ins-net');
+  if (netEl) {
+    netEl.textContent = `${netGain >= 0 ? '+' : ''}${fmt(netGain)} руб.`;
+    netEl.className = 'im-val ' + (netGain >= 0 ? 'net' : 'pos');
+  }
+}
+
+// ── Charts ────────────────────────────────────────────────
+function buildLabels(maxMonths) {
+  return Array.from({length: maxMonths}, (_, i) => `${i+1} м`);
+}
+
+function pfdSeries(p, months, maxLen) {
+  const { monthly } = calcPFD(p, months);
+  return Array.from({length: maxLen}, (_, i) => {
+    const m = monthly[i];
+    if (m) return m.totalInterest / 1e6;
+    return (monthly[monthly.length-1]?.totalInterest || 0) / 1e6;
+  });
+}
+
+function rateSeries(p, months, maxLen) {
+  const { monthly } = calcPFD(p, months);
+  return Array.from({length: maxLen}, (_, i) => {
+    const m = monthly[i];
+    return m ? m.effectiveRatePct : null;
+  });
+}
+
+function updateCharts(p) {
+  const maxM  = Math.max(p.mOpt, p.mCur, p.mPes) + 6;
+  const labels = buildLabels(maxM);
+
+  const ds1 = [
+    { label: 'Оптимистичный (ПФД→минимум)', months: p.mOpt, color: '#27ae60', fill: 'rgba(39,174,96,0.12)' },
+    { label: `Базовый (ПФД=${p.targetPFDpct}%)`,       months: p.mCur, color: '#e8b84b', fill: 'rgba(232,184,75,0.12)' },
+    { label: 'Пессимистичный (0 продаж в стройке)', months: p.mPes, color: '#e74c3c', fill: 'rgba(231,76,60,0.12)' },
+  ].map(s => ({
+    label: s.label,
+    data: pfdSeries(p, s.months, maxM),
+    borderColor: s.color,
+    backgroundColor: s.fill,
+    fill: true, tension: 0.45, borderWidth: 2.5,
+    pointRadius: 0, pointHoverRadius: 5,
+  }));
+
+  if (charts.pfd) charts.pfd.destroy();
+  charts.pfd = new Chart(el('c-pfd'), {
+    type: 'line',
+    data: { labels, datasets: ds1 },
+    options: {
+      ...CHART_DEFAULTS,
+      scales: {
+        x: { ...CHART_DEFAULTS.scales.x },
+        y: { ...CHART_DEFAULTS.scales.y, ticks: { ...CHART_DEFAULTS.scales.y.ticks, callback: v => v + ' млн' } }
+      },
+      plugins: {
+        ...CHART_DEFAULTS.plugins,
+        tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)} млн руб.` } }
+      }
+    }
+  });
+
+  // ── Chart 2: Effective rate ──
+  const ds2 = [
+    { label: 'Оптимистичный',  months: p.mOpt, color: '#27ae60' },
+    { label: 'Текущий',        months: p.mCur, color: '#e8b84b' },
+    { label: 'Пессимистичный', months: p.mPes, color: '#e74c3c' },
+  ].map(s => ({
+    label: s.label,
+    data: rateSeries(p, s.months, maxM),
+    borderColor: s.color,
+    tension: 0, stepped: true,
+    borderWidth: 2, pointRadius: 2, pointHoverRadius: 5,
+  }));
+
+  if (charts.rate) charts.rate.destroy();
+  charts.rate = new Chart(el('c-rate'), {
+    type: 'line',
+    data: { labels, datasets: ds2 },
+    options: {
+      ...CHART_DEFAULTS,
+      scales: {
+        x: { ...CHART_DEFAULTS.scales.x },
+        y: {
+          ...CHART_DEFAULTS.scales.y,
+          ticks: { ...CHART_DEFAULTS.scales.y.ticks, callback: v => v + '%' },
+          suggestedMin: 0,
+        }
+      },
+      plugins: {
+        ...CHART_DEFAULTS.plugins,
+        tooltip: { callbacks: { label: ctx => ctx.parsed.y != null ? `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}%` : '' } }
+      }
+    }
+  });
+
+  // ── Chart 3: Channel comparison (stacked bar) ──
+  const rev  = p.area * p.price;
+  const channels = [
+    { label: 'Прямой канал',          pct: p.marketing + p.salary, months: p.mCur, color: '#3498db' },
+    { label: 'Агентский базовый',     pct: p.agentBase,             months: p.mCur, color: '#e8b84b' },
+    { label: 'Агентский расширенный', pct: p.agentExt + p.nonmat,   months: p.mOpt, color: '#27ae60' },
+  ].map(c => {
+    const { totalInterest } = calcPFD(p, c.months);
+    return { ...c, channelCostM: rev * c.pct / 1e6, pfdM: totalInterest / 1e6 };
+  });
+
+  if (charts.ch) charts.ch.destroy();
+  charts.ch = new Chart(el('c-channels'), {
+    type: 'bar',
+    data: {
+      labels: channels.map(c => c.label),
+      datasets: [
+        {
+          label: 'Маркетинг / Комиссия',
+          data: channels.map(c => c.channelCostM),
+          backgroundColor: channels.map(c => c.color + 'bb'),
+          borderColor:     channels.map(c => c.color),
+          borderWidth: 2, borderRadius: 6,
+        },
+        {
+          label: 'Расходы ПФД',
+          data: channels.map(c => c.pfdM),
+          backgroundColor: channels.map(() => 'rgba(130,140,175,0.25)'),
+          borderColor:     channels.map(() => 'rgba(130,140,175,0.55)'),
+          borderWidth: 2, borderRadius: 6,
+        }
+      ]
+    },
+    options: {
+      ...CHART_DEFAULTS,
+      scales: {
+        x: { ...CHART_DEFAULTS.scales.x, stacked: false },
+        y: { ...CHART_DEFAULTS.scales.y, stacked: false, ticks: { ...CHART_DEFAULTS.scales.y.ticks, callback: v => v + ' млн' } }
+      },
+      plugins: {
+        ...CHART_DEFAULTS.plugins,
+        tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)} млн руб.` } }
+      }
+    }
+  });
+
+  // ── Chart 4: Cost growth ──
+  const months48 = Array.from({length: 60}, (_, i) => i + 1);
+  const baseCostTotal = p.area * p.cost;
+  const monthlyGrowthRate = p.growth / 12;   // 15%/год ÷ 12 = 1.25%/мес
+  const grownData   = months48.map(m => baseCostTotal * Math.pow(1 + monthlyGrowthRate, m) / 1e6);
+  const baseFlat    = months48.map(() => baseCostTotal / 1e6);
+
+  const pointOpt = months48.map((m, i) => m === Math.min(p.mOpt, 60) ? grownData[i] : null);
+  const pointCur = months48.map((m, i) => m === Math.min(p.mCur, 60) ? grownData[i] : null);
+  const pointPes = months48.map((m, i) => m === Math.min(p.mPes, 60) ? grownData[i] : null);
+
+  if (charts.cost) charts.cost.destroy();
+  charts.cost = new Chart(el('c-cost'), {
+    type: 'line',
+    data: {
+      labels: months48.map(m => `${m} м`),
+      datasets: [
+        {
+          label: `Себестоимость: ${Math.round(p.growth*100)}%/год ÷ 12 = ${(p.growth/12*100).toFixed(2)}%/мес`,
+          data: grownData,
+          borderColor: '#e74c3c', backgroundColor: 'rgba(231,76,60,0.08)',
+          fill: true, tension: 0.4, borderWidth: 2.5, pointRadius: 0,
+        },
+        {
+          label: 'Базовая себестоимость',
+          data: baseFlat,
+          borderColor: '#495670', borderDash: [6, 4],
+          tension: 0, borderWidth: 1.5, pointRadius: 0,
+        },
+        {
+          label: 'Оптимистичный сценарий',
+          data: pointOpt,
+          borderColor: '#27ae60', pointRadius: 9, pointHoverRadius: 12,
+          pointBackgroundColor: '#27ae60', showLine: false,
+        },
+        {
+          label: 'Текущий сценарий',
+          data: pointCur,
+          borderColor: '#e8b84b', pointRadius: 9, pointHoverRadius: 12,
+          pointBackgroundColor: '#e8b84b', showLine: false,
+        },
+        {
+          label: 'Пессимистичный сценарий',
+          data: pointPes,
+          borderColor: '#e74c3c', pointRadius: 9, pointHoverRadius: 12,
+          pointBackgroundColor: '#e74c3c', showLine: false,
+        },
+      ]
+    },
+    options: {
+      ...CHART_DEFAULTS,
+      scales: {
+        x: { ...CHART_DEFAULTS.scales.x, ticks: { ...CHART_DEFAULTS.scales.x.ticks, maxTicksLimit: 15 } },
+        y: { ...CHART_DEFAULTS.scales.y, ticks: { ...CHART_DEFAULTS.scales.y.ticks, callback: v => v.toFixed(0) + ' млн' } }
+      },
+      plugins: {
+        ...CHART_DEFAULTS.plugins,
+        tooltip: { callbacks: { label: ctx => ctx.parsed.y != null ? `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)} млн руб.` : '' } }
+      }
+    }
+  });
+}
+
+// ── Master recalc ─────────────────────────────────────────
+function recalc() {
+  const p = getP();
+
+  renderDrawdown(p);
+
+  renderSliders(p);
+
+  // Сценарии: обратная задача — считаем темп, обновляем p.mOpt/mCur/mPes
+  renderScenarios(p);
+
+  // Каналы используют обновлённые mOpt/mCur
+  renderChannel('ch-direct-costs', p, p.mCur, p.marketing + p.salary);
+  renderChannel('ch-base-costs',   p, p.mCur, p.agentBase);
+  renderChannel('ch-ext-costs',    p, p.mOpt, p.agentExt + p.nonmat);
+
+  // Канал продаж (микс)
+  renderChannelMix(p);
+
+  updateCharts(p);
+  renderInsight(p);
+}
+
+// ── Init ──────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', recalc);
+</script>
+
+</body>
+</html>
