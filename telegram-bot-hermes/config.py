@@ -24,6 +24,10 @@ TELEGRAM_LOG_FILE = os.environ.get("TELEGRAM_LOG_FILE", "Inbox/Telegram_Archive.
 GOOGLE_CALENDAR_WEBHOOK_URL = os.environ.get("GOOGLE_CALENDAR_WEBHOOK_URL", "")
 CALENDAR_TIMEZONE = os.environ.get("CALENDAR_TIMEZONE", "Asia/Yekaterinburg")
 
+# Local Path to Obsidian Vault
+OBSIDIAN_VAULT_PATH = os.environ.get("OBSIDIAN_VAULT_PATH", "/Users/anton_tsoy/Desktop/Обсидиан").rstrip("/")
+
+
 def is_admin(user_id: int) -> bool:
     """Проверка, является ли пользователь администратором бота"""
     return user_id in ADMIN_IDS

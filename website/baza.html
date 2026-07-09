@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Антон Цой | База обучения</title>
+    <meta name="description" content="База для новичков в недвижимости. Пойми за неделю, твоя ли это профессия. Школа «Недвижимость для людей».">
+    
+    <!-- OG-теги для красивого превью -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Антон Цой — Блок «База» для новичков">
+    <meta property="og:description" content="Честный тест-драйв профессии. Пойми за неделю на реальных данных рынка, подходит ли тебе недвижимость.">
+    <meta property="og:image" content="img/anton-portrait.png">
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" href="style.css?v=1.0.2">
+    
+    <style>
+        .baza-hero {
+            padding: 80px 0 20px 0;
+            text-align: left;
+        }
+        
+        .baza-title {
+            font-size: 2.2rem;
+            line-height: 1.1;
+            margin-bottom: 12px;
+        }
+        
+        .baza-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: hsla(180, 100%, 45%, 0.1);
+            color: var(--primary);
+            border: 1px solid hsla(180, 100%, 45%, 0.2);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+        
+        .baza-intro {
+            font-size: 1rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .step-card-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .step-card {
+            border-left: 2px solid var(--border-color);
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .step-card.active {
+            border-left-color: var(--primary);
+        }
+
+        .step-number {
+            position: absolute;
+            left: -12px;
+            top: 0;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--bg-main);
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .step-card.active .step-number {
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .step-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .step-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .price-tag {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin: 16px 0;
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+        }
+
+        .price-tag span {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .back-btn-top {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition-fast);
+            margin-top: 10px;
+        }
+
+        .back-btn-top:active {
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Canvas for Matrix Rain -->
+    <canvas id="matrix-canvas"></canvas>
+
+    <!-- Header (Apple style) -->
+    <header class="header">
+        <div class="container header-container">
+            <a href="index.html" class="logo" style="text-decoration: none;">
+                <span class="logo-accent">АНТОН</span>ЦОЙ
+            </a>
+            <div class="header-right">
+                <a href="index.html" class="back-btn-top">
+                    <i class="fa-solid fa-arrow-left"></i> Назад
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <!-- Hero Section -->
+        <section class="container baza-hero">
+            <div class="baza-badge">
+                <i class="fa-solid fa-graduation-cap"></i> Блок «База»
+            </div>
+            <h1 class="baza-title">
+                Неделя, чтобы понять:<br>
+                <span class="text-gradient">твоё ли это</span>
+            </h1>
+            <p class="baza-intro">
+                Честный тест-драйв профессии брокера новостроек. В основе — только реальная аналитика рынка, статистика и математика, без иллюзий и «воды».
+            </p>
+        </section>
+
+        <!-- Main Info -->
+        <section class="container section">
+            <div class="glass-card m-bottom-lg">
+                <h2 class="m-bottom-md" style="font-size: 1.4rem;"><i class="fa-solid fa-circle-question text-gradient"></i> Зачем нужна «База»?</h2>
+                <p class="m-bottom-sm" style="font-size: 0.95rem; line-height: 1.6;">
+                    Недвижимость — это не про легкие деньги, а про системную аналитику и умение проектировать решения. Она подходит далеко не всем.
+                </p>
+                <p style="font-size: 0.95rem; line-height: 1.6; color: var(--text-muted);">
+                    Этот блок — ваш способ <strong>попробовать профессию в деле без риска слить большие деньги</strong> на дорогое обучение. Пройдя её, вы получите честный ответ: ваше это или нет. Если нет — вы сэкономите месяцы жизни. Если да — поймете, как системно развиваться дальше.
+                </p>
+            </div>
+
+            <!-- Workflow Section -->
+            <div class="section-header">
+                <h2 class="section-title">Весь цикл сделки</h2>
+                <p class="section-subtitle">Как именно вы будете работать с клиентом: от первого контакта до комиссии</p>
+            </div>
+
+            <div class="step-card-list">
+                <div class="step-card active">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Первый контакт в мессенджере</h3>
+                    <p class="step-desc">
+                        Что отвечать, когда просят «скинуть планировки в WhatsApp». Уход от роли справочного бюро и квалификация клиента на первой минуте.
+                    </p>
+                </div>
+
+                <div class="step-card active">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">JTBD-Брифинг и выявление потребностей</h3>
+                    <p class="step-desc">
+                        Разбор реальных сценариев покупателей. Зачем клиент берет квартиру: для жизни, инвестиции или сохранения капитала. Оценка бюджета и лимитов.
+                    </p>
+                </div>
+
+                <div class="step-card active">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Оцифрованный подбор</h3>
+                    <p class="step-desc">
+                        Как за секунды сузить базу из 100 квартир до шорт-листа из 3 идеальных вариантов. Правила аргументации отсева лишнего.
+                    </p>
+                </div>
+
+                <div class="step-card active">
+                    <div class="step-number">4</div>
+                    <h3 class="step-title">Тест-драйв и ведение сделки</h3>
+                    <p class="step-desc">
+                        Правила фиксации уникальности в CRM застройщика (защита вашей комиссии). Ведение показа на объекте и доведение до брони без давления.
+                    </p>
+                </div>
+
+                <div class="step-card active">
+                    <div class="step-number">5</div>
+                    <h3 class="step-title">Получение агентского вознаграждения</h3>
+                    <p class="step-desc">
+                        18 технологических вех сделки: от одобрения ипотеки и подписания ДДУ до раскрытия эскроу-счетов и выплаты комиссии.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Pricing & Guarantee -->
+            <div class="glass-card m-bottom-lg" style="border-color: hsla(180, 100%, 45%, 0.3);">
+                <h2 style="font-size: 1.3rem; margin-bottom: 8px;">Минимальный шаг для старта</h2>
+                <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">
+                    Этот блок платный, но имеет символическую стоимость. Это фильтр вашей осознанности — я работаю только с теми, кто готов инвестировать в свои действия. Также это отличная возможность попробовать коммуникацию со мной лично.
+                </p>
+                
+                <div class="price-tag">
+                    5 000 ₽ <span>/ единоразово</span>
+                </div>
+
+                <div class="principle-card" style="background: hsla(145, 100%, 42%, 0.05); border: 1px solid hsla(145, 100%, 42%, 0.2); border-radius: var(--border-radius-md); padding: 16px; margin: 16px 0;">
+                    <p style="font-size: 0.85rem; color: var(--accent); line-height: 1.5; font-weight: 500;">
+                        <i class="fa-solid fa-shield-halved"></i> 100% Гарантия возврата/переноса: если вы решите продолжить обучение на полном курсе «Брокер по новостройкам», вся стоимость «Базы» будет зачтена в счет оплаты полного курса.
+                    </p>
+                </div>
+
+                <a href="https://t.me/anton_tsoy?text=Привет!%20Хочу%20пройти%20Базу" target="_blank" class="btn btn-primary btn-full">
+                    Начать с «Базы» <i class="fa-solid fa-chevron-right btn-arrow"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container footer-container">
+                <p>&copy; 2026 Антон Цой. Недвижимость для людей.</p>
+                <div class="footer-links">
+                    <a href="index.html">Визитка</a>
+                    <a href="main.html">Основной сайт</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js?v=1.0.2"></script>
+</body>
+</html>

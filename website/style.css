@@ -1140,8 +1140,8 @@ h1, h2, h3, h4, .logo, .stat-num {
 
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
     width: 100%;
 }
 

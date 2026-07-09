@@ -111,6 +111,28 @@
             border-color: var(--primary);
         }
         
+        .linktree-btn-content {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+            text-align: left;
+        }
+        
+        .linktree-btn-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+        }
+        
+        .linktree-btn-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+        
         .linktree-btn i {
             font-size: 1.2rem;
             color: var(--primary);
@@ -201,19 +223,40 @@
 
             <!-- Links list -->
             <div class="links-grid">
-                <!-- 1. Основной сайт -->
-                <a href="http://31.29.151.54/main.html" class="linktree-btn featured">
-                    <span><i class="fa-solid fa-globe m-right-sm"></i> Перейти на основной сайт</span>
+                <!-- 1. База -->
+                <a href="baza.html" class="linktree-btn featured">
+                    <div class="linktree-btn-content">
+                        <span class="linktree-btn-title"><i class="fa-solid fa-graduation-cap m-right-sm"></i> База</span>
+                        <span class="linktree-btn-subtitle">Если ты новичок, начни с этого</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+
+                <!-- 2. Повышение квалификации -->
+                <a href="experienced.html" class="linktree-btn featured" style="background: linear-gradient(135deg, hsla(270, 95%, 60%, 0.15), hsla(180, 100%, 45%, 0.15)); border-color: hsla(270, 95%, 60%, 0.4); box-shadow: 0 4px 20px hsla(270, 95%, 60%, 0.1);">
+                    <div class="linktree-btn-content">
+                        <span class="linktree-btn-title"><i class="fa-solid fa-rocket m-right-sm" style="color: var(--secondary);"></i> Повышение квалификации</span>
+                        <span class="linktree-btn-subtitle">Для опытных агентов новостроек</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right" style="color: var(--secondary);"></i>
+                </a>
+
+                <!-- 3. Основной сайт -->
+                <a href="main.html" class="linktree-btn">
+                    <div class="linktree-btn-content">
+                        <span class="linktree-btn-title"><i class="fa-solid fa-globe m-right-sm" style="color: var(--primary);"></i> Перейти на основной сайт</span>
+                        <span class="linktree-btn-subtitle">Калькулятор воронки, кейсы, тест</span>
+                    </div>
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
                 
-                <!-- 2. Телеграм-канал -->
+                <!-- 4. Телеграм-канал -->
                 <a href="https://t.me/tsoygovorit" target="_blank" class="linktree-btn">
                     <span><i class="fa-brands fa-telegram m-right-sm"></i> Telegram-канал</span>
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
 
-                <!-- 3. Телеграм-бот -->
+                <!-- 5. Телеграм-бот -->
                 <a href="https://t.me/Tsoyanton_bot" target="_blank" class="linktree-btn">
                     <span><i class="fa-solid fa-robot m-right-sm"></i> Telegram-бот помощник</span>
                     <i class="fa-solid fa-chevron-right"></i>

@@ -431,7 +431,45 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Программы обучения</h2>
-                <p class="section-subtitle">Нажмите на интересующее вас направление, чтобы раскрыть подробности программы</p>
+                <p class="section-subtitle">Выберите подходящую ступень обучения или изучите полную программу ниже</p>
+            </div>
+
+            <!-- Programs Selector Grid -->
+            <div class="programs-selector" style="display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 40px;">
+                <!-- 1. База -->
+                <div class="glass-card reveal" style="border-color: hsla(180, 100%, 45%, 0.2); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; padding: 24px;">
+                    <div style="position: absolute; top: 0; right: 0; padding: 6px 12px; background: hsla(180, 100%, 45%, 0.15); border-bottom-left-radius: 12px; font-size: 0.65rem; text-transform: uppercase; font-weight: 700; color: var(--primary); letter-spacing: 0.5px;">Для новичков</div>
+                    <div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; color: var(--text-primary);"><i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i> Блок «База»</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin: 0;">Честный тест-драйв профессии за 1 неделю. Узнай, твоё ли это в принципе, и разбери основы работы на рынке новостроек.</p>
+                    </div>
+                    <a href="baza.html" class="btn btn-secondary btn-sm btn-full" style="border-color: hsla(180, 100%, 45%, 0.3); color: var(--text-primary); text-decoration: none;">Изучить Базу <i class="fa-solid fa-chevron-right m-left-xs"></i></a>
+                </div>
+
+                <!-- 2. Повышение квалификации -->
+                <div class="glass-card reveal" style="border-color: hsla(270, 95%, 60%, 0.2); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; padding: 24px;">
+                    <div style="position: absolute; top: 0; right: 0; padding: 6px 12px; background: hsla(270, 95%, 60%, 0.15); border-bottom-left-radius: 12px; font-size: 0.65rem; text-transform: uppercase; font-weight: 700; color: var(--secondary); letter-spacing: 0.5px;">Для опытных</div>
+                    <div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; color: var(--text-primary);"><i class="fa-solid fa-rocket" style="color: var(--secondary);"></i> Опытный брокер</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin: 0;">Специализированная программа повышения квалификации из 7 блоков. Как продавать в новых реалиях после 2025 года.</p>
+                    </div>
+                    <a href="experienced.html" class="btn btn-secondary btn-sm btn-full" style="border-color: hsla(270, 95%, 60%, 0.3); color: var(--text-primary); text-decoration: none;">Смотреть программу <i class="fa-solid fa-chevron-right m-left-xs"></i></a>
+                </div>
+
+                <!-- 3. Для команд -->
+                <div class="glass-card reveal" style="border-color: hsla(145, 100%, 42%, 0.2); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; padding: 24px;">
+                    <div style="position: absolute; top: 0; right: 0; padding: 6px 12px; background: hsla(145, 100%, 42%, 0.15); border-bottom-left-radius: 12px; font-size: 0.65rem; text-transform: uppercase; font-weight: 700; color: var(--accent); letter-spacing: 0.5px;">Для компаний</div>
+                    <div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; color: var(--text-primary);"><i class="fa-solid fa-users" style="color: var(--accent);"></i> Обучение команд</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin: 0;">Интенсивы и академии для агентских сетей застройщиков и агрегаторов. Внедрение стандартов и рост конверсии.</p>
+                    </div>
+                    <a href="#contact" class="btn btn-secondary btn-sm btn-full" style="border-color: hsla(145, 100%, 42%, 0.3); color: var(--text-primary); text-decoration: none;">Запросить КП <i class="fa-solid fa-chevron-right m-left-xs"></i></a>
+                </div>
+            </div>
+
+            <div class="section-header" style="margin-bottom: 20px;">
+                <h3 style="font-size: 1.4rem; font-weight: 700; color: var(--text-primary);">Полная программа: Брокер по новостройкам</h3>
+                <p class="section-subtitle">Подробная программа из 7 учебных блоков (45 000 ₽ / 7 недель)</p>
             </div>
 
             <div class="services-accordion-list">

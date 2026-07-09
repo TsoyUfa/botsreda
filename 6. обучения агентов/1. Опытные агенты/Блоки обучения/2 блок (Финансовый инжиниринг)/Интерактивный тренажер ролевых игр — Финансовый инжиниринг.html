@@ -1,0 +1,2533 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Адаптивный тренажер ролевых игр — Финансовый инжиниринг</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-dark: #07090e;
+      --bg-card: rgba(15, 23, 42, 0.55);
+      --bg-card-hover: rgba(30, 41, 59, 0.7);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-active: rgba(6, 182, 212, 0.4);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      
+      --cyan: #06b6d4;
+      --violet: #8b5cf6;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      
+      --gradient-cyan-violet: linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%);
+      --gradient-emerald-blue: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+      --gradient-amber-rose: linear-gradient(135deg, #f59e0b 0%, #f43f5e 100%);
+      
+      --shadow-glow: 0 0 25px rgba(6, 182, 212, 0.15);
+      --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient background blobs */
+    .bg-blobs {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.12;
+      animation: floatBlob 20s infinite alternate;
+    }
+
+    .blob-1 {
+      top: -10%;
+      right: -10%;
+      width: 50vw;
+      height: 50vw;
+      background: var(--cyan);
+    }
+
+    .blob-2 {
+      bottom: -15%;
+      left: -10%;
+      width: 60vw;
+      height: 60vw;
+      background: var(--violet);
+      animation-delay: -8s;
+    }
+
+    @keyframes floatBlob {
+      0% { transform: scale(1) translate(0, 0); }
+      100% { transform: scale(1.15) translate(40px, 50px); }
+    }
+
+    header {
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      background: rgba(7, 9, 14, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 10;
+      position: sticky;
+      top: 0;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-badge {
+      background: var(--gradient-cyan-violet);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-weight: 800;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+    }
+
+    .logo-text {
+      font-size: 1.25rem;
+      font-weight: 700;
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(to right, #ffffff, #cbd5e1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .logo-text span {
+      color: var(--cyan);
+      -webkit-text-fill-color: var(--cyan);
+    }
+
+    .header-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .btn-nav-top {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-nav-top:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-nav-top.active {
+      background: rgba(6, 182, 212, 0.1);
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      padding: 24px 40px;
+      gap: 24px;
+      height: calc(100vh - 70px);
+      overflow: hidden;
+    }
+
+    /* Left Sidebar: Leaderboard & Case List */
+    .sidebar {
+      width: 330px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    .glass-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: var(--shadow-card);
+      transition: all 0.2s ease;
+    }
+
+    .glass-card:hover {
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .card-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 8px;
+    }
+
+    /* Leaderboard Styles */
+    .leaderboard-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .leaderboard-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+
+    .leaderboard-item.rank-0 {
+      border-color: rgba(245, 158, 11, 0.3);
+      background: rgba(245, 158, 11, 0.04);
+    }
+
+    .agent-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .agent-rank-icon {
+      font-size: 1.1rem;
+    }
+
+    .rank-0 .agent-rank-icon { color: var(--amber); }
+    .rank-1 .agent-rank-icon { color: #cbd5e1; }
+    .rank-2 .agent-rank-icon { color: #b45309; }
+
+    .agent-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .agent-score {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--cyan);
+    }
+
+    .agent-badges {
+      display: flex;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .mini-badge {
+      font-size: 0.65rem;
+      padding: 1px 4px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+    }
+
+    /* Navigation list of Cases */
+    .nav-cases-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow-y: auto;
+      padding-right: 4px;
+      flex: 1;
+    }
+
+    /* Custom Scrollbar for sidebars */
+    .nav-cases-list::-webkit-scrollbar, .sidebar::-webkit-scrollbar, .workspace::-webkit-scrollbar {
+      width: 4px;
+    }
+    .nav-cases-list::-webkit-scrollbar-thumb, .sidebar::-webkit-scrollbar-thumb, .workspace::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 2px;
+    }
+
+    .nav-case-btn {
+      width: 100%;
+      text-align: left;
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px 12px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      transition: all 0.2s;
+    }
+
+    .nav-case-btn:hover {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-main);
+    }
+
+    .nav-case-btn.active {
+      background: rgba(6, 182, 212, 0.06);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      font-weight: 600;
+    }
+
+    .case-status-indicator {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+      background: #1e293b;
+      color: #64748b;
+    }
+
+    .nav-case-btn.status-active .case-status-indicator {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--amber);
+    }
+
+    .nav-case-btn.status-done .case-status-indicator {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--emerald);
+    }
+
+    .nav-case-btn.status-failed .case-status-indicator {
+      background: rgba(244, 63, 94, 0.15);
+      color: var(--rose);
+    }
+
+    /* Workspace Container */
+    .workspace {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+
+    /* Screens: Register Screen & Presentation Screen */
+    .screen {
+      display: none;
+      height: 100%;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    /* Screen: Registration styles */
+    .register-card {
+      max-width: 500px;
+      margin: 60px auto 0 auto;
+      text-align: center;
+    }
+
+    .register-header {
+      margin-bottom: 25px;
+    }
+
+    .register-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: var(--gradient-cyan-violet);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    .register-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .reg-inputs {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .reg-input-group {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      gap: 6px;
+    }
+
+    .reg-input-group label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .reg-input-group input {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 16px;
+      color: white;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .reg-input-group input:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 10px rgba(6, 182, 212, 0.25);
+    }
+
+    .btn-action {
+      background: var(--gradient-cyan-violet);
+      border: none;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-family: 'Outfit', sans-serif;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-action:hover {
+      box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
+      transform: translateY(-1px);
+    }
+
+    /* Presentation Workspace styles */
+    .case-header-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+    }
+
+    .case-title-area {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .case-category {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--cyan);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-attempt {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--amber);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
+    .case-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+
+    /* Timer styles */
+    .timer-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      padding: 8px 16px;
+      border-radius: 10px;
+    }
+
+    .timer-display {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.5rem;
+      letter-spacing: 0.5px;
+      color: var(--text-main);
+      width: 80px;
+      text-align: center;
+    }
+
+    .timer-display.alert {
+      color: var(--rose);
+      animation: pulseAlert 1s infinite alternate;
+    }
+
+    @keyframes pulseAlert {
+      0% { opacity: 0.8; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1.05); text-shadow: 0 0 10px rgba(244, 63, 94, 0.5); }
+    }
+
+    .timer-controls {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-timer {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-timer:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.3);
+      color: var(--text-main);
+    }
+
+    .btn-timer.btn-play-pause.running {
+      color: var(--rose);
+      border-color: rgba(244, 63, 94, 0.3);
+    }
+
+    /* Grid Layout: Card description & answers */
+    .case-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 20px;
+    }
+
+    /* Left col: Case card info */
+    .case-card-info {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .info-section {
+      background: rgba(255, 255, 255, 0.015);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px 20px;
+    }
+
+    .info-section-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .objection-quote {
+      font-style: italic;
+      color: var(--amber);
+      font-size: 1rem;
+      line-height: 1.4;
+      border-left: 3px solid var(--amber);
+      padding-left: 12px;
+    }
+
+    .math-details {
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .math-details strong {
+      color: var(--cyan);
+    }
+
+    /* Right col: Agent response panels */
+    .answers-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .agent-answer-block {
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .agent-answer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .agent-answer-title {
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .agent-answer-title span {
+      color: var(--cyan);
+    }
+
+    .agent-answer-block textarea {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px 12px;
+      color: white;
+      font-family: inherit;
+      font-size: 0.8rem;
+      outline: none;
+      resize: vertical;
+      min-height: 60px;
+      transition: all 0.2s;
+    }
+
+    .agent-answer-block textarea:focus {
+      border-color: var(--cyan);
+    }
+
+    /* Evaluation Area (revealed after clicking Analyze) */
+    .evaluation-area {
+      display: none;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 10px;
+    }
+
+    .evaluation-area.active {
+      display: flex;
+    }
+
+    .eval-agents-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .eval-agent-card {
+      background: rgba(255, 255, 255, 0.015);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .eval-agent-name {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 10px;
+      color: var(--cyan);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      padding-bottom: 6px;
+    }
+
+    /* Heuristics tags */
+    .heuristics-panel {
+      margin-bottom: 10px;
+    }
+
+    .heuristic-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-right: 4px;
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .heuristic-tag.passed {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      color: var(--emerald);
+    }
+
+    .heuristic-tag.failed {
+      background: rgba(244, 63, 94, 0.1);
+      border: 1px solid rgba(244, 63, 94, 0.2);
+      color: var(--rose);
+    }
+
+    .eval-feedback-text {
+      font-size: 0.75rem;
+      line-height: 1.4;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      background: rgba(0, 0, 0, 0.15);
+      padding: 8px 10px;
+      border-radius: 6px;
+    }
+
+    /* Trainer grading checklist */
+    .grading-checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .grading-checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+
+    .grading-checkbox-label input {
+      accent-color: var(--cyan);
+    }
+
+    .grading-checkbox-label:hover {
+      color: var(--text-main);
+    }
+
+    .agent-live-calc-score {
+      margin-top: 10px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--cyan);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Routing Decisions Box */
+    .routing-container-card {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .routing-advice-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .routing-advice-header.success { color: var(--emerald); }
+    .routing-advice-header.warn { color: var(--amber); }
+
+    .routing-advice-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .routing-buttons-row {
+      display: flex;
+      gap: 15px;
+    }
+
+    /* Golden Answer Container */
+    .golden-answer-card {
+      background: rgba(16, 185, 129, 0.02);
+      border: 1px solid rgba(16, 185, 129, 0.12);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .golden-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+
+    .golden-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--emerald);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .golden-content {
+      font-size: 0.85rem;
+      line-height: 1.5;
+      border-top: 1px dashed rgba(16, 185, 129, 0.1);
+      padding-top: 10px;
+    }
+
+    .golden-script {
+      font-style: italic;
+      color: #e2e8f0;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border-left: 3px solid var(--emerald);
+    }
+
+    .golden-why {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .golden-why strong {
+      color: var(--emerald);
+    }
+
+    /* Footer / Bottom Actions */
+    .footer-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      padding-top: 15px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    /* Final Screen: Leaderboard */
+    .leaderboard-fullscreen-card {
+      max-width: 850px;
+      margin: 40px auto 0 auto;
+    }
+
+    .leaderboard-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .leaderboard-table th {
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 2px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .leaderboard-table td {
+      padding: 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .leaderboard-table tr:hover {
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    .medal-icon {
+      font-size: 1.3rem;
+    }
+
+    .medal-gold { color: var(--amber); }
+    .medal-silver { color: #cbd5e1; }
+    .medal-bronze { color: #b45309; }
+
+    .agent-badges-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .agent-badge-tag {
+      font-size: 0.75rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .badge-negotiator {
+      background: rgba(6, 182, 212, 0.1);
+      border: 1px solid rgba(6, 182, 212, 0.2);
+      color: var(--cyan);
+    }
+
+    .badge-analyst {
+      background: rgba(139, 92, 246, 0.1);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      color: var(--violet);
+    }
+
+    .badge-closer {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      color: var(--emerald);
+    }
+
+    /* Sound alert overlay animation */
+    .alert-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(244, 63, 94, 0.15);
+      border: 8px solid var(--rose);
+      z-index: 9999;
+      pointer-events: none;
+      display: none;
+      animation: alertPulseOverlay 1s infinite alternate;
+    }
+
+    @keyframes alertPulseOverlay {
+      0% { opacity: 0.3; }
+      100% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background blobs -->
+  <div class="bg-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
+  <!-- Alert Overlay for Time Up -->
+  <div class="alert-overlay" id="alertOverlay"></div>
+
+  <!-- Header -->
+  <header>
+    <div class="logo-container">
+      <div class="logo-badge">ADAPTIVE TRAINING</div>
+      <div class="logo-text">Ролевой тренажер: <span>Финансовый инжиниринг</span></div>
+    </div>
+    
+    <div class="header-links">
+      <button class="btn-nav-top active" id="btnNavCases" onclick="showScreen('screenTrainer')">
+        <i class="fa-solid fa-gamepad"></i> Тренажер ролевок
+      </button>
+      <button class="btn-nav-top" id="btnNavResults" onclick="showScreen('screenLeaderboard')">
+        <i class="fa-solid fa-trophy"></i> Итоговый рейтинг
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Grid Area -->
+  <main>
+    
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebarContainer">
+      
+      <!-- Mini Leaderboard -->
+      <div class="glass-card">
+        <div class="card-title">
+          <i class="fa-solid fa-ranking-star" style="color: var(--cyan);"></i> Рейтинг агентов
+        </div>
+        <div class="leaderboard-list" id="miniLeaderboard">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Navigation Case List -->
+      <div class="glass-card" style="flex: 1; display: flex; flex-direction: column;">
+        <div class="card-title">
+          <i class="fa-solid fa-list-check" style="color: var(--violet);"></i> Статус отработки паттернов
+        </div>
+        <div class="nav-cases-list" id="navCasesList">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Workspace Container -->
+    <div class="workspace">
+
+      <!-- SCREEN 1: Registration (Initial state) -->
+      <div class="screen active" id="screenRegister">
+        <div class="glass-card register-card">
+          <div class="register-header">
+            <h2 class="register-title">Начало обучения</h2>
+            <p class="register-desc">Зарегистрируйте трех агентов для адаптивного прохождения тренировки</p>
+          </div>
+          
+          <div class="reg-inputs">
+            <div class="reg-input-group">
+              <label for="regAgent1">Имя Агента 1</label>
+              <input type="text" id="regAgent1" value="Агент 1">
+            </div>
+            <div class="reg-input-group">
+              <label for="regAgent2">Имя Агента 2</label>
+              <input type="text" id="regAgent2" value="Агент 2">
+            </div>
+            <div class="reg-input-group">
+              <label for="regAgent3">Имя Агента 3</label>
+              <input type="text" id="regAgent3" value="Агент 3">
+            </div>
+          </div>
+
+          <button class="btn-action" onclick="registerAgents()">
+            <i class="fa-solid fa-play"></i> Запустить тренажер
+          </button>
+        </div>
+      </div>
+
+      <!-- SCREEN 2: Trainer / Simulation Screen -->
+      <div class="screen" id="screenTrainer">
+        
+        <!-- Case Header -->
+        <div class="glass-card case-header-card">
+          <div class="case-title-area">
+            <div class="case-category">
+              <span id="currentCategory">Раздел 1: Субсидированная ипотека</span>
+              <span class="badge-attempt" id="currentAttemptBadge">Попытка 1</span>
+            </div>
+            <h2 class="case-name" id="currentTitle">Кейс 1: Семья Салиховых (Страх удорожания)</h2>
+          </div>
+          
+          <!-- Timer Widget -->
+          <div class="timer-container">
+            <div class="timer-display" id="timerVal">05:00</div>
+            <div class="timer-controls">
+              <button class="btn-timer btn-play-pause" onclick="toggleTimer()" title="Старт/Пауза">
+                <i class="fa-solid fa-play" id="playIcon"></i>
+              </button>
+              <button class="btn-timer" onclick="resetTimer()" title="Сбросить">
+                <i class="fa-solid fa-rotate-left"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Case Content Grid -->
+        <div class="case-grid">
+          
+          <!-- Left Panel: Situation & Math -->
+          <div class="case-card-info">
+            
+            <div class="glass-card info-section">
+              <div class="info-section-title">
+                <i class="fa-solid fa-building-circle-arrow-right" style="color: var(--cyan);"></i> ЖК и Проект (Уфа)
+              </div>
+              <p style="font-weight: 600; font-size: 0.95rem; color: var(--cyan);" id="currentLocation">ЖК Цветы Башкирии (Архстрой)</p>
+            </div>
+
+            <div class="glass-card info-section">
+              <div class="info-section-title">
+                <i class="fa-solid fa-circle-info" style="color: var(--violet);"></i> Ситуация
+              </div>
+              <p style="font-size: 0.9rem; line-height: 1.5;" id="currentSituation">Семья хочет купить квартиру...</p>
+            </div>
+
+            <div class="glass-card info-section">
+              <div class="info-section-title">
+                <i class="fa-solid fa-triangle-exclamation" style="color: var(--amber);"></i> Возражение клиента
+              </div>
+              <p class="objection-quote" id="currentObjection">«Это грабеж!»</p>
+            </div>
+
+            <div class="glass-card info-section">
+              <div class="info-section-title">
+                <i class="fa-solid fa-calculator" style="color: var(--emerald);"></i> Математические факты (Расчет)
+              </div>
+              <div class="math-details" id="currentMath">
+                <!-- Math facts rendered dynamically -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right Panel: Agent Inputs -->
+          <div class="answers-container">
+            <div class="glass-card" style="height: 100%; display: flex; flex-direction: column; gap: 15px;">
+              <div class="card-title" style="margin-bottom: 0px;">
+                <i class="fa-solid fa-pen-nib" style="color: var(--cyan);"></i> Записать ответы агентов
+              </div>
+              
+              <div class="agent-answer-block">
+                <div class="agent-answer-header">
+                  <div class="agent-answer-title"><i class="fa-solid fa-user"></i> <span id="labelAgent1">Агент 1</span></div>
+                </div>
+                <textarea id="answerAgent1" placeholder="Введите ответ агента для анализа..."></textarea>
+              </div>
+
+              <div class="agent-answer-block">
+                <div class="agent-answer-header">
+                  <div class="agent-answer-title"><i class="fa-solid fa-user"></i> <span id="labelAgent2">Агент 2</span></div>
+                </div>
+                <textarea id="answerAgent2" placeholder="Введите ответ агента для анализа..."></textarea>
+              </div>
+
+              <div class="agent-answer-block">
+                <div class="agent-answer-header">
+                  <div class="agent-answer-title"><i class="fa-solid fa-user"></i> <span id="labelAgent3">Агент 3</span></div>
+                </div>
+                <textarea id="answerAgent3" placeholder="Введите ответ агента для анализа..."></textarea>
+              </div>
+
+              <button class="btn-action" style="margin-top: auto;" onclick="analyzeAnswers()">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Проанализировать ответы
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Evaluation Panel (reveals on button click) -->
+        <div class="evaluation-area" id="evaluationArea">
+          
+          <h3 class="card-title"><i class="fa-solid fa-square-poll-vertical" style="color: var(--cyan);"></i> Анализ и оценка ответов</h3>
+          
+          <div class="eval-agents-grid">
+            
+            <!-- Agent 1 Eval Card -->
+            <div class="glass-card eval-agent-card">
+              <div class="eval-agent-name" id="evalNameAgent1">Агент 1</div>
+              <div class="heuristics-panel" id="heuristicsAgent1">
+                <!-- Keywords badges dynamically loaded -->
+              </div>
+              <div class="eval-feedback-text" id="feedbackAgent1">
+                Введите ответ агента и нажмите анализ.
+              </div>
+              <div class="grading-checklist">
+                <label class="grading-checkbox-label">
+                  <input type="checkbox" id="chkAgent1_Join" onchange="calculateScore(1)"> Присоединение к боли (+25%)
+                </label>
+                <label class="grading-checkbox-label">
+                  <input type="checkbox" id="chkAgent1_Destroy" onchange="calculateScore(1)"> Разрушение иллюзии (+25%)
+                </label>
+                <label class="grading-checkbox-label">
+                  <input type="checkbox" id="chkAgent1_Math" onchange="calculateScore(1)"> Математика выгоды (+25%)
+                </label>
+                <label class="grading-checkbox-label">
+                  <input type="checkbox" id="chkAgent1_Close" onchange="calculateScore(1)"> Призыв к расчету (+25%)
+                </label>
+              </div>
+              <div class="agent-live-calc-score">
+                <span>Балл:</span>
+                <span id="scoreAgent1Display">0 / 100</span>
+              </div>
+            </div>
+
+            <!-- Agent 2 Eval Card -->
+            <div class="glass-card eval-agent-card">
+              <div class="eval-agent-name" id="evalNameAgent2">Агент 2</div>
+              <div class="heuristics-panel" id="heuristicsAgent2">
+                <!-- Keywords badges -->
+              </div>
+              <div class="eval-feedback-text" id="feedbackAgent2">
+                Введите ответ агента и нажмите анализ.
+              </div>
+              <div class="grading-checklist">
+                <label class="grading-checkbox-label">
+                  <input type="checkbox" id="chkAgent2_Join" onchange="calculateScore(2)"> Присоединение к боли (+25%)
+                </label>
+                <label class="grading-checkbox-label">
+                  <input type="checkbox" id="chkAgent2_Destroy" onchange="calculateScore(2)"> Разрушение иллюзии (+25%)
+                </label>
+                <label class="grading-checkbox-label">
+                  <input type="checkbox" id="chkAgent2_Math" onchange="calculateScore(2)"> Математика выгоды (+25%)
+                </label>
+                <label class="grading-checkbox-label">
+                  <input type="checkbox" id="chkAgent2_Close" onchange="calculateScore(2)"> Призыв к расчету (+25%)
+                </label>
+              </div>
+              <div class="agent-live-calc-score">
+                <span>Балл:</span>
+                <span id="scoreAgent2Display">0 / 100</span>
+              </div>
+            </div>
+
+            <!-- Agent 3 Eval Card -->
+            <div class="glass-card eval-agent-card">
+              <div class="eval-agent-name" id="evalNameAgent3">Агент 3</div>
+              <div class="heuristics-panel" id="heuristicsAgent3">
+                <!-- Keywords badges -->
+              </div>
+              <div class="eval-feedback-text" id="feedbackAgent3">
+                Введите ответ агента и нажмите анализ.
+              </div>
+              <div class="grading-checklist">
+                <label class="grading-checkbox-label">
+                  <input type="checkbox" id="chkAgent3_Join" onchange="calculateScore(3)"> Присоединение к боли (+25%)
+                </label>
+                <label class="grading-checkbox-label">
+                  <input type="checkbox" id="chkAgent3_Destroy" onchange="calculateScore(3)"> Разрушение иллюзии (+25%)
+                </label>
+                <label class="grading-checkbox-label">
+                  <input type="checkbox" id="chkAgent3_Math" onchange="calculateScore(3)"> Математика выгоды (+25%)
+                </label>
+                <label class="grading-checkbox-label">
+                  <input type="checkbox" id="chkAgent3_Close" onchange="calculateScore(3)"> Призыв к расчету (+25%)
+                </label>
+              </div>
+              <div class="agent-live-calc-score">
+                <span>Балл:</span>
+                <span id="scoreAgent3Display">0 / 100</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Golden standard block -->
+          <div class="glass-card golden-answer-card">
+            <div class="golden-header" onclick="toggleGoldenAnswer()">
+              <div class="golden-title">
+                <i class="fa-solid fa-award"></i> Показать эталонный ответ Навигатора
+              </div>
+              <i class="fa-solid fa-chevron-down" id="goldenArrow" style="color: var(--emerald); transition: transform 0.3s;"></i>
+            </div>
+            
+            <div class="golden-content" id="goldenContent" style="display: none;">
+              <div class="golden-script" id="currentGolden">
+                «Рамиль, абсолютно вас понимаю...»
+              </div>
+              <div class="golden-why" id="currentWhy">
+                <strong>Почему это работает:</strong> Присоединение, оцифровка, понятный горизонт планирования.
+              </div>
+            </div>
+          </div>
+
+          <!-- Adaptive Learning Loop / Trainer Routing Panel -->
+          <div class="glass-card routing-container-card" id="routingContainer">
+            <div class="routing-advice-header" id="routingAdviceHeader">
+              <i class="fa-solid fa-circle-question"></i> Рекомендация тренера
+            </div>
+            <div class="routing-advice-desc" id="routingAdviceDesc">
+              Подсчет среднего балла раунда...
+            </div>
+            <div class="routing-buttons-row">
+              <button class="btn-action" style="background: var(--gradient-emerald-blue); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);" onclick="saveAndRoute(true)">
+                <i class="fa-solid fa-circle-check"></i> Паттерн усвоен (Далее)
+              </button>
+              <button class="btn" id="btnRepeatPattern" style="border-color: var(--amber); color: var(--amber); background: rgba(245, 158, 11, 0.05);" onclick="saveAndRoute(false)">
+                <i class="fa-solid fa-rotate-right"></i> Отработка (Загрузить клон)
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Navigation Footer -->
+        <div class="footer-actions">
+          <button class="btn" onclick="prevPattern()"><i class="fa-solid fa-arrow-left"></i> Предыдущий паттерн</button>
+          <span style="font-weight: 600; font-size: 0.9rem;" id="caseProgressText">Паттерн 1 из 10</span>
+          <button class="btn" onclick="nextPattern()">Следующий паттерн <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+
+      </div>
+
+      <!-- SCREEN 3: Full Leaderboard & Results -->
+      <div class="screen" id="screenLeaderboard">
+        <div class="glass-card leaderboard-fullscreen-card">
+          <div class="card-title" style="font-size: 1.5rem; justify-content: center; border-bottom: 2px solid var(--border-color); padding-bottom: 12px;">
+            <i class="fa-solid fa-ranking-star" style="color: var(--amber);"></i> Итоговая таблица обучения
+          </div>
+          
+          <table class="leaderboard-table">
+            <thead>
+              <tr>
+                <th style="width: 80px;">Место</th>
+                <th>Агент</th>
+                <th style="width: 140px; text-align: center;">Общий балл</th>
+                <th style="width: 140px; text-align: center;">Средний балл</th>
+                <th>Достижения (Бейджи)</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboardFullBody">
+              <!-- Populated by JavaScript -->
+            </tbody>
+          </table>
+
+          <div style="display: flex; justify-content: space-between; margin-top: 30px;">
+            <button class="btn" onclick="resetAllData()" style="border-color: rgba(244, 63, 94, 0.3); color: var(--rose);">
+              <i class="fa-solid fa-trash-can"></i> Сбросить весь прогресс
+            </button>
+            <button class="btn-action" onclick="showScreen('screenTrainer')">
+              <i class="fa-solid fa-arrow-rotate-left"></i> Вернуться к тренажеру
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    // Cases Database structured by Patterns (10 Patterns, each with 3 Variations/Clones)
+    const casesDatabase = {
+      1: [
+        {
+          id: "1_1",
+          title: "Паттерн 1: Страх удорожания (Семья Салиховых)",
+          location: "ЖК Цветы Башкирии (Архстрой)",
+          situation: "Семья хочет купить 3-комнатную квартиру в Уфе за 11 000 000 руб. ПВ — 3 000 000 руб. Под семейную ипотеку они не подходят. Им предлагают субсидированную ставку 12.49% годовых с удорожанием на 8%. Квартира вырастает до 11 880 000 руб.",
+          objection: "«Это грабеж! Застройщик накручивает почти 900 тысяч рублей из воздуха! Я лучше возьму обычную рыночную ставку 21.7% без всяких наценок!»",
+          math: `<strong>Вариант А (Рыночная ставка 21.7%, без удорожания):</strong><br>
+          • Кредит: 8 000 000 руб. | Платеж: <strong>145 000 руб./мес.</strong><br>
+          • Переплата по процентам за 10 лет: <strong>17 400 000 руб.</strong><br><br>
+          <strong>Вариант Б (Субсидия 12.49%, с удорожанием 8%):</strong><br>
+          • Кредит: 8 880 000 руб. | Платеж: <strong>94 700 руб./мес.</strong><br>
+          • Переплата по процентам за 10 лет: <strong>11 364 000 руб.</strong><br><br>
+          <strong>Выгода:</strong> Снижение платежа на <strong>50 300 руб./мес.</strong> Экономия за 10 лет: <strong>6 036 000 руб.</strong> Чистая выгода с учетом удорожания: <strong>более 5.1 млн руб.</strong>`,
+          keywords: {
+            join: ["понима", "абсолют", "соглас", "логич", "верн", "слышу"],
+            destroy: ["выраст", "рост", "инфляц", "подожд", "сгор", "упуст"],
+            math: ["плат", "процент", "145", "94", "50", "переплат", "экономи"],
+            closing: ["расчет", "бронир", "оформ", "посчита"]
+          },
+          golden: "«Рамиль, абсолютно вас понимаю. Увеличение цены квартиры почти на 900 тысяч выглядит дико. Любой разумный человек начнет искать подвох. Но давайте отложим эмоции и посмотрим на цифры: во сколько вашей семье обойдется аренда денег у банка на реальном горизонте в 10 лет... С удорожанием ваш ежемесячный платеж меньше на 50 300 рублей. За 10 лет вы сберегаете в семейном бюджете более 6 млн рублей живыми деньгами на процентах банку. Даже с учетом того, что долг номинально вырос на 880 тысяч, ваша чистая финансовая выгода составляет более 5.1 млн рублей. Что выгоднее вашей семье: переплачивать банку по 50 тысяч в месяц или зафиксировать низкий платеж?»",
+          why: "<strong>Почему это работает:</strong> 1. Присоединение к боли клиента. 2. Оцифровка стоимости аренды денег у банка. 3. Рассмотрение реалистичного 10-летнего горизонта планирования."
+        },
+        {
+          id: "1_2",
+          title: "Паттерн 1: Страх удорожания [Клон 1: Семья Валеевых]",
+          location: "ЖК Нова",
+          situation: "Семья планирует купить 2-комнатную квартиру в Уфе за 8 000 000 руб. ПВ — 2 000 000 руб. Без льгот. Им предлагают ставку 12.49% с удорожанием на 8%. Квартира вырастает до 8 640 000 руб.",
+          objection: "«Почему квартира вдруг стоит на 640 тысяч дороже? Это спекуляция застройщика! Я лучше возьму под 21.7%, но по реальной цене 8 миллионов!»",
+          math: `<strong>Вариант А (Рыночная ставка 21.7%, без удорожания):</strong><br>
+          • Кредит: 6 000 000 руб. | Платеж: <strong>108 750 руб./мес.</strong><br>
+          • Переплата по процентам за 10 лет: <strong>13 050 000 руб.</strong><br><br>
+          <strong>Вариант Б (Субсидия 12.49%, с удорожанием 8%):</strong><br>
+          • Кредит: 6 640 000 руб. | Платеж: <strong>70 800 руб./мес.</strong><br>
+          • Переплата по процентам за 10 лет: <strong>8 496 000 руб.</strong><br><br>
+          <strong>Выгода:</strong> Снижение платежа на <strong>37 950 руб./мес.</strong> Экономия за 10 лет: <strong>4 554 000 руб.</strong> Чистая выгода с учетом накрутки: <strong>более 3.9 млн руб.</strong>`,
+          keywords: {
+            join: ["понима", "абсолют", "соглас", "логич", "верн", "слышу"],
+            destroy: ["выраст", "рост", "инфляц", "подожд", "сгор", "упуст"],
+            math: ["плат", "процент", "108", "70", "37", "переплат", "экономи"],
+            closing: ["расчет", "бронир", "оформ", "посчита"]
+          },
+          golden: "«Айдар, абсолютно разделяю ваше возмущение. Наценка в 640 тысяч на ровном месте настораживает. Но давайте посчитаем цену аренды этих денег на 10 лет. При рыночной ставке 21.7% ваш платеж 108 750 руб. С субсидией и удорожанием платеж снижается до 70 800 руб. Каждый месяц вы экономите 37 950 руб. За 10 лет эта экономия составит более 4.5 миллионов рублей. Застройщик забрал 640 тысяч один раз, а банк заберет 4.5 миллиона за 10 лет. Что выгоднее вашей семье?»",
+          why: "<strong>Почему это работает:</strong> Умелая альтернативная оцифровка разовой комиссии застройщика против многолетней переплаты банку."
+        },
+        {
+          id: "1_3",
+          title: "Паттерн 1: Страх удорожания [Клон 2: Семья Каримовых]",
+          location: "ЖК Нью Лайф",
+          situation: "Покупка квартиры в Уфе за 6 500 000 руб. ПВ — 1 500 000 руб. Предлагается удорожание 8% для снижения ставки до 12.49%. Квартира вырастает до 7 020 000 руб.",
+          objection: "«Удорожание на 520 тысяч рублей — это скрытая комиссия, я не буду за нее платить. Возьму рыночную ипотеку 21.7% без наценки».",
+          math: `<strong>Вариант А (Рыночная ставка 21.7%, без удорожания):</strong><br>
+          • Кредит: 5 000 000 (по базовой цене) | Платеж: <strong>90 600 руб./мес.</strong><br>
+          • Переплата по процентам за 10 лет: <strong>10 870 000 руб.</strong><br><br>
+          <strong>Вариант Б (Субсидия 12.49%, с удорожанием 8%):</strong><br>
+          • Кредит: 5 520 000 (с удорожанием) | Платеж: <strong>58 900 руб./мес.</strong><br>
+          • Переплата по процентам за 10 лет: <strong>7 068 000 руб.</strong><br><br>
+          <strong>Выгода:</strong> Снижение платежа на <strong>31 700 руб./мес.</strong> Экономия за 10 лет: <strong>3 804 000 руб.</strong> Чистая выгода с учетом наценки: <strong>более 3.2 млн руб.</strong>`,
+          keywords: {
+            join: ["понима", "абсолют", "соглас", "логич", "верн", "слышу"],
+            destroy: ["выраст", "рост", "инфляц", "подожд", "сгор", "упуст"],
+            math: ["плат", "процент", "90", "58", "31", "переплат", "экономи"],
+            closing: ["расчет", "бронир", "оформ", "посчита"]
+          },
+          golden: "«Лилия, согласна с вами, переплачивать 520 тысяч никому не хочется. Но давайте сравним расходы. Без удорожания ваш платеж — 90 600 рублей в месяц. С удорожанием — 58 900 рублей. Разница в платеже — более 31 000 рублей каждый месяц в вашу пользу. За 10 лет вы сэкономите на процентах банку 3 800 000 рублей. Да, долг номинально вырос на 520 тысяч, но чистыми вы сохраняете более 3.2 млн рублей. Оформим расчет?»",
+          why: "<strong>Почему это работает:</strong> Четкое деление на \"разовые\" потери и \"ежемесячную\" выгоду, что легко воспринимается клиентом."
+        }
+      ],
+      2: [
+        {
+          id: "2_1",
+          title: "Паттерн 2: Быстрое погашение (Клиент Артур)",
+          location: "ЖК Нью Лайф",
+          situation: "Артур покупает 1-к квартиру за 5 500 000 руб., ПВ — 1 500 000 руб. Планирует закрыть весь долг досрочно ровно за 3 года (36 месяцев) за счет бонусов.",
+          objection: "«Зачем мне ваше удорожание в 8% (+440 тысяч к цене)? Я лучше возьму базовую цену под рыночные 21.7%. За 3 года переплата по процентам будет минимальной, удорожание просто не успеет окупиться!»",
+          math: `<strong>Вариант А (Рыночная ставка 21.7%, без удорожания):</strong><br>
+          • Кредит: 4 000 000 руб. | Обязательный платеж: <strong>72 500 руб./мес.</strong><br>
+          • Для закрытия за 3 года платить нужно по: <strong>152 150 руб./мес.</strong><br>
+          • Переплата по процентам за 3 года: <strong>1 477 400 руб.</strong><br><br>
+          <strong>Вариант Б (Субсидия 12.49%, с удорожанием 8%):</strong><br>
+          • Кредит: 4 440 000 руб. | Обязательный платеж: <strong>47 300 руб./мес.</strong><br>
+          • При платеже в 152 150 руб. кредит закроется за <strong>37 месяцев</strong> (всего на 1 месяц дольше).<br>
+          • Дополнительная переплата по отношению к первому варианту — всего 152 000 руб.<br><br>
+          <strong>Аргумент безопасности:</strong> Обязательный платеж меньше на <strong>25 200 руб./мес.</strong> Это подушка безопасности на случай сбоев в доходах.`,
+          keywords: {
+            join: ["отличн", "понима", "цел", "разум", "соглас"],
+            destroy: ["задерж", "риск", "бизнес", "безопасн", "разниц"],
+            math: ["обязательн", "72", "47", "152", "переплат", "37", "месяц"],
+            closing: ["безопасн", "расчет", "посчита", "оформ"]
+          },
+          golden: "«Артур, отличный финансовый план. Закрыть ипотеку за 3 года — мощная цель. Но давайте проведем краш-тест вашей модели на случай, если реальность внесет коррективы. При рыночной ставке ваш жесткий минимальный платеж банку составит 72 500 рублей в месяц. Любая заминка в бизнесе — и вы зажаты обязательствами. С удорожанием ваш минимальный платеж снижается до 47 300 рублей в месяц. При этом, продолжая платить по 152 тысячи, вы закроете кредит всего на 1 месяц дольше. Что безопаснее для вашего бюджета: жесткие 72.5 тысячи обязательного платежа или мягкие 47.3 тысячи с возможностью гасить досрочно в своем темпе?»",
+          why: "<strong>Почему это работает:</strong> 1. Стресс-тестирование финансовой модели клиента. 2. Продажа безопасности как главного аргумента."
+        },
+        {
+          id: "2_2",
+          title: "Паттерн 2: Быстрое погашение [Клон 1: Клиент Булат]",
+          location: "ЖК 8 Марта",
+          situation: "Булат берет 2-комнатную квартиру за 7 000 000 руб., ПВ — 2 000 000 руб. Намерен закрыть кредит 5 млн руб. досрочно за 3 года.",
+          objection: "«Субсидированная ставка требует удорожания на 8% (+400 тысяч к цене). Я закрою кредит за 3 года, проценты по рыночной ставке 21.7% будут минимальными. Мне это удорожание невыгодно!»",
+          math: `<strong>Вариант А (Рыночная ставка 21.7%, без удорожания):</strong><br>
+          • Кредит: 5 000 000 руб. | Обязательный платеж: <strong>90 600 руб./мес.</strong><br>
+          • Платеж для закрытия за 3 года: <strong>190 200 руб./мес.</strong><br>
+          • Переплата по процентам за 3 года: <strong>1 847 200 руб.</strong><br><br>
+          <strong>Вариант Б (Субсидия 12.49%, с удорожанием 8%):</strong><br>
+          • Кредит: 5 400 000 руб. | Обязательный платеж: <strong>57 500 руб./мес.</strong><br>
+          • При платеже в 190 200 руб. закроется за <strong>37 месяцев.</strong><br>
+          • Переплата за 3 года: 2 037 400 руб. (разница всего 190 200 руб.).<br><br>
+          <strong>Аргумент безопасности:</strong> Обязательный платеж ниже на <strong>33 100 руб./мес.</strong> (57.5к вместо 90.6к). Это страховка от форс-мажоров.`,
+          keywords: {
+            join: ["отличн", "понима", "цел", "разум", "соглас"],
+            destroy: ["задерж", "риск", "бизнес", "безопасн", "разниц"],
+            math: ["обязательн", "90", "57", "190", "переплат", "37", "месяц"],
+            closing: ["безопасн", "расчет", "посчита", "оформ"]
+          },
+          golden: "«Булат, закрыть ипотеку за 3 года — это профессиональный подход. Но давайте подстрахуемся. При ставке 21.7% банк потребует от вас 90 600 рублей обязательного платежа ежемесячно. Это жесткие рамки. При субсидированной ставке ваш обязательный платеж снижается до 57 500 рублей. Вы продолжаете платить по 190 тысяч и закрываете долг практически за те же 3 года. Но в случае любых непредвиденных обстоятельств вы всегда можете снизить платеж до комфортных 57.5 тысяч. Наша безопасность стоит этой минимальной разницы в 190 тысяч? Сделаем расчет?»",
+          why: "<strong>Почему это работает:</strong> Апелляция к психологическому комфорту предпринимателя/клиента с высокими доходами."
+        }
+      ],
+      3: [
+        {
+          id: "3_1",
+          title: "Паттерн 3: Аренда + Ипотека (Студентка Алина)",
+          location: "ЖК Старая Уфа (Кирпич Холдинг)",
+          situation: "Алина снимает квартиру в Уфе за 35 000 руб./мес. Хочет купить 1-к квартиру в ЖК Старая Уфа за 5 800 000 руб. Дом сдается через 2 года. ПВ — 1 200 000 руб. (20%). По семейной ипотеке платеж составит около 27 600 руб./мес.",
+          objection: "«Я не потяну платить 35 тысяч за аренду и еще 27.6 тысяч за строящийся дом. Это 62.6 тысячи в месяц! Мне просто не на что будет жить. Придется ждать сдачи дома и покупать готовое, хотя тогда цены вырастут».",
+          math: `<strong>Вариант со стандартной Семейной ипотекой (6%):</strong><br>
+          • Кредит: 4 600 000 руб. | Платеж с 1-го месяца: <strong>27 600 руб./мес.</strong><br>
+          • Двойная нагрузка (Аренда + Ипотека) во время стройки: <strong>62 600.</strong><br><br>
+          <strong>Вариант с траншевой ипотекой (схема 100к):</strong><br>
+          • Первый транш во время стройки: 100 000 руб. | Ежемесячный платеж: всего <strong>500 руб./мес.</strong><br>
+          • Финансовая нагрузка во время стройки: 35 000 (аренда) + 500 (ипотека) = <strong>35 500 руб./мес.</strong><br>
+          • Второй транш перечисляется перед сдачей дома. Ипотека поднимается до 27 600 руб./мес., но аренда прекращается.<br><br>
+          <strong>Выгода:</strong> Чистая экономия на платежах за 2 года стройки: <strong>более 620 000 руб.</strong>, которые пойдут на ремонт.`,
+          keywords: {
+            join: ["понима", "соглас", "действительн", "разрыв", "абсолют"],
+            destroy: ["рост", "выраст", "ценах", "упуст", "дорож"],
+            math: ["транш", "500", "рубл", "600", "экономи", "ремонт", "620"],
+            closing: ["оформ", "расчет", "посчита", "бронь", "запуск"]
+          },
+          golden: "«Алина, платить 62.6 тысячи в месяц во время стройки — это действительно жестко для бюджета. Я никогда не предложу схему, которая загонит вас в кассовый разрыв. Мы поступим иначе — применим траншевую схему. Банк выдаст кредит частями: на 2 года стройки застройщику перечислят всего 100 000 рублей из кредита. Проценты будут начисляться только на них. Ваш платеж составит всего 500 рублей в месяц. Вы спокойно продолжаете снимать жилье, а перед сдачей дома платеж поднимется до 27 600 рублей, но вы уже съедете со съёмной. Вы сбережете более 620 000 рублей на ремонт квартиры. Оформим расчет?»",
+          why: "<strong>Почему это работает:</strong> 1. Закрытие боли «негде жить во время стройки». 2. Показ упущенной выгоды (наглядная оцифровка 620 тысяч рублей сбережений)."
+        },
+        {
+          id: "3_2",
+          title: "Паттерн 3: Аренда + Ипотека [Клон 1: Дизайнер Ксения]",
+          location: "ЖК Нью Лайф",
+          situation: "Ксения снимает 1-комнатную квартиру в Уфе за 40 000 руб./мес. Хочет купить квартиру в строящемся ЖК Нью Лайф за 6 500 000 руб. ПВ — 1 300 000 руб. Ипотека 6%, платеж после сдачи составит 31 200 руб./мес.",
+          objection: "«Платить 40 тысяч за аренду и еще 31.2 тысячи по ипотеке за воздух во время стройки? Это 71 200 рублей в месяц. Я просто разорюсь!»",
+          math: `<strong>Вариант со стандартной Семейной ипотекой (6%):</strong><br>
+          • Кредит: 5 200 000 руб. | Платеж с 1-го месяца: <strong>31 200 руб./мес.</strong><br>
+          • Двойная нагрузка: 40 000 + 31 200 = <strong>71 200 руб./мес.</strong><br><br>
+          <strong>Траншевая ипотека (первый транш 100к):</strong><br>
+          • Кредит на время стройки (24 месяца): 100 000 руб. | Платеж: <strong>500 руб./мес.</strong><br>
+          • Финансовая нагрузка во время стройки: 40 000 + 500 = <strong>40 500 руб./мес.</strong><br><br>
+          <strong>Сбережения за 2 года:</strong> Более <strong>730 000 руб.</strong>, которые Ксения сохранит для покупки мебели в новую квартиру.`,
+          keywords: {
+            join: ["понима", "соглас", "действительн", "разрыв", "абсолют"],
+            destroy: ["рост", "выраст", "ценах", "упуст", "дорож"],
+            math: ["транш", "500", "рубл", "730", "экономи", "мебел", "меблир"],
+            closing: ["оформ", "расчет", "посчита", "бронь", "запуск"]
+          },
+          golden: "«Ксения, платить по 71 тысячи в месяц во время строительства — это неоправданный финансовый риск. Я сама против таких схем. Мы решим это по-другому с помощью траншевой ипотеки. Банк перечислит застройщику только первый транш в 100 тысяч рублей. Ваш платеж по ипотеке на 2 года стройки составит всего 500 рублей в месяц. Вы спокойно продолжаете снимать квартиру, а перед сдачей дома банк перечислит остаток, и платеж поднимется до 31 200 рублей. Но к этому моменту вы уже съедете со съёмной. За два года вы сэкономите более 730 тысяч рублей. Начнем оформление?»",
+          why: "<strong>Почему это работает:</strong> Устранение страха кассового разрыва и перевод сэкономленной суммы в будущие овеществленные расходы (мебель)."
+        }
+      ],
+      4: [
+        {
+          id: "4_1",
+          title: "Паттерн 4: Депозитный арбитраж (Инвестор Вадим)",
+          location: "ЖК Зорге.Премьер",
+          situation: "Вадим — инвестор с 12 000 000 руб. наличными. Планирует оплатить 100% стоимости 3-к квартиры в ЖК Зорге.Премьер сразу наличными, так как не любит банки и ипотечные долги.",
+          objection: "«Я не люблю долги. Сразу отдам всю сумму застройщику, и пусть строится. Ипотеку брать не буду, ставки грабительские, зачем мне переплачивать банкам?»",
+          math: `<strong>Стратегия 100% наличных:</strong><br>
+          • Доходность за 2 года стройки: <strong>0% годовых.</strong> Деньги заморожены в бетоне.<br><br>
+          <strong>Стратегия депозитного арбитража с траншевой ипотекой (6%):</strong><br>
+          • Первоначальный взнос 20%: **2 400 000 руб.**<br>
+          • Кредит 9 600 000 руб. Первый транш: 100 рублей. Платежи во время стройки (2 года): **1 рубль в месяц**.<br>
+          • Остаток 9 600 000 руб. размещаем на депозитах под 18% годовых.<br><br>
+          <strong>Математика доходности:</strong><br>
+          • Начисленные проценты по вкладу за 2 года: <strong>3 456 000 руб.</strong><br>
+          • Расходы по ипотеке за 2 года: <strong>24 рубля.</strong><br>
+          • Чистая прибыль инвестора: <strong>3 456 000 рублей.</strong> Вы можете закрыть ипотеку перед вводом дома и получить квартиру на 3.45 млн дешевле.`,
+          keywords: {
+            join: ["как инвестор", "понима", "разумн", "соглас", "логич"],
+            destroy: ["заморозить", "арбитраж", "доходн", "депозит", "работат"],
+            math: ["18", "процент", "3 456", "миллион", "рубл", "депозит", "вклад", "транш", "выгод"],
+            closing: ["стратеги", "согласуем", "расчет", "посчита"]
+          },
+          golden: "«Вадим, как инвестор вы понимаете, что деньги должны генерировать максимальную доходность. Отдать 12 миллионов застройщику сразу — это заморозить ваш капитал под 0% годовых на 2 года стройки. Давайте посчитаем, как заставить эти деньги работать на вас через траншевый арбитраж. Мы платим застройщику ПВ 20% (2.4 млн), а оставшиеся 9.6 млн кладем на депозиты под 18% годовых. Ипотеку оформляем по траншевой программе Семейной ипотеки под 6%: банк перечислит первый транш 100 рублей, ваш платеж на время стройки — 1 рубль в месяц. За два года проценты принесут вам 3 456 000 рублей чистой прибыли, а расходы на ипотеку составят 24 рубля. Какая стратегия вам кажется более доходной?»",
+          why: "<strong>Почему это работает:</strong> 1. Разговор на языке цифр и ROI инвестора. 2. Демонстрация возможности извлечения легкой прибыли из разницы ставок (арбитраж 18% вклада против 6% кредита)."
+        },
+        {
+          id: "4_2",
+          title: "Паттерн 4: Депозитный арбитраж [Клон 1: Инвестор Эдуард]",
+          location: "ЖК Старая Уфа",
+          situation: "Эдуард хочет приобрести квартиру за 10 000 000 руб. У него есть вся сумма наличными. Планирует внести 100% оплату сразу.",
+          objection: "«Зачем мне связываться с ипотекой, если есть вся сумма? Я лучше сразу все оплачу, зафиксирую покупку и буду спать спокойно, без долгов».",
+          math: `<strong>100% оплата наличными:</strong> Доходность капитала на 2 года стройки: <strong>0% годовых.</strong><br><br>
+          <strong>Траншевый арбитраж (Семейная ипотека 6%):</strong><br>
+          • ПВ 20%: <strong>2 000 000 руб.</strong> Остаток 8 000 000 руб. в ипотеку.<br>
+          • Первый транш банка: 100 рублей. Платеж на 2 года: <strong>1 рубль в месяц.</strong><br>
+          • Оставшиеся 8 000 000 руб. размещаем под 18% годовых на вклад.<br><br>
+          <strong>Математика доходности:</strong><br>
+          • Проценты по вкладу за 2 года: <strong>2 880 000 руб.</strong><br>
+          • Итоговая чистая прибыль: <strong>2 880 000 руб.</strong> (это готовый ремонт или скидка 28.8% от цены квартиры).`,
+          keywords: {
+            join: ["как инвестор", "понима", "разумн", "соглас", "логич"],
+            destroy: ["заморозить", "арбитраж", "доходн", "депозит", "работат"],
+            math: ["18", "процент", "2 880", "миллион", "рубл", "депозит", "вклад", "транш", "выгод"],
+            closing: ["стратеги", "согласуем", "расчет", "посчита"]
+          },
+          golden: "«Эдуард, спать спокойно без долгов — понятное желание. Но как инвестору вам важно, чтобы деньги приносили прибыль. Отдав 10 миллионов сразу застройщику, вы заморозите их под 0% на 2 года. Мы сделаем умнее: вносим ПВ 20% (2 миллиона), а оставшиеся 8 миллионов кладем на депозит под 18% годовых. Ипотеку берем под 6% по траншевой схеме: платеж на 2 года составит 1 рубль в месяц. За два года вклад принесет вам 2 880 000 рублей чистой прибыли. Перед сдачей вы забираете деньги с процентами и можете закрыть кредит полностью. В итоге вы заработали почти 3 миллиона на ровном месте. Оформим расчет?»",
+          why: "<strong>Почему это работает:</strong> Перевод психологического неприятия долга («не люблю ипотеки») в плоскость упущенной коммерческой выгоды."
+        }
+      ],
+      5: [
+        {
+          id: "5_1",
+          title: "Паттерн 5: Молодая семья с декретом (ЖК Достояние)",
+          location: "ЖК Достояние",
+          situation: "Семья хочет 2-к квартиру в ЖК Достояние за 8 000 000 руб. ПВ — 1 600 000 руб., кредит — 6 400 000 руб. В ближайший год планируют ребенка, доходы семьи снизятся из-за декрета жены. Боятся обязательного платежа в 38 400 руб./мес.",
+          objection: "«На одну зарплату мужа платить почти 40 тысяч в месяц и содержать ребенка во время стройки мы не сможем. Отложим покупку на 2-3 года».",
+          math: `<strong>Стандартная семейная ипотека (6%):</strong><br>
+          • Платеж с 1-го месяца: <strong>38 400 руб./мес.</strong><br>
+          • Доход падает (декрет), расходы на стройку и аренду/быт сохраняются.<br><br>
+          <strong>Траншевая программа (первый транш 100к):</strong><br>
+          • Платеж на 2 года стройки: всего <strong>600 руб./мес.</strong><br>
+          • Переход ко второму траншу — за месяц до ввода дома.<br><br>
+          <strong>Экономия бюджета:</strong> Сэкономленные за период стройки <strong>870 000 руб.</strong> составят отличную финансовую подушку для комфортного выхода в декрет.`,
+          keywords: {
+            join: ["понима", "соглас", "опасен", "декрет", "абсолют"],
+            destroy: ["дорож", "выраст", "ценах", "инфляц", "потеря"],
+            math: ["600", "рубл", "38 400", "подушк", "экономи", "870"],
+            closing: ["оформ", "расчет", "посчита", "бронь"]
+          },
+          golden: "«Понимаю ваши опасения. Появление ребенка — это время повышенных расходов, и брать на себя платеж in 38 тысяч во время декрета рискованно. Но откладывать покупку на 3 года — значит потерять в цене квартиры. За 3 года инфляция поднимет стоимость этой квартиры минимум до 10.5 млн. Мы поступим безопаснее: применим траншевую семейную ипотеку. На 2 года строительства платеж составит всего 600 рублей в месяц. Вы спокойно рожаете ребенка, живете на одну зарплату без кредитной нагрузки и откладываете сэкономленные деньги. Перед сдачей дома платеж поднимется до 38 400 руб., но у вас уже будет сэкономлено более 870 000 рублей подушки. Оформим бронь?»",
+          why: "<strong>Почему это работает:</strong> 1. Снижение страха финансовой несостоятельности молодой семьи во время декрета. 2. Оцифровка роста цен на недвижимость как аргумент против выжидания."
+        },
+        {
+          id: "5_2",
+          title: "Паттерн 5: Молодая семья с декретом [Клон 1: ЖК Цветы Башкирии]",
+          location: "ЖК Цветы Башкирии (Архстрой)",
+          situation: "Молодожены хотят квартиру за 7 000 000 руб. ПВ — 1 400 000 руб. Кредит — 5 600 000 под 6%. Платеж 33 600 руб./мес. Готовятся стать родителями, боятся высоких ежемесячных расходов.",
+          objection: "«Мы планируем ребенка. Мой доход в декрете уменьшится в три раза, мы не потянем ипотеку в 33.6 тысяч в месяц. Отложим сделку, пока ребенок не пойдет в садик».",
+          math: `<strong>Стандартная семейная ипотека (6%):</strong> Платеж: <strong>33 600 руб./мес.</strong> с 1-го месяца.<br><br>
+          <strong>Траншевая ипотека (первый транш 100к):</strong><br>
+          • Платеж до сдачи дома (2 года): всего <strong>500 руб./мес.</strong><br>
+          • Выдача второго транша — перед вводом объекта в эксплуатацию.<br><br>
+          <strong>Сэкономленная сумма:</strong> За 24 месяца строительства семья сберегает в бюджете <strong>790 000 руб.</strong>, которые служат декретной подушкой безопасности.`,
+          keywords: {
+            join: ["понима", "соглас", "опасен", "декрет", "абсолют"],
+            destroy: ["дорож", "выраст", "ценах", "инфляц", "потеря"],
+            math: ["500", "рубл", "33 600", "подушк", "экономи", "790"],
+            closing: ["оформ", "расчет", "посчита", "бронь"]
+          },
+          golden: "«Лия, абсолютно вас понимаю. Рождение ребенка — прекрасное событие, но оно требует финансовой стабильности. Платить 33.6 тысячи во время декрета на одну зарплату — большой стресс. Однако, если мы отложим покупку на 3 года, цены вырастут и эта квартира обойдется вам уже в 9 миллионов. Мы поступим умнее. Оформим траншевую Семейную ипотеку: ваш платеж на 2 года стройки составит всего 500 рублей в месяц. Вы спокойно выйдете в декрет без долгов и кредитной нагрузки. А сэкономленные за 2 года 790 000 рублей станут вашей подушкой безопасности, когда платеж поднимется. Начнем оформление?»",
+          why: "<strong>Почему это работает:</strong> Замена стратегии «копить и ждать» на стратегию «купить сейчас по низкой цене с отложенным платежом»."
+        }
+      ],
+      6: [
+        {
+          id: "6_1",
+          title: "Паттерн 6: Страх отказа во 2-м транше (Клиентка Гульназ)",
+          location: "ЖК Нью Лайф",
+          situation: "Гульназ покупает квартиру по траншевой ипотеке (кредит 5.1 млн, первый транш 100 000 руб., второй — 5 000 000 перед вводом дома через 2 года).",
+          objection: "«А если через 2 года, когда придет время второго транша, меня сократят на работе или я буду в декрете? Банк же проверит меня заново, увидит снижение доходов и откажет во втором транше! Застройщик заберет квартиру и оштрафует меня на ПВ!»",
+          math: `<strong>Юридические факты по ФЗ-214 и регламентам банков:</strong><br>
+          • Кредитный договор подписывается <strong>один раз на полную сумму</strong> (5.1 млн руб.) до регистрации ДДУ.<br>
+          • Кредитный лимит фиксируется и резервируется банком сразу.<br>
+          • Повторный скоринг платежеспособности (проверка работы, доходов 2-НДФЛ) перед выдачей второго транша <strong>не проводится.</strong><br>
+          • Единственное техническое условие перечисления второго транша — отсутствие просроченной задолженности по платежам первого транша (своевременная выплата 600 руб./мес).`,
+          keywords: {
+            join: ["логич", "понима", "страх", "соглас", "абсолют"],
+            destroy: ["договор", "подписыва", "закон", "один раз", "скоринг"],
+            math: ["техническ", "провер", "доход", "просроч", "задолженн"],
+            closing: ["договор", "покаж", "пункт", "оформ"]
+          },
+          golden: "«Гульназ, это абсолютно логичный страх. Брать обязательства на 2 года вперед тревожно, если правила игры могут измениться. Но давайте посмотрим на юридическую сторону сделки. Кредитный договор подписывается один раз на всю сумму сразу, до регистрации договора долевого участия. Банк одобряет вас как заемщика один раз на старте. Выдача второго транша — это техническое обязательство банка перед застройщиком. Банк не проводит повторный скоринг, не запрашивает новые 2-НДФЛ и не проверяет вашу работу перед перечислением второго транша. Единственное условие — вовремя платить ваши 600 рублей в месяц. Давайте откроем проект кредитного договора, я покажу вам этот пункт, чтобы вы спали спокойно?»",
+          why: "<strong>Почему это работает:</strong> 1. Высокая экспертность агента в юридических тонкостях ипотечного кредитования. 2. Снятие тревожности через демонстрацию пунктов реального договора."
+        },
+        {
+          id: "6_2",
+          title: "Паттерн 6: Страх отказа во 2-м транше [Клон 1: Клиентка Ляйсан]",
+          location: "ЖК Старая Уфа",
+          situation: "Ляйсан приобретает квартиру по траншевой ипотеке (первый транш 100 000 руб., второй — 4 200 000 руб. через 18 месяцев).",
+          objection: "«Вдруг я потеряю работу или у меня снизится зарплата через год? Банк перед перечислением 4.2 миллионов проверит мою кредитную историю, увидит проблемы и заблокирует выдачу! Это огромный риск!»",
+          math: `<strong>Юридические факты по ФЗ-214 и регламентам банков:</strong><br>
+          • Банк одобряет всю сумму кредита (4.3 млн руб.) <strong>в день сделки.</strong><br>
+          • Кредитный договор регистрируется в Росреестре с фиксацией полной суммы лимита.<br>
+          • Выдача второго транша — технический платеж банка девелоперу по условиям договора.<br>
+          • Повторный анализ доходов (скоринг 2-НДФЛ) <strong>не производится.</strong><br>
+          • Условие выдачи: аккуратное внесение ежемесячных платежей по первому траншу (500 руб./мес).`,
+          keywords: {
+            join: ["логич", "понима", "страх", "соглас", "абсолют"],
+            destroy: ["договор", "подписыва", "закон", "один раз", "скоринг"],
+            math: ["техническ", "провер", "доход", "просроч", "задолженн"],
+            closing: ["договор", "покаж", "пункт", "оформ"]
+          },
+          golden: "«Ляйсан, вы правы, ситуация на рынке труда непредсказуема, и ваш вопрос логичен. Но по закону ипотечный скоринг проводится банком один раз на старте сделки. Когда вы подписываете кредитный договор, банк юридически фиксирует за вами весь кредитный лимит в 4.3 миллиона. Выдача второго транша через 18 месяцев — это технический перевод средств застройщику, прописанный в договоре. Никаких справок о доходах и проверок трудоустройства перед этим банк не запрашивает. Важно просто вовремя платить 500 рублей в месяц по первому траншу. Давайте изучим образец договора, чтобы вы убедились в безопасности?»",
+          why: "<strong>Почему это работает:</strong> Опора на нормативно-правовую базу, юридическая аргументация успокаивает мнительного клиента."
+        }
+      ],
+      7: [
+        {
+          id: "7_1",
+          title: "Паттерн 7: Рассрочка-мост 10/90 (Семья Ирины)",
+          location: "ЖК Свой берег (Архстрой)",
+          situation: "Семья Ирины покупает трёшку за 10 000 000 руб. У них есть старая 2-к квартира, которую оценивают в 7 000 000 руб., но вторичка стоит. Риелтор требует сделать скидку 1.5 млн руб. для быстрой продажи.",
+          objection: "«Я не буду отдавать квартиру за бесценок и дарить кому-то полтора миллиона! Но и на съёмное жилье с детьми на 2 года стройки я не перееду. Наверное, мы просто отложим покупку новостройки».",
+          math: `<strong>Вариант продажи со спешкой (дисконт):</strong><br>
+          • Потеря на продаже вторички: <strong>1 500 000 руб.</strong><br>
+          • Дополнительный стресс от быстрой сделки и переезда.<br><br>
+          <strong>Схема «Рассрочка-мост 10/90» на 18 месяцев:</strong><br>
+          • Первоначальный взнос 10%: <strong>1 000 000 руб.</strong> (из свободных накоплений).<br>
+          • Остаток 90% (9 000 000 руб.) вносится через 18 месяцев перед сдачей дома.<br>
+          • Семья продолжает бесплатно жить в своей 2-к квартире, не платит аренду.<br><br>
+          <strong>Выгода:</strong> Фиксация цены новостройки, экономия 1.5 млн руб. (без дисконта), продажа вторички по справедливой цене за 1.5 года без спешки.`,
+          keywords: {
+            join: ["ошибк", "понима", "дисконт", "соглас", "абсолют"],
+            destroy: ["спешк", "продать", "справедлив", "цен", "рыноч"],
+            math: ["10/90", "1 000", "9 000", "18", "месяц", "полтора", "миллион"],
+            closing: ["согласуем", "бронь", "оформ", "расчет", "посчита"]
+          },
+          golden: "«Ирина, продавать вашу квартиру с дисконтом в 1.5 миллиона сейчас — это финансовая ошибка. И переезжать на съёмное с детьми — лишний стресс. Мы решим этот вопрос без потерь с помощью длинной рассрочки-моста «10/90» на 18 месяцев. Мы вносим первоначальный взнос всего 10% — 1 000 000 руб. Застройщик фиксирует цену новостройки. Остаток 90% мы должны внести перед сдачей дома. Вы спокойно продолжаете жить в своей двушке. У нас есть полтора года, чтобы без спешки найти покупателя по вашей справедливой цене (7 млн руб.). Перед сдачей дома мы перечисляем деньги застройщику. Согласуем бронь?»",
+          why: "<strong>Почему это работает:</strong> 1. Защита денег клиента от вынужденных скидок при срочной продаже. 2. Решение бытовой боли (живем дома до сдачи, переезжаем один раз)."
+        },
+        {
+          id: "7_2",
+          title: "Паттерн 7: Рассрочка-мост 10/90 [Клон 1: Семья Альмиры]",
+          location: "ЖК Старая Уфа",
+          situation: "Альмира хочет купить квартиру в новостройке за 8 000 000 руб. У нее есть вторичная квартира за 5 500 000 руб., но покупателей нет. Риелтор предлагает скинуть цену до 4 300 000 руб. для срочной продажи.",
+          objection: "«Мы хотим новостройку, но дарить покупателям миллион двести тысяч рублей скидки ради срочности я не буду. Лучше подождем, пока ставки упадут и вторичка оживет».",
+          math: `<strong>Срочная продажа с дисконтом:</strong> Потеря <strong>1 200 000 руб.</strong> на продаже.<br><br>
+          <strong>Рассрочка «10/90» на 18 месяцев до ввода дома:</strong><br>
+          • Первоначальный взнос 10%: <strong>800 000 руб.</strong> из накоплений.<br>
+          • Промежуточные платежи: 0 рублей.<br>
+          • Финальный платеж 90% (7 200 000 руб.) вносится через 18 месяцев перед получением ключей.<br><br>
+          <strong>Выгода:</strong> Вы фиксируете новостройку по текущей цене. Спокойно живете в своей квартире 1.5 года и продаете ее без спешки за полные 5.5 млн. Сэкономлено <strong>1.2 млн рублей.</strong>`,
+          keywords: {
+            join: ["ошибк", "понима", "дисконт", "соглас", "абсолют"],
+            destroy: ["спешк", "продать", "справедлив", "цен", "рыноч"],
+            math: ["10/90", "800", "7 200", "18", "месяц", "полтора", "миллион"],
+            closing: ["согласуем", "бронь", "оформ", "расчет", "посчита"]
+          },
+          golden: "«Альмира, согласна с вами, делать скидку больше миллиона — это неоправданный ущерб для бюджета. Мы поступим по-другому. Воспользуемся программой рассрочки «10/90» на 1.5 года. Вы вносите 800 тысяч рублей из накоплений, и застройщик закрепляет за вами новостройку. Оставшиеся 90% вы вносите перед вводом дома в эксплуатацию. Все эти полтора года вы продолжаете жить в своей старой квартире, а мы спокойно выставляем её на продажу по реальной рыночной цене без всяких дисконтов. Перед сдачей дома вы продаете квартиру за полные 5.5 миллионов и закрываете остаток рассрочки. Запускаем поиск квартир под эту программу?»",
+          why: "<strong>Почему это работает:</strong> Устранение финансовой потери (1.2 млн руб.) через предоставление временного коридора для спокойной продажи."
+        }
+      ],
+      8: [
+        {
+          id: "8_1",
+          title: "Паттерн 8: Оборотные средства (Предприниматель Илья)",
+          location: "ЖК Старая Уфа",
+          situation: "Илья покупает квартиру стоимостью 20 000 000 руб. У него есть вся сумма наличными, но деньги приносят 30% годовых в его бизнесе.",
+          objection: "«Вытащить 20 миллионов из бизнеса сразу — это потерять значительную часть прибыли. Но и переплачивать банкам по ипотеке я не хочу».",
+          math: `<strong>Вариант 100% оплаты наличными:</strong><br>
+          • Отток капитала из бизнеса: 20 000 000 руб. | Упущенная прибыль бизнеса под 30% за 2 года: <strong>12 000 000 руб.</strong><br><br>
+          <strong>Вариант с длинной рассрочкой «30/70» на 2 года:</strong><br>
+          • Первоначальный взнос 30%: <strong>6 000 000 руб.</strong><br>
+          • Остаток 70% (14 000 000 руб.) вносится через 24 месяца одной суммой.<br>
+          • Оставшиеся 14 000 000 руб. работают в бизнесе и приносят 30% годовых.<br><br>
+          <strong>Математика доходности:</strong><br>
+          • Заработанная прибыль в бизнесе за 2 года: <strong>8 400 000 руб.</strong><br>
+          • Фактическая стоимость квартиры для Ильи (с учетом заработанного): 20.0M - 8.4M = <strong>11 600 000 руб.</strong> (экономия 42%).`,
+          keywords: {
+            join: ["выводить", "оборот", "понима", "бизнес", "абсолют", "соглас"],
+            destroy: ["оборотн", "работат", "бизнес", "прибыл", "упущен"],
+            math: ["30/70", "6 000", "14 000", "2", "год", "30%", "8 400", "прибыл", "выгод"],
+            closing: ["согласован", "услови", "оформ", "расчет", "посчита"]
+          },
+          golden: "«Илья, выводить оборотный капитал под 30% годовых ради покупки недвижимости — это убыточное решение. Мы сохраним ваши деньги в бизнесе. Мы воспользуемся длинной беспроцентной рассрочкой «30/70» на 2 года до сдачи дома. Мы платим застройщику первоначальный взнос 30% — это 6 000 000 руб. Оставшиеся 70% (14 000 000 руб.) вы вносите одной суммой через 24 месяца. Ваши 14 миллионов рублей остаются в обороте бизнеса и под ваши 30% годовых приносят вам 8 400 000 рублей чистой прибыли за 2 года. К моменту сдачи дома вы выводите 14 млн рублей и закрываете рассрочку. Квартира фактически обошлась вам на 42% дешевле. Начнем согласование?»",
+          why: "<strong>Почему это работает:</strong> 1. Разговор на языке финансовой эффективности бизнеса. 2. Оцифровка выгоды через концепцию альтернативной стоимости капитала."
+        },
+        {
+          id: "8_2",
+          title: "Паттерн 8: Оборотные средства [Клон 1: Предприниматель Артур]",
+          location: "ЖК Свой берег",
+          situation: "Артур покупает апартаменты за 15 000 000 руб. У него есть деньги, но они работают в бизнесе и приносят 30% годовых.",
+          objection: "«Я не хочу изымать 15 миллионов рублей из оборота. Это нанесет сильный удар по текущим закупкам и снизит прибыль компании».",
+          math: `<strong>100% оплата наличными из оборота:</strong> Отток 15 000 000 руб. Упущенная прибыль бизнеса за 2 года: <strong>9 000 000 руб.</strong><br><br>
+          <strong>Рассрочка «30/70» на 2 года (24 месяца):</strong><br>
+          • ПВ 30%: <strong>4 500 000 руб.</strong><br>
+          • Оставшиеся 70% (10 500 000 руб.) вносятся через 24 месяца.<br>
+          • 10 500 000 руб. остаются в обороте компании под 30% годовых.<br><br>
+          <strong>Математика выгоды:</strong> За 2 года оборотные средства приносят <strong>6 300 000 рублей чистой прибыли.</strong> За счет этой прибыли квартира обходится предпринимателю дешевле на 42%.`,
+          keywords: {
+            join: ["выводить", "оборот", "понима", "бизнес", "абсолют", "соглас"],
+            destroy: ["оборотн", "работат", "бизнес", "прибыл", "упущен"],
+            math: ["30/70", "4 500", "10 500", "2", "год", "30%", "6 300", "прибыл", "выгод"],
+            closing: ["согласован", "услови", "оформ", "расчет", "посчита"]
+          },
+          golden: "«Артур, извлекать 15 миллионов из операционной деятельности компании действительно невыгодно, деньги должны работать. Мы поступим практичнее. Воспользуемся беспроцентной рассрочкой «30/70» на 2 года. Мы вносим только 30% взноса — это 4.5 миллиона рублей. А остальные 10.5 миллионов остаются в обороте вашего бизнеса под 30% годовых. За два года строительства они сгенерируют 6.3 миллиона чистой прибыли. Перед вводом дома в эксплуатацию вы закроете рассрочку. Таким образом, ваш бизнес фактически оплатит почти половину стоимости апартаментов. Оформим бронь по этой программе?»",
+          why: "<strong>Почему это работает:</strong> Подчеркивание выгоды сохранения оборотного капитала для коммерческих клиентов."
+        }
+      ],
+      9: [
+        {
+          id: "9_1",
+          title: "Паттерн 9: Ипотечный маневр (Клиент Тимур)",
+          location: "ЖК Цветы Башкирии",
+          situation: "Тимур холост, детей нет, IT-специалистом не является (льготных программ нет). Не хочет брать рыночную ипотеку под 22% годовых. Хочет копить 3 года наличными.",
+          objection: "«Это кабала, я буду переплачивать три цены. Я лучше буду копить наличные 3 года, откладывая по 100 тысяч в месяц, и куплю без долгов».",
+          math: `<strong>Вариант с накоплением наличных (3 года):</strong><br>
+          • Рост цен на новостройки в Уфе: ~10-12% в год.<br>
+          • Стоимость квартиры сегодня: 6 000 000 руб. | Через 3 года: <strong>8 200 000 руб.</strong><br>
+          • Скорость удорожания квартиры обгоняет скорость накопления на 2.2 млн руб.<br><br>
+          <strong>Схема «Ипотечный маневр» через беспроцентную рассрочку (2 года):</strong><br>
+          • ПВ 20%: <strong>1 200 000 руб.</strong> Цена квартиры зафиксирована в ДДУ.<br>
+          • Комфортный ежемесячный платеж: <strong>20 000 руб.</strong><br>
+          • Остаток долга перед сдачей дома переоформляется в ипотеку. Прогноз снижения ставок ЦБ к этому моменту — до 11-12% годовых.<br><br>
+          <strong>Выгода:</strong> Фиксация сегодняшней цены, отсутствие переплат банку в течение 2 лет стройки, комфортная ставка по ипотеке на остаток в будущем.`,
+          keywords: {
+            join: ["кабал", "понима", "нецелесообразн", "абсолют", "соглас"],
+            destroy: ["накоплен", "инфляц", "рост", "выраст", "ценах", "догонять"],
+            math: ["маневр", "1 200", "20", "22%", "11-12%", "снижен", "зафиксирова"],
+            closing: ["посчита", "график", "бронь", "оформ", "расчет"]
+          },
+          golden: "«Тимур, брать ипотеку под 22% — действительно финансово нецелесообразно. Но копить наличные 3 года — тоже рискованная стратегия. В Уфе цены на недвижимость растут быстрее, чем вы копите. Квартира, которая сегодня стоит 6 млн рублей, через 3 года будет стоить минимум 8.2 млн рублей. Инфляция просто съест ваши накопления. Мы сделаем умнее — проведем «ипотечный маневр» через длинную рассрочку от застройщика в ЖК Цветы Башкирии: вносим ПВ 1.2 млн рублей, фиксируем цену и платим по 20 тысяч в месяц. Перед сдачей дома через 2 года переоформим остаток в ипотеку, но уже под прогнозируемые 11-12% годовых. Вы зафиксируете сегодняшнюю низкую цену и получите дешевый кредит завтра. Посчитаем график платежей?»",
+          why: "<strong>Почему это работает:</strong> 1. Разрушение иллюзии выгодности накоплений при высокой инфляции. 2. Продажа рассрочки как временного моста к дешевым кредитам в будущем."
+        },
+        {
+          id: "9_2",
+          title: "Паттерн 9: Ипотечный маневр [Клон 1: Клиент Рамиль]",
+          location: "ЖК Нью Лайф",
+          situation: "Рамиль не имеет льготных программ. Не согласен переплачивать по рыночной ставке 22%. Планирует откладывать деньги 3 года и купить за наличные.",
+          objection: "«Ипотека 22% — это финансовое безумие. Я буду копить деньги и через 3 года куплю квартиру без переплат за наличный расчет».",
+          math: `<strong>Вариант накопления (3 года):</strong><br>
+          • Сегодня квартира стоит 5 000 000 руб. При росте рынка на 10-12% в год через 3 года она будет стоить <strong>6 800 000 руб.</strong><br>
+          • Потери на росте цен составят <strong>1 800 000 руб.</strong><br><br>
+          <strong>Ипотечный маневр с длинной рассрочкой (2 года):</strong><br>
+          • ПВ 20%: <strong>1 000 000 руб.</strong> Стоимость квартиры фиксируется жестко в ДДУ.<br>
+          • Ежемесячный платеж: <strong>25 000 руб.</strong><br>
+          • Остаток долга перед сдачей дома переоформляется в ипотеку под сниженную ставку ЦБ (11-12%).<br><br>
+          <strong>Выгода:</strong> Зафиксирована низкая цена квартиры, за 2 года стройки проценты банку не выплачивались, ипотека берется позже под нормальный процент.`,
+          keywords: {
+            join: ["кабал", "понима", "нецелесообразн", "абсолют", "соглас"],
+            destroy: ["накоплен", "инфляц", "рост", "выраст", "ценах", "догонять"],
+            math: ["маневр", "1 000", "25", "22%", "11-12%", "снижен", "зафиксирова"],
+            closing: ["посчита", "график", "бронь", "оформ", "расчет"]
+          },
+          golden: "«Рамиль, абсолютно с вами согласен, брать кредит под 22% не имеет смысла. Но копить наличные «под матрасом» — тоже потеря денег. За 3 года инфляция поднимет стоимость выбранной квартиры с 5 до 6.8 млн рублей. Рост цены опередит ваши накопления. Мы поступим рациональнее. Зафиксируем цену квартиры сегодня через беспроцентную рассрочку. Вносим ПВ 1 млн рублей и платим по 25 тысяч в месяц. Перед сдачей дома, когда ключевая ставка пойдет на спад, мы переведем остаток в классическую ипотеку под комфортные 11-12%. Вы сбережете 1.8 млн на росте цены квартиры и возьмете ипотеку на выгодных условиях. Оформим расчет?»",
+          why: "<strong>Почему это работает:</strong> Развенчание мифа о выгоде накоплений в условиях стабильного удорожания квадратного метра."
+        }
+      ],
+      10: [
+        {
+          id: "10_1",
+          title: "Паттерн 10: Сейф-рассрочка (Клиент Олег)",
+          location: "ЖК 8 Марта (Архстрой)",
+          situation: "Олег планирует покупку в рассрочку в ЖК 8 Марта (Архстрой), но боится банкротства застройщика, так как платежи по рассрочке идут напрямую застройщику, а не на эскроу-счет.",
+          objection: "«При ипотеке мои деньги лежат на безопасном эскроу-счете в банке до сдачи дома. А в рассрочке я плачу напрямую девелоперу на расчетный счет. Если он обанкротится во время стройки, я потеряю все свои взносы! Рассрочка — это огромный риск».",
+          math: `<strong>Юридическая защита рассрочки по ФЗ-214:</strong><br>
+          • Обременение (залог) в пользу покупателя регистрируется в Росреестре сразу при подписании ДДУ.<br><br>
+          <strong>Схема «Сейф-рассрочка» (100% безопасность):</strong><br>
+          • Первоначальный взнос (20% или 30%) вносится покупателем на **эскроу-счет в банке-партнере**, а не застройщику.<br>
+          • Промежуточные ежемесячные платежи отсутствуют или также направляются на эскроу-счет.<br>
+          • Финальный платеж вносится на эскроу-счет за месяц до ввода дома.<br>
+          • Средства застрахованы в АСВ и не выдаются застройщику до полной сдачи дома.<br><br>
+          <strong>Итог:</strong> Нулевой риск недостроя, аналогичный ипотечной сделке, с сохранением беспроцентной рассрочки.`,
+          keywords: {
+            join: ["безопасн", "понима", "абсолют", "соглас", "верн"],
+            destroy: ["сейф", "эскроу", "застройщик", "росреестр", "фз-214", "застрахова"],
+            math: ["20%", "30%", "эскроу", "партнер", "банк", "беспроцент"],
+            closing: ["программ", "список", "покаж", "оформ", "расчет", "посчита"]
+          },
+          golden: "«Олег, это очень важный технический момент, вы абсолютно правы. Безопасность средств должна быть на первом месте. При стандартной рассрочке деньги действительно идут на счет застройщика. Но мы можем исключить этот риск на 100% с помощью программы «Сейф-рассрочка». По этой программе ваш первоначальный взнос зачисляется не застройщику, а на безопасный эскроу-счет в банке-партнере. Остаток суммы вы вносите в самом конце строительства на этот же эскроу-счет. Ваши деньги защищены законом ФЗ-214 и системой страхования вкладов АСВ на протяжении всей стройки. Застройщик не получит деньги, пока не сдаст дом. Вы получаете рассрочку и нулевой риск недостроя. Давайте я покажу вам список квартир в ЖК 8 Марта, подходящих под эту программу?»",
+          why: "<strong>Почему это работает:</strong> 1. Полное закрытие самого сильного страха рассрочки (страха потери денег). 2. Демонстрация юридического профессионализма через предложение альтернативного финансового продукта."
+        },
+        {
+          id: "10_2",
+          title: "Паттерн 10: Сейф-рассрочка [Клон 1: Клиент Ильгиз]",
+          location: "ЖК Цветы Башкирии (Архстрой)",
+          situation: "Ильгиз выбирает длинную рассрочку в ЖК Цветы Башкирии, но переживает о сохранности своих денег до ввода дома в эксплуатацию.",
+          objection: "«В ипотеке мои средства надежно лежат на эскроу. В рассрочке я перевожу деньги напрямую на счет строительной компании. Если они лопнут, я останусь у разбитого корыта. Это неоправданный риск!»",
+          math: `<strong>Юридический регламент ФЗ-214:</strong> Обременение объекта регистрируется Росреестром в пользу покупателя.<br><br>
+          <strong>Сейф-рассрочка (эскроу-контроль):</strong><br>
+          • ПВ 20% перечисляется на **эскроу-счет** в банк-партнер.<br>
+          • Ежемесячные платежи отсутствуют.<br>
+          • Финальный платеж 80% вносится на эскроу-счет перед сдачей объекта.<br>
+          • Застройщик имеет доступ к средствам на эскроу только после раскрытия счетов (после сдачи дома).<br><br>
+          <strong>Выгода:</strong> Беспроцентная рассрочка с такой же защитой средств, как при классической ипотечной сделке.`,
+          keywords: {
+            join: ["безопасн", "понима", "абсолют", "соглас", "верн"],
+            destroy: ["сейф", "эскроу", "застройщик", "росреестр", "фз-214", "застрахова"],
+            math: ["20%", "80%", "эскроу", "партнер", "банк", "беспроцент"],
+            closing: ["программ", "список", "покаж", "оформ", "расчет", "посчита"]
+          },
+          golden: "«Ильгиз, полностью поддерживаю ваше стремление обезопасить сбережения. На сложном строительном рынке отдавать деньги напрямую застройщику — действительно риск. Мы решим эту проблему через программу «Сейф-рассрочка». Мы подпишем договор, по которому ваш взнос 20% и финальный платеж 80% пойдут не застройщику, а на безопасный эскроу-счет в банке. Застройщик не сможет забрать ни рубля, пока не передаст вам ключи от готовой квартиры. Ваши деньги на эскроу защищены АСВ. Вы получаете бесплатную рассрочку и 100% безопасность. Зафиксируем квартиру по этой программе?»",
+          why: "<strong>Почему это работает:</strong> Демонстрация системы страхования и блокировки раскрытия эскроу-счетов как абсолютной защиты капитала клиента."
+        }
+      ]
+    };
+
+    // Mapping patterns to human names
+    const patternNames = {
+      1: "Субсидия: Страх удорожания",
+      2: "Субсидия: Быстрое погашение",
+      3: "Транш: Аренда + Ипотека",
+      4: "Транш: Депозитный арбитраж",
+      5: "Транш: Подушка для декрета",
+      6: "Транш: Страх 2-го транша",
+      7: "Рассрочка: Продажа вторички",
+      8: "Рассрочка: Оборот в бизнесе",
+      9: "Рассрочка: Высокие ставки",
+      10: "Рассрочка: Страх эскроу"
+    };
+
+    // State Variables
+    let state = {
+      agents: [
+        { id: 1, name: "Агент 1", score: 0, badges: [], patternScores: {} },
+        { id: 2, name: "Агент 2", score: 0, badges: [], patternScores: {} },
+        { id: 3, name: "Агент 3", score: 0, badges: [], patternScores: {} }
+      ],
+      currentPatternId: 1,
+      currentVariationIndex: 0,
+      patternAttempts: { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1 },
+      patternStatus: { 1: 'active', 2: 'none', 3: 'none', 4: 'none', 5: 'none', 6: 'none', 7: 'none', 8: 'none', 9: 'none', 10: 'none' }, // 'none', 'active', 'failed', 'done'
+      answers: {}, // Temp storage for inputs: { patternId_varIndex: { agentId: "text" } }
+      scores: {} // Temp storage for checklists: { patternId_varIndex: { agentId: { join: false, ... } } }
+    };
+
+    // Timer Variables
+    let timerInterval = null;
+    let timerTimeLeft = 300;
+    let isTimerRunning = false;
+    let audioCtx = null;
+
+    // Initialize application
+    window.onload = function() {
+      const savedState = localStorage.getItem("adaptive_roleplay_state");
+      if (savedState) {
+        try {
+          state = JSON.parse(savedState);
+          showScreen('screenTrainer');
+          initNavCases();
+          loadActiveCase();
+          updateLeaderboard();
+        } catch (e) {
+          console.error("Failed to load saved state", e);
+        }
+      }
+    };
+
+    // Screen switching
+    function showScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+      
+      const sidebar = document.getElementById('sidebarContainer');
+      const btnCases = document.getElementById('btnNavCases');
+      const btnResults = document.getElementById('btnNavResults');
+
+      if (screenId === 'screenRegister') {
+        sidebar.style.display = 'none';
+        btnCases.style.display = 'none';
+        btnResults.style.display = 'none';
+      } else {
+        sidebar.style.display = 'flex';
+        btnCases.style.display = 'flex';
+        btnResults.style.display = 'flex';
+        
+        if (screenId === 'screenTrainer') {
+          btnCases.classList.add('active');
+          btnResults.classList.remove('active');
+        } else if (screenId === 'screenLeaderboard') {
+          btnCases.classList.remove('active');
+          btnResults.classList.add('active');
+          renderFullLeaderboard();
+        }
+      }
+    }
+
+    // Register Agents
+    function registerAgents() {
+      const name1 = document.getElementById('regAgent1').value.trim() || "Агент 1";
+      const name2 = document.getElementById('regAgent2').value.trim() || "Агент 2";
+      const name3 = document.getElementById('regAgent3').value.trim() || "Агент 3";
+
+      state.agents[0].name = name1;
+      state.agents[1].name = name2;
+      state.agents[2].name = name3;
+
+      // Reset scores and storage
+      state.agents.forEach(a => {
+        a.score = 0;
+        a.badges = [];
+        a.patternScores = {};
+      });
+      
+      state.currentPatternId = 1;
+      state.currentVariationIndex = 0;
+      state.patternAttempts = { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1 };
+      state.patternStatus = { 1: 'active', 2: 'none', 3: 'none', 4: 'none', 5: 'none', 6: 'none', 7: 'none', 8: 'none', 9: 'none', 10: 'none' };
+      state.answers = {};
+      state.scores = {};
+
+      saveStateToLocalStorage();
+      
+      document.getElementById('labelAgent1').textContent = name1;
+      document.getElementById('labelAgent2').textContent = name2;
+      document.getElementById('labelAgent3').textContent = name3;
+      
+      document.getElementById('evalNameAgent1').textContent = name1;
+      document.getElementById('evalNameAgent2').textContent = name2;
+      document.getElementById('evalNameAgent3').textContent = name3;
+
+      showScreen('screenTrainer');
+      initNavCases();
+      loadActiveCase();
+      updateLeaderboard();
+    }
+
+    // Initialize list of patterns in sidebar
+    function initNavCases() {
+      const list = document.getElementById('navCasesList');
+      list.innerHTML = '';
+      
+      for (let pid = 1; pid <= 10; pid++) {
+        const btn = document.createElement('button');
+        btn.className = 'nav-case-btn';
+        btn.id = `navBtnPattern-${pid}`;
+        btn.onclick = () => selectPattern(pid);
+        
+        let status = state.patternStatus[pid] || 'none';
+        let statusText = 'Не начат';
+        let statusClass = 'none';
+
+        if (pid === state.currentPatternId) {
+          btn.classList.add('active');
+          statusClass = 'status-active';
+          statusText = `Попытка ${state.patternAttempts[pid]}`;
+        } else if (status === 'done') {
+          statusClass = 'status-done';
+          statusText = 'Усвоен';
+        } else if (status === 'failed') {
+          statusClass = 'status-failed';
+          statusText = 'В отработке';
+        }
+        
+        btn.className = `nav-case-btn ${statusClass}`;
+        btn.innerHTML = `
+          <span>${pid}. ${patternNames[pid]}</span>
+          <span class="case-status-indicator">${statusText}</span>
+        `;
+        list.appendChild(btn);
+      }
+    }
+
+    // Load active case details based on currentPatternId and currentVariationIndex
+    function loadActiveCase() {
+      const pId = state.currentPatternId;
+      const vIdx = state.currentVariationIndex;
+      
+      // Get variations array for the current pattern
+      const variations = casesDatabase[pId];
+      // Safety check: if variation index overflows, wrap around
+      const data = variations[vIdx % variations.length];
+
+      // Update Case Metadata
+      document.getElementById('currentCategory').textContent = `Паттерн ${pId} из 10 | Раздел: ${pId <= 2 ? 'Субсидия' : (pId <= 6 ? 'Транш' : 'Рассрочка')}`;
+      document.getElementById('currentTitle').textContent = data.title;
+      document.getElementById('currentAttemptBadge').textContent = `Попытка ${state.patternAttempts[pId]} (Вариант ${vIdx + 1})`;
+      document.getElementById('currentLocation').textContent = data.location;
+      document.getElementById('currentSituation').textContent = data.situation;
+      document.getElementById('currentObjection').textContent = data.objection;
+      document.getElementById('currentMath').innerHTML = data.math;
+      
+      // Update Golden answer content
+      document.getElementById('currentGolden').textContent = data.golden;
+      document.getElementById('currentWhy').innerHTML = data.why;
+      
+      // Hide golden answer initially
+      document.getElementById('goldenContent').style.display = 'none';
+      document.getElementById('goldenArrow').style.transform = 'rotate(0deg)';
+
+      // Restore previously saved answer text & checklist values
+      const storageKey = `${pId}_${vIdx}`;
+      const caseAnswers = state.answers[storageKey] || { 1: '', 2: '', 3: '' };
+      document.getElementById('answerAgent1').value = caseAnswers[1] || '';
+      document.getElementById('answerAgent2').value = caseAnswers[2] || '';
+      document.getElementById('answerAgent3').value = caseAnswers[3] || '';
+
+      const caseGrades = state.scores[storageKey] || {
+        1: { join: false, destroy: false, math: false, close: false },
+        2: { join: false, destroy: false, math: false, close: false },
+        3: { join: false, destroy: false, math: false, close: false }
+      };
+
+      for (let agentId = 1; agentId <= 3; agentId++) {
+        document.getElementById(`chkAgent${agentId}_Join`).checked = caseGrades[agentId].join;
+        document.getElementById(`chkAgent${agentId}_Destroy`).checked = caseGrades[agentId].destroy;
+        document.getElementById(`chkAgent${agentId}_Math`).checked = caseGrades[agentId].math;
+        document.getElementById(`chkAgent${agentId}_Close`).checked = caseGrades[agentId].close;
+        calculateScore(agentId);
+      }
+
+      // Progress footer text
+      document.getElementById('caseProgressText').textContent = `Паттерн ${pId} из 10`;
+
+      // Reset Evaluation Area visibility
+      document.getElementById('evaluationArea').classList.remove('active');
+
+      // Update top header buttons state
+      document.getElementById('btnNavCases').classList.add('active');
+      document.getElementById('btnNavResults').classList.remove('active');
+
+      // Reset Timer
+      resetTimer();
+    }
+
+    // Navigation triggers
+    function selectPattern(pId) {
+      saveCurrentTextToState();
+      state.currentPatternId = pId;
+      state.currentVariationIndex = 0; // start at variation 0
+      loadActiveCase();
+      initNavCases();
+    }
+
+    function prevPattern() {
+      if (state.currentPatternId > 1) {
+        selectPattern(state.currentPatternId - 1);
+      }
+    }
+
+    function nextPattern() {
+      if (state.currentPatternId < 10) {
+        selectPattern(state.currentPatternId + 1);
+      }
+    }
+
+    // Save inputs to state temporarily
+    function saveCurrentTextToState() {
+      const pId = state.currentPatternId;
+      const vIdx = state.currentVariationIndex;
+      const storageKey = `${pId}_${vIdx}`;
+
+      if (!state.answers[storageKey]) state.answers[storageKey] = {};
+      state.answers[storageKey][1] = document.getElementById('answerAgent1').value;
+      state.answers[storageKey][2] = document.getElementById('answerAgent2').value;
+      state.answers[storageKey][3] = document.getElementById('answerAgent3').value;
+    }
+
+    // Collapsible Golden Answer toggle
+    function toggleGoldenAnswer() {
+      const content = document.getElementById('goldenContent');
+      const arrow = document.getElementById('goldenArrow');
+      if (content.style.display === 'none') {
+        content.style.display = 'block';
+        arrow.style.transform = 'rotate(180deg)';
+      } else {
+        content.style.display = 'none';
+        arrow.style.transform = 'rotate(0deg)';
+      }
+    }
+
+    // Timer Controls
+    function toggleTimer() {
+      const icon = document.getElementById('playIcon');
+      if (isTimerRunning) {
+        clearInterval(timerInterval);
+        isTimerRunning = false;
+        icon.className = 'fa-solid fa-play';
+        document.querySelector('.btn-play-pause').classList.remove('running');
+      } else {
+        isTimerRunning = true;
+        icon.className = 'fa-solid fa-pause';
+        document.querySelector('.btn-play-pause').classList.add('running');
+        timerInterval = setInterval(() => {
+          timerTimeLeft--;
+          updateTimerDisplay();
+          
+          if (timerTimeLeft <= 0) {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+            icon.className = 'fa-solid fa-play';
+            document.querySelector('.btn-play-pause').classList.remove('running');
+            triggerTimerAlarm();
+          }
+        }, 1000);
+      }
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      isTimerRunning = false;
+      timerTimeLeft = 300; // 5 mins
+      document.getElementById('playIcon').className = 'fa-solid fa-play';
+      document.querySelector('.btn-play-pause').classList.remove('running');
+      document.getElementById('timerVal').classList.remove('alert');
+      document.getElementById('alertOverlay').style.display = 'none';
+      updateTimerDisplay();
+    }
+
+    function updateTimerDisplay() {
+      const mins = Math.floor(timerTimeLeft / 60);
+      const secs = timerTimeLeft % 60;
+      const display = document.getElementById('timerVal');
+      display.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+      
+      if (timerTimeLeft <= 30) {
+        display.classList.add('alert');
+      } else {
+        display.classList.remove('alert');
+      }
+    }
+
+    // Oscillator audio beep
+    function triggerTimerAlarm() {
+      document.getElementById('alertOverlay').style.display = 'block';
+      
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      let t = audioCtx.currentTime;
+      for (let i = 0; i < 3; i++) {
+        let osc = audioCtx.createOscillator();
+        let gainNode = audioCtx.createGain();
+        
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, t + i * 0.4);
+        
+        gainNode.gain.setValueAtTime(0.5, t + i * 0.4);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, t + i * 0.4 + 0.3);
+        
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        
+        osc.start(t + i * 0.4);
+        osc.stop(t + i * 0.4 + 0.3);
+      }
+    }
+
+    // Heuristics Answer Analyser
+    function analyzeAnswers() {
+      saveCurrentTextToState();
+      const pId = state.currentPatternId;
+      const vIdx = state.currentVariationIndex;
+      const storageKey = `${pId}_${vIdx}`;
+
+      // Get variation data
+      const variations = casesDatabase[pId];
+      const data = variations[vIdx % variations.length];
+
+      // Reveal Evaluation Container
+      document.getElementById('evaluationArea').classList.add('active');
+      document.getElementById('evaluationArea').scrollIntoView({ behavior: 'smooth' });
+
+      let sumScores = 0;
+
+      for (let agentId = 1; agentId <= 3; agentId++) {
+        const textInput = document.getElementById(`answerAgent${agentId}`).value.toLowerCase();
+        const heuristicsContainer = document.getElementById(`heuristicsAgent${agentId}`);
+        const feedbackContainer = document.getElementById(`feedbackAgent${agentId}`);
+
+        if (!textInput.trim()) {
+          heuristicsContainer.innerHTML = '';
+          feedbackContainer.textContent = 'Ответ не введен. Запишите ответ агента выше.';
+          continue;
+        }
+
+        // Search patterns in typed response
+        let hasJoin = data.keywords.join.some(kw => textInput.includes(kw));
+        let hasDestroy = data.keywords.destroy.some(kw => textInput.includes(kw));
+        let hasMath = data.keywords.math.some(kw => textInput.includes(kw));
+        let hasClose = data.keywords.closing.some(kw => textInput.includes(kw));
+
+        // Auto check trainer checklist
+        document.getElementById(`chkAgent${agentId}_Join`).checked = hasJoin;
+        document.getElementById(`chkAgent${agentId}_Destroy`).checked = hasDestroy;
+        document.getElementById(`chkAgent${agentId}_Math`).checked = hasMath;
+        document.getElementById(`chkAgent${agentId}_Close`).checked = hasClose;
+
+        // Save auto-checked checklists to state
+        if (!state.scores[storageKey]) state.scores[storageKey] = {};
+        state.scores[storageKey][agentId] = {
+          join: hasJoin,
+          destroy: hasDestroy,
+          math: hasMath,
+          close: hasClose
+        };
+
+        const agentScore = calculateScore(agentId);
+        sumScores += agentScore;
+
+        // Render tags
+        heuristicsContainer.innerHTML = `
+          <span class="heuristic-tag ${hasJoin ? 'passed' : 'failed'}">
+            <i class="fa-solid ${hasJoin ? 'fa-check' : 'fa-xmark'}"></i> Присоединение
+          </span>
+          <span class="heuristic-tag ${hasDestroy ? 'passed' : 'failed'}">
+            <i class="fa-solid ${hasDestroy ? 'fa-check' : 'fa-xmark'}"></i> Разрушение
+          </span>
+          <span class="heuristic-tag ${hasMath ? 'passed' : 'failed'}">
+            <i class="fa-solid ${hasMath ? 'fa-check' : 'fa-xmark'}"></i> Математика
+          </span>
+          <span class="heuristic-tag ${hasClose ? 'passed' : 'failed'}">
+            <i class="fa-solid ${hasClose ? 'fa-check' : 'fa-xmark'}"></i> Закрытие
+          </span>
+        `;
+
+        // Render dynamic tips
+        let tips = [];
+        if (!hasJoin) tips.push("⚠️ Присоединитесь к возражению («Понимаю...», «Логично...»).");
+        if (!hasDestroy) tips.push("⚠️ Разрушьте иллюзию безопасности выжидания (рост цен, инфляция).");
+        if (!hasMath) tips.push("⚠️ Оцифруйте платеж и общую переплату (приведите расчет).");
+        if (!hasClose) tips.push("⚠️ Добавьте призыв к бесплатному расчету / бронированию лота.");
+
+        if (tips.length === 0) {
+          feedbackContainer.innerHTML = '<span style="color: var(--emerald); font-weight: 600;"><i class="fa-solid fa-square-check"></i> Идеальная структура ответа Навигатора!</span>';
+        } else {
+          feedbackContainer.innerHTML = '<strong>Советы:</strong><br>' + tips.join('<br>');
+        }
+      }
+
+      // Compute average score of the round and render routing recommendations
+      const avgScore = Math.round(sumScores / 3);
+      updateRoutingAdvices(avgScore);
+    }
+
+    // Dynamic advice box renderer
+    function updateRoutingAdvices(avgScore) {
+      const header = document.getElementById('routingAdviceHeader');
+      const desc = document.getElementById('routingAdviceDesc');
+      const btnRepeat = document.getElementById('btnRepeatPattern');
+
+      // Adjust button state depending on variations array length
+      const variations = casesDatabase[state.currentPatternId];
+      const hasClonesLeft = variations.length > 1;
+
+      if (!hasClonesLeft) {
+        btnRepeat.style.display = 'none';
+      } else {
+        btnRepeat.style.display = 'inline-flex';
+      }
+
+      if (avgScore >= 75) {
+        header.className = "routing-advice-header success";
+        header.innerHTML = '<i class="fa-solid fa-circle-check"></i> Рекомендуется: Паттерн усвоен!';
+        desc.innerHTML = `Средний балл раунда составил <strong>${avgScore} / 100</strong>. Агенты отлично отработали возражения. Нажмите кнопку <strong>«Паттерн усвоен»</strong> для перехода к следующей теме.`;
+      } else {
+        header.className = "routing-advice-header warn";
+        header.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Рекомендуется: Требуется повторная отработка!';
+        desc.innerHTML = `Средний балл раунда составил <strong>${avgScore} / 100</strong>. Обнаружены системные ошибки. Рекомендуется нажать кнопку <strong>«Отработка»</strong> для запуска кейса-клона с другими цифрами и именами.`;
+      }
+    }
+
+    // Real-time score calculator for checkboxes
+    function calculateScore(agentId) {
+      const pId = state.currentPatternId;
+      const vIdx = state.currentVariationIndex;
+      const storageKey = `${pId}_${vIdx}`;
+
+      const joinChecked = document.getElementById(`chkAgent${agentId}_Join`).checked;
+      const destroyChecked = document.getElementById(`chkAgent${agentId}_Destroy`).checked;
+      const mathChecked = document.getElementById(`chkAgent${agentId}_Math`).checked;
+      const closeChecked = document.getElementById(`chkAgent${agentId}_Close`).checked;
+
+      const score = (joinChecked ? 25 : 0) + 
+                    (destroyChecked ? 25 : 0) + 
+                    (mathChecked ? 25 : 0) + 
+                    (closeChecked ? 25 : 0);
+
+      document.getElementById(`scoreAgent${agentId}Display`).textContent = `${score} / 100`;
+
+      // Save checklist values in state
+      if (!state.scores[storageKey]) state.scores[storageKey] = {};
+      state.scores[storageKey][agentId] = {
+        join: joinChecked,
+        destroy: destroyChecked,
+        math: mathChecked,
+        close: closeChecked
+      };
+
+      return score;
+    }
+
+    // Routing Logic trigger: trainer decides to advance or repeat clone
+    function saveAndRoute(isMastered) {
+      const pId = state.currentPatternId;
+      const vIdx = state.currentVariationIndex;
+      const storageKey = `${pId}_${vIdx}`;
+
+      // Save checklist scores to agents' patternScores
+      state.agents.forEach(agent => {
+        const agentId = agent.id;
+        const joinChecked = document.getElementById(`chkAgent${agentId}_Join`).checked;
+        const destroyChecked = document.getElementById(`chkAgent${agentId}_Destroy`).checked;
+        const mathChecked = document.getElementById(`chkAgent${agentId}_Math`).checked;
+        const closeChecked = document.getElementById(`chkAgent${agentId}_Close`).checked;
+
+        const roundScore = (joinChecked ? 25 : 0) + 
+                           (destroyChecked ? 25 : 0) + 
+                           (mathChecked ? 25 : 0) + 
+                           (closeChecked ? 25 : 0);
+
+        // Keep the best score of attempts for the pattern
+        const currentBest = agent.patternScores[pId] || 0;
+        agent.patternScores[pId] = Math.max(currentBest, roundScore);
+      });
+
+      // Update Total cumulative score
+      state.agents.forEach(agent => {
+        let sum = 0;
+        Object.keys(agent.patternScores).forEach(pid => {
+          sum += agent.patternScores[pid];
+        });
+        agent.score = sum;
+      });
+
+      // Update achievements
+      updateAgentBadges();
+
+      if (isMastered) {
+        // Mark pattern status as done
+        state.patternStatus[pId] = 'done';
+        
+        // Go to next pattern if not at the end
+        if (state.currentPatternId < 10) {
+          state.currentPatternId++;
+          state.currentVariationIndex = 0; // reset variation
+          state.patternStatus[state.currentPatternId] = 'active';
+          saveStateToLocalStorage();
+          loadActiveCase();
+          initNavCases();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          // Training completed!
+          saveStateToLocalStorage();
+          showScreen('screenLeaderboard');
+        }
+      } else {
+        // Re-practice current pattern: load next clone
+        state.patternStatus[pId] = 'failed';
+        state.patternAttempts[pId]++; // increment attempts count
+        
+        const variations = casesDatabase[pId];
+        // Move variation index forward
+        state.currentVariationIndex = (state.currentVariationIndex + 1) % variations.length;
+
+        saveStateToLocalStorage();
+        loadActiveCase();
+        initNavCases();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      updateLeaderboard();
+    }
+
+    // Achievements calculator
+    function updateAgentBadges() {
+      state.agents.forEach(agent => {
+        let countJoin = 0, countMath = 0, countClose = 0;
+        
+        // Scan all attempt scores
+        Object.keys(state.scores).forEach(key => {
+          const s = state.scores[key][agent.id];
+          if (s) {
+            if (s.join) countJoin++;
+            if (s.math) countMath++;
+            if (s.close) countClose++;
+          }
+        });
+
+        const updatedBadges = [];
+        if (countJoin >= 3) updatedBadges.push({ type: 'negotiator', label: 'Психолог' });
+        if (countMath >= 3) updatedBadges.push({ type: 'analyst', label: 'Математик' });
+        if (countClose >= 3) updatedBadges.push({ type: 'closer', label: 'Закрыватель' });
+
+        agent.badges = updatedBadges;
+      });
+    }
+
+    // Sort and update sidebar leaderboard
+    function updateLeaderboard() {
+      const sortedAgents = [...state.agents].sort((a, b) => b.score - a.score);
+      const container = document.getElementById('miniLeaderboard');
+      container.innerHTML = '';
+
+      sortedAgents.forEach((agent, index) => {
+        const item = document.createElement('div');
+        item.className = `leaderboard-item rank-${index}`;
+        
+        let medal = '<i class="fa-solid fa-award agent-rank-icon"></i>';
+        if (index === 0) medal = '<i class="fa-solid fa-medal agent-rank-icon"></i>';
+
+        const badgesHtml = agent.badges.map(b => `<span class="mini-badge">${b.label}</span>`).join(' ');
+
+        item.innerHTML = `
+          <div class="agent-info">
+            ${medal}
+            <div>
+              <div class="agent-name">${agent.name}</div>
+              <div class="agent-badges">${badgesHtml}</div>
+            </div>
+          </div>
+          <div class="agent-score">${agent.score}</div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    // Render fullscreen leaderboard table
+    function renderFullLeaderboard() {
+      const sortedAgents = [...state.agents].sort((a, b) => b.score - a.score);
+      const body = document.getElementById('leaderboardFullBody');
+      body.innerHTML = '';
+
+      sortedAgents.forEach((agent, index) => {
+        const tr = document.createElement('tr');
+        
+        let medal = `<span class="medal-icon text-muted">${index + 1}</span>`;
+        if (index === 0) medal = '<i class="fa-solid fa-medal medal-icon medal-gold"></i>';
+        else if (index === 1) medal = '<i class="fa-solid fa-medal medal-icon medal-silver"></i>';
+        else if (index === 2) medal = '<i class="fa-solid fa-medal medal-icon medal-bronze"></i>';
+
+        const patternsAttempted = Object.keys(agent.patternScores).length;
+        const avg = patternsAttempted > 0 ? Math.round(agent.score / patternsAttempted) : 0;
+
+        const badgesHtml = agent.badges.map(b => `
+          <span class="agent-badge-tag badge-${b.type}">${b.label}</span>
+        `).join(' ');
+
+        tr.innerHTML = `
+          <td style="text-align: center;">${medal}</td>
+          <td style="font-weight: 700;">${agent.name}</td>
+          <td style="text-align: center; font-weight: 800; color: var(--cyan); font-size: 1.15rem;">${agent.score}</td>
+          <td style="text-align: center; color: var(--text-muted);">${avg} / 100</td>
+          <td>
+            <div class="agent-badges-row">
+              ${badgesHtml || '<span class="text-muted" style="font-size: 0.8rem;">Нет достижений</span>'}
+            </div>
+          </td>
+        `;
+        body.appendChild(tr);
+      });
+    }
+
+    // Save current state
+    function saveStateToLocalStorage() {
+      localStorage.setItem("adaptive_roleplay_state", JSON.stringify(state));
+    }
+
+    // Reset simulator completely
+    function resetAllData() {
+      if (confirm("Вы действительно хотите сбросить весь прогресс обучения? Это удалит имена агентов и все сохраненные оценки.")) {
+        localStorage.removeItem("adaptive_roleplay_state");
+        state = {
+          agents: [
+            { id: 1, name: "Агент 1", score: 0, badges: [], patternScores: {} },
+            { id: 2, name: "Агент 2", score: 0, badges: [], patternScores: {} },
+            { id: 3, name: "Агент 3", score: 0, badges: [], patternScores: {} }
+          ],
+          currentPatternId: 1,
+          currentVariationIndex: 0,
+          patternAttempts: { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1 },
+          patternStatus: { 1: 'active', 2: 'none', 3: 'none', 4: 'none', 5: 'none', 6: 'none', 7: 'none', 8: 'none', 9: 'none', 10: 'none' },
+          answers: {},
+          scores: {}
+        };
+        showScreen('screenRegister');
+        document.getElementById('regAgent1').value = "Агент 1";
+        document.getElementById('regAgent2').value = "Агент 2";
+        document.getElementById('regAgent3').value = "Агент 3";
+      }
+    }
+  </script>
+</body>
+</html>

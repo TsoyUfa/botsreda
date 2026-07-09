@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (galleryGrid && lightboxModal) {
         const totalPhotos = 56;
-        const photosPerPage = 8;
+        const photosPerPage = 9;
         let loadedPhotosCount = 0;
         let currentPhotoIndex = 1;
 

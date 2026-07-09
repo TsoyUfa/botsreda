@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Антон Цой | Обучение опытных агентов</title>
+    <meta name="description" content="Повышение квалификации для опытных агентов новостроек. Программа из 7 блоков для перехода от хаоса к системному бизнесу.">
+    
+    <!-- OG-теги для красивого превью -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Антон Цой — Повышение квалификации для опытных агентов">
+    <meta property="og:description" content="Рынок изменился навсегда. Программа из 7 блоков: финансовый инжиниринг, золотой стандарт подбора, защита комиссии.">
+    <meta property="og:image" content="img/anton-portrait.png">
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" href="style.css?v=1.0.2">
+    
+    <style>
+        .exp-hero {
+            padding: 80px 0 20px 0;
+            text-align: left;
+        }
+        
+        .exp-title {
+            font-size: 2.2rem;
+            line-height: 1.1;
+            margin-bottom: 12px;
+        }
+        
+        .exp-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: hsla(270, 95%, 60%, 0.1);
+            color: var(--secondary);
+            border: 1px solid hsla(270, 95%, 60%, 0.2);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+        
+        .exp-intro {
+            font-size: 1rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .market-warning {
+            background: hsla(350, 100%, 55%, 0.06);
+            border: 1px solid hsla(350, 100%, 55%, 0.2);
+            border-radius: var(--border-radius-lg);
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .market-warning-title {
+            color: var(--danger);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .market-warning-text {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+
+        .price-tag {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin: 16px 0;
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+        }
+
+        .price-tag span {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .back-btn-top {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition-fast);
+            margin-top: 10px;
+        }
+
+        .back-btn-top:active {
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Canvas for Matrix Rain -->
+    <canvas id="matrix-canvas"></canvas>
+
+    <!-- Header (Apple style) -->
+    <header class="header">
+        <div class="container header-container">
+            <a href="index.html" class="logo" style="text-decoration: none;">
+                <span class="logo-accent">АНТОН</span>ЦОЙ
+            </a>
+            <div class="header-right">
+                <a href="index.html" class="back-btn-top">
+                    <i class="fa-solid fa-arrow-left"></i> Назад
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <!-- Hero Section -->
+        <section class="container exp-hero">
+            <div class="exp-badge">
+                <i class="fa-solid fa-rocket"></i> Повышение квалификации
+            </div>
+            <h1 class="exp-title">
+                Для опытных<br>
+                <span class="text-gradient">агентов новостроек</span>
+            </h1>
+            <p class="exp-intro">
+                Программа перевода из роли справочного бюро в роль Финансового Навигатора, управляющего математикой сделки.
+            </p>
+        </section>
+
+        <!-- Market Shift Warning -->
+        <section class="container">
+            <div class="market-warning reveal">
+                <div class="market-warning-title">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Реальность рынка новостроек
+                </div>
+                <p class="market-warning-text">
+                    Рынок изменился навсегда. Такого рынка, как был до 2025 года, больше никогда в России не будет. Вы или меняетесь, адаптируясь под новые сложные инструменты, или уходите из профессии.
+                </p>
+            </div>
+        </section>
+
+        <!-- Blocks Section -->
+        <section class="container section">
+            <div class="section-header">
+                <h2 class="section-title">7 Блоков обучения</h2>
+                <p class="section-subtitle">Нажмите на интересующий вас блок, чтобы раскрыть подробности программы</p>
+            </div>
+
+            <div class="services-accordion-list">
+                <!-- Блок 1 -->
+                <div class="accordion-item glass-card">
+                    <div class="accordion-header">
+                        <div class="acc-icon-box"><i class="fa-solid fa-phone-volume" style="color: var(--secondary);"></i></div>
+                        <div class="acc-title-box">
+                            <h3>Блок 1: От первой заявки до встречи</h3>
+                            <span class="acc-badge">Первый контакт</span>
+                        </div>
+                        <div class="acc-arrow"><i class="fa-solid fa-chevron-down"></i></div>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Освойте JTBD-подход (Jobs to be Done) к клиенту. Уход от роли «справочного бюро» и перевод любого контакта в закрытую встречу:</p>
+                        <ul class="acc-details">
+                            <li><i class="fa-solid fa-check" style="color: var(--secondary);"></i> Аудит бюджета и истинных мотивов клиента на первой минуте разговора.</li>
+                            <li><i class="fa-solid fa-check" style="color: var(--secondary);"></i> Жесткий запрет на бесконтрольный слив лида (почему нельзя сразу слать подборки в мессенджеры).</li>
+                            <li><i class="fa-solid fa-check" style="color: var(--secondary);"></i> Алгоритм назначения встреч на объекте застройщика без давления и манипуляций.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Блок 2 -->
+                <div class="accordion-item glass-card">
+                    <div class="accordion-header">
+                        <div class="acc-icon-box"><i class="fa-solid fa-percent" style="color: var(--secondary);"></i></div>
+                        <div class="acc-title-box">
+                            <h3>Блок 2: Финансовый инжиниринг в продажах</h3>
+                            <span class="acc-badge">Способы покупки</span>
+                        </div>
+                        <div class="acc-arrow"><i class="fa-solid fa-chevron-down"></i></div>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Математика ипотеки нового времени. Перестаньте продавать планировки — проектируйте выгодные финансовые решения:</p>
+                        <ul class="acc-details">
+                            <li><i class="fa-solid fa-check" style="color: var(--secondary);"></i> Расчет и комбинация траншевой ипотеки, рассрочек, субсидированных ставок и лизинга.</li>
+                            <li><i class="fa-solid fa-check" style="color: var(--secondary);"></i> Снятие внутреннего блока агентов «субсидирование — это зло из-за удорожания» (показываем на цифрах выгоду для капитала).</li>
+                            <li><i class="fa-solid fa-check" style="color: var(--secondary);"></i> Техника «Защита расчетов на громкой связи» при звонке куратору застройщика на встрече.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Блок 3 -->
+                <div class="accordion-item glass-card">
+                    <div class="accordion-header">
+                        <div class="acc-icon-box"><i class="fa-solid fa-list-check" style="color: var(--secondary);"></i></div>
+                        <div class="acc-title-box">
+                            <h3>Блок 3: Золотой стандарт подбора</h3>
+                            <span class="acc-badge">Защита шорт-листа</span>
+                        </div>
+                        <div class="acc-arrow"><i class="fa-solid fa-chevron-down"></i></div>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Стандартизируйте выбор клиента. Сужайте базу до идеального решения за секунды:</p>
+                        <ul class="acc-details">
+                            <li><i class="fa-solid fa-check" style="color: var(--secondary);"></i> Золотое правило очередности: Сначала Финансы ➔ затем Локация ➔ затем ЖК ➔ только в конце конкретная Планировка.</li>
+                            <li><i class="fa-solid fa-check" style="color: var(--secondary);"></i> Правило «Не более 3 вариантов»: почему обилие вариантов убивает сделку.</li>
+                            <li><i class="fa-solid fa-check" style="color: var(--secondary);"></i> Скрипты аргументации шорт-листа под JTBD-задачи клиента (вариант минимального платежа, комфорта, сроков).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Блок 4 -->
+                <div class="accordion-item glass-card">
+                    <div class="accordion-header">
+                        <div class="acc-icon-box"><i class="fa-solid fa-car" style="color: var(--secondary);"></i></div>
+                        <div class="acc-title-box">
+                            <h3>Блок 4: Тест-драйв новостроек</h3>
+                            <span class="acc-badge">Управление показом</span>
+                        </div>
+                        <div class="acc-arrow"><i class="fa-solid fa-chevron-down"></i></div>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Управляйте экскурсией и ведите клиента к бронированию, защищая его интересы:</p>
+                        <ul class="acc-details">
+                            <li><i class="fa-solid fa-check" style="color: var(--secondary);"></i> Сценарий работы в паре с менеджером застройщика: как забирать лидерство и отсекать манипуляции ОП.</li>
+                            <li><i class="fa-solid fa-check" style="color: var(--secondary);"></i> Протокол «Умных технических вопросов» (шумоизоляция, профили, лифты, инфраструктура).</li>
+                            <li><i class="fa-solid fa-check" style="color: var(--secondary);"></i> Отработка искусственного дефицита («бронируйте сейчас за 50к, завтра подорожает»).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Блок 5 -->
+                <div class="accordion-item glass-card">
+                    <div class="accordion-header">
+                        <div class="acc-icon-box"><i class="fa-solid fa-shield-halved" style="color: var(--secondary);"></i></div>
+                        <div class="acc-title-box">
+                            <h3>Блок 5: Технологический стандарт сделки</h3>
+                            <span class="acc-badge">Безопасность комиссии</span>
+                        </div>
+                        <div class="acc-arrow"><i class="fa-solid fa-chevron-down"></i></div>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Защитите свои интересы и комиссионные при согласовании условий с застройщиками:</p>
+                        <ul class="acc-details">
+                            <li><i class="fa-solid fa-check" style="color: var(--secondary);"></i> Железное правило фиксации уникальности клиента в CRM застройщика ДО отправки названий ЖК.</li>
+                            <li><i class="fa-solid fa-check" style="color: var(--secondary);"></i> 18 вех безопасной сделки от ДДУ до эскроу-счетов.</li>
+                            <li><i class="fa-solid fa-check" style="color: var(--secondary);"></i> Работа с отказами в уникальности: как действовать, если застройщик пытается «срезать» комиссию.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Блок 6 -->
+                <div class="accordion-item glass-card">
+                    <div class="accordion-header">
+                        <div class="acc-icon-box"><i class="fa-solid fa-message" style="color: var(--secondary);"></i></div>
+                        <div class="acc-title-box">
+                            <h3>Блок 6: Переписки в мессенджерах</h3>
+                            <span class="acc-badge">Прогрев текстом</span>
+                        </div>
+                        <div class="acc-arrow"><i class="fa-solid fa-chevron-down"></i></div>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Управляйте вниманием клиентов в WhatsApp и Telegram без спама и навязчивости:</p>
+                        <ul class="acc-details">
+                            <li><i class="fa-solid fa-check" style="color: var(--secondary);"></i> 3 правила переписки: 1 сообщение — 1 мысль, обязательный легкий вопрос-триггер, польза вместо рекламы.</li>
+                            <li><i class="fa-solid fa-check" style="color: var(--secondary);"></i> Сценарии реактивации «уснувших» клиентов через финансовые триггеры.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Блок 7 -->
+                <div class="accordion-item glass-card">
+                    <div class="accordion-header">
+                        <div class="acc-icon-box"><i class="fa-solid fa-briefcase" style="color: var(--secondary);"></i></div>
+                        <div class="acc-title-box">
+                            <h3>Блок 7: Системный бизнес агента</h3>
+                            <span class="acc-badge">Повторные продажи</span>
+                        </div>
+                        <div class="acc-arrow"><i class="fa-solid fa-chevron-down"></i></div>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Превратите профессию брокера в предсказуемый бизнес с чеком от 500к+ ₽/мес:</p>
+                        <ul class="acc-details">
+                            <li><i class="fa-solid fa-check" style="color: var(--secondary);"></i> Декомпозиция больших финансовых целей на ежедневные и еженедельные действия.</li>
+                            <li><i class="fa-solid fa-check" style="color: var(--secondary);"></i> Дашборд показателей: трекинг воронки (Касания ➔ Диалоги ➔ Встречи ➔ Брони ➔ Сделки) и управление конверсией.</li>
+                            <li><i class="fa-solid fa-check" style="color: var(--secondary);"></i> Управление LTV (Lifetime Value) — база повторных продаж и сбор рекомендаций. Метод тайм-блоков против выгорания.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing & Call to Action -->
+        <section class="container">
+            <div class="glass-card m-bottom-lg" style="border-color: hsla(270, 95%, 60%, 0.3);">
+                <h2 style="font-size: 1.3rem; margin-bottom: 8px;">Начать прокачку навыков</h2>
+                <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">
+                    Полноценная 4-8 недельная программа повышения квалификации. Мы прорабатываем каждый блок на практике, прописываем книгу стандартов под ваш бизнес и доводим до стабильных сделок.
+                </p>
+                
+                <div class="price-tag">
+                    45 000 ₽ <span>/ за курс</span>
+                </div>
+
+                <a href="https://t.me/anton_tsoy?text=Привет!%20Интересует%20обучение%20для%20опытных" target="_blank" class="btn btn-primary btn-full">
+                    Записаться на курс <i class="fa-solid fa-chevron-right btn-arrow"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container footer-container">
+                <p>&copy; 2026 Антон Цой. Недвижимость для людей.</p>
+                <div class="footer-links">
+                    <a href="index.html">Визитка</a>
+                    <a href="main.html">Основной сайт</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js?v=1.0.2"></script>
+</body>
+</html>
